@@ -2,7 +2,7 @@
 
 use Faker\Generator as FakerEng;
 
-$factory->define(App\Models\Order\Order::class, function (FakerEng $faker) {
+$factory->define(App\Models\Factor\Order::class, function (FakerEng $faker) {
     $descriptions = $datetimes = [];
     if ( rand(0, 1) ) $descriptions['admin'] = Faker::sentence();
     if ( rand(0, 1) ) $descriptions['buyer'] = Faker::sentence();
@@ -18,12 +18,12 @@ $factory->define(App\Models\Order\Order::class, function (FakerEng $faker) {
 
 
     return [
-        'descriptions'      => [ null, $descriptions ][ $faker->boolean() ],
-        'destination'       => [ null, Faker::address() ][ $faker->boolean() ],
-        'postal_code'       => [ null, $faker->postcode ][ $faker->boolean() ],
+        'descriptions'      => nullable( $descriptions ),
+        'destination'       => nullable( Faker::address() ),
+        'postal_code'       => nullable( $faker->postcode ),
         'offer'             => $faker->numberBetween(0, 100000),
         'total'             => $faker->numberBetween(100000, 10000000),
-        'payment'           => [ null, $faker->dateTime() ][ $faker->boolean() ],
+        'payment'           => nullable( $faker->dateTime() ),
         'created_at'        => $faker->dateTime(),
         'payment_jalali'    => jdate( time() - ( rand(1, 1000) * rand(1, 1000) )),
         'auth_code'         => $auth_code,
@@ -39,16 +39,41 @@ $factory->define(App\Models\Order\Order::class, function (FakerEng $faker) {
     ];
 });
 
-$factory->define(App\Models\Order\OrderItem::class, function (FakerEng $faker) {
+$factory->define(App\Models\Factor\OrderItem::class, function (FakerEng $faker) {
     return [
        'count' => $faker->numberBetween(1, 5), 
     ];
 });
 
-$factory->define(App\Models\Order\DiscountCode::class, function (FakerEng $faker) {
+$factory->define(App\Models\Factor\Coupen::class, function (FakerEng $faker) {
     return [
         'code'          => $faker->numberBetween(10000000, 99999999),
         'value'         => $faker->numberBetween(1000, 100000),
         'using_time'    => [ null, $faker->dateTime() ][ $faker->boolean() ]
+    ];
+});
+
+$factory->define(App\Models\Factor\Account::class, function (FakerEng $faker) {
+    return [
+        'title'         => Faker::comapny(),
+        'title_en'      => [ null, $faker->company ][ $faker->boolean() ],
+        'description'   => [ null, $faker->sentence() ][ $faker->boolean() ],
+        'type'          => [ 'personal', 'bank', 'cart' ][ rand(0, 2) ],
+        'logo'          => [ null, $faker->imageUrl() ][ $faker->boolean() ],
+        'max_debt'      => $faker->numberBetween(0, 5000000),
+    ];
+});
+
+$factory->define(App\Models\Factor\Transaction::class, function (FakerEng $faker) {
+    return [
+        'value'         => $faker->numberBetween(0, 5000000),
+        'description'   => [ null, $faker->sentence() ][ $faker->boolean() ],
+        'type'          => [ $faker->boolean() ],
+        'docs'          => [ null, function () use ( $faker ) {
+            $docs = [];
+            for ($i = 0; $i < rand(0, 5); ++$i)
+                $docs[] = [ 'title' => $faker->company, 'file' => $faker->words().$faker->fileExtension ];
+            return $docs;
+        }][ $faker->boolean() ],
     ];
 });

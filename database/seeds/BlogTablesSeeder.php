@@ -23,7 +23,7 @@ class BlogTablesSeeder extends Seeder
             
             $user->articles()->saveMany( factory(\App\Models\Article::class, rand(0, 10))->make([
                 'subject_id' => $subjects->random()->id
-            ]) )->each( function ( $article ) {
+            ]) )->each( function ( $article ) use( $users ) {
 
                 $article->comments()->saveMany( factory(\App\Models\Opinion\Comment::class, rand(0, 10))->make([
                     'user_id' => $users->random()->id

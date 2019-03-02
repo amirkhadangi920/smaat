@@ -31,13 +31,20 @@ $factory->define(App\Models\Product\Variation::class, function (FakerEng $faker)
     
     $price = $faker->numberBetween(1000, 20000000);
     return [
-        'price'             => $price,
-        'offer'             => $faker->numberBetween(1000, $price),
-        'offer_deadline'    => $faker->dateTimeBetween('now', '+2 years'),
-        'inventory'         => $faker->numberBetween(0, 100),
-        'sending_time'      => $faker->numberBetween(1, 10),
-        'status'            => $faker->boolean(),
-        'old_prices'        => [ null, function () use ( $faker ) {
+        'purchase_price'        => $price,
+        'sales_price'           => $faker->numberBetween(1000, $price),
+        'offer'                 => [ null, $faker->numberBetween(1000, $price) ][ $faker->boolean() ],
+        'offer_deadline'        => [ null, $faker->dateTimeBetween('now', '+2 years') ][ $faker->boolean() ],
+        'inventory'             => [ null, $faker->numberBetween(0, 100) ][ $faker->boolean() ],
+        'sending_time'          => $faker->numberBetween(1, 10),
+        'status'                => $faker->boolean(),
+        'old_purchase_prices'   => [ null, function () use ( $faker ) {
+            $prices = [];
+            for ($i = 0; $i < rand(0, 5); ++$i)
+                $prices[] = [ 'price' => $faker->imageUrl(480, 320), 'datetime' => $faker->dateTimeBetween('-2 years', 'now') ];
+            return $prices;
+        }][ $faker->boolean() ],
+        'old_sales_prices'      => [ null, function () use ( $faker ) {
             $prices = [];
             for ($i = 0; $i < rand(0, 5); ++$i)
                 $prices[] = [ 'price' => $faker->imageUrl(480, 320), 'datetime' => $faker->dateTimeBetween('-2 years', 'now') ];

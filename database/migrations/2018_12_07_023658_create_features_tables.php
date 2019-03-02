@@ -1,8 +1,9 @@
 <?php
 
 use Illuminate\Support\Facades\Schema;
-use Illuminate\Database\Schema\Blueprint;
+// use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
+use App\Helpers\Blueprint;
 
 class CreateFeaturesTables extends Migration
 {
@@ -13,62 +14,43 @@ class CreateFeaturesTables extends Migration
      */
     public function up()
     {
-        Schema::create('brands', function (Blueprint $table) {
-            $table->increments('id');
+        $schema = DB::connection()->getSchemaBuilder();
 
-            $table->unsignedInteger('category_id');
-                $table->foreign('category_id')->references('id')->on('categories')
-                    ->onDelete('cascade')->onUpdate('cascade');
-
-            $table->string('logo', 150)->nullable();
-            $table->string('slug', 100);
-            $table->string('name', 50);
-            $table->string('description', 255)->nullable();
-
-            $table->softDeletes();
-            $table->timestamps();
+        $schema->blueprintResolver(function($table, $callback) {
+            return new Blueprint($table, $callback);
         });
 
-        Schema::create('colors', function (Blueprint $table) {
-            $table->increments('id');
-
-            $table->unsignedInteger('category_id')->nullable();
-                $table->foreign('category_id')->references('id')->on('categories')
-                    ->onDelete('cascade')->onUpdate('cascade');
-
-            $table->string('name', 30);
-            $table->string('code', 9)->comment('Hexadecimal code of the color, e.g #43df12');
-            
-            $table->softDeletes();
-            $table->timestamps();
+        $schema->create('brands', function ($table) {
+            $table->table([
+                'logo' => '150|nullable',
+                'sluggable_info' => 'param:name'
+            ], [ 'categories']);
         });
 
-        Schema::create('sizes', function (Blueprint $table) {
-            $table->increments('id');
-
-            $table->unsignedInteger('category_id');
-                $table->foreign('category_id')->references('id')->on('categories')
-                    ->onDelete('cascade')->onUpdate('cascade');
-
-            $table->string('name', 50);
-
-            $table->softDeletes();
-            $table->timestamps();
+        $schema->create('colors', function ($table) {
+            $table->table([
+                'name' => 30,
+                'code' => '9|comment:Hexadecimal code of the color, e.g #43df12',
+            ], [ 'categories']);
         });
 
-        Schema::create('warranties', function (Blueprint $table) {
-            $table->increments('id');
+        $schema->create('sizes', function ($table) {
+            $table->table([
+                'name' => 50,
+            ], [ 'categories']);
+        });
 
-            $table->unsignedInteger('category_id');
-                $table->foreign('category_id')->references('id')->on('categories')
-                    ->onDelete('cascade')->onUpdate('cascade');
+        $schema->create('warranties', function ($table) {
+            $table->table([
+                'info',
+                'expire' => 20,
+            ], [ 'categories']);
+        });
 
-            $table->string('title', 50);
-            $table->string('expire', 20);
-            $table->string('description', 255)->nullable();
-            
-            $table->softDeletes();
-            $table->timestamps();
+        $schema->create('units', function ($table) {
+            $table->table([
+                'info',
+            ], [ 'categories']);
         });
     }
 
@@ -79,9 +61,9 @@ class CreateFeaturesTables extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('brands');
-        Schema::dropIfExists('colors');
-        Schema::dropIfExists('warranties');
-        Schema::dropIfExists('sizes');
+        $schema->dropIfExists('brands');
+        $schema->dropIfExists('colors');
+        $schema->dropIfExists('warranties');
+        $schema->dropIfExists('sizes');
     }
 }

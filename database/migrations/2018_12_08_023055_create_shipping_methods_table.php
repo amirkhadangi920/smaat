@@ -5,7 +5,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Migrations\Migration;
 use App\Helpers\Blueprint;
 
-class CreateArticlesTable extends Migration
+class CreateShippingMethodsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -19,17 +19,15 @@ class CreateArticlesTable extends Migration
         $schema->blueprintResolver(function($table, $callback) {
             return new Blueprint($table, $callback);
         });
-
-        $schema->create('articles', function (Blueprint $table) {
+        
+        $schema->create('shipping_methods', function (Blueprint $table) {
             $table->table([
-                'sluggable_info',
-                'body',
-                'image' => 100,
-                'reading_time' => 'nullable|integer|comment:How much time need for reading the article in minute'
-            ], [
-                'users',
-                'subjects' => true,
-            ], 'uuid');
+                'info'      => 'param:name',
+                'logo'      => '150|nullable',
+                'cost'      => 'integer',
+                'minimum'   => 'integer|default:0|comment:Minimum factor total for this method',
+                'is_active' => 'boolean|default:1'
+            ]);
         });
     }
 

@@ -1,8 +1,9 @@
 <?php
 
 use Illuminate\Support\Facades\Schema;
-use Illuminate\Database\Schema\Blueprint;
+// use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
+use App\Helpers\Blueprint;
 
 class CreateGroupingTables extends Migration
 {
@@ -13,44 +14,37 @@ class CreateGroupingTables extends Migration
      */
     public function up()
     {
-        Schema::create('categories', function (Blueprint $table) {
-            $table->increments('id');
-            
-            $table->integer('parent_id')->unsigned()->nullable();
-                $table->foreign('parent_id')
-                    ->references('id')
-                    ->on('categories')
-                    ->onDelete('cascade')
-                    ->onUpdate('cascade');
-                    
-            $table->string('slug', 100);
-            $table->string('title', 50);
-            $table->string('description', 255)->nullable();
-            $table->tinyInteger('depth')->default(1)->comment('Depth of the group e.g parent > child > sub-sbhild is 3');
-            $table->string('logo', 100)->nullable();
+        $schema = DB::connection()->getSchemaBuilder();
 
-            $table->mediumText('scoring_feilds')->nullable();
-
-            $table->softDeletes();
-            $table->timestamps();
+        $schema->blueprintResolver(function($table, $callback) {
+            return new Blueprint($table, $callback);
         });
 
-        Schema::create('subjects', function (Blueprint $table) {
-            $table->increments('id');
-            
-            $table->integer('parent_id')->unsigned()->nullable();
-                $table->foreign('parent_id')->references('id')->on('subjects')
-                    ->onDelete('cascade')->onUpdate('cascade');
-                    
-            $table->string('slug', 100);
-            $table->string('title', 50);
-            $table->string('description', 255)->nullable();
-            $table->tinyInteger('depth')->default(1)->comment('Depth of the group e.g parent > child > sub-sbhild is 3');
-            $table->string('logo', 100)->nullable();
-            
-            $table->softDeletes();
-            $table->timestamps();
+        $schema->create('categories', function (Blueprint $table) {
+            $table->table([
+                'sluggable_info',
+                'depth'          => 'tinyInteger|default:1|comment:Depth of the group e.g parent > child > sub-sbhild is 3',
+                'logo'           => '100|nullable',
+                'scoring_feilds' => 'mediumText|nullable'
+            ], ['self']);
         });
+
+        $schema->create('subjects', function (Blueprint $table) {
+            $table->table([
+                'sluggable_info',
+                'depth'          => 'tinyInteger|default:1|comment:Depth of the group e.g parent > child > sub-sbhild is 3',
+                'logo'           => '100|nullable',
+            ], ['self']);
+        });
+
+        // $schema->create('groupings', function (Blueprint $table) {
+        //     $table->table([
+        //         'info',
+        //         'depth' => 'tinyInteger|default:1|comment:Depth of the group e.g parent > child > sub-sbhild is 3',
+        //         'logo'  => '100|nullable',
+        //         'type'  => '30|comment:Type of the group, e.g for accounts, incomes etc...',
+        //     ], ['self']);
+        // });
     }
 
     /**
@@ -60,7 +54,8 @@ class CreateGroupingTables extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('categories');
-        Schema::dropIfExists('subjects');
+        $schema->dropIfExists('categories');
+        $schema->dropIfExists('subjects');
+        $schema->dropIfExists('account_groups');
     }
 }

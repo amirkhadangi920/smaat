@@ -2,6 +2,12 @@
 
 use Faker\Generator as Faker;
 
+
+function nullable ( $value )
+{
+    return [ null, $value ][ rand(0, 1) ];
+}
+
 $factory->define(App\Models\Article::class, function (Faker $faker) {
     return [
         'title'         => $faker->name(),

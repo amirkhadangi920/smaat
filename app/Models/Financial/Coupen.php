@@ -1,12 +1,12 @@
 <?php
 
-namespace App\Models\Order;
+namespace App\Models\Financial;
 
 use Illuminate\Database\Eloquent\Model;
 use OwenIt\Auditing\Auditable;
 use OwenIt\Auditing\Contracts\Auditable as AuditableContract;
 
-class DiscountCode extends Model implements AuditableContract
+class Coupen extends Model implements AuditableContract
 {
     use Auditable;
 

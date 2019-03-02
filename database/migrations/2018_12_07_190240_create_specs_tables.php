@@ -1,8 +1,9 @@
 <?php
 
 use Illuminate\Support\Facades\Schema;
-use Illuminate\Database\Schema\Blueprint;
+// use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
+use App\Helpers\Blueprint;
 
 class CreateSpecsTables extends Migration
 {
@@ -13,48 +14,35 @@ class CreateSpecsTables extends Migration
      */
     public function up()
     {
-        Schema::create('specs', function (Blueprint $table) {
-            $table->increments('id');
-            $table->unsignedInteger('category_id');
-                $table->foreign('category_id')->references('id')->on('categories')
-                    ->onDelete('cascade')->onUpdate('cascade');
-                    
-            $table->string('title');
-            $table->string('description', 255)->nullable();
-            
-            $table->softDeletes();
-            $table->timestamps();
+        $schema = DB::connection()->getSchemaBuilder();
+
+        $schema->blueprintResolver(function($table, $callback) {
+            return new Blueprint($table, $callback);
+        });
+        
+        $schema->create('specifications', function (Blueprint $table) {
+            $table->id();
+            $table->reltoCategories();
+            $table->info();
+            $table->full_timestamps();
         });
 
-        Schema::create('spec_headers', function (Blueprint $table) {
-            $table->increments('id');
-            $table->unsignedInteger('spec_id');
-            $table->foreign('spec_id')->references('id')->on('specs')
-                    ->onDelete('cascade')->onUpdate('cascade');
-                    
-            $table->string('title', 50);
-            $table->string('description', 255)->nullable();
-
-            $table->softDeletes();
-            $table->timestamps();
+        $schema->create('specification_headers', function (Blueprint $table) {
+            $table->id();
+            $table->reltoSpecifications();
+            $table->info();
+            $table->full_timestamps();
         });
 
-        Schema::create('spec_rows', function (Blueprint $table) {
-            $table->increments('id');
-            $table->unsignedInteger('spec_header_id');
-            $table->foreign('spec_header_id')->references('id')->on('spec_headers')
-                    ->onDelete('cascade')->onUpdate('cascade');
-
-            $table->string('title', 50);
-            $table->string('description', 255)->nullable();
-            $table->string('label', 50)->nullable();
-            $table->mediumText('values')->nullable();
-            $table->string('help', 255)->nullable();
-            $table->boolean('multiple')->default(0);
-            $table->boolean('required')->default(1);
-            
-            $table->softDeletes();
-            $table->timestamps();
+        $schema->create('specification_rows', function (Blueprint $table) {
+            $table->table([
+                'info',
+                'label'     => '50|nullable',
+                'values'    => 'array',
+                'help'      => '255|nullable',
+                'multiple'  => 'default:0',
+                'required'  => 'default:1',
+            ], ['specification_headers']);
         });
     }
 
@@ -65,8 +53,8 @@ class CreateSpecsTables extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('speceficatinos');
-        Schema::dropIfExists('spec_headers');
-        Schema::dropIfExists('spec_rows');
+        $schema->dropIfExists('speceficatinos');
+        $schema->dropIfExists('spec_headers');
+        $schema->dropIfExists('spec_rows');
     }
 }

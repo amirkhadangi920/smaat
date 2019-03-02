@@ -1,8 +1,9 @@
 <?php
 
 use Illuminate\Support\Facades\Schema;
-use Illuminate\Database\Schema\Blueprint;
+// use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
+use App\Helpers\Blueprint;
 
 class CreateOptionsTable extends Migration
 {
@@ -13,9 +14,15 @@ class CreateOptionsTable extends Migration
      */
     public function up()
     {
-        Schema::create('options', function (Blueprint $table) {
-            $table->increments('id');
-            $table->string('name', 50);
+        $schema = DB::connection()->getSchemaBuilder();
+
+        $schema->blueprintResolver(function($table, $callback) {
+            return new Blueprint($table, $callback);
+        });
+        
+        $schema->create('options', function (Blueprint $table) {
+            $table->id();
+            $table->name(50);
             $table->mediumText('value', 50);
             $table->timestamps();
         });
@@ -28,6 +35,6 @@ class CreateOptionsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('options');
+        $schema->dropIfExists('options');
     }
 }

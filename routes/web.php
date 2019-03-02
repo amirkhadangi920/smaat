@@ -17,11 +17,10 @@ use App\Models\Article;
 
 Route::get('/', function () {
 
-    return Article::first()->attachTag('tag3');
-
-
-    return view('welcome');
+    
 });
+
+Route::resource('/article', 'panel\ArticleController');
 
 // https://github.com/spatie/laravel-medialibrary
 

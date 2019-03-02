@@ -1,8 +1,9 @@
 <?php
 
 use Illuminate\Support\Facades\Schema;
-use Illuminate\Database\Schema\Blueprint;
+// use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
+use App\Helpers\Blueprint;
 
 class CreateLocationTables extends Migration
 {
@@ -13,33 +14,36 @@ class CreateLocationTables extends Migration
      */
     public function up()
     {
-        Schema::create('countries', function (Blueprint $table) {
-            $table->increments('id');
-            $table->string('longitude‎', 12)->nullable();
-            $table->string('latitude‎', 12)->nullable();
-            $table->string('name', 30);
-            $table->string('code', 4);
+        $schema = DB::connection()->getSchemaBuilder();
+
+        $schema->blueprintResolver(function($table, $callback) {
+            return new Blueprint($table, $callback);
         });
 
-        Schema::create('provinces', function (Blueprint $table) {
-            $table->increments('id');
-            $table->unsignedInteger('country_id');
-                $table->foreign('country_id')->references('id')->on('countries')
-                    ->onDelete('cascade')->onUpdate('cascade');
-            $table->string('longitude‎', 12)->nullable();
-            $table->string('latitude‎', 12)->nullable();
-            $table->string('name', 30);
+        $schema->create('countries', function (Blueprint $table) {
+            $table->table([
+                'longitude‎' => '12|nullable',
+                'longitude‎' => '12|nullable',
+                'name'      => 30,
+                'code'      => 4, 
+            ], [], 'int', false);
         });
 
-        Schema::create('cities', function (Blueprint $table) {
-            $table->increments('id');
-            $table->unsignedInteger('province_id');
-                $table->foreign('province_id')->references('id')->on('provinces')
-                    ->onDelete('cascade')->onUpdate('cascade');
-            $table->string('longitude‎', 12)->nullable();
-            $table->string('latitude‎', 12)->nullable();
-            $table->string('name', 30);
-            $table->unsignedBigInteger('users_count')->default(0);
+        $schema->create('provinces', function (Blueprint $table) {
+            $table->table([
+                'longitude‎' => '12|nullable',
+                'longitude‎' => '12|nullable',
+                'name'      => 30,
+            ], ['countries' => false], 'int', false);
+        });
+
+        $schema->create('cities', function (Blueprint $table) {
+            $table->table([
+                'longitude‎' => '12|nullable',
+                'longitude‎' => '12|nullable',
+                'name'      => 30,
+                'users_count'  => 'unsignedInteger|default:0',
+            ], ['provinces'], 'int', false);
         });
     }
 
@@ -50,8 +54,8 @@ class CreateLocationTables extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('users');
-        Schema::dropIfExists('provinces');
-        Schema::dropIfExists('cities');
+        $schema->dropIfExists('users');
+        $schema->dropIfExists('provinces');
+        $schema->dropIfExists('cities');
     }
 }

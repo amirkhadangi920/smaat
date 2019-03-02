@@ -1,8 +1,9 @@
 <?php
 
 use Illuminate\Support\Facades\Schema;
-use Illuminate\Database\Schema\Blueprint;
+// use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
+use App\Helpers\Blueprint;
 
 class CreateOpinionTables extends Migration
 {
@@ -13,72 +14,45 @@ class CreateOpinionTables extends Migration
      */
     public function up()
     {
-        Schema::create('comments', function (Blueprint $table) {
-            $table->increments('id');
+        $schema = DB::connection()->getSchemaBuilder();
 
-            $table->uuid('user_id')->nullable();
-                $table->foreign('user_id')->references('id')->on('users')
-                    ->onDelete('cascade')->onUpdate('cascade');
-            
-            $table->uuid('article_id')->nullable();
-                    $table->foreign('article_id')->references('id')->on('articles')
-                        ->onDelete('cascade')->onUpdate('cascade');
-
-            $table->unsignedInteger('parent_id')->nullable();
-                $table->foreign('parent_id')->references('id')->on('comments')
-                    ->onDelete('cascade')->onUpdate('cascade');
-
-            
+        $schema->blueprintResolver(function($table, $callback) {
+            return new Blueprint($table, $callback);
+        });
+        
+        $schema->create('comments', function (Blueprint $table) {
+            $table->id();
+            $table->add_foreign();
+            $table->relations([
+                'users' => true,
+                'articles' => true,
+            ]);
             $table->mediumText('message');
-
-            $table->softDeletes();
-            $table->timestamps();
+            $table->full_timestamps();
         });
 
-        Schema::create('reviews', function (Blueprint $table) {
-            $table->increments('id');
-
-            $table->uuid('user_id')->nullable();
-                $table->foreign('user_id')->references('id')->on('users')
-                    ->onDelete('cascade')->onUpdate('cascade');
-
-            $table->unsignedInteger('parent_id')->nullable();
-                $table->foreign('parent_id')->references('id')->on('comments')
-                    ->onDelete('cascade')->onUpdate('cascade');
-
-            $table->uuid('product_id')->nullable();
-                $table->foreign('product_id')->references('id')->on('products')
-                    ->onDelete('cascade')->onUpdate('cascade');
-            
-            $table->mediumText('ranks')->nullable()->comment('Array of user ranking in this review');
-            $table->mediumText('advantages')->nullable()->comment('Array of user advantages in this review');
-            $table->mediumText('disadvantages')->nullable()->comment('Array of user disadvantages in this review');
-            
-            $table->mediumText('message');
-
-            $table->softDeletes();
-            $table->timestamps();
+        $schema->create('reviews', function (Blueprint $table) {
+            $table->table([
+                'ranks' => 'array',
+                'advantages' => 'array',
+                'disadvantages' => 'array',
+                'message' => 'mediumText',
+            ], [
+                'self',
+                'users' => true,
+                'products' => true,
+            ]);
         });
 
-        Schema::create('question_and_answers', function (Blueprint $table) {
-            $table->increments('id');
-
-            $table->uuid('user_id')->nullable();
-                $table->foreign('user_id')->references('id')->on('users')
-                    ->onDelete('cascade')->onUpdate('cascade');
-
-            $table->unsignedInteger('question_id')->nullable();
-                $table->foreign('question_id')->references('id')->on('question_and_answers')
-                    ->onDelete('cascade')->onUpdate('cascade');
-
-            $table->uuid('product_id')->nullable();
-                $table->foreign('product_id')->references('id')->on('products')
-                    ->onDelete('cascade')->onUpdate('cascade');
-            
+        $schema->create('question_and_answers', function (Blueprint $table) {
+            $table->id();
+            $table->relations([
+                'users' => true,
+                'products' => true,
+            ]);
+            $table->add_foreign('question_and_answers', true, 'unsignedInteger', 'question_id');
             $table->mediumText('message');
-
-            $table->softDeletes();
-            $table->timestamps();
+            $table->full_timestamps();
         });
     }
 
@@ -89,8 +63,8 @@ class CreateOpinionTables extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('comments');
-        Schema::dropIfExists('reviews');
-        Schema::dropIfExists('question_and_answers');
+        $schema->dropIfExists('comments');
+        $schema->dropIfExists('reviews');
+        $schema->dropIfExists('question_and_answers');
     }
 }

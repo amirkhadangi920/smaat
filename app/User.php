@@ -9,11 +9,17 @@ use OwenIt\Auditing\Auditable;
 use OwenIt\Auditing\Contracts\Auditable as AuditableContract;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use App\Traits\GenerateRandomID;
-use App\Models\Article;
-use App\Models\Product\Product;
+use Spatie\Permission\Traits\HasRoles;
+use Laratrust\Traits\LaratrustUserTrait;
+use App\Models\{
+    Article,
+    Product\Product
+};
 
 class User extends Authenticatable implements AuditableContract
 {
+    use LaratrustUserTrait;
+    // use Notifiable, SoftDeletes, GenerateRandomID, Auditable, HasRoles;
     use Notifiable, SoftDeletes, GenerateRandomID, Auditable;
 
     /****************************************
@@ -50,7 +56,8 @@ class User extends Authenticatable implements AuditableContract
      * @var array
      */
     protected $casts = [
-        'phones' => 'array',
+        'phones'        => 'array',
+        'social_links'  => 'array',
     ];
 
     /**
@@ -59,7 +66,7 @@ class User extends Authenticatable implements AuditableContract
      * @var array
      */
     protected $hidden = [
-        'password', 'remember_token',
+        'password', 'remember_token'
     ];
 
     /**

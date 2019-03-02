@@ -1,13 +1,13 @@
 <?php
 
-namespace App\Models\Order;
+namespace App\Models\Financial;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use OwenIt\Auditing\Auditable;
 use OwenIt\Auditing\Contracts\Auditable as AuditableContract;
 
-class OrderItem extends Model implements AuditableContract
+class FactorItem extends Model implements AuditableContract
 {
     use SoftDeletes, Auditable;
 

@@ -50,8 +50,9 @@ class Variation extends Model implements AuditableContract
      * @var array
      */
     protected $casts = [
-        'old_prices'    => 'array',
-        'status'        => 'boolean'
+        'old_purchase_prices'   => 'array',
+        'old_sales_prices'      => 'array',
+        'status'                => 'boolean'
     ];
 
     /**

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Models\Order;
+namespace App\Models\Financial;
 
 use Illuminate\Database\Eloquent\Model;
 use \Morilog\Jalali\Jalalian;
@@ -10,7 +10,7 @@ use App\Traits\GenerateRandomID;
 use OwenIt\Auditing\Auditable;
 use OwenIt\Auditing\Contracts\Auditable as AuditableContract;
 
-class Order extends Model
+class Factor extends Model
 {
     use SoftDeletes, GenerateRandomID, Auditable;
 
@@ -18,6 +18,14 @@ class Order extends Model
      **             Attributes
      ***************************************/
     
+    /**
+     * Different types of Factor constants
+     */
+    const SELL = 1;
+    const BUY = 2;
+    const SELL_BACK = 3;
+    const BUY_BACK = 4;
+
     /**
      * The attributes specifies that table has char type id
      *
@@ -31,21 +39,21 @@ class Order extends Model
      * @var array
      */
     protected $fillable = [
-        'buyer_id',
-        'discount_code_id',
+        // 'discount_code_id',
         'descriptions',
         'destination',
         'postal_code',
         'offer',
         'total',
-        'payment',
+        'tax',
         'created_at',
-        'payment_jalali',
         'auth_code',
         'payment_code',
         'datetimes',
         'shipping',
-        'status'
+        'status',
+        'paid_at',
+        'jalali_paid_at',
     ];
     
     /**
@@ -66,8 +74,8 @@ class Order extends Model
      */
     protected $dates = [
         'deleted_at',
-        'payment',
-        'payment_jalali'
+        'paid_at',
+        'jalali_paid_at'
     ];
 
 

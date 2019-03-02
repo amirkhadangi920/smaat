@@ -16,7 +16,9 @@
         "laravel/tinker": "^1.0",
         "morilog/jalali": "3.*",
         "owen-it/laravel-auditing": "^8.0",
+        "santigarcor/laratrust": "5.2.*",
         "spatie/laravel-medialibrary": "^7.0.0",
+        "spatie/laravel-permission": "^2.32",
         "spatie/laravel-tags": "^2.2",
         "ybazli/faker": "^1.0"
     },

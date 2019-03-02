@@ -41,7 +41,7 @@ class ProductTablesSeeder extends Seeder
                     )
                 );
 
-                $data['users']->each( function ( $user ) use ( $product) {
+                $data['users']->each( function ( $user ) use ( $product, $data ) {
                     $product->reviews()->save(
                         factory(\App\Models\Opinion\Review::class)->make([
                             'user_id' => $user->id
