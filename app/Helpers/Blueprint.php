@@ -170,14 +170,16 @@ class Blueprint extends BaseBlueprint
         foreach ( $relations as $table => $nullable )
         {
             if ( $nullable === 'self' )
-                return $this->add_foreign();
-
-            if ( is_int( $table ) )
+                $this->add_foreign();
+            else
             {
-                $table = $nullable;
-                $nullable = false;
+                if ( is_int( $table ) )
+                {
+                    $table = $nullable;
+                    $nullable = false;
+                }
+                $this->{'relto'.$table}($nullable);
             }
-            $this->{'relto'.$table}($nullable);
         }
     }
 

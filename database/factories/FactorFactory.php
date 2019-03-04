@@ -2,7 +2,7 @@
 
 use Faker\Generator as FakerEng;
 
-$factory->define(App\Models\Factor\Order::class, function (FakerEng $faker) {
+$factory->define(App\Models\Financial\Factor::class, function (FakerEng $faker) {
     $descriptions = $datetimes = [];
     if ( rand(0, 1) ) $descriptions['admin'] = Faker::sentence();
     if ( rand(0, 1) ) $descriptions['buyer'] = Faker::sentence();
@@ -39,13 +39,27 @@ $factory->define(App\Models\Factor\Order::class, function (FakerEng $faker) {
     ];
 });
 
-$factory->define(App\Models\Factor\OrderItem::class, function (FakerEng $faker) {
+$factory->define(App\Models\Financial\FactorItem::class, function (FakerEng $faker) {
     return [
        'count' => $faker->numberBetween(1, 5), 
     ];
 });
 
-$factory->define(App\Models\Factor\Coupen::class, function (FakerEng $faker) {
+$factory->define(App\Models\Financial\FactorStatus::class, function (FakerEng $faker) {
+    return [
+        'title'         => $faker->name(),
+        'description'   => $faker->sentence(), 
+        'cost'          => $faker->numberBetween(1000, 500000), 
+    ];
+});
+
+$factory->define(App\Models\Financial\FactorPoint::class, function (FakerEng $faker) {
+    return [
+        'value'         => $faker->numberBetween(0, 500000) 
+    ];
+});
+
+$factory->define(App\Models\Financial\Coupen::class, function (FakerEng $faker) {
     return [
         'code'          => $faker->numberBetween(10000000, 99999999),
         'value'         => $faker->numberBetween(1000, 100000),
@@ -53,7 +67,7 @@ $factory->define(App\Models\Factor\Coupen::class, function (FakerEng $faker) {
     ];
 });
 
-$factory->define(App\Models\Factor\Account::class, function (FakerEng $faker) {
+$factory->define(App\Models\Financial\Account::class, function (FakerEng $faker) {
     return [
         'title'         => Faker::comapny(),
         'title_en'      => [ null, $faker->company ][ $faker->boolean() ],
@@ -64,7 +78,7 @@ $factory->define(App\Models\Factor\Account::class, function (FakerEng $faker) {
     ];
 });
 
-$factory->define(App\Models\Factor\Transaction::class, function (FakerEng $faker) {
+$factory->define(App\Models\Financial\Transaction::class, function (FakerEng $faker) {
     return [
         'value'         => $faker->numberBetween(0, 5000000),
         'description'   => [ null, $faker->sentence() ][ $faker->boolean() ],

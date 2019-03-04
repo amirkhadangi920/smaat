@@ -7,6 +7,8 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use OwenIt\Auditing\Auditable;
 use OwenIt\Auditing\Contracts\Auditable as AuditableContract;
 use Cviebrock\EloquentSluggable\Sluggable;
+use App\Models\Group\Category;
+use App\Models\Product\Product;
 
 class Brand extends Model implements AuditableContract
 {
@@ -55,5 +57,25 @@ class Brand extends Model implements AuditableContract
                 'source' => 'name'
             ]
         ];
+    }
+    /****************************************
+     **             Relations
+     ***************************************/
+    
+
+    /**
+     * each category can get one brand
+     */
+    public function category ()
+    {
+        return $this->belongsTo(Category::class);
+    }
+
+    /**
+     * Get all the products of the brand.
+     */
+    public function products ()
+    {
+        return $this->hasMany(Product::class);
     }
 }

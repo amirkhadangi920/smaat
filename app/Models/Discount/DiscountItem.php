@@ -1,18 +1,12 @@
 <?php
 
-namespace App\Models\Feature;
+namespace App\Models\Discount;
 
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
-use OwenIt\Auditing\Auditable;
-use OwenIt\Auditing\Contracts\Auditable as AuditableContract;
-use App\Models\Group\Category;
 use App\Models\Product\Variation;
 
-class Color extends Model implements AuditableContract
+class DiscountItem extends Model
 {
-    use SoftDeletes, Auditable;
-
     /****************************************
      **             Attributes
      ***************************************/
@@ -23,8 +17,9 @@ class Color extends Model implements AuditableContract
      * @var array
      */
     protected $fillable = [
-        'name',
-        'code'
+        'offer',
+        'quantity',
+        'sold_count'
     ];
 
     /**
@@ -33,24 +28,24 @@ class Color extends Model implements AuditableContract
      * @var array
      */
     protected $dates = ['deleted_at'];
-
+    
     /****************************************
      **             Relations
      ***************************************/
-
-    /**
-     * each category can get one color
+    
+     /**
+     * get the all discount that owned discount item
      */
-    public function category ()
+    public function discount ()
     {
-        return $this->belongsTo(Category::class);
+        return $this->belongsTo(Discount::class);
     }
 
     /**
-     * get the all variation that owned the color
+     * get the all variation that owned discount item
      */
-    public function variations ()
+    public function variation ()
     {
-        return $this->hasMany(Variation::class);
+        return $this->belongsTo(Variation::class);
     }
 }

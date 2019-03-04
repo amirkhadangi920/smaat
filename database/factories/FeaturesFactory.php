@@ -24,6 +24,13 @@ $factory->define(App\Models\Feature\Size::class, function (Faker $faker) {
     ];
 });
 
+$factory->define(App\Models\Feature\Unit::class, function (Faker $faker) {
+    return [
+        'title'         => $faker->name(),
+        'description'   => $faker->sentence(),
+    ];
+});
+
 $factory->define(App\Models\Feature\Warranty::class, function (Faker $faker) {
     $warranties = [
         'طلایی',

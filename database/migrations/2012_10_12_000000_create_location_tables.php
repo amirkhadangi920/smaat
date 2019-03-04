@@ -23,7 +23,7 @@ class CreateLocationTables extends Migration
         $schema->create('countries', function (Blueprint $table) {
             $table->table([
                 'longitude‎' => '12|nullable',
-                'longitude‎' => '12|nullable',
+                'latitude‎' => '12|nullable',
                 'name'      => 30,
                 'code'      => 4, 
             ], [], 'int', false);
@@ -32,7 +32,7 @@ class CreateLocationTables extends Migration
         $schema->create('provinces', function (Blueprint $table) {
             $table->table([
                 'longitude‎' => '12|nullable',
-                'longitude‎' => '12|nullable',
+                'latitude‎' => '12|nullable',
                 'name'      => 30,
             ], ['countries' => false], 'int', false);
         });
@@ -40,7 +40,7 @@ class CreateLocationTables extends Migration
         $schema->create('cities', function (Blueprint $table) {
             $table->table([
                 'longitude‎' => '12|nullable',
-                'longitude‎' => '12|nullable',
+                'latitude‎' => '12|nullable',
                 'name'      => 30,
                 'users_count'  => 'unsignedInteger|default:0',
             ], ['provinces'], 'int', false);

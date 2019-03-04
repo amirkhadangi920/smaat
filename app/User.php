@@ -13,8 +13,21 @@ use Spatie\Permission\Traits\HasRoles;
 use Laratrust\Traits\LaratrustUserTrait;
 use App\Models\{
     Article,
-    Product\Product
+    Product\Product,
+    Opinion\Comment,
+    Places\City,
+    Financial\Factor,
+    Opinion\QuestionAndAnswer,
+    Opinion\Review,
+ Promocode\Promocode,
+ Financial\FactorItem,
+ Discount\Discount
+
+
+
 };
+
+
 
 class User extends Authenticatable implements AuditableContract
 {
@@ -104,6 +117,22 @@ class User extends Authenticatable implements AuditableContract
         return $this->hasMany(Article::class);
     }
 
+    /**
+     * Get all the discounts that the user
+     */
+    public function discounts ()
+    {
+        return $this->hasMany(Discount::class);
+    }
+
+    /**
+     * Get all the promocode that the user 
+     */
+    public function promocodes ()
+    {
+        return $this->hasMany(Promocode::class);
+    }
+
 
     /**
      * Get all of the favorites products
@@ -111,5 +140,53 @@ class User extends Authenticatable implements AuditableContract
     public function favorites ()
     {
         return $this->belongsToMany(Product::class, 'favorites');
+    }
+
+    /**
+     * Get all the audits that the user wrote them
+     */
+    public function comments ()
+    {
+        return $this->hasMany(Comment::class);
+    }
+
+    /**
+     * each user live in one city
+     */
+    public function city ()
+    {
+        return $this->belongsTo(City::class);
+    }
+
+    /**
+     * Get all the questionAndAnsers of the users.
+     */
+    public function users ()
+    {
+        return $this->hasMany(QuestionAndAnswer::class);
+    }
+
+    /**
+     * Get all the orders of the users.
+     */
+    public function orders ()
+    {
+        return $this->hasMany(Factor::class);
+    }
+
+    /**
+     * Get all the orders items of the users.
+     */
+    public function orderItems ()
+    {
+        return $this->hasMany(FactorItem::class);
+    }
+
+    /**
+     * Get all the orders of the users.
+     */
+    public function reviews ()
+    {
+        return $this->hasMany(Review::class);
     }
 }

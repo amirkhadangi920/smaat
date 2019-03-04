@@ -12,6 +12,9 @@ use App\Models\Spec\{ SpecData, Spec };
 use App\Models\Group\Category;
 use App\Models\Opinion\{ Review, QuestionAndAnswer };
 use Spatie\Tags\HasTags;
+use App\Models\Feature\Brand;
+use App\Models\Feature\Unit;
+
 
 class Product extends Model implements AuditableContract
 {
@@ -87,6 +90,14 @@ class Product extends Model implements AuditableContract
     }
 
     /**
+     * Get all of the users like some products
+     */
+    public function favorites ()
+    {
+        return $this->belongsToMany(\App\User::class, 'favorites');
+    }
+
+    /**
      * Get all the reviews of the product.
      */
     public function reviews ()
@@ -116,6 +127,54 @@ class Product extends Model implements AuditableContract
     public function accessories()
     {
         return $this->belongsToMany(Product::class, 'product_accessory', 'accessory_id');
+    }
+
+    /**
+     * Get all the category that owned product.
+     */
+    public function category ()
+    {
+        return $this->belongsTo(Category::class);
+    }
+
+    /**
+     * Get all the unit that owned product.
+     */
+    public function unit ()
+    {
+        return $this->belongsTo(Unit::class);
+    }
+    
+    /**
+     * Get all the parentCategory that owned product.
+     */
+    public function parentCategory ()
+    {
+        return $this->belongsTo(Category::class, 'parent_category');
+    }
+
+    /**
+     * Get the variation that owned product.
+     */
+    public function variation ()
+    {
+        return $this->hasOne(Variation::class);
+    }
+
+    /**
+     * Get all the brand that owned product.
+     */
+    public function brand ()
+    {
+        return $this->belongsTo(Brand::class);
+    }
+
+    /**
+     * Get all the spec that owned product.
+     */
+    public function spec ()
+    {
+        return $this->belongsTo(Spec::class);
     }
 
     public static function productCard ($query = null, $options = [])
@@ -230,31 +289,6 @@ class Product extends Model implements AuditableContract
             };
         }
         return $product->load($relations);
-    }
-
-    public function category ()
-    {
-        return $this->belongsTo(Category::class);
-    }
-    
-    public function parentCategory ()
-    {
-        return $this->belongsTo(Category::class, 'parent_category');
-    }
-
-    public function variation ()
-    {
-        return $this->hasOne(ProductVariation::class);
-    }
-
-    public function brand ()
-    {
-        return $this->belongsTo(Brand::class);
-    }
-
-    public function spec ()
-    {
-        return $this->belongsTo(Spec::class);
     }
 
     public static function related_products (Product $product)

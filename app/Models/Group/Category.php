@@ -8,7 +8,13 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use OwenIt\Auditing\Auditable;
 use OwenIt\Auditing\Contracts\Auditable as AuditableContract;
 use Cviebrock\EloquentSluggable\Sluggable;
-use App\Models\Feature\{ Brand, Color, Size, Warranty };
+use App\Models\Feature\{
+    Brand,
+    Color,
+    Size,
+    Warranty,
+    Unit
+ };
 use App\Models\Product\Product;
 use Spatie\Tags\HasTags;
 
@@ -65,6 +71,14 @@ class Category extends Model implements AuditableContract
     }
 
     /**
+     * Get all the units that owned by the category
+     */
+    public function units ()
+    {
+        return $this->hasMany(Unit::class);
+    }
+
+    /**
      * Get all the colors that owned by the category
      */
     public function colors ()
@@ -112,6 +126,13 @@ class Category extends Model implements AuditableContract
         return $this->hasMany(Category::class, 'parent_id');
     }
     
+    /**
+     * return parent category that can have many childs
+     */
+    public function parent ()
+    {
+        return $this->belongsTo(self::class, 'parent_id');
+    }
 
 
     /**

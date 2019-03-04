@@ -7,6 +7,7 @@ use App\Models\Category;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use OwenIt\Auditing\Auditable;
 use OwenIt\Auditing\Contracts\Auditable as AuditableContract;
+use App\Models\Product\Product;
 
 class Spec extends Model implements AuditableContract
 {
@@ -34,14 +35,33 @@ class Spec extends Model implements AuditableContract
      */
     protected $dates = ['deleted_at'];
 
+    /****************************************
+     **             Relations
+     ****************************************
+
+    /**
+     * Get the category that owned spec.
+     */
     public function category ()
     {
         return $this->belongsTo(Category::class);
     }
 
+    /**
+     * Get all the spec header of the spec.
+     */
+
     public function specHeaders ()
     {
         return $this->hasMany(SpecHeader::class);
+    }
+
+    /**
+     * Get all the products of the spec.
+     */
+    public function products ()
+    {
+        return $this->hasMany(Product::class);
     }
 
     public static function compare ()

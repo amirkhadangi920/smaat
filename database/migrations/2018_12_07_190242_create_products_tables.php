@@ -44,7 +44,7 @@ class CreateProductsTables extends Migration
                 'categories' => true,
                 'brands' => true,
                 'units' => true,
-                'specifications' => true
+                'specs' => true
             ], 'uuid');
         });
 
@@ -78,9 +78,9 @@ class CreateProductsTables extends Migration
             $table->primary(['product_id', 'accessory_id']);
         });
 
-        $schema->create('specification_data', function (Blueprint $table) {
+        $schema->create('spec_data', function (Blueprint $table) {
             $table->id();
-            $table->reltoSpecification_rows();
+            $table->reltoSpec_rows();
             $table->reltoProducts();
             $table->mediumText('data');
             $table->full_timestamps();

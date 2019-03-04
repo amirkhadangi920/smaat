@@ -50,16 +50,32 @@ class SpecRow extends Model implements AuditableContract
         'password', 'remember_token',
     ];
 
+    /****************************************
+     **             Relations
+     ***************************************/
+
+     /**
+     * Get the all of the spec row that owned spec header 
+     *
+     */
     public function specHeader ()
     {
         return $this->belongsTo(SpecHeader::class, 'spec_header_id');
     }
 
+    /**
+     * If i want to give one spec data i use it.
+     *
+     */
     public function specData ()
     {
         return $this->hasOne(SpecData::class, 'spec_row_id');
     }
 
+    /**
+     * Get the all of the spec data that owned spec row 
+     *
+     */
     public function specDatas ()
     {
         return $this->hasMany(SpecData::class, 'spec_row_id');

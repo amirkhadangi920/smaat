@@ -33,11 +33,11 @@ class DatabaseSeeder extends Seeder
         //     echo "\e[31mAmir Khadangi user \e[39mwith id=\e[30m\e[101m3g6s316j\e[49m \e[39mwas \e[32mcreated\n";
         // }
 
-        $cities = $this->call(LocationTablesSeeder::class);
+        // $cities = $this->call(LocationTablesSeeder::class);
         $this->call(OptionTableSeeder::class);
         
         $users = factory(\App\User::class, 5)->create([
-            'city_id' => $cities->random()->id
+            // 'city_id' => $cities->random()->id
         ]);
         echo "\e[31m\e[1m\e[100m{$users->count()}\e[49m Users \e[39mwas \e[32mcreated\n";
     

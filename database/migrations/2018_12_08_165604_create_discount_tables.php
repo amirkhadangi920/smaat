@@ -52,7 +52,7 @@ class CreateDiscountTables extends Migration
                 'value'         => 'integer',
                 'min_total'     => 'integer|default:0',
                 'reward_type'   => '20|default:buy|comment:e.g buy, birthday, gift etc...',
-            ], ['users'], 'int', ['expired_at']);
+            ], [], 'int', ['expired_at']);
         });
 
         $schema->create('promocode_variation', function (Blueprint $table) {
@@ -64,9 +64,9 @@ class CreateDiscountTables extends Migration
         });
 
         $schema->create('promocode_user', function (Blueprint $table) {
+            $table->interface('promocodes', 'users');
             $table->boolean('is_used')->default(0);
             $table->timestamp('used_at')->nullable();
-            $table->interface('promocodes', 'users');
         });
     }
 
