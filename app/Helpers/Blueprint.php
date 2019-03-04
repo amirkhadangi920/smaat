@@ -102,9 +102,9 @@ class Blueprint extends BaseBlueprint
 
 
         if ($nullable)
-            $this->$feild_type($column);
-        else
             $this->$feild_type($column)->nullable();
+        else
+            $this->$feild_type($column);
 
         $this->foreign($column)->references('id')->on($table)
             ->onDelete($on_change)->onUpdate($on_change);
