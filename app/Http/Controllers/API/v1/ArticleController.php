@@ -1,42 +1,38 @@
 <?php
 
-namespace App\Http\Controllers\panel;
+namespace App\Http\Controllers\API\v1;
 
 use App\Models\Article;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use Illuminate\Support\Facades\Auth;
+use Auth;
+use Laratrust;
 
 class ArticleController extends Controller
 {
     /**
-     * Display a listing of the resource.
+     * Display a listing of the Article.
      *
      * @return \Illuminate\Http\Response
      */
     public function index()
     {
-        return \App\User::create([
-            'name'  => '12'
-        ]);
-        // return Auth::loginUsingId(1);
-
-        return auth()->user();
+        return Article::create();
     }
 
     /**
-     * Store a newly created resource in storage.
+     * Store a newly created Article in storage.
      *
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
     {
-        //
+        
     }
 
     /**
-     * Display the specified resource.
+     * Display the specified Article.
      *
      * @param  \App\Models\Article  $article
      * @return \Illuminate\Http\Response
@@ -47,7 +43,7 @@ class ArticleController extends Controller
     }
 
     /**
-     * Update the specified resource in storage.
+     * Update the specified Article in storage.
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  \App\Models\Article  $article
@@ -59,7 +55,7 @@ class ArticleController extends Controller
     }
 
     /**
-     * Remove the specified resource from storage.
+     * Remove the specified Article from storage.
      *
      * @param  \App\Models\Article  $article
      * @return \Illuminate\Http\Response

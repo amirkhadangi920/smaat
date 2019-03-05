@@ -20,7 +20,7 @@ Route::get('/', function () {
     
 });
 
-Route::resource('/article', 'panel\ArticleController');
+// Route::resource('/article', 'panel\ArticleController');
 
 // https://github.com/spatie/laravel-medialibrary
 

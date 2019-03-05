@@ -34,7 +34,7 @@ class CreateLocationTables extends Migration
                 'longitude‎' => '12|nullable',
                 'latitude‎' => '12|nullable',
                 'name'      => 30,
-            ], ['countries' => false], 'int', false);
+            ], ['countries'], 'int', false);
         });
 
         $schema->create('cities', function (Blueprint $table) {
