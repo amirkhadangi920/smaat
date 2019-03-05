@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use OwenIt\Auditing\Auditable;
 use OwenIt\Auditing\Contracts\Auditable as AuditableContract;
+use App\Models\Product\Product;
 
 class SpecData extends Model implements AuditableContract
 {
@@ -33,8 +34,24 @@ class SpecData extends Model implements AuditableContract
         'data'
     ];
 
+    /****************************************
+     **             Relations
+     ***************************************/
+
+     /**
+     * Get the spec row that relate spec data
+     */
     public function specRow ()
     {
         return $this->belongsTo(SpecRow::class, 'spec_row_id');
     }
+
+    /**
+     * Get the product that owned spec dara
+     */
+    public function product ()
+    {
+        return $this->belongsTo(Product::class, 'product_id');
+    }
+
 }

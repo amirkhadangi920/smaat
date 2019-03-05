@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Cviebrock\EloquentSluggable\Sluggable;
 use OwenIt\Auditing\Auditable;
 use OwenIt\Auditing\Contracts\Auditable as AuditableContract;
+use App\Models\Article;
 
 class Comment extends Model implements AuditableContract
 {
@@ -54,4 +55,12 @@ class Comment extends Model implements AuditableContract
     {
         return $this->belongsTo(\App\User::class);
     }
+
+    /**
+     * This function for answer's comments
+     */
+    public function answers() {
+  
+        return $this->hasMany(self::class, 'parent_id');
+}
 }

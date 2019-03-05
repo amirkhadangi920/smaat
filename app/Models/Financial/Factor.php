@@ -96,13 +96,15 @@ class Factor extends Model
      */
     public function items ()
     {
-        return $this->hasMany(OrderItem::class);
+        return $this->hasMany(FactorItem::class);
     }
 
     public function discount_code ()
     {
         return $this->belongsTo(DiscountCode::class);
     }
+
+    
 
 
     /**

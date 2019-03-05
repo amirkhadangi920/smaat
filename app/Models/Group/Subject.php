@@ -9,6 +9,7 @@ use OwenIt\Auditing\Auditable;
 use OwenIt\Auditing\Contracts\Auditable as AuditableContract;
 use Cviebrock\EloquentSluggable\Sluggable;
 use Spatie\Tags\HasTags;
+use App\Models\Article;
 
 class Subject extends Model implements AuditableContract
 {
@@ -57,9 +58,24 @@ class Subject extends Model implements AuditableContract
      */
     public function childs ()
     {
-        return $this->hasMany(Subject::class, 'parent_id');
+        return $this->hasMany(self::class, 'parent_id');
     }
     
+    /**
+     * return parent category that can have many childs
+     */
+    public function parent ()
+    {
+        return $this->belongsTo(self::class, 'parent_id');
+    }
+
+    /**
+     * Get all the child categories that owned by the category
+     */
+    public function articles ()
+    {
+        return $this->hasMany(Article::class);
+    }
 
     /****************************************
      **              Methods

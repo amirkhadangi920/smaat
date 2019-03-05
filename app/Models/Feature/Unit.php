@@ -3,16 +3,11 @@
 namespace App\Models\Feature;
 
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
-use OwenIt\Auditing\Auditable;
-use OwenIt\Auditing\Contracts\Auditable as AuditableContract;
 use App\Models\Group\Category;
-use App\Models\Product\Variation;
+use App\Models\Product\Product;
 
-class Color extends Model implements AuditableContract
+class Unit extends Model
 {
-    use SoftDeletes, Auditable;
-
     /****************************************
      **             Attributes
      ***************************************/
@@ -22,9 +17,9 @@ class Color extends Model implements AuditableContract
      *
      * @var array
      */
-    protected $fillable = [
-        'name',
-        'code'
+    protected $fillable = [ 
+        'title',
+       'description'
     ];
 
     /**
@@ -34,23 +29,23 @@ class Color extends Model implements AuditableContract
      */
     protected $dates = ['deleted_at'];
 
-    /****************************************
+     /****************************************
      **             Relations
      ***************************************/
-
+    
     /**
-     * each category can get one color
+     * Get the category that owned unit
      */
-    public function category ()
+    public function categories ()
     {
         return $this->belongsTo(Category::class);
     }
 
     /**
-     * get the all variation that owned the color
+     * Get all the products of the unit.
      */
-    public function variations ()
+    public function products ()
     {
-        return $this->hasMany(Variation::class);
+        return $this->hasMany(Product::class);
     }
 }

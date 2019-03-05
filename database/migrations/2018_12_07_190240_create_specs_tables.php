@@ -20,21 +20,21 @@ class CreateSpecsTables extends Migration
             return new Blueprint($table, $callback);
         });
         
-        $schema->create('specifications', function (Blueprint $table) {
+        $schema->create('specs', function (Blueprint $table) {
             $table->id();
             $table->reltoCategories();
             $table->info();
             $table->full_timestamps();
         });
 
-        $schema->create('specification_headers', function (Blueprint $table) {
+        $schema->create('spec_headers', function (Blueprint $table) {
             $table->id();
-            $table->reltoSpecifications();
+            $table->reltoSpecs();
             $table->info();
             $table->full_timestamps();
         });
 
-        $schema->create('specification_rows', function (Blueprint $table) {
+        $schema->create('spec_rows', function (Blueprint $table) {
             $table->table([
                 'info',
                 'label'     => '50|nullable',
@@ -42,7 +42,7 @@ class CreateSpecsTables extends Migration
                 'help'      => '255|nullable',
                 'multiple'  => 'default:0',
                 'required'  => 'default:1',
-            ], ['specification_headers']);
+            ], ['spec_headers']);
         });
     }
 

@@ -6,6 +6,8 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use OwenIt\Auditing\Auditable;
 use OwenIt\Auditing\Contracts\Auditable as AuditableContract;
+use App\Models\Product\Variation;
+use App\Models\Financial\Factor;
 
 class FactorItem extends Model implements AuditableContract
 {
@@ -34,13 +36,33 @@ class FactorItem extends Model implements AuditableContract
      */
     protected $dates = ['deleted_at'];
 
+    /****************************************
+     **             Relations
+     ***************************************/
+
+
     /**
      * Relation to ProductVariation Model
      *
-     * @return ProductVariation Model
      */
     public function variation ()
     {
-        return $this->belongsTo(ProductVariation::class);
+        return $this->belongsTo(Variation::class);
+    }
+
+    /**
+     * Get all the items of the product
+     */
+    public function order ()
+    {
+        return $this->belongsTo(Factor::class);
+    }
+
+    /**
+     * Get all the items of the user
+     */
+    public function user ()
+    {
+        return $this->belongsTo(\App\User::class);
     }
 }

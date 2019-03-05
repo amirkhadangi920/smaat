@@ -9,6 +9,14 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use App\Traits\GenerateRandomID;
 use OwenIt\Auditing\Auditable;
 use OwenIt\Auditing\Contracts\Auditable as AuditableContract;
+use App\Models\Feature\{
+                Size,
+                Color,
+                Warranty
+                };
+use App\Models\Financial\FactorItem;
+use App\Models\Financial\FactorPoint;
+use App\Models\Discount\DiscountItem;
 
 class Variation extends Model implements AuditableContract
 {
@@ -64,6 +72,9 @@ class Variation extends Model implements AuditableContract
         'deleted_at',
         'offer_deadline'
     ];
+    /****************************************
+     **             Relations
+     ***************************************/
 
     /**
      * Relation to Product model
@@ -103,7 +114,29 @@ class Variation extends Model implements AuditableContract
     
     public function order_item ()
     {
-        return $this->hasMany(OrderItem::class, 'variation_id');
+        return $this->hasMany(FactorItem::class, 'variation_id');
+    }
+
+    /**
+     * Relation to discount item model
+     * 
+     * @return discountItem Model
+     */
+    
+    public function discount_item ()
+    {
+        return $this->hasMany(DiscountItem::class);
+    }
+
+    /**
+     * Relation to orderpoint model with orderable
+     * 
+     * @return OrderPoint Model
+     */
+    
+    public function order_point ()
+    {
+        return $this->morphMany(FactorPoint::class, 'orderable');
     }
 
     /**

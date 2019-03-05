@@ -1,16 +1,12 @@
 <?php
 
-namespace App\Models\Spec;
+namespace App\Models\Discount;
 
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
-use OwenIt\Auditing\Auditable;
-use OwenIt\Auditing\Contracts\Auditable as AuditableContract;
 
-class SpecHeader extends Model implements AuditableContract
+class Discount extends Model
 {
-    use SoftDeletes, Auditable;
-
+    
     /****************************************
      **             Attributes
      ***************************************/
@@ -22,7 +18,12 @@ class SpecHeader extends Model implements AuditableContract
      */
     protected $fillable = [
         'title',
-        'description'
+        'description',
+        'logo',
+        'type',
+        'status',
+        'start_at',
+        'expired_at'
     ];
 
     /**
@@ -31,24 +32,24 @@ class SpecHeader extends Model implements AuditableContract
      * @var array
      */
     protected $dates = ['deleted_at'];
-
+    
     /****************************************
      **             Relations
      ***************************************/
-
-    /**
-     * Get the spec that relate spec header
-     */
-    public function spec ()
+    
+     /**
+    * Get all of the discount's user.
+    */
+    public function user ()
     {
-        return $this->belongsTo(Spec::class);
+        return $this->belongsTo(\App\User::class);
     }
 
     /**
-     * Get the all spec row that owned spec header
+     * get the all discount item that owned the discount
      */
-    public function specRows ()
+    public function discount_item ()
     {
-        return $this->hasMany(SpecRow::class);
+        return $this->hasMany(DiscountItem::class);
     }
 }

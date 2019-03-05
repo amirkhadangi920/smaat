@@ -9,6 +9,7 @@ use OwenIt\Auditing\Contracts\Auditable as AuditableContract;
 use App\Traits\GenerateRandomID;
 use App\Models\Opinion\Comment;
 use Spatie\Tags\HasTags;
+use App\Models\Group\Subject;
 
 class Article extends Model implements AuditableContract
 {
@@ -44,22 +45,37 @@ class Article extends Model implements AuditableContract
      */
     protected $dates = ['deleted_at'];
 
-    public function user ()
-    {
-        return $this->belongsTo(\App\User::class);
-    }
-
     /****************************************
      **             Relations
      ***************************************/
 
     /**
+    * Get all of the article's user.
+    */
+    public function user ()
+    {
+        return $this->belongsTo(\App\User::class);
+    }
+
+    
+    /**
      * Get all of the article's comments.
      */
-    public function comments()
+    public function comments ()
     {
         return $this->hasMany(Comment::class);
     }
+
+
+    /**
+     * each article can give one subject.
+     *
+     * @var array
+     */
+    public function subject ()
+    {
+        return $this->belongsTo(Subject::class);
+    } 
 
 
     /****************************************
