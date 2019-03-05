@@ -1,8 +1,9 @@
 <?php
 
 use Illuminate\Database\Migrations\Migration;
-use Illuminate\Database\Schema\Blueprint;
+// use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
+use App\Helpers\Blueprint;
 
 class CreateAuditsTable extends Migration
 {
@@ -13,7 +14,13 @@ class CreateAuditsTable extends Migration
      */
     public function up()
     {
-        Schema::create('audits', function (Blueprint $table) {
+        $schema = DB::connection()->getSchemaBuilder();
+
+        $schema->blueprintResolver(function($table, $callback) {
+            return new Blueprint($table, $callback);
+        });
+
+        $schema->create('audits', function (Blueprint $table) {
             $table->increments('id');
             $table->string('user_type')->nullable();
             $table->uuid('user_id')->nullable();
