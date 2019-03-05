@@ -9,7 +9,6 @@ class PromocodeUser extends Model
     /****************************************
      **             Attributes
      ***************************************/
-
     /**
      * The attributes that are mass assignable.
      *

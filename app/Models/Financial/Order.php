@@ -9,8 +9,9 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use App\Traits\GenerateRandomID;
 use OwenIt\Auditing\Auditable;
 use OwenIt\Auditing\Contracts\Auditable as AuditableContract;
+use App\Models\Discount\Discount;
 
-class Factor extends Model
+class Order extends Model
 {
     use SoftDeletes, GenerateRandomID, Auditable;
 
@@ -49,8 +50,9 @@ class Factor extends Model
         'created_at',
         'auth_code',
         'payment_code',
+        // 'payment_jalali',
         'datetimes',
-        'shipping',
+        'shipping_methods',
         'status',
         'paid_at',
         'jalali_paid_at',
@@ -96,12 +98,12 @@ class Factor extends Model
      */
     public function items ()
     {
-        return $this->hasMany(FactorItem::class);
+        return $this->hasMany(OrderItem::class);
     }
 
-    public function discount_code ()
+    public function discount ()
     {
-        return $this->belongsTo(DiscountCode::class);
+        return $this->belongsTo(Discount::class);
     }
 
     

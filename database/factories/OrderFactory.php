@@ -2,7 +2,7 @@
 
 use Faker\Generator as FakerEng;
 
-$factory->define(App\Models\Financial\Factor::class, function (FakerEng $faker) {
+$factory->define(App\Models\Financial\Order::class, function (FakerEng $faker) {
     $descriptions = $datetimes = [];
     if ( rand(0, 1) ) $descriptions['admin'] = Faker::sentence();
     if ( rand(0, 1) ) $descriptions['buyer'] = Faker::sentence();
@@ -23,13 +23,13 @@ $factory->define(App\Models\Financial\Factor::class, function (FakerEng $faker) 
         'postal_code'       => nullable( $faker->postcode ),
         'offer'             => $faker->numberBetween(0, 100000),
         'total'             => $faker->numberBetween(100000, 10000000),
-        'payment'           => nullable( $faker->dateTime() ),
+        'payment_code'           => nullable( $faker->dateTime() ),
         'created_at'        => $faker->dateTime(),
-        'payment_jalali'    => jdate( time() - ( rand(1, 1000) * rand(1, 1000) )),
+        // 'payment_jalali'    => jdate( time() - ( rand(1, 1000) * rand(1, 1000) )),
         'auth_code'         => $auth_code,
         'payment_code'      => $auth_code ? str_random(30) : null,
         'datetimes'         => $datetimes,
-        'shipping'          => [ null, [
+        'shipping_methods'          => [ null, [
             'cost' => $faker->numberBetween(0, 20000),
             'type' => [ 'model1', 'model2', 'model3', 'model4' ][ rand(0, 3) ]
         ]][ $faker->boolean() ],
@@ -39,21 +39,21 @@ $factory->define(App\Models\Financial\Factor::class, function (FakerEng $faker) 
     ];
 });
 
-$factory->define(App\Models\Financial\FactorItem::class, function (FakerEng $faker) {
+$factory->define(App\Models\Financial\OrderItem::class, function (FakerEng $faker) {
     return [
        'count' => $faker->numberBetween(1, 5), 
     ];
 });
 
-$factory->define(App\Models\Financial\FactorStatus::class, function (FakerEng $faker) {
+$factory->define(App\Models\Financial\OrderStatus::class, function (FakerEng $faker) {
     return [
         'title'         => $faker->name(),
         'description'   => $faker->sentence(), 
-        'cost'          => $faker->numberBetween(1000, 500000), 
+        'cost'          => $faker->numberBetween(0, 1000), 
     ];
 });
 
-$factory->define(App\Models\Financial\FactorPoint::class, function (FakerEng $faker) {
+$factory->define(App\Models\Financial\OrderPoint::class, function (FakerEng $faker) {
     return [
         'value'         => $faker->numberBetween(0, 500000) 
     ];

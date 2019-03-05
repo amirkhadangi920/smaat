@@ -2,10 +2,10 @@
 
 use Faker\Generator as Faker;
 
-$factory->define(App\Models\Shipping::class, function (Faker $faker) {
+$factory->define(App\Models\Shipping_method::class, function (Faker $faker) {
     return [
         
-        'title'           => $faker->name(),
+        'name'           => $faker->name(),
         'description'     => $faker->sentence(),  
         'logo'            => [ null, $faker->imageUrl() ][ $faker->boolean() ],
         'cost'            => $faker->numberBetween( 1000 , 9000),

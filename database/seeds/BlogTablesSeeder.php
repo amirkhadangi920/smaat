@@ -21,7 +21,7 @@ class BlogTablesSeeder extends Seeder
 
         $users->each( function ( $user ) use ( $subjects, $users ) {
             
-            $user->articles()->saveMany( factory(\App\Models\Article::class, rand(0, 10))->make([
+            $user->articles()->saveMany( factory(\App\Models\Article::class, rand(0, 10) )->make([
                 'subject_id' => $subjects->random()->id
             ]) )->each( function ( $article ) use( $users ) {
 

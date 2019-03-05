@@ -3,6 +3,7 @@
 namespace App\Models\Discount;
 
 use Illuminate\Database\Eloquent\Model;
+use App\Models\Financial\Order;
 
 class Discount extends Model
 {
@@ -51,5 +52,13 @@ class Discount extends Model
     public function discount_item ()
     {
         return $this->hasMany(DiscountItem::class);
+    }
+
+    /**
+     * get the all Order that owned the discount
+     */
+    public function orders ()
+    {
+        return $this->hasMany(Order::class);
     }
 }

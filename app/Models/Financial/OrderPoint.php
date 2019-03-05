@@ -4,7 +4,7 @@ namespace App\Models\Financial;
 
 use Illuminate\Database\Eloquent\Model;
 
-class FactorPoint extends Model
+class OrderPoint extends Model
 {
     /****************************************
      **             Attributes

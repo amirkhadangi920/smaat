@@ -63,7 +63,7 @@ class Blueprint extends BaseBlueprint
     public function info($title = 'title', $description = 'description', $title_length = 50, $description_length = 300)
     {
         $this->string($title, $title_length);
-        $this->string($description, $description_length);
+        $this->string($description, $description_length)->nullable();
     }
 
     /**

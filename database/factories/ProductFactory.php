@@ -33,8 +33,6 @@ $factory->define(App\Models\Product\Variation::class, function (FakerEng $faker)
     return [
         'purchase_price'        => $price,
         'sales_price'           => $faker->numberBetween(1000, $price),
-        'offer'                 => [ null, $faker->numberBetween(1000, $price) ][ $faker->boolean() ],
-        'offer_deadline'        => [ null, $faker->dateTimeBetween('now', '+2 years') ][ $faker->boolean() ],
         'inventory'             => [ null, $faker->numberBetween(0, 100) ][ $faker->boolean() ],
         'sending_time'          => $faker->numberBetween(1, 10),
         'status'                => $faker->boolean(),

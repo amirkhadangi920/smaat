@@ -4,8 +4,7 @@ use Illuminate\Support\Facades\Schema;
 // use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 use App\Helpers\Blueprint;
-
-class CreateFactorsTables extends Migration
+class CreateOrderTeble extends Migration
 {
     /**
      * Run the migrations.
@@ -42,6 +41,7 @@ class CreateFactorsTables extends Migration
                 'checkout'          => 'boolean|default:0',
                 'auth_code'         => '50|nullable',
                 'payment_code'      => '30|nullable',
+                // 'payment_jalali'    => 'timestamp',
                 'datetimes'         => 'mediumText|nullable',
                 'status'            => 'boolean|default:0',
                 'type'              => 'tinyInteger|comment:Type of factor, e.g sell, buy, sell_back etc...',
@@ -60,10 +60,10 @@ class CreateFactorsTables extends Migration
                 'count' => 'unsignedInteger',
                 'price' => 'unsignedBigInteger|default:0',
                 'offer' => 'unsignedBigInteger|default:0',
-                'tax' => 'unsignedBigInteger|default:0',
+                'tax'   => 'unsignedBigInteger|default:0',
                 'description' => '255|nullable',
             ], [
-                'users',
+                // 'users',
                 'orders',
                 'variations' => true,
             ], 'uuid');

@@ -7,9 +7,9 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use OwenIt\Auditing\Auditable;
 use OwenIt\Auditing\Contracts\Auditable as AuditableContract;
 use App\Models\Product\Variation;
-use App\Models\Financial\Factor;
+use App\Models\Financial\Order;
 
-class FactorItem extends Model implements AuditableContract
+class OrderItem extends Model implements AuditableContract
 {
     use SoftDeletes, Auditable;
 
@@ -55,14 +55,14 @@ class FactorItem extends Model implements AuditableContract
      */
     public function order ()
     {
-        return $this->belongsTo(Factor::class);
+        return $this->belongsTo(Order::class);
     }
 
-    /**
-     * Get all the items of the user
-     */
-    public function user ()
-    {
-        return $this->belongsTo(\App\User::class);
-    }
+    // /**
+    //  * Get all the items of the user
+    //  */
+    // public function user ()
+    // {
+    //     return $this->belongsTo(\App\User::class);
+    // }
 }

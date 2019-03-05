@@ -29,14 +29,6 @@ class Promocode extends Model
      ***************************************/
 
     /**
-     * Get the promocode that owned user.
-     */
-    public function user ()
-    {
-        return $this->belongsTo(\App\User::class);
-    }
-
-    /**
      * Get the all promocode user that owned promocode.
      */
     public function promocode_users ()

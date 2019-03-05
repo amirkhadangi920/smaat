@@ -30,6 +30,7 @@ class ProductTablesSeeder extends Seeder
                 ])
             );
         
+            
             $this->products->each(function ($product) use ( $data ) {
 
                 $this->variations = $this->variations->merge(
@@ -40,27 +41,49 @@ class ProductTablesSeeder extends Seeder
                         ])
                     )
                 );
+                
+                // $this->variations->each( function( $variation ) {
 
-                $data['users']->each( function ( $user ) use ( $product, $data ) {
-                    $product->reviews()->save(
-                        factory(\App\Models\Opinion\Review::class)->make([
-                            'user_id' => $user->id
-                        ])
-                    );
+                //     $variation->order_points()->saveMany(
+                //         factory( App\Models\Financial\OrderPoint::class ,5)->make([
+                //             'variation_id'  => $variation->id
+                //         ])
+                //     );
+                // });
 
-                    $product->questions()->save(
-                        factory(\App\Models\Opinion\QuestionAndAnswer::class)->make([
-                            'user_id' => $user->id
-                        ])
-                    )->each( function ($questionAndAnsers) use ( $data ) {
-                        $questionAndAnsers->answers()->saveMany(
-                            factory(\App\Models\Opinion\QuestionAndAnswer::class, rand(0, 5))->make([
-                                'user_id' => $data['users']->random()->id
-                            ])
-                        );
-                    });
-                });
+                // $variations->each( function($variation) use($promocodeUsers) {
+                //     $id = [];
+                    
+                //     for( $i = 0 ; $i < rand(1,4) ; $i++ )
+                //     {
+                //         $id[] = $promocodeUsers->random()->id;
+                //     }
+                    
+                //     $variations->promocode_User()->sync( $id );
+                // }
 
+                // $data['users']->each( function ( $user ) use ( $product, $data ) {
+                //     $product->reviews()->save(
+                //         factory(\App\Models\Opinion\Review::class)->make([
+                //             'user_id' => $user->id
+                //         ])
+                //     );
+                    
+                //     $product->questions()->save(
+                //         factory(App\Models\Opinion\QuestionAndAnswer::class)->make([
+                //             'user_id' => $user->id
+                //         ])
+                //     )->each( function ($questionAndAnsers) use ( $data ) {
+                //         $questionAndAnsers->answers()->saveMany(
+                //             factory(\App\Models\Opinion\QuestionAndAnswer::class, rand(0, 5) )->make([
+                //                 'user_id' => $data['users']->random()->id
+                //             ])
+                //         );
+                //     });
+                // });
+
+                
+                    
                 $data['specifications']['rows']->each( function ( $spec_row ) use ( $product ) {
 
                     $product->spec_data()->save(

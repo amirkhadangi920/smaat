@@ -16,15 +16,12 @@ use App\Models\{
     Product\Product,
     Opinion\Comment,
     Places\City,
-    Financial\Factor,
+    Financial\Order,
     Opinion\QuestionAndAnswer,
     Opinion\Review,
- Promocode\Promocode,
- Financial\FactorItem,
- Discount\Discount
-
-
-
+    Promocode\Promocode,
+    Financial\FactorItem,
+    Discount\Discount
 };
 
 
@@ -171,7 +168,7 @@ class User extends Authenticatable implements AuditableContract
      */
     public function orders ()
     {
-        return $this->hasMany(Factor::class);
+        return $this->hasMany(Order::class);
     }
 
     /**
@@ -179,7 +176,7 @@ class User extends Authenticatable implements AuditableContract
      */
     public function orderItems ()
     {
-        return $this->hasMany(FactorItem::class);
+        return $this->hasMany(OrderItem::class);
     }
 
     /**

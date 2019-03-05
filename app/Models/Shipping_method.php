@@ -1,30 +1,20 @@
 <?php
 
-namespace App\Models\Financial;
+namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class FactorStatus extends Model
+class Shipping_method extends Model
 {
     /****************************************
      **             Attributes
      ***************************************/
-    
     /**
      * The attributes that are mass assignable.
      *
      * @var array
      */
     protected $fillable = [
-        'title',
-        'description',
-        'cost',
+        'name' , 'description' , 'logo' , 'cost' , 'minimum'  , 'is_active'
     ];
-
-    /**
-     * The attributes that should be mutated to dates.
-     *
-     * @var array
-     */
-    protected $dates = ['deleted_at'];
 }

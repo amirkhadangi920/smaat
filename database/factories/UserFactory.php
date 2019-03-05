@@ -30,8 +30,8 @@ $factory->define(App\User::class, function ($faker) {
         'type'              => 0,
         'remember_token'    => str_random(10),
         'last_purchase'     => nullable( $faker->dateTimeBetween('-3 years', 'now') ),
-        'purchase_counts'   => nullable( rand(0, 20) ),
-        'total_payments'    => nullable( rand(0, 50000000) ),
+        'purchase_counts'   => rand(0, 20),
+        'total_payments'    => rand(0, 50000000),
         'phones'            => nullable(
             function () use ( $faker ) {
                 $phones = [];
