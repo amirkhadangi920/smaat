@@ -2,6 +2,8 @@
 
 namespace App;
 
+use Cog\Contracts\Love\Liker\Models\Liker as LikerContract;
+use Cog\Laravel\Love\Liker\Models\Traits\Liker;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -27,11 +29,11 @@ use App\Models\{
 
 
 
-class User extends Authenticatable implements AuditableContract
+class User extends Authenticatable implements AuditableContract , LikerContract
 {
     use LaratrustUserTrait, HasApiTokens;
     // use Notifiable, SoftDeletes, GenerateRandomID, Auditable, HasRoles;
-    use Notifiable, SoftDeletes, GenerateRandomID, Auditable;
+    use Notifiable, SoftDeletes, GenerateRandomID, Auditable, Liker;
 
     /****************************************
      **             Attributes

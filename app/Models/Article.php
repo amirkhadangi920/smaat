@@ -2,6 +2,8 @@
 
 namespace App\Models;
 
+use Cog\Likeable\Contracts\Likeable as LikeableContract;
+use Cog\Likeable\Traits\Likeable;
 use Illuminate\Database\Eloquent\Model;
 use Cviebrock\EloquentSluggable\Sluggable;
 use OwenIt\Auditing\Auditable;
@@ -11,9 +13,9 @@ use App\Models\Opinion\Comment;
 use Spatie\Tags\HasTags;
 use App\Models\Group\Subject;
 
-class Article extends Model implements AuditableContract
+class Article extends Model implements AuditableContract , LikeableContract
 {
-    use Sluggable, Auditable, GenerateRandomID, HasTags;
+    use Sluggable, Auditable, GenerateRandomID, HasTags, Likeable;
 
     /****************************************
      **             Attributes
