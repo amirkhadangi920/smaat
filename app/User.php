@@ -9,7 +9,8 @@ use OwenIt\Auditing\Auditable;
 use OwenIt\Auditing\Contracts\Auditable as AuditableContract;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use App\Traits\GenerateRandomID;
-use Spatie\Permission\Traits\HasRoles;
+// use Spatie\Permission\Traits\HasRoles;
+use Laravel\Passport\HasApiTokens;
 use Laratrust\Traits\LaratrustUserTrait;
 use App\Models\{
     Article,
@@ -18,7 +19,7 @@ use App\Models\{
 
 class User extends Authenticatable implements AuditableContract
 {
-    use LaratrustUserTrait;
+    use LaratrustUserTrait, HasApiTokens;
     // use Notifiable, SoftDeletes, GenerateRandomID, Auditable, HasRoles;
     use Notifiable, SoftDeletes, GenerateRandomID, Auditable;
 
