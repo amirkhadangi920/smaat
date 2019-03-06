@@ -23,7 +23,7 @@ class ProductTablesSeeder extends Seeder
         $data['categories']->each( function ( $category ) use ( $data ) {
 
             $this->products = $category->products()->saveMany(
-                factory(\App\Models\Product\Product::class, rand(1, 2))->make([
+                factory(\App\Models\Product\Product::class, rand(1, 5))->make([
                     'user_id' => $data['users']->random()->id,
                     'brand_id' => $data['features']['brands']->random()->id,
                     'spec_id' => $data['specifications']['spec_table']
@@ -33,13 +33,18 @@ class ProductTablesSeeder extends Seeder
             $this->products->each(function ($product) use ( $data ) {
 
                 $this->variations = $this->variations->merge(
-                    $product->variations()->saveMany(
-                        factory(\App\Models\Product\Variation::class, rand(1, 2))->make([
+                    $variations = $product->variations()->saveMany(
+                        factory(\App\Models\Product\Variation::class, rand(1, 5))->make([
                             'warranty_id' => $data['features']['warranties']->random()->id,
                             'color_id' => $data['features']['colors']->random()->id,
                         ])
                     )
                 );
+                
+                $variations->each( function( $variation ) use( $data ) {
+                    $variation->promocodes()->sync( $data['promocodes']->random() );
+                });
+                
                 // ->each( function( $variation) use( $data ){
 
                     // $variation->order_points()->saveMany(

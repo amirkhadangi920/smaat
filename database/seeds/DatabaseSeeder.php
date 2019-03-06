@@ -16,75 +16,45 @@ class DatabaseSeeder extends Seeder
     {
         echo "\n";
 
-        // if ( !\App\User::whereEmail('AmirKhadangi920@Gmail.com')->first() )
-        // {
-        //     \App\User::create([
-        //         'first_name' => 'امیر',
-        //         'last_name' => 'خدنگی',
-        //         'phones' => [
-        //             [ 'type' => 'main', 'value' => '09105009868' ]
-        //         ],
-        //         'email' => 'AmirKhadangi920@Gmail.com',
-        //         'password' => Hash::make('123456'),
-        //         'address' => 'سناباد 44 ، ساختمان 52',
-        //         'postal_code' => '1234567890',
-        //         'type' => 1
-        //     ]);
-        //     echo "\e[31mAmir Khadangi user \e[39mwith id=\e[30m\e[101m3g6s316j\e[49m \e[39mwas \e[32mcreated\n";
-        // }
+        // $this->call(AdminTableSeeder::class);
 
         // $cities = $this->call(LocationTablesSeeder::class);
         
         $this->call(OptionTableSeeder::class);
         
-        $users = factory(\App\User::class, 2)->create([
+        $users = factory(\App\User::class, 5)->create([
             // 'city_id' => $cities->random()->id
         ]);
         echo "\e[31m\e[1m\e[100m{$users->count()}\e[49m Users \e[39mwas \e[32mcreated\n";
     
         $this->call(BlogTablesSeeder::class, $users);
 
-        $categories = factory(\App\Models\Group\Category::class, 2)->create();
-        $categories->each( function ( $category ) use ( &$categories ) {
+        $categories = $this->call(CategoryTablesSeeder::class);
 
-            $categories = $categories->merge( $category->childs()->saveMany(
-                factory(\App\Models\Group\Category::class, 2)->make()
-            ));
-        });
-
+        // $categories->each( function( $category ) {
+        // $category->order_points()->saveMany( 
+        //     factory( App\Models\Financial\OrderItem::class, 5 )->make([
+        //         'category_id'   => $category->id
+        //         ])
+        //     );
+        // });    
+        //     dd('lkajkldlka');
         $features = $this->call(FeatureTablesSeeder::class, $categories);
         
         $specifications = $this->call(SpecificationTablesSeeder::class, $categories);
+        
+        $promocodes = $this->call(PromocodeTablesSeeder::class, compact('users', 'categories'));
 
         $products = $this->call(ProductTablesSeeder::class, compact(
-            'users', 'categories', 'specifications', 'features')); 
+            'users', 'categories', 'specifications', 'features','promocodes'
+        )); 
 
-        // Add favorites products for the users
-        $users->each( function ( $user ) use ( $products ) {
-
-            for( $i = 0; $i < rand(0, 3); ++$i )
-            {
-                $user->favorites()->sync( $products['products']->random() );
-            }
-        });
+        // $this->call(AbstractTablesSeeder::class, compact('users', 'products'));
         
-        // Add Accesories for the products
-        $products['products']->each( function ( $product ) use ( &$products ) {
 
-            for( $i = 0; $i < rand(0, 3); ++$i )
-            {
-                $product->accessories()->sync( $products['products']->random() );
-            }
-        });
-        $this->call(PromocodeTablesSeeder::class, compact('users'));
-
-        $promocodes = factory( App\Models\Promocode\Promocode::class, 5 )->create();
-
-        $this->call(OrderTablesSeeder::class, compact('users', 'products', 'cities', 'promocodes'));
-
-        // dd('lksngljknbzgb,jz');
-        
-    
+        $this->call(OrderTablesSeeder::class, compact(
+            'users', 'products', 'cities', 'promocodes', 'categories'
+        ));
     }
 
     /**
