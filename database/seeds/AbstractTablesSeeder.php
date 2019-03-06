@@ -25,7 +25,7 @@ class AbstractTablesSeeder extends Seeder
 
             for( $i = 0; $i < rand(0, 3); ++$i )
             {
-                $product->accessories()->sync( $data['products']->random() );
+                $product->accessories()->sync( $data['products']['products']->random() );
             }
         });
     }

@@ -21,24 +21,15 @@ class DatabaseSeeder extends Seeder
         // $cities = $this->call(LocationTablesSeeder::class);
         
         $this->call(OptionTableSeeder::class);
+
+        $users = $this->call(UserTableSeeder::class, compact('cities') );
         
-        $users = factory(\App\User::class, 5)->create([
-            // 'city_id' => $cities->random()->id
-        ]);
         echo "\e[31m\e[1m\e[100m{$users->count()}\e[49m Users \e[39mwas \e[32mcreated\n";
     
         $this->call(BlogTablesSeeder::class, $users);
 
-        $categories = $this->call(CategoryTablesSeeder::class);
+        $categories = $this->call(CategoryTablesSeeder::class);    
 
-        // $categories->each( function( $category ) {
-        // $category->order_points()->saveMany( 
-        //     factory( App\Models\Financial\OrderItem::class, 5 )->make([
-        //         'category_id'   => $category->id
-        //         ])
-        //     );
-        // });    
-        //     dd('lkajkldlka');
         $features = $this->call(FeatureTablesSeeder::class, $categories);
         
         $specifications = $this->call(SpecificationTablesSeeder::class, $categories);

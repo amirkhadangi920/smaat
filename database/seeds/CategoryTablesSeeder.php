@@ -19,10 +19,12 @@ class CategoryTablesSeeder extends Seeder
             ));
         });
         
-            
-           
-        // });
-
+        $categories->each( function( $category ) {
+            $category->order_points()->saveMany( 
+                factory( App\Models\Financial\OrderPoint::class, 5 )->make()
+                );
+            });
+    
         return $categories;
     }
 }
