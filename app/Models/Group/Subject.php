@@ -10,10 +10,11 @@ use OwenIt\Auditing\Contracts\Auditable as AuditableContract;
 use Cviebrock\EloquentSluggable\Sluggable;
 use Spatie\Tags\HasTags;
 use App\Models\Article;
+use App\Traits\MultiLevel;
 
 class Subject extends Model implements AuditableContract
 {
-    use SoftDeletes, Sluggable, Auditable, HasTags;
+    use SoftDeletes, Sluggable, Auditable, HasTags, MultiLevel;
 
     /****************************************
      **             Attributes
@@ -93,5 +94,15 @@ class Subject extends Model implements AuditableContract
                 'source' => 'title'
             ]
         ];
+    }
+    
+    /**
+     * Get the route key for the model.
+     *
+     * @return string
+     */
+    public function getRouteKeyName()
+    {
+        return 'slug';
     }
 }

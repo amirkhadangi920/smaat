@@ -43,6 +43,7 @@ class CreateFeaturesTables extends Migration
         $schema->create('warranties', function ($table) {
             $table->table([
                 'info',
+                'logo' => 'nullable|array',
                 'expire' => 20,
             ], [ ]);
         });

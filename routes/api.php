@@ -32,5 +32,19 @@ Route::group([
 ], function () {
 
     Route::resource('/article', 'ArticleController');
-    Route::resource('/category', 'CategoryController');
+    
+    $this->group([ 'namespace' => 'Group' ], function () {
+
+        Route::resource('/category', 'CategoryController');
+        Route::resource('/subject', 'SubjectController');
+    });
+
+    $this->group([ 'namespace' => 'Feature' ], function () {
+
+        Route::resource('/brand', 'BrandController');
+        Route::resource('/color', 'ColorController');
+        Route::resource('/size', 'SizeController');
+        Route::resource('/warranty', 'WarrantyController');
+        Route::resource('/unit', 'UnitController');
+    });
 });

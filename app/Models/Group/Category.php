@@ -19,10 +19,11 @@ use App\Models\Spec\Spec;
 use App\Models\Product\Product;
 use App\Models\Discount\Discount;
 use App\Models\Financial\OrderPoint;
+use App\Traits\MultiLevel;
 
 class Category extends Model implements AuditableContract
 {
-    use SoftDeletes, Sluggable, Auditable, HasTags;
+    use SoftDeletes, Sluggable, Auditable, HasTags, MultiLevel;
 
     /****************************************
      **             Attributes
@@ -205,63 +206,5 @@ class Category extends Model implements AuditableContract
     public function getRouteKeyName()
     {
         return 'slug';
-    }
-
-    /**
-     * Get a breadcrump for specified category
-     * e.g parnet > child > sub-child ...
-     *
-     * @param Category $category
-     * @return Array
-     */
-    public static function breadcrumb (Category $category)
-    {
-        $breadcrumb = collect([$category]);
-
-        if ( is_null($category->parent_id) )
-            return $breadcrumb->pluck('title', 'slug');
-        
-        do {
-            $breadcrumb->push( $breadcrumb->last()->parent );
-        } while ( $breadcrumb->last()->parent );
-
-        return $breadcrumb->pluck('title', 'slug');
-    }
-
-    /**
-     * Get all the categories in tree style
-     *
-     * @return collection $categories
-     */
-    public static function tree()
-    {
-        $categories = static::select('id', 'slug', 'title', 'logo')
-                ->whereNull('parent_id')->latest()->get();
-
-        $categories->each( function ( $category ) {
-            static::get_childs( $category );
-        });
-
-        return $categories;
-    }
-
-    /**
-     * Recursive function for geting the childs of the group,
-     * if group has child, run this method on all of it's childs recursive
-     *
-     * @param Category $category
-     * @return void
-     */
-    public static function get_childs(Category $category)
-    {
-        $category->load('childs:parent_id,slug,title');
-
-        if ( $category->childs->isNotEmpty() )
-        {
-            foreach ( $category->childs as $child )
-                static::get_childs( $child );
-        } else {
-            unset( $category->childs );
-        }
     }
 }
