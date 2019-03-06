@@ -17,6 +17,8 @@ use App\Models\Feature\{
  };
 use App\Models\Product\Product;
 use Spatie\Tags\HasTags;
+use App\Models\Promocode\Promocode;
+use App\Models\Discount\Discount;
 
 class Category extends Model implements AuditableContract
 {
@@ -145,6 +147,22 @@ class Category extends Model implements AuditableContract
         return $this->belongsTo(self::class, 'parent_id');
     }
 
+    /**
+     * Get all the promocodes that owned the category & adverb
+     */
+    public function promocodes ()
+    {
+        return $this->belongsToMany(Promocode::class);
+    }
+    
+
+    /**
+     * Get all the discounts that owned the category & adverb
+     */
+    public function discounts ()
+    {
+        return $this->belongsToMany(Discount::class);
+    }
 
     /**
      * Return first level , or cateogries with depth == 1

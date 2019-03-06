@@ -70,13 +70,11 @@ class Article extends Model implements AuditableContract , LikeableContract
 
 
     /**
-     * each article can give one subject.
-     *
-     * @var array
+     * Get all the subjects that owned article & adverb
      */
-    public function subject ()
+    public function subjects ()
     {
-        return $this->belongsTo(Subject::class);
+        return $this->belongsToMany(Subject::class);
     } 
 
 

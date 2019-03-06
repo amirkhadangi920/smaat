@@ -17,6 +17,7 @@ use App\Models\Feature\{
 use App\Models\Financial\OrderItem;
 use App\Models\Financial\OrderPoint;
 use App\Models\Discount\DiscountItem;
+use App\Models\Promocode\Promocode;
 
 class Variation extends Model implements AuditableContract
 {
@@ -82,6 +83,14 @@ class Variation extends Model implements AuditableContract
     public function product ()
     {
         return $this->belongsTo(Product::class);
+    }
+
+    /**
+     * Get all the promocodes that owned the variations & adverb
+     */
+    public function promocodes ()
+    {
+        return $this->belongsToMany(Promocode::class);
     }
 
     /**

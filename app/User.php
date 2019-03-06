@@ -118,21 +118,20 @@ class User extends Authenticatable implements AuditableContract , LikerContract
     }
 
     /**
+     * Get all the promocodes that owned the promocode & adverb
+     */
+    public function promocodes ()
+    {
+        return $this->belongsToMany(Promocode::class);
+    }
+
+    /**
      * Get all the discounts that the user
      */
     public function discounts ()
     {
         return $this->hasMany(Discount::class);
     }
-
-    /**
-     * Get all the promocode that the user 
-     */
-    public function promocodes ()
-    {
-        return $this->hasMany(Promocode::class);
-    }
-
 
     /**
      * Get all of the favorites products
