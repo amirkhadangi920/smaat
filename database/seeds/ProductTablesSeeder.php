@@ -23,7 +23,7 @@ class ProductTablesSeeder extends Seeder
         $data['categories']->each( function ( $category ) use ( $data ) {
 
             $this->products = $category->products()->saveMany(
-                factory(\App\Models\Product\Product::class, rand(1, 10))->make([
+                factory(\App\Models\Product\Product::class, rand(1, 2))->make([
                     'user_id' => $data['users']->random()->id,
                     'brand_id' => $data['features']['brands']->random()->id,
                     'spec_id' => $data['specifications']['spec_table']
@@ -34,33 +34,44 @@ class ProductTablesSeeder extends Seeder
 
                 $this->variations = $this->variations->merge(
                     $product->variations()->saveMany(
-                        factory(\App\Models\Product\Variation::class, rand(1, 3))->make([
+                        factory(\App\Models\Product\Variation::class, rand(1, 2))->make([
                             'warranty_id' => $data['features']['warranties']->random()->id,
                             'color_id' => $data['features']['colors']->random()->id,
                         ])
                     )
                 );
+                // ->each( function( $variation) use( $data ){
 
-                $data['users']->each( function ( $user ) use ( $product, $data ) {
-                    $product->reviews()->save(
-                        factory(\App\Models\Opinion\Review::class)->make([
-                            'user_id' => $user->id
-                        ])
-                    );
+                    // $variation->order_points()->saveMany(
+                        //  factory(App\Models\Financial\OrderPoint::class, 5)->make([
+                        // 'variation_id'  => $variation->id,
+                        // 'category_id'   => $data['categories']->random()->id
+                    // ]));
 
-                    $product->questions()->save(
-                        factory(\App\Models\Opinion\QuestionAndAnswer::class)->make([
-                            'user_id' => $user->id
-                        ])
-                    )->each( function ($questionAndAnsers) use ( $data ) {
-                        $questionAndAnsers->answers()->saveMany(
-                            factory(\App\Models\Opinion\QuestionAndAnswer::class, rand(0, 5))->make([
-                                'user_id' => $data['users']->random()->id
-                            ])
-                        );
-                    });
-                });
+                // $data['users']->each( function ( $user ) use ( $product, $data ) {
 
+                //     $product->reviews()->save(
+                //         factory(\App\Models\Opinion\Review::class)->make([
+                //             'user_id' => $user->id
+                //         ])
+                //     );
+
+                //     // echo $user->id.PHP_EOL;
+
+                //     $product->questions()->save(
+                //         factory(\App\Models\Opinion\QuestionAndAnswer::class)->make([
+                //             'user_id' => $user->id
+                //         ])
+                //     )->each( function ($questionAndAnswers) use ( $data ) {
+                //         $questionAndAnswers->answers()->saveMany(
+                //             factory(\App\Models\Opinion\QuestionAndAnswer::class, rand(0, 2))->make([
+                //                 'user_id' => $data['users']->random()->id
+                //             ])
+                //         );
+                //     });
+                //     dd('klahdjkla');
+                // });
+                
                 $data['specifications']['rows']->each( function ( $spec_row ) use ( $product ) {
 
                     $product->spec_data()->save(

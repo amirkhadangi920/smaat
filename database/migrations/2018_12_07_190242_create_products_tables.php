@@ -57,7 +57,7 @@ class CreateProductsTables extends Migration
                 'old_sales_prices'      => 'array|comment:Array of the all prices and it\'s changing time',
                 'inventory'             => 'nullable|smallInteger|comment:Null = infinite , 0 = unavailble & number = inventory', 
                 'sending_time'          => 'tinyInteger|default:1|commnt:Sending time of this product variation in day, e.g 2days',
-                'status'                => 'boolean|default:1|comment:Enable/Disable showing the variation'
+                'status'                => 'boolean|default:1|comment:Enable/Disable showing the variation',
             ], [
                 'products',
                 'warranties' => true,
@@ -66,7 +66,7 @@ class CreateProductsTables extends Migration
             ], 'uuid');
         });
 
-        $schema->create('ordering_points', function (Blueprint $table) {
+        $schema->create('order_points', function (Blueprint $table) {
             $table->integer('value')->default(0);
             $table->morphs('orderable');
         });

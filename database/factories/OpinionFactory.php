@@ -23,20 +23,20 @@ $factory->define(App\Models\Opinion\Review::class, function (FakerEng $faker) {
             return $disadvantages;
         }][ $faker->boolean() ],
         'message'       => Faker::sentence(),
-        'created_at'    => $faker->dateTime()
+        // 'created_at'    => $faker->unixTime()
     ];
 });
 
 $factory->define(App\Models\Opinion\Comment::class, function (FakerEng $faker) {
     return [
         'message'       => Faker::sentence(),
-        'created_at'    => $faker->dateTime()
+        // 'created_at'    => $faker->unixTime()
     ];
 });
 
 $factory->define(App\Models\Opinion\QuestionAndAnswer::class, function (FakerEng $faker) {
     return [
         'message'       => Faker::sentence(),
-        'created_at'    => $faker->dateTime()
+        // 'created_at'    => $faker->unixTime()
     ];
 });

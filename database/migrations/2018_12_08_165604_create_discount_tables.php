@@ -22,10 +22,10 @@ class CreateDiscountTables extends Migration
         
         $schema->create('discounts', function (Blueprint $table) {
             $table->table([
-                'slugable_info',
-                'logo' => '150|nullable',
-                'type' => 'tinyInteger|nullable',
-                'status' => 'tinyInteger|default:0'
+                'sluggable_info',
+                'logo'          => 'nullable|array',
+                'type'          => 'tinyInteger|nullable',
+                'status'        => 'tinyInteger|default:0'
             ], [
                 'users',
             ], 'int', ['start_at', 'expired_at']);

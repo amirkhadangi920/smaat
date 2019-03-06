@@ -18,6 +18,7 @@ class FeatureTablesSeeder extends Seeder
             'brands'        => collect(),
             'sizes'         => collect(),
             'warranties'    => collect(),
+            'units'         => collect(),
         ];
     }
 
@@ -51,6 +52,12 @@ class FeatureTablesSeeder extends Seeder
             $this->data['sizes'] = $this->data['sizes']->merge(
                 $category->sizes()->saveMany(
                     factory(\App\Models\Feature\Size::class, rand(1, 10))->make()
+                )
+            );
+
+            $this->data['units'] = $this->data['units']->merge(
+                $category->sizes()->saveMany(
+                    factory(\App\Models\Feature\Unit::class, rand(1, 10))->make()
                 )
             );
             

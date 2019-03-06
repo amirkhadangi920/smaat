@@ -23,7 +23,8 @@ class QuestionAndAnswer extends Model implements AuditableContract
      * @var array
      */
     protected $fillable = [
-        'message'
+        'message',
+        // 'created_at'
     ];
 
     /**

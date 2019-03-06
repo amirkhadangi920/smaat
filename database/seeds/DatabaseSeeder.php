@@ -34,20 +34,21 @@ class DatabaseSeeder extends Seeder
         // }
 
         // $cities = $this->call(LocationTablesSeeder::class);
+        
         $this->call(OptionTableSeeder::class);
         
-        $users = factory(\App\User::class, 5)->create([
+        $users = factory(\App\User::class, 2)->create([
             // 'city_id' => $cities->random()->id
         ]);
         echo "\e[31m\e[1m\e[100m{$users->count()}\e[49m Users \e[39mwas \e[32mcreated\n";
     
         $this->call(BlogTablesSeeder::class, $users);
 
-        $categories = factory(\App\Models\Group\Category::class, rand(1,5))->create();
+        $categories = factory(\App\Models\Group\Category::class, 2)->create();
         $categories->each( function ( $category ) use ( &$categories ) {
 
             $categories = $categories->merge( $category->childs()->saveMany(
-                factory(\App\Models\Group\Category::class, rand(0,3))->make()
+                factory(\App\Models\Group\Category::class, 2)->make()
             ));
         });
 
@@ -55,29 +56,35 @@ class DatabaseSeeder extends Seeder
         
         $specifications = $this->call(SpecificationTablesSeeder::class, $categories);
 
-        $products = $this->call(ProductTablesSeeder::class, compact('users', 'categories', 'specifications', 'features'));
-        
+        $products = $this->call(ProductTablesSeeder::class, compact(
+            'users', 'categories', 'specifications', 'features')); 
+
         // Add favorites products for the users
         $users->each( function ( $user ) use ( $products ) {
 
             for( $i = 0; $i < rand(0, 3); ++$i )
             {
-                $user->favorites()->attach( $products['products']->random() );
+                $user->favorites()->sync( $products['products']->random() );
             }
         });
-
+        
         // Add Accesories for the products
-        $products['products']->each( function ( $product ) use ( $products ) {
+        $products['products']->each( function ( $product ) use ( &$products ) {
 
             for( $i = 0; $i < rand(0, 3); ++$i )
             {
-                $product->accessories()->attach( $products['products']->random() );
+                $product->accessories()->sync( $products['products']->random() );
             }
         });
+        $this->call(PromocodeTablesSeeder::class, compact('users'));
 
-        $this->call(OrderTablesSeeder::class, compact('users', 'products'));
+        $promocodes = factory( App\Models\Promocode\Promocode::class, 5 )->create();
 
-        echo "\n";
+        $this->call(OrderTablesSeeder::class, compact('users', 'products', 'cities', 'promocodes'));
+
+        // dd('lksngljknbzgb,jz');
+        
+    
     }
 
     /**

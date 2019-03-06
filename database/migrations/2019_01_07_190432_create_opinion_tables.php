@@ -38,7 +38,6 @@ class CreateOpinionTables extends Migration
                 'disadvantages' => 'array',
                 'message' => 'mediumText',
             ], [
-                'self',
                 'users' => true,
                 'products' => true,
             ]);

@@ -2,6 +2,8 @@
 
 namespace App;
 
+use Cog\Contracts\Love\Liker\Models\Liker as LikerContract;
+use Cog\Laravel\Love\Liker\Models\Traits\Liker;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -17,24 +19,21 @@ use App\Models\{
     Product\Product,
     Opinion\Comment,
     Places\City,
-    Financial\Factor,
+    Financial\Order,
     Opinion\QuestionAndAnswer,
     Opinion\Review,
- Promocode\Promocode,
- Financial\FactorItem,
- Discount\Discount
-
-
-
+    Promocode\Promocode,
+    Financial\FactorItem,
+    Discount\Discount
 };
 
 
 
-class User extends Authenticatable implements AuditableContract
+class User extends Authenticatable implements AuditableContract , LikerContract
 {
     use LaratrustUserTrait, HasApiTokens;
     // use Notifiable, SoftDeletes, GenerateRandomID, Auditable, HasRoles;
-    use Notifiable, SoftDeletes, GenerateRandomID, Auditable;
+    use Notifiable, SoftDeletes, GenerateRandomID, Auditable, Liker;
 
     /****************************************
      **             Attributes
@@ -172,7 +171,7 @@ class User extends Authenticatable implements AuditableContract
      */
     public function orders ()
     {
-        return $this->hasMany(Factor::class);
+        return $this->hasMany(Order::class);
     }
 
     /**
@@ -180,7 +179,7 @@ class User extends Authenticatable implements AuditableContract
      */
     public function orderItems ()
     {
-        return $this->hasMany(FactorItem::class);
+        return $this->hasMany(OrderItem::class);
     }
 
     /**

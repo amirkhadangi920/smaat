@@ -126,7 +126,7 @@ class Product extends Model implements AuditableContract
      */
     public function accessories()
     {
-        return $this->belongsToMany(Product::class, 'product_accessory', 'accessory_id');
+        return $this->belongsToMany(Product::class, 'accessories', 'accessory_id');
     }
 
     /**

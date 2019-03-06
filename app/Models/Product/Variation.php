@@ -14,8 +14,8 @@ use App\Models\Feature\{
                 Color,
                 Warranty
                 };
-use App\Models\Financial\FactorItem;
-use App\Models\Financial\FactorPoint;
+use App\Models\Financial\OrderItem;
+use App\Models\Financial\OrderPoint;
 use App\Models\Discount\DiscountItem;
 
 class Variation extends Model implements AuditableContract
@@ -44,8 +44,6 @@ class Variation extends Model implements AuditableContract
         'size_id',
         'price',
         'unit',
-        'offer',
-        'offer_deadline',
         'inventory',
         'sending_time',
         'status',
@@ -114,7 +112,7 @@ class Variation extends Model implements AuditableContract
     
     public function order_item ()
     {
-        return $this->hasMany(FactorItem::class, 'variation_id');
+        return $this->hasMany(OrderItem::class, 'variation_id');
     }
 
     /**
@@ -134,9 +132,9 @@ class Variation extends Model implements AuditableContract
      * @return OrderPoint Model
      */
     
-    public function order_point ()
+    public function order_points ()
     {
-        return $this->morphMany(FactorPoint::class, 'orderable');
+        return $this->morphMany(OrderPoint::class, 'orderable');
     }
 
     /**

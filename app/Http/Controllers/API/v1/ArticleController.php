@@ -5,8 +5,6 @@ namespace App\Http\Controllers\API\v1;
 use App\Models\Article;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use Auth;
-use Laratrust;
 
 class ArticleController extends Controller
 {
@@ -17,7 +15,7 @@ class ArticleController extends Controller
      */
     public function index()
     {
-        return Article::create();
+        return Article::paginate(20);
     }
 
     /**
