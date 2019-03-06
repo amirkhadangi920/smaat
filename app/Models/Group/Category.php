@@ -3,22 +3,20 @@
 namespace App\Models\Group;
 
 use Illuminate\Database\Eloquent\Model;
-use App\Models\Spec\Spec;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use OwenIt\Auditing\Auditable;
 use OwenIt\Auditing\Contracts\Auditable as AuditableContract;
+use OwenIt\Auditing\Auditable;
 use Cviebrock\EloquentSluggable\Sluggable;
+use Spatie\Tags\HasTags;
 use App\Models\Feature\{
     Brand,
     Color,
     Size,
     Warranty,
     Unit
- };
+};
+use App\Models\Spec\Spec;
 use App\Models\Product\Product;
-use Spatie\Tags\HasTags;
-use App\Models\Promocode\Promocode;
-use App\Models\Discount\Discount;
 
 class Category extends Model implements AuditableContract
 {
@@ -34,7 +32,7 @@ class Category extends Model implements AuditableContract
      * @var array
      */
     protected $fillable = [
-        'parent',
+        'parent_id',
         'title',
         'description',
         'depth',
@@ -49,7 +47,22 @@ class Category extends Model implements AuditableContract
      */
     protected $casts = [
         'depth'             => 'integer',
-        'scoring_feilds'    => 'array'
+        'scoring_feilds'    => 'array',
+        'logo'              => 'array'
+    ];
+
+    /**
+     * The attributes that should be hidden for arrays.
+     *
+     * @var array
+     */
+    protected $hidden = [
+        'id',
+        'parent_id',
+        'deleted_at',
+        'created_at',
+        'updated_at',
+        'scoring_feilds'
     ];
 
     /**
@@ -164,23 +177,6 @@ class Category extends Model implements AuditableContract
         return $this->belongsToMany(Discount::class);
     }
 
-    /**
-     * Return first level , or cateogries with depth == 1
-     *
-     * @return Collection
-     */
-    public static function first_levels()
-    {
-        return Static::select('id', 'title', 'description', 'avatar')
-            ->where('parent', null)->latest()->get();
-    }
-    
-    public function parent_group ()
-    {
-        return $this->belongsTo(Category::class, 'parent');
-    }
-
-
     /****************************************
      **              Methods
      ***************************************/
@@ -197,5 +193,73 @@ class Category extends Model implements AuditableContract
                 'source' => 'title'
             ]
         ];
+    }
+
+    /**
+     * Get the route key for the model.
+     *
+     * @return string
+     */
+    public function getRouteKeyName()
+    {
+        return 'slug';
+    }
+
+    /**
+     * Get a breadcrump for specified category
+     * e.g parnet > child > sub-child ...
+     *
+     * @param Category $category
+     * @return Array
+     */
+    public static function breadcrumb (Category $category)
+    {
+        $breadcrumb = collect([$category]);
+
+        if ( is_null($category->parent_id) )
+            return $breadcrumb->pluck('title', 'slug');
+        
+        do {
+            $breadcrumb->push( $breadcrumb->last()->parent );
+        } while ( $breadcrumb->last()->parent );
+
+        return $breadcrumb->pluck('title', 'slug');
+    }
+
+    /**
+     * Get all the categories in tree style
+     *
+     * @return collection $categories
+     */
+    public static function tree()
+    {
+        $categories = static::select('id', 'slug', 'title', 'logo')
+                ->whereNull('parent_id')->latest()->get();
+
+        $categories->each( function ( $category ) {
+            static::get_childs( $category );
+        });
+
+        return $categories;
+    }
+
+    /**
+     * Recursive function for geting the childs of the group,
+     * if group has child, run this method on all of it's childs recursive
+     *
+     * @param Category $category
+     * @return void
+     */
+    public static function get_childs(Category $category)
+    {
+        $category->load('childs:parent_id,slug,title');
+
+        if ( $category->childs->isNotEmpty() )
+        {
+            foreach ( $category->childs as $child )
+                static::get_childs( $child );
+        } else {
+            unset( $category->childs );
+        }
     }
 }

@@ -2,6 +2,10 @@
 
 namespace App\Traits;
 
+use Carbon\Carbon;
+use Image;
+
+
 Trait ImageTools
 {
     /**
@@ -10,28 +14,63 @@ Trait ImageTools
      * @param File $image
      * @return String file_name
      */
-    public function upload_image ($image, $resize = [], $watermark = null)
+    public function upload_image ($image)
     {
-        // Create file name & file path with /year/month/day/filename formats
-        $time = Carbon::now();   
-        $file_path = "uploads/{$time->year}/{$time->month}/{$time->day}";
-        $file_ext = $image->getClientOriginalExtension();
-        $file_name = rtrim($image->getClientOriginalName(), ".$file_ext");
-        $file_name = time() . '_' . substr($file_name, 0, 50);
+        $file_name = $this->makeFileName( $image );
         
-        // Create directories if doesn't exists
-        if (!file_exists( public_path($file_path) )) {
-            mkdir(public_path($file_path), 0777, true);
-        }
-        
-        // Reszie , Add watermark and upload the image to storge
-        $image = Image::make( $image );
-        $this->resize($image, $resize);
-        $this->watermark($image, $watermark);
-        
+        $this->createDirectory( $file_name['path'] );
 
-        $image->save( public_path("$file_path/$file_name.$file_ext") );
-        return "/$file_path/$file_name.$file_ext";
+        $image = Image::make( $image );
+
+        return [
+            'big'       => $this->resizeAndSave($image, 1000, $file_name),
+            'medium'    => $this->resizeAndSave($image, 700, $file_name),
+            'small'     => $this->resizeAndSave($image, 400, $file_name),
+            'tiny'      => $this->resizeAndSave($image, 100, $file_name),
+        ];
+    }
+
+    /**
+     * Create an array of file name with the image
+     *
+     * @param file $image
+     * @return void
+     */
+    public function makeFileName ( $image )
+    {
+        $result = [];
+        $time = Carbon::now();
+        
+        $result['path'] = "images/{$time->year}/{$time->month}/{$time->day}";
+        $result['ext'] = $image->getClientOriginalExtension();
+        $result['name'] = rtrim($image->getClientOriginalName(), ".{$result['ext']}");
+        $result['name'] = time() . '_' . substr($result['name'], 0, 50);
+
+        return $result;
+    }
+
+    /**
+     * Create a directory if doesn't exists
+     *
+     * @param string $path
+     * @return void
+     */
+    public function createDirectory ( $path )
+    {
+        if (!file_exists( public_path( $path ) ))
+            mkdir(public_path( $path ), 0777, true);
+    }
+
+
+    public function resizeAndSave ( $image, $width, $file_name )
+    {
+        $this->resize( $image, $width );
+
+        $file_name = "/{$file_name['path']}/{$width}-{$file_name['name']}.{$file_name['ext']}";
+        
+        $image->save( public_path( $file_name ) );
+
+        return $file_name;
     }
 
     /**
@@ -42,44 +81,28 @@ Trait ImageTools
      * @param boolean $fixed
      * @return void
      */
-    public function resize ( $image, $dimentions = [], $fixed = false )
+    public function resize ( $image, $width )
     {
-        // Get width & height value from array to vars
-        $width = isset($dimentions['width']) ? $dimentions['width'] : null; 
-        $height = isset($dimentions['height']) ? $dimentions['height'] : null; 
-
-        // Return the image if doens't define any dimentions
-        if ( !( $width && $height ) ) return $image;
-
-        // Fixed resize if $fixed == true 
-        if ( $fixed || ( $width && $height ) )
-        {
-            $img->resize($width, $height);
-        }
-        // Resize with asspect ratio if $fixed == false
-        else
-        {
-            $image->resize($width, $height, function ($constraint) {
-                $constraint->aspectRatio();
-            });
-        }
+        $image->resize($width, null, function ($constraint) {
+            $constraint->aspectRatio();
+        });
     }
 
-    /**
-     * Add the watermark to the given image
-     *
-     * @param Image $image
-     * @param File $watermark
-     * @return void
-     */
-    public function watermark ($image, $watermark = null)
-    {
-        if ( $watermark && file_exists( $watermark ) )
-        {
-            $watermark = Image::make( $watermark );
-            $ratio = $watermark->width() / $watermark->height();
-            $watermark->resize(50 * $ratio, 50);
-            $image->insert($watermark, 'bottom-right', 10, 10);
-        }
-    }
+    // /**
+    //  * Add the watermark to the given image
+    //  *
+    //  * @param Image $image
+    //  * @param File $watermark
+    //  * @return void
+    //  */
+    // public function watermark ($image, $watermark = null)
+    // {
+    //     if ( $watermark && file_exists( $watermark ) )
+    //     {
+    //         $watermark = Image::make( $watermark );
+    //         $ratio = $watermark->width() / $watermark->height();
+    //         $watermark->resize(50 * $ratio, 50);
+    //         $image->insert($watermark, 'bottom-right', 10, 10);
+    //     }
+    // }
 }

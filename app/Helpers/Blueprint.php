@@ -138,6 +138,22 @@ class Blueprint extends BaseBlueprint
     }
 
     /**
+     * Add the proper columns for a polymorphic table.
+     *
+     * @param  string  $name
+     * @param  string|null  $indexName
+     * @return void
+     */
+    public function morphs($name, $indexName = null)
+    {
+        $this->string("{$name}_type");
+
+        $this->uuid("{$name}_id");
+
+        $this->index(["{$name}_type", "{$name}_id"], $indexName);
+    }
+
+    /**
      * Add an mediumtext fieild to the table that represents an json array
      *
      * @param string        $column

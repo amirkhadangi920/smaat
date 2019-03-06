@@ -15,9 +15,15 @@ use Illuminate\Http\Request;
 
 Route::post('login', 'API\UserController@login');
 Route::post('register', 'API\UserController@register');
-Route::group(['middleware' => 'auth:api'], function(){
+Route::group([
+    'middleware' => 'auth:api'
+], function(){
     Route::post('details', 'API\UserController@details');
 });
+Route::middleware('auth:api')->get('/user', function (Request $request) {
+    return $request->user();
+});
+
 
 Route::group([
     'namespace' => 'API\v1',
@@ -25,9 +31,6 @@ Route::group([
     'middleware' => 'auth:api'
 ], function () {
 
-    Route::resource('/articles', 'ArticleController');
-});
-
-Route::middleware('auth:api')->get('/user', function (Request $request) {
-    return $request->user();
+    Route::resource('/article', 'ArticleController');
+    Route::resource('/category', 'CategoryController');
 });

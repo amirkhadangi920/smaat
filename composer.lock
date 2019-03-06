@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "b409a7544be322ca091ac72410f6e13a",
+    "content-hash": "a00f4b4f4c204e4c40fcf6bdebb5b39d",
     "packages": [
         {
             "name": "beberlei/assert",
@@ -3328,71 +3328,6 @@
             "time": "2019-02-27T09:31:55+00:00"
         },
         {
-            "name": "spatie/laravel-permission",
-            "version": "2.35.0",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/spatie/laravel-permission.git",
-                "reference": "c29eaa782e222299bd669feb37a39285c04f2ee4"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/spatie/laravel-permission/zipball/c29eaa782e222299bd669feb37a39285c04f2ee4",
-                "reference": "c29eaa782e222299bd669feb37a39285c04f2ee4",
-                "shasum": ""
-            },
-            "require": {
-                "illuminate/auth": "~5.3.0|~5.4.0|~5.5.0|~5.6.0|~5.7.0|~5.8.0",
-                "illuminate/container": "~5.3.0|~5.4.0|~5.5.0|~5.6.0|~5.7.0|~5.8.0",
-                "illuminate/contracts": "~5.3.0|~5.4.0|~5.5.0|~5.6.0|~5.7.0|~5.8.0",
-                "illuminate/database": "~5.4.0|~5.5.0|~5.6.0|~5.7.0|~5.8.0",
-                "php": ">=7.0"
-            },
-            "require-dev": {
-                "orchestra/testbench": "~3.4.2|~3.5.0|~3.6.0|~3.7.0",
-                "phpunit/phpunit": "^5.7|6.2|^7.0",
-                "predis/predis": "^1.1"
-            },
-            "type": "library",
-            "extra": {
-                "laravel": {
-                    "providers": [
-                        "Spatie\\Permission\\PermissionServiceProvider"
-                    ]
-                }
-            },
-            "autoload": {
-                "psr-4": {
-                    "Spatie\\Permission\\": "src"
-                },
-                "files": [
-                    "src/helpers.php"
-                ]
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Freek Van der Herten",
-                    "email": "freek@spatie.be",
-                    "homepage": "https://spatie.be",
-                    "role": "Developer"
-                }
-            ],
-            "description": "Permission handling for Laravel 5.4 and up",
-            "homepage": "https://github.com/spatie/laravel-permission",
-            "keywords": [
-                "acl",
-                "laravel",
-                "permission",
-                "security",
-                "spatie"
-            ],
-            "time": "2019-03-01T19:52:03+00:00"
-        },
-        {
             "name": "spatie/laravel-tags",
             "version": "2.2.2",
             "source": {
@@ -4946,72 +4881,6 @@
                 "laravel-dump-server"
             ],
             "time": "2018-10-04T07:22:24+00:00"
-        },
-        {
-            "name": "crestapps/laravel-code-generator",
-            "version": "v2.3.0",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/CrestApps/laravel-code-generator.git",
-                "reference": "ab59405050889dce0341925daba8cd8e2dd2d881"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/CrestApps/laravel-code-generator/zipball/ab59405050889dce0341925daba8cd8e2dd2d881",
-                "reference": "ab59405050889dce0341925daba8cd8e2dd2d881",
-                "shasum": ""
-            },
-            "require": {
-                "laravel/framework": "~5.1"
-            },
-            "type": "library",
-            "extra": {
-                "laravel": {
-                    "providers": [
-                        "CrestApps\\CodeGenerator\\CodeGeneratorServiceProvider"
-                    ]
-                }
-            },
-            "autoload": {
-                "psr-4": {
-                    "CrestApps\\CodeGenerator\\": "src/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Majd Alhayek (Mike)",
-                    "email": "mike@crestapps.com",
-                    "homepage": "https://www.crestapps.com"
-                }
-            ],
-            "description": "An intelligent code generator for Laravel framework that will save you time! This awesome tool will help you generate resources like views, controllers, routes, migrations, languages and/or form-requests! It is extremely flexible and customizable to cover many on the use cases. It is shipped with cross-browsers compatible template, along with a client-side validation to modernize your application.",
-            "keywords": [
-                "Alhayek",
-                "CrestApps",
-                "Majd Alhayek",
-                "Mike Alhayek",
-                "code generator",
-                "code-generator",
-                "controller creator",
-                "crud",
-                "crud builder",
-                "crud generator",
-                "generator",
-                "generators",
-                "laravel",
-                "laravel code generator",
-                "laravel crud",
-                "laravel crud builder",
-                "laravel crud generator",
-                "laravel-code-generator",
-                "routes creator",
-                "views creator"
-            ],
-            "time": "2019-03-03T16:52:02+00:00"
         },
         {
             "name": "doctrine/instantiator",
