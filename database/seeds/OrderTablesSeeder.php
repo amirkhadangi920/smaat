@@ -45,7 +45,10 @@ class OrderTablesSeeder extends Seeder
             'user_id' => $data['users']->random()->id
         ]);
 
-        
+        $data['categories']->each( function( $category ) use( $discounts ) {
+
+            $category->discounts()->sync( $discounts->random() );
+        });
 
         $data['products']['variations']->each( function ( $variation ) use ( $discounts ) {
 

@@ -7,6 +7,7 @@ use App\Models\Financial\Order;
 use Cviebrock\EloquentSluggable\Sluggable;
 use OwenIt\Auditing\Auditable;
 use OwenIt\Auditing\Contracts\Auditable as AuditableContract;
+use App\Models\Group\Category;
 
 class Discount extends Model implements AuditableContract 
 {
@@ -63,6 +64,14 @@ class Discount extends Model implements AuditableContract
     public function orders ()
     {
         return $this->hasMany(Order::class);
+    }
+
+    /**
+     * Get all the categories that owned the category & adverb
+     */
+    public function categories ()
+    {
+        return $this->belongsToMany(Category::class);
     }
 
     /****************************************

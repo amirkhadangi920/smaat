@@ -71,11 +71,11 @@ class Subject extends Model implements AuditableContract
     }
 
     /**
-     * Get all the child categories that owned by the category
+     * Get all the articles that owned the category & adverb
      */
     public function articles ()
     {
-        return $this->hasMany(Article::class);
+        return $this->belongsToMany(Article::class);
     }
 
     /****************************************

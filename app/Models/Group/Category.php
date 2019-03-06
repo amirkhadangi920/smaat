@@ -161,6 +161,22 @@ class Category extends Model implements AuditableContract
         return $this->belongsTo(self::class, 'parent_id');
     }
 
+    /**
+     * Get all the promocodes that owned the category & adverb
+     */
+    public function promocodes ()
+    {
+        return $this->belongsToMany(Promocode::class);
+    }
+    
+
+    /**
+     * Get all the discounts that owned the category & adverb
+     */
+    public function discounts ()
+    {
+        return $this->belongsToMany(Discount::class);
+    }
 
     /****************************************
      **              Methods
