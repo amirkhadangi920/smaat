@@ -8,6 +8,8 @@ class ProductTablesSeeder extends Seeder
 
     public $variations;
 
+    public $questionAndAnswers;
+
     public function __construct()
     {
         $this->variations = collect();
@@ -23,13 +25,30 @@ class ProductTablesSeeder extends Seeder
         $data['categories']->each( function ( $category ) use ( $data ) {
 
             $this->products = $category->products()->saveMany(
+
                 factory(\App\Models\Product\Product::class, rand(1, 5))->make([
                     'user_id' => $data['users']->random()->id,
                     'brand_id' => $data['features']['brands']->random()->id,
                     'spec_id' => $data['specifications']['spec_table']
                 ])
-            );
-        
+
+            )->each( function( $product ) use ( $data ){
+                 $product->questions()->save(
+                     factory(\App\Models\Opinion\QuestionAndAnswer::class)->make([
+                    'user_id' => $data['users']->random()->id
+                    ])
+                );
+            });    
+
+            // $questionAndAnswers = $this->$questionAndAnswers->each( function (&$questionAndAnswer) use ( $data ) {
+            //     $questionAndAnswer->answers()->save(
+            //         factory(\App\Models\Opinion\QuestionAndAnswer::class)->make([
+            //             'user_id' => $data['users']->random()->id
+            //         ])
+            //     );
+            
+            // });
+    
             $this->products->each(function ($product) use ( $data ) {
 
                 $this->variations = $this->variations->merge(
@@ -44,39 +63,22 @@ class ProductTablesSeeder extends Seeder
                 $variations->each( function( $variation ) use( $data ) {
                     $variation->promocodes()->sync( $data['promocodes']->random() );
                 });
-                
-                // ->each( function( $variation) use( $data ){
 
-                    // $variation->order_points()->saveMany(
-                        //  factory(App\Models\Financial\OrderPoint::class, 5)->make([
-                        // 'variation_id'  => $variation->id,
-                        // 'category_id'   => $data['categories']->random()->id
-                    // ]));
+                $variations->each( function( $variation ) {
+                    $variation->order_points()->saveMany(
+                        factory(App\Models\Financial\OrderPoint::class, 5)->make() 
+                    );
+                });
 
-                // $data['users']->each( function ( $user ) use ( $product, $data ) {
+                $data['users']->each( function ( $user ) use ( $product, $data ) {
 
-                //     $product->reviews()->save(
-                //         factory(\App\Models\Opinion\Review::class)->make([
-                //             'user_id' => $user->id
-                //         ])
-                //     );
-
-                //     // echo $user->id.PHP_EOL;
-
-                //     $product->questions()->save(
-                //         factory(\App\Models\Opinion\QuestionAndAnswer::class)->make([
-                //             'user_id' => $user->id
-                //         ])
-                //     )->each( function ($questionAndAnswers) use ( $data ) {
-                //         $questionAndAnswers->answers()->saveMany(
-                //             factory(\App\Models\Opinion\QuestionAndAnswer::class, rand(0, 2))->make([
-                //                 'user_id' => $data['users']->random()->id
-                //             ])
-                //         );
-                //     });
-                //     dd('klahdjkla');
-                // });
-                
+                    $product->reviews()->save(
+                        factory(\App\Models\Opinion\Review::class)->make([
+                            'user_id' => $data['users']->random()->id
+                        ])
+                    );
+                });
+               //     // echo $user->id.PHP_EOL;
                 $data['specifications']['rows']->each( function ( $spec_row ) use ( $product ) {
 
                     $product->spec_data()->save(
