@@ -28,7 +28,7 @@ class DatabaseSeeder extends Seeder
         echo "\e[31m\e[1m\e[100m{$users->count()}\e[49m Users \e[39mwas \e[32mcreated\n";
     
         $this->call(BlogTablesSeeder::class, $users);
-
+        
         $categories = $this->call(CategoryTablesSeeder::class);
 
         // $categories->each( function( $category ) {

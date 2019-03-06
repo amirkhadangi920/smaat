@@ -22,8 +22,8 @@ class CreateFeaturesTables extends Migration
 
         $schema->create('brands', function ($table) {
             $table->table([
+                'sluggable_info' => 'param:name',
                 'logo' => 'nullable|array',
-                'sluggable_info' => 'param:name'
             ], [ 'categories']);
         });
 
@@ -43,6 +43,7 @@ class CreateFeaturesTables extends Migration
         $schema->create('warranties', function ($table) {
             $table->table([
                 'info',
+                'logo' => 'nullable|array',
                 'expire' => 20,
             ], [ 'categories']);
         });
