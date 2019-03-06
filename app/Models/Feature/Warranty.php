@@ -66,12 +66,10 @@ class Warranty extends Model implements AuditableContract
     }
 
     /**
-     * get the all variation that owned the warranty
-     *
-     * @return Warranty Model
+     * Get all of the tags for the post.
      */
-    public function category ()
+    public function categories()
     {
-        return $this->belogsTo(Category::class);
+        return $this->morphToMany(Category::class, 'featureable');
     }
 }

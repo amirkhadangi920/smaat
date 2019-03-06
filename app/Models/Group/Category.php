@@ -79,51 +79,51 @@ class Category extends Model implements AuditableContract
      ***************************************/
 
     /**
-     * Get all the brands that owned by the category
-     */
-    public function brands ()
-    {
-        return $this->hasMany(Brand::class);
-    }
-
-    /**
-     * Get all the units that owned by the category
-     */
-    public function units ()
-    {
-        return $this->hasMany(Unit::class);
-    }
-
-    /**
-     * Get all the colors that owned by the category
-     */
-    public function colors ()
-    {
-        return $this->hasMany(Color::class);
-    }
-
-    /**
-     * Get all the sizes that owned by the category
-     */
-    public function sizes ()
-    {
-        return $this->hasMany(Size::class);
-    }
-
-    /**
-     * Get all the warranties that owned by the category
-     */
-    public function warranties ()
-    {
-        return $this->hasMany(Warranty::class);
-    }
-
-    /**
      * Get all the products that owned by the category
      */
     public function products ()
     {
         return $this->hasMany(Product::class);
+    }
+
+    /**
+     * Get all of the colors that are assigned this category.
+     */
+    public function colors()
+    {
+        return $this->morphedByMany(Color::class, 'featurable');
+    }
+
+    /**
+     * Get all of the colors that are assigned this category.
+     */
+    public function sizes()
+    {
+        return $this->morphedByMany(Size::class, 'featurable');
+    }
+
+    /**
+     * Get all of the colors that are assigned this category.
+     */
+    public function brands()
+    {
+        return $this->morphedByMany(Brand::class, 'featurable');
+    }
+
+    /**
+     * Get all of the colors that are assigned this category.
+     */
+    public function units()
+    {
+        return $this->morphedByMany(Unit::class, 'featurable');
+    }
+
+    /**
+     * Get all of the colors that are assigned this category.
+     */
+    public function warranties()
+    {
+        return $this->morphedByMany(Warranty::class, 'featureable');
     }
 
     /**

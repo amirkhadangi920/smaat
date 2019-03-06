@@ -22,22 +22,22 @@ class CreateFeaturesTables extends Migration
 
         $schema->create('brands', function ($table) {
             $table->table([
-                'sluggable_info' => 'param:name',
                 'logo' => 'nullable|array',
-            ], [ 'categories']);
+                'sluggable_info' => 'param:name'
+            ], [ ]);
         });
 
         $schema->create('colors', function ($table) {
             $table->table([
                 'name' => 30,
                 'code' => '9|comment:Hexadecimal code of the color, e.g #43df12',
-            ], [ 'categories']);
+            ], [ ]);
         });
 
         $schema->create('sizes', function ($table) {
             $table->table([
                 'name' => 50,
-            ], [ 'categories']);
+            ], [ ]);
         });
 
         $schema->create('warranties', function ($table) {
@@ -45,13 +45,18 @@ class CreateFeaturesTables extends Migration
                 'info',
                 'logo' => 'nullable|array',
                 'expire' => 20,
-            ], [ 'categories']);
+            ], [ ]);
         });
 
         $schema->create('units', function ($table) {
             $table->table([
                 'info',
-            ], [ 'categories']);
+            ], [ ]);
+        });
+
+        $schema->create('featureables', function ($table) {
+            $table->reltoCategories();
+            $table->morphs('featureable');
         });
     }
 

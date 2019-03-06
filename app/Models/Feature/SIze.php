@@ -35,10 +35,10 @@ class Size extends Model implements AuditableContract
      ***************************************/
     
     /**
-     * Get the category that owned size
+     * Get all of the tags for the post.
      */
-    public function categories ()
+    public function categories()
     {
-        return $this->belongsTo(Category::class);
+        return $this->morphToMany(Category::class, 'featureable');
     }
 }

@@ -16,12 +16,12 @@ class AbstractTablesSeeder extends Seeder
 
             for( $i = 0; $i < rand(0, 3); ++$i )
             {
-                $user->favorites()->sync( $data['products']->random() );
+                $user->favorites()->sync( $data['products']['products']->random() );
             }
         });
-        dd('ksnmklfnklnfksnlk');
+
         // Add Accesories for the products
-        $data['products']->each( function ( $product ) use ( &$data ) {
+        $data['products']['products']->each( function ( $product ) use ( &$data ) {
 
             for( $i = 0; $i < rand(0, 3); ++$i )
             {
