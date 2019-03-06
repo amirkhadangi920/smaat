@@ -39,11 +39,11 @@ class Color extends Model implements AuditableContract
      ***************************************/
 
     /**
-     * each category can get one color
+     * Get all of the tags for the post.
      */
-    public function category ()
+    public function categories()
     {
-        return $this->belongsTo(Category::class);
+        return $this->morphToMany(Category::class, 'featureable');
     }
 
     /**

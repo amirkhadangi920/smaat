@@ -24,33 +24,38 @@ class CreateFeaturesTables extends Migration
             $table->table([
                 'logo' => 'nullable|array',
                 'sluggable_info' => 'param:name'
-            ], [ 'categories']);
+            ], [ ]);
         });
 
         $schema->create('colors', function ($table) {
             $table->table([
                 'name' => 30,
                 'code' => '9|comment:Hexadecimal code of the color, e.g #43df12',
-            ], [ 'categories']);
+            ], [ ]);
         });
 
         $schema->create('sizes', function ($table) {
             $table->table([
                 'name' => 50,
-            ], [ 'categories']);
+            ], [ ]);
         });
 
         $schema->create('warranties', function ($table) {
             $table->table([
                 'info',
                 'expire' => 20,
-            ], [ 'categories']);
+            ], [ ]);
         });
 
         $schema->create('units', function ($table) {
             $table->table([
                 'info',
-            ], [ 'categories']);
+            ], [ ]);
+        });
+
+        $schema->create('featureables', function ($table) {
+            $table->reltoCategories();
+            $table->morphs('featureable');
         });
     }
 

@@ -34,11 +34,11 @@ class Unit extends Model
      ***************************************/
     
     /**
-     * Get the category that owned unit
+     * Get all of the tags for the post.
      */
-    public function categories ()
+    public function categories()
     {
-        return $this->belongsTo(Category::class);
+        return $this->morphToMany(Category::class, 'featureable');
     }
 
     /**
