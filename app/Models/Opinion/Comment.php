@@ -2,8 +2,6 @@
 
 namespace App\Models\Opinion;
 
-use Cog\Contracts\Love\Likeable\Models\Likeable as LikeableContract;
-use Cog\Laravel\Love\Likeable\Models\Traits\Likeable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Cviebrock\EloquentSluggable\Sluggable;
@@ -13,7 +11,7 @@ use App\Models\Article;
 
 class Comment extends Model implements AuditableContract , LikeableContract
 {
-    use SoftDeletes, Auditable, Likeable;
+    use SoftDeletes, Auditable;
 
     /****************************************
      **             Attributes
