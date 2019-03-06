@@ -19,10 +19,6 @@ class CategoryTablesSeeder extends Seeder
             ));
         });
         
-            
-           
-        // });
-
         return $categories;
     }
 }
