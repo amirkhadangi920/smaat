@@ -24,7 +24,7 @@ class CreateGroupingTables extends Migration
             $table->table([
                 'sluggable_info',
                 'depth'          => 'tinyInteger|default:1|comment:Depth of the group e.g parent > child > sub-sbhild is 3',
-                'logo'           => '100|nullable',
+                'logo'           => 'nullable|array',
                 'scoring_feilds' => 'mediumText|nullable'
             ], ['self']);
         });

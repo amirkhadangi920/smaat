@@ -43,7 +43,6 @@ class CreateOrderTeble extends Migration
                 'payment_code'      => '30|nullable',
                 // 'payment_jalali'    => 'timestamp',
                 'datetimes'         => 'mediumText|nullable',
-                'status'            => 'boolean|default:0',
                 'type'              => 'tinyInteger|comment:Type of factor, e.g sell, buy, sell_back etc...',
                 'is_accept'         => 'boolean|default:0'
             ], [
@@ -55,7 +54,7 @@ class CreateOrderTeble extends Migration
             ], 'uuid', ['paid_at', 'jalali_paid_at']);            
         });
 
-        $schema->create('orders_items', function (Blueprint $table) {
+        $schema->create('order_items', function (Blueprint $table) {
             $table->table([
                 'count' => 'unsignedInteger',
                 'price' => 'unsignedBigInteger|default:0',
@@ -66,7 +65,7 @@ class CreateOrderTeble extends Migration
                 // 'users',
                 'orders',
                 'variations' => true,
-            ], 'uuid');
+            ],  'uuid');
         });
     }
 

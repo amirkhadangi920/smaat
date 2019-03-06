@@ -3,6 +3,7 @@
 namespace App\Models\Promocode;
 
 use Illuminate\Database\Eloquent\Model;
+use App\Models\Financial\Order;
 
 class Promocode extends Model
 {
@@ -31,9 +32,17 @@ class Promocode extends Model
     /**
      * Get the all promocode user that owned promocode.
      */
-    public function promocode_users ()
+    public function promocode_user()
     {
         return $this->hasMany(PromocodeUser::class);
+    }
+
+    /**
+     * Get the all orders that owned promocode.
+     */
+    public function orders ()
+    {
+        return $this->hasMany(Order::class);
     }
 }
     

@@ -111,6 +111,17 @@ class Category extends Model implements AuditableContract
     }
 
     /**
+     * Relation to orderpoint model with orderable
+     * 
+     * @return OrderPoint Model
+     */
+    
+    public function order_points ()
+    {
+        return $this->morphMany(OrderPoint::class, 'orderable');
+    }
+
+    /**
      * Get all the specification table that owned by the category
      */
     public function specs ()

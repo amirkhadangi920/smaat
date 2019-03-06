@@ -132,7 +132,7 @@ class Variation extends Model implements AuditableContract
      * @return OrderPoint Model
      */
     
-    public function order_point ()
+    public function order_points ()
     {
         return $this->morphMany(OrderPoint::class, 'orderable');
     }

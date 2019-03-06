@@ -70,11 +70,4 @@ class Review extends Model implements AuditableContract
         return $this->belongsTo(\App\User::class);
     }
 
-    /**
-     * Get all the asnwers of the question
-     */
-    public function Browses()
-    {
-        return $this->hasMany(Review::class, 'parent_id');
-    }
 }

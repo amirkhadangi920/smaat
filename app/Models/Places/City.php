@@ -3,6 +3,7 @@
 namespace App\Models\Places;
 
 use Illuminate\Database\Eloquent\Model;
+use App\Models\Financial\Order;
 
 class City extends Model
 {
@@ -48,5 +49,13 @@ class City extends Model
     public function users ()
     {
         return $this->hasMany(\App\User::class);
+    }
+
+    /**
+     * Get all of the orders of city.
+     */
+    public function orders ()
+    {
+        return $this->hasMany(Order::class);
     }
 }

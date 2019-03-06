@@ -10,6 +10,9 @@ use App\Traits\GenerateRandomID;
 use OwenIt\Auditing\Auditable;
 use OwenIt\Auditing\Contracts\Auditable as AuditableContract;
 use App\Models\Discount\Discount;
+use App\Models\Promocode\Promocode;
+use App\Models\Shipping_method;
+use App\Models\Places\City;
 
 class Order extends Model
 {
@@ -90,7 +93,7 @@ class Order extends Model
      */
     public function user ()
     {
-        return $this->belongsTo(\App\User::class, 'buyer');
+        return $this->belongsTo(\App\User::class);
     }
 
     /**
@@ -101,12 +104,45 @@ class Order extends Model
         return $this->hasMany(OrderItem::class);
     }
 
+    /**
+     * Get the discount that owned the order
+     */
     public function discount ()
     {
         return $this->belongsTo(Discount::class);
     }
 
+    /**
+     * Get the order status that owned the order
+     */
+    public function order_status ()
+    {
+        return $this->belongsTo(OrderStatus::class);
+    }
+
+    /**
+     * Get the promocode that owned the order
+     */
+    public function promocode ()
+    {
+        return $this->belongsTo(Promocode::class);
+    }
     
+    /**
+     * Get the shipping method that owned the order
+     */
+    public function shipping_method ()
+    {
+        return $this->belongsTo(Shipping_method::class);
+    }
+
+    /**
+     * Get the city that owned the order
+     */
+    public function city ()
+    {
+        return $this->belongsTo(City::class);
+    }
 
 
     /**

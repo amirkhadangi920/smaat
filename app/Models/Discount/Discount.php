@@ -4,10 +4,13 @@ namespace App\Models\Discount;
 
 use Illuminate\Database\Eloquent\Model;
 use App\Models\Financial\Order;
+use Cviebrock\EloquentSluggable\Sluggable;
+use OwenIt\Auditing\Auditable;
+use OwenIt\Auditing\Contracts\Auditable as AuditableContract;
 
-class Discount extends Model
+class Discount extends Model implements AuditableContract 
 {
-    
+    use Sluggable, Auditable;
     /****************************************
      **             Attributes
      ***************************************/
@@ -47,9 +50,9 @@ class Discount extends Model
     }
 
     /**
-     * get the all discount item that owned the discount
+     * get the all discount items that owned the discount
      */
-    public function discount_item ()
+    public function discount_items()
     {
         return $this->hasMany(DiscountItem::class);
     }
@@ -60,5 +63,23 @@ class Discount extends Model
     public function orders ()
     {
         return $this->hasMany(Order::class);
+    }
+
+    /****************************************
+     **              Methods
+     ***************************************/
+
+    /**
+     * Return the sluggable configuration array for this model.
+     *
+     * @return array
+     */
+    public function sluggable()
+    {
+        return [
+            'slug' => [
+                'source' => 'title'
+            ]
+        ];
     }
 }

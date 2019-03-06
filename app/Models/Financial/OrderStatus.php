@@ -27,4 +27,16 @@ class OrderStatus extends Model
      * @var array
      */
     protected $dates = ['deleted_at'];
+
+    /****************************************
+     **             Relations
+     ***************************************/
+
+    /**
+     * Get all the orders of the order status
+     */
+    public function orders ()
+    {
+        return $this->hasMany(Order::class);
+    }
 }

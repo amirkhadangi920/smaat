@@ -37,7 +37,7 @@ class DatabaseSeeder extends Seeder
         
         $this->call(OptionTableSeeder::class);
         
-        $users = factory(\App\User::class, 5)->create([
+        $users = factory(\App\User::class, 2)->create([
             // 'city_id' => $cities->random()->id
         ]);
         echo "\e[31m\e[1m\e[100m{$users->count()}\e[49m Users \e[39mwas \e[32mcreated\n";
@@ -56,47 +56,35 @@ class DatabaseSeeder extends Seeder
         
         $specifications = $this->call(SpecificationTablesSeeder::class, $categories);
 
-        $products = $this->call(ProductTablesSeeder::class, compact('users', 'categories', 'specifications', 'features'));
+        $products = $this->call(ProductTablesSeeder::class, compact(
+            'users', 'categories', 'specifications', 'features')); 
 
-        // dd($products['products']->teke());
         // Add favorites products for the users
-        // $users->each( function ( $user ) use ( $products ) {
+        $users->each( function ( $user ) use ( $products ) {
 
-        //     $user->favorites()->sync(
-        //         $products['products']->teke( rand(0, 3) )->pluck('id' )
-        //     );
-        // });
-
+            for( $i = 0; $i < rand(0, 3); ++$i )
+            {
+                $user->favorites()->sync( $products['products']->random() );
+            }
+        });
+        
         // Add Accesories for the products
-        // $products['products']->each( function ( $product ) use ( $products ) {
-            
-        //     $product->accessories()->sync(
-        //         collect( $products )->take( rand(0, 3) )->pluck('id')
-        //     );
-        // });
-        // dd('alknflknlknljkdkglkjd');
+        $products['products']->each( function ( $product ) use ( &$products ) {
 
-        
-
-        $this->call(OrderTablesSeeder::class, compact('users', 'products'));
-
-        echo "\n";
-        
-
-        // factory( App\Models\Shipping_method::class, 5 )->create();
-
+            for( $i = 0; $i < rand(0, 3); ++$i )
+            {
+                $product->accessories()->sync( $products['products']->random() );
+            }
+        });
+        $this->call(PromocodeTablesSeeder::class, compact('users'));
 
         $promocodes = factory( App\Models\Promocode\Promocode::class, 5 )->create();
 
-        // $promocodes->each( function( $promocode ) use( $users ){
+        $this->call(OrderTablesSeeder::class, compact('users', 'products', 'cities', 'promocodes'));
 
-        //     $promocode->promocode_users()->saveMany( factory( App\Models\Promocode\PromocodeUser::class, 5 )->make([
-
-        //         'promocode_id'  =>$promocode->id,
-        //         'user_id'       =>$users->random()->id
-        //     ]));
-        // });
+        // dd('lksngljknbzgb,jz');
         
+    
     }
 
     /**

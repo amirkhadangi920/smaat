@@ -8,10 +8,11 @@ use OwenIt\Auditing\Auditable;
 use OwenIt\Auditing\Contracts\Auditable as AuditableContract;
 use App\Models\Product\Variation;
 use App\Models\Financial\Order;
+use App\Traits\GenerateRandomID;
 
 class OrderItem extends Model implements AuditableContract
 {
-    use SoftDeletes, Auditable;
+    use SoftDeletes, Auditable, GenerateRandomID;
 
     /****************************************
      **             Attributes

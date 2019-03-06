@@ -19,6 +19,12 @@ class OrderPoint extends Model
         'value',
     ];
 
+    /**
+     * The attributes specifies that table has time
+     *
+     * @var boolean
+     */
+    public $timestamps = false;
     /****************************************
     **             Relations
     ***************************************/

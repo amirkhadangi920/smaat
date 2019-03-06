@@ -1,6 +1,7 @@
 <?php
 
 use Faker\Generator as FakerEng;
+use App\Models\Shipping_method;
 
 $factory->define(App\Models\Financial\Order::class, function (FakerEng $faker) {
     $descriptions = $datetimes = [];
@@ -19,6 +20,7 @@ $factory->define(App\Models\Financial\Order::class, function (FakerEng $faker) {
 
     return [
         'descriptions'      => nullable( $descriptions ),
+        'type'              => $faker->numberBetween(0, 100),
         'destination'       => nullable( Faker::address() ),
         'postal_code'       => nullable( $faker->postcode ),
         'offer'             => $faker->numberBetween(0, 100000),
@@ -29,10 +31,7 @@ $factory->define(App\Models\Financial\Order::class, function (FakerEng $faker) {
         'auth_code'         => $auth_code,
         'payment_code'      => $auth_code ? str_random(30) : null,
         'datetimes'         => $datetimes,
-        'shipping_methods'          => [ null, [
-            'cost' => $faker->numberBetween(0, 20000),
-            'type' => [ 'model1', 'model2', 'model3', 'model4' ][ rand(0, 3) ]
-        ]][ $faker->boolean() ],
+        'shipping_method_id'=> nullable( factory(Shipping_method::class)->create()->id ),
         'status'            => [
             'created', 'awaiting_payment', 'paied', 'sending', 'sended', 'canceled', 'packaging'
         ][ rand(0, 6) ],
@@ -41,7 +40,11 @@ $factory->define(App\Models\Financial\Order::class, function (FakerEng $faker) {
 
 $factory->define(App\Models\Financial\OrderItem::class, function (FakerEng $faker) {
     return [
-       'count' => $faker->numberBetween(1, 5), 
+       'count'          => $faker->numberBetween(1, 5), 
+       'price'          => $faker->numberBetween(0, 500000),
+       'offer'          => $faker->numberBetween(0, 2000),
+       'tax'            => $faker->numberBetween(0, 5000),
+       'description'    => $faker->text(255)
     ];
 });
 
