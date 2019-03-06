@@ -17,6 +17,8 @@ use App\Models\Feature\{
 };
 use App\Models\Spec\Spec;
 use App\Models\Product\Product;
+use App\Models\Discount\Discount;
+use App\Models\Financial\OrderPoint;
 
 class Category extends Model implements AuditableContract
 {
