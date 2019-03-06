@@ -49,7 +49,7 @@ class DatabaseSeeder extends Seeder
             'users', 'categories', 'specifications', 'features','promocodes'
         )); 
 
-        // $this->call(AbstractTablesSeeder::class, compact('users', 'products'));
+        $this->call(AbstractTablesSeeder::class, compact('users', 'products'));
         
 
         $this->call(OrderTablesSeeder::class, compact(

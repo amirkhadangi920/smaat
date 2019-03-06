@@ -20,7 +20,7 @@ class BlogTablesSeeder extends Seeder
             ));
         });
 
-        $articles = factory( \App\Models\Article::class , rand(0, 10) )->create([
+        $articles = factory( \App\Models\Article::class , rand(1, 10) )->create([
             'user_id' => $users->random()->id
         ]);
 
@@ -31,7 +31,7 @@ class BlogTablesSeeder extends Seeder
 
         $articles->each( function ( $article ) use( $users ) {
 
-            $article->comments()->saveMany( factory(\App\Models\Opinion\Comment::class, rand(0, 10))->make([
+            $article->comments()->saveMany( factory(\App\Models\Opinion\Comment::class, rand(1, 10))->make([
                 'user_id' => $users->random()->id
             ]));    
         });
