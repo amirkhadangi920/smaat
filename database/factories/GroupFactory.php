@@ -5,34 +5,32 @@ use Faker\Generator as FakerEng;
 $factory->define(App\Models\Group\Category::class, function (FakerEng $faker) {
     return [
         'title'             => Faker::fullName(),
-        'description'       => [ null, Faker::sentence() ][ $faker->boolean() ],
+        'description'       => nullable( Faker::sentence() ),
         'depth'             => $faker->numberBetween(1, 5),
-        'logo'              => [ null, $faker->imageUrl(100, 100) ][ $faker->boolean() ],
-        'offer'             => [ null, $faker->numberBetween(1000, 100000) ][ $faker->boolean() ],
-        'offer_deadline'    => [ null, $faker->dateTimeBetween('now', '+2 years') ][ $faker->boolean() ],
-        'scoring_feilds'    => [ null, function () use ( $faker ) {
+        'logo'              => nullable( $faker->imageUrl(100, 100) ),
+        'scoring_feilds'    => nullable( function () use ( $faker ) {
             $feilds = [];
             for ($i = 0; $i < rand(1, 8); ++$i)
                 $feilds[] = $faker->sentence();
             return $feilds;
-        }][ $faker->boolean() ]
+        })
     ];
 });
 
 $factory->define(App\Models\Group\Subject::class, function (FakerEng $faker) {
     return [
         'title'             => Faker::fullName(),
-        'description'       => [ null, Faker::sentence() ][ $faker->boolean() ],
+        'description'       => nullable( Faker::sentence() ),
         'depth'             => $faker->numberBetween(1, 5),
-        'logo'              => [ null, $faker->imageUrl(100, 100) ][ $faker->boolean() ],
+        'logo'              => nullable( $faker->imageUrl(100, 100) ),
     ];
 });
 
 $factory->define(App\Models\Group\AccountGroup::class, function (FakerEng $faker) {
     return [
         'title'             => Faker::fullName(),
-        'description'       => [ null, Faker::sentence() ][ $faker->boolean() ],
+        'description'       => nullable( Faker::sentence() ),
         'depth'             => $faker->numberBetween(1, 5),
-        'logo'              => [ null, $faker->imageUrl(100, 100) ][ $faker->boolean() ],
+        'logo'              => nullable( $faker->imageUrl(100, 100) ),
     ];
 });

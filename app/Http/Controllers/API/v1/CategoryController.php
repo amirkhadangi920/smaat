@@ -5,9 +5,19 @@ namespace App\Http\Controllers\API\v1;
 use App\Models\Group\Category;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Http\Resources\Group\Category as CategoryResource;
+use App\Http\Resources\Group\CategoryCollection;
+use App\Permission;
 
 class CategoryController extends Controller
 {
+    /**
+     * Type of this controller for use in messages
+     *
+     * @var string
+     */
+    private $type = 'category';
+
     /**
      * Display a listing of the resource.
      *
@@ -15,7 +25,12 @@ class CategoryController extends Controller
      */
     public function index()
     {
-        //
+        return response()->json([
+            'data' => Category::tree(),
+            'message' => __('messages.return.all', [
+                'data' => __("types.{$this->type}.title")
+            ])
+        ]);
     }
 
     /**
@@ -26,18 +41,34 @@ class CategoryController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $this->checkPermission('create-category');
+
+        $category = Category::create(
+            $this->requestWithImage( $request )->merge([
+                'scoring_feilds' => $request->scoring_feilds ? explode(',', $request->scoring_feilds) : null
+            ])->all()
+        );
+        
+        return (new CategoryResource( $category ))->additional([
+            'message' => __('messages.create.successful', [
+                'data' => __("types.{$this->type}.title")
+            ])
+        ]);
     }
 
     /**
-     * Display the specified resource.
+     * Display the specified category with it's breadcrumb.
      *
-     * @param  \App\Models\Group\Category  $category
-     * @return \Illuminate\Http\Response
+     * @param  Category $category
+     * @return CategoryResource
      */
     public function show(Category $category)
     {
-        //
+        return (new CategoryResource( $category, Category::breadcrumb( $category ) ))->additional([
+            'message' => __('messages.return.single', [
+                'data' => __("types.{$this->type}.title")
+            ])
+        ]);;
     }
 
     /**
@@ -49,17 +80,44 @@ class CategoryController extends Controller
      */
     public function update(Request $request, Category $category)
     {
-        //
+        $this->checkPermission('update-category');
+
+        $category->update(
+            $this->requestWithImage( $request, 'logo', $category )->merge([
+                'scoring_feilds' => $request->scoring_feilds ? explode(',', $request->scoring_feilds) : null
+            ])->all()
+        );
+        
+        return (new CategoryResource( $category ))->additional([
+            'message' => __('messages.update.successful', [
+                'data' => __("types.{$this->type}.title")
+            ])
+        ]);
     }
 
     /**
-     * Remove the specified resource from storage.
+     * Remove the one or multiple categories from storage.
      *
-     * @param  \App\Models\Group\Category  $category
-     * @return \Illuminate\Http\Response
+     * @param  String $categories
+     * @return Array\JSON
      */
-    public function destroy(Category $category)
+    public function destroy($categories)
     {
-        //
+        $categories = explode(',', $categories);
+
+        $this->checkPermission('delete-category');
+
+        foreach ( $categories as $category )
+        {
+            Category::whereSlug($category)->firstOrfail()->delete();
+        }
+
+        $status = count($categories) === 1 ? 'successful' : 'plural';
+        
+        return response()->json([
+            'message' => __("messages.delete.{$status}", [
+                'data' => __("types.{$this->type}.title")
+            ])
+        ]); 
     }
 }
