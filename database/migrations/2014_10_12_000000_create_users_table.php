@@ -29,7 +29,7 @@ class CreateUsersTable extends Migration
                 'email'             => '100|unique',
                 'email_verified_at' => 'timestamp|nullable',
                 'password'          => 100,
-                'avatar'            => '50|nullable',
+                'avatar'            => 'nullable|array',
                 
                 'address'           => '300|nullable',
                 'postal_code'       => '10|nullable',

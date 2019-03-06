@@ -22,7 +22,7 @@ class CreateFeaturesTables extends Migration
 
         $schema->create('brands', function ($table) {
             $table->table([
-                'logo' => '150|nullable',
+                'logo' => 'nullable|array',
                 'sluggable_info' => 'param:name'
             ], [ 'categories']);
         });
