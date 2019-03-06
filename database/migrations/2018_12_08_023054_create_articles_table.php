@@ -28,8 +28,11 @@ class CreateArticlesTable extends Migration
                 'reading_time' => 'nullable|integer|comment:How much time need for reading the article in minute'
             ], [
                 'users',
-                'subjects' => true,
             ], 'uuid');
+        });
+
+        $schema->create('article_subject', function (Blueprint $table) {
+            $table->interface('articles', 'subjects');
         });
     }
 
