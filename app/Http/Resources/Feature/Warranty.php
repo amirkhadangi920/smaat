@@ -14,6 +14,21 @@ class Warranty extends JsonResource
      */
     public function toArray($request)
     {
-        return parent::toArray($request);
+        return [
+            'id'                => $this->id,
+            'link'              => "/api/v1/warranty/{$this->id}",
+            'logo'              => $this->logo,
+            'title'             => $this->title,
+            'description'       => $this->description,
+            'expire'            => $this->expire,
+            'categories'        => $this->categories->map( function ( $category ) {
+                
+                return [
+                    'id'    => $category->id,
+                    'link'  => "/api/v1/category/{$category->slug}",
+                    'title' => $category->title,
+                ];
+            })
+        ];
     }
 }

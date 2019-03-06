@@ -14,6 +14,19 @@ class Unit extends JsonResource
      */
     public function toArray($request)
     {
-        return parent::toArray($request);
+        return [
+            'id'                => $this->id,
+            'link'              => "/api/v1/unit/{$this->id}",
+            'title'             => $this->title,
+            'description'       => $this->description,
+            'categories'        => $this->categories->map( function ( $category ) {
+                
+                return [
+                    'id'    => $category->id,
+                    'link'  => "/api/v1/category/{$category->slug}",
+                    'title' => $category->title,
+                ];
+            })
+        ];
     }
 }
