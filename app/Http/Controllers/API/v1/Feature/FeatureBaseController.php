@@ -2,142 +2,41 @@
 
 namespace App\Http\Controllers\API\v1\Feature;
 
-use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use App\Http\Controllers\API\v1\MainController;
 
-class FeatureBaseController extends Controller
+class FeatureBaseController extends MainController
 {
     /**
-     * Display a listing of the group.
+     * The relation of the controller to get when accesing data from DB
      *
-     * @return \Illuminate\Http\Response
+     * @var array
      */
-    public function index()
-    {
-        return $this->resource::collection(
-            $this->model::latest()->with('categories:id,slug,title')->paginate(20)
-        )->additional([
-            'message' => __('messages.return.all', [
-                'data' => __("types.{$this->type}.title")
-            ])
-        ]);
-    }
-
+    protected $relations = [
+        'categories:id,slug,title'
+    ];
+ 
     /**
-     * Store a newly created group in storage.
+     * The function that get the model and run after the model was created
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        $this->checkPermission("create-{$this->type}");
-
-        if ( isset($this->image_field) )
-        {
-            $feature = $this->model::create(
-                $this->requestWithImage( $request, $this->image_field )->all()
-            );
-        }
-        else
-        {
-            $feature = $this->model::create( $request->all() );
-        }
-
-        $feature->categories()->attach( $request->categories );
-        
-        return (new $this->resource( $feature ))->additional([
-            'message' => __('messages.create.successful', [
-                'data' => __("types.{$this->type}.title")
-            ])
-        ]);
-    }
-
-    /**
-     * Display the specified group with it's breadcrumb.
-     *
-     * @param  Model $feature
-     * @return ModelResource
-     */
-    public function show($feature)
-    {
-        $feature = $this->getFeature( $feature);
-
-        return (new $this->resource( $feature ))->additional([
-            'message' => __('messages.return.single', [
-                'data' => __("types.{$this->type}.title")
-            ])
-        ]);;
-    }
-
-    /**
-     * Update the specified group in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  $feature
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $feature)
-    {
-        $this->checkPermission("update-{$this->type}");
-        
-        $feature = $this->getFeature( $feature);
-
-        if ( isset($this->image_field) )
-        {
-            $feature->update(
-                $this->requestWithImage( $request, $this->image_field, $feature )->all()
-            );
-        }
-        else
-        {
-            $feature->update( $request->all() );
-        }
-
-        $feature->categories()->sync( $request->categories );
-        
-        return (new $this->resource( $feature ))->additional([
-            'message' => __('messages.update.successful', [
-                'data' => __("types.{$this->type}.title")
-            ])
-        ]);
-    }
-
-    /**
-     * Remove the one or multiple groups from storage.
-     *
-     * @param  String $features
-     * @return Array\JSON
-     */
-    public function destroy($features)
-    {
-        $this->checkPermission("delete-{$this->type}");
-        
-        $features = explode(',', $features);
-
-        foreach ( $features as $feature )
-        {
-            $this->getFeature( $feature )->delete();
-        }
-
-        $status = count($features) === 1 ? 'successful' : 'plural';
-        
-        return response()->json([
-            'message' => __("messages.delete.{$status}", [
-                'data' => __("types.{$this->type}.title")
-            ])
-        ]); 
-    }
-
-    /**
-     * Find an get a feature data from Database,
-     * or abort 404 not found exception if can't find
-     *
-     * @param [type] $feature
+     * @param Request $request
+     * @param Model $data
      * @return void
      */
-    public function getFeature($feature)
+    public function afterCreate($request, $feature)
     {
-        return $this->model::findOrFail($feature);
-    } 
+        $feature->categories()->attach( $request->categories );
+    }
+
+    /**
+     * The function that get the model and run after the model was updated
+     *
+     * @param Request $request
+     * @param Model $data
+     * @return void
+     */
+    public function afterUpdate($request, $feature)
+    {
+        $this->afterCreate($request, $feature);
+    }
 }
