@@ -28,7 +28,7 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 Route::group([
     'namespace' => 'API\v1',
     'prefix' => 'v1',
-    'middleware' => 'auth:api'
+    // 'middleware' => 'auth:api'
 ], function () {
 
     Route::resource('/article', 'ArticleController');
@@ -46,5 +46,15 @@ Route::group([
         Route::resource('/size', 'SizeController');
         Route::resource('/warranty', 'WarrantyController');
         Route::resource('/unit', 'UnitController');
+    });
+
+    $this->group([ 'namespace' => 'Spec' ], function () {
+
+        Route::resource('/spec', 'SpecController');
+        Route::post('/spec_header/copy/{spec_header}', 'SpecHeaderController@copy');
+        Route::resource('/spec_header', 'SpecHeaderController')->only('store', 'update', 'destroy');
+        Route::resource('/spec_row', 'SpecRowController')->only('store', 'update', 'destroy');
+        
+        Route::resource('/spec_data', 'SpecDataController');
     });
 });

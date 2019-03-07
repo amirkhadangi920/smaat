@@ -21,8 +21,18 @@ class SpecHeader extends Model implements AuditableContract
      * @var array
      */
     protected $fillable = [
+        'spec_id',
         'title',
         'description'
+    ];
+
+    /**
+     * The attributes that should be hidden for arrays.
+     *
+     * @var array
+     */
+    protected $hidden = [
+        'spec_id',
     ];
 
     /**
@@ -39,7 +49,7 @@ class SpecHeader extends Model implements AuditableContract
     /**
      * Get the spec that relate spec header
      */
-    public function spec ()
+    public function spec()
     {
         return $this->belongsTo(Spec::class);
     }
@@ -47,7 +57,7 @@ class SpecHeader extends Model implements AuditableContract
     /**
      * Get the all spec row that owned spec header
      */
-    public function specRows ()
+    public function rows()
     {
         return $this->hasMany(SpecRow::class);
     }
