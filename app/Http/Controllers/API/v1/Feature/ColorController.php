@@ -3,14 +3,10 @@
 namespace App\Http\Controllers\API\v1\Feature;
 
 use App\Models\Feature\Color;
-use App\Http\Controllers\Controller;
 use App\Http\Resources\Feature\Color as ColorResource;
-use App\Traits\Controllers\FeatureControllers;
 
-class ColorController extends Controller
+class ColorController extends FeatureBaseController
 {
-    use FeatureControllers;
-
     /**
      * Type of this controller for use in messages
      *

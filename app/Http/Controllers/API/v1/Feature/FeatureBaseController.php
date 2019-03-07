@@ -1,10 +1,11 @@
 <?php
 
-namespace App\Traits\Controllers;
+namespace App\Http\Controllers\API\v1\Feature;
 
+use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
-trait FeatureControllers
+class FeatureBaseController extends Controller
 {
     /**
      * Display a listing of the group.

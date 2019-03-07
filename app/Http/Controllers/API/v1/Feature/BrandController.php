@@ -3,14 +3,10 @@
 namespace App\Http\Controllers\API\v1\Feature;
 
 use App\Models\Feature\Brand;
-use App\Http\Controllers\Controller;
 use App\Http\Resources\Feature\Brand as BrandResource;
-use App\Traits\Controllers\FeatureControllers;
 
-class BrandController extends Controller
+class BrandController extends FeatureBaseController
 {
-    use FeatureControllers;
-
     /**
      * Type of this controller for use in messages
      *

@@ -1,10 +1,11 @@
 <?php
 
-namespace App\Traits\Controllers;
+namespace App\Http\Controllers\API\v1\Group;
 
+use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
-Trait GroupControllers
+class GroupBaseController extends Controller
 {
     /**
      * Display a listing of the group.
