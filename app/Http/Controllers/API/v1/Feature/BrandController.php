@@ -38,4 +38,16 @@ class BrandController extends Controller
      * @var string
      */
     protected $image_field = 'logo';
+
+    /**
+     * Override the getFeature() method of the trait
+     * to works with brand slugs
+     *
+     * @param [type] $feature
+     * @return void
+     */
+    public function getFeature($feature)
+    {
+        return $this->model::whereSlug($feature)->firstOrFail();
+    } 
 }

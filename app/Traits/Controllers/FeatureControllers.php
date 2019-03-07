@@ -13,8 +13,9 @@ trait FeatureControllers
      */
     public function index()
     {
-        return response()->json([
-            'data' => $this->model::latest()->get(),
+        return $this->resource::collection(
+            $this->model::latest()->with('categories:id,slug,title')->paginate(20)
+        )->additional([
             'message' => __('messages.return.all', [
                 'data' => __("types.{$this->type}.title")
             ])
@@ -41,6 +42,8 @@ trait FeatureControllers
         {
             $feature = $this->model::create( $request->all() );
         }
+
+        $feature->categories()->attach( $request->categories );
         
         return (new $this->resource( $feature ))->additional([
             'message' => __('messages.create.successful', [
@@ -57,7 +60,7 @@ trait FeatureControllers
      */
     public function show($feature)
     {
-        $feature = $this->model::whereSlug($feature)->firstOrFail();
+        $feature = $this->getFeature( $feature);
 
         return (new $this->resource( $feature ))->additional([
             'message' => __('messages.return.single', [
@@ -76,8 +79,8 @@ trait FeatureControllers
     public function update(Request $request, $feature)
     {
         $this->checkPermission("update-{$this->type}");
-
-        $feature = $this->model::whereSlug($feature)->firstOrFail();
+        
+        $feature = $this->getFeature( $feature);
 
         if ( isset($this->image_field) )
         {
@@ -90,6 +93,7 @@ trait FeatureControllers
             $feature->update( $request->all() );
         }
 
+        $feature->categories()->sync( $request->categories );
         
         return (new $this->resource( $feature ))->additional([
             'message' => __('messages.update.successful', [
@@ -112,7 +116,7 @@ trait FeatureControllers
 
         foreach ( $features as $feature )
         {
-            Model::whereSlug($feature)->firstOrfail()->delete();
+            $this->getFeature( $feature )->delete();
         }
 
         $status = count($features) === 1 ? 'successful' : 'plural';
@@ -123,4 +127,16 @@ trait FeatureControllers
             ])
         ]); 
     }
+
+    /**
+     * Find an get a feature data from Database,
+     * or abort 404 not found exception if can't find
+     *
+     * @param [type] $feature
+     * @return void
+     */
+    public function getFeature($feature)
+    {
+        return $this->model::findOrFail($feature);
+    } 
 }

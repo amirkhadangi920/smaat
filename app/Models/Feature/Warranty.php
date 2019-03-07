@@ -29,6 +29,15 @@ class Warranty extends Model implements AuditableContract
     ];
 
     /**
+     * The attributes that should be cast to native types.
+     *
+     * @var array
+     */
+    protected $casts = [
+        'logo' => 'array'
+    ];
+
+    /**
      * The attributes that should be mutated to dates.
      *
      * @var array

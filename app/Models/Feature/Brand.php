@@ -36,6 +36,7 @@ class Brand extends Model implements AuditableContract
      */
     protected $casts = [
         'depth' => 'integer',
+        'logo' => 'array'
     ];
 
     /**
@@ -45,19 +46,7 @@ class Brand extends Model implements AuditableContract
      */
     protected $dates = ['deleted_at'];
 
-    /**
-     * Return the sluggable configuration array for this model.
-     *
-     * @return array
-     */
-    public function sluggable()
-    {
-        return [
-            'slug' => [
-                'source' => 'name'
-            ]
-        ];
-    }
+
     /****************************************
      **             Relations
      ***************************************/
@@ -77,5 +66,34 @@ class Brand extends Model implements AuditableContract
     public function products ()
     {
         return $this->hasMany(Product::class);
+    }
+
+
+    /****************************************
+     **              Methods
+     ***************************************/
+
+    /**
+     * Return the sluggable configuration array for this model.
+     *
+     * @return array
+     */
+    public function sluggable()
+    {
+        return [
+            'slug' => [
+                'source' => 'name'
+            ]
+        ];
+    }
+
+    /**
+     * Get the route key for the model.
+     *
+     * @return string
+     */
+    public function getRouteKeyName()
+    {
+        return 'slug';
     }
 }
