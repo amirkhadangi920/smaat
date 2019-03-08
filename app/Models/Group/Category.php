@@ -142,9 +142,9 @@ class Category extends Model implements AuditableContract
     /**
      * Get all the specification table that owned by the category
      */
-    public function specs ()
+    public function spec ()
     {
-        return $this->hasMany(Spec::class);
+        return $this->hasOne(Spec::class);
     }
 
     /**

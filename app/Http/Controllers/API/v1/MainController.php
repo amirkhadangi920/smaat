@@ -25,7 +25,7 @@ class MainController extends Controller
     }
 
     /**
-     * Store a newly created group in storage.
+     * Store a newly created group in (stor)age.
      *
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
@@ -34,7 +34,7 @@ class MainController extends Controller
     {
         // $this->checkPermission("create-{$this->type}");
 
-        $data = $this->storeWithImageOrNot( $request );
+        $data = $this->storeData( $request );
 
         if ( method_exists($this, 'afterCreate') )
             $this->afterCreate($request, $data);
@@ -76,7 +76,7 @@ class MainController extends Controller
         
         $data = $this->getModel( $data);
 
-        $this->updateWithImageOrNot( $request, $data );
+        $this->updateData( $request, $data );
 
         if ( method_exists($this, 'afterUpdate') )
             $this->afterUpdate( $request, $data );

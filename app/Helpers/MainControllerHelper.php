@@ -82,7 +82,7 @@ trait MainControllerHelper
      * @param Request $request
      * @return void
      */
-    public function storeWithImageOrNot($request)
+    public function storeData($request)
     {
         if ( isset($this->image_field) )
         {
@@ -105,7 +105,7 @@ trait MainControllerHelper
      * @param Request $request
      * @return void
      */
-    public function updateWithImageOrNot($request, $data)
+    public function updateData($request, $data)
     {
         if ( isset($this->image_field) )
         {

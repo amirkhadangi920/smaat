@@ -15,7 +15,6 @@ use Spatie\Tags\HasTags;
 use App\Models\Feature\Brand;
 use App\Models\Feature\Unit;
 
-
 class Product extends Model implements AuditableContract
 {
     use SoftDeletes, Auditable, Sluggable, GenerateRandomID, HasTags;
@@ -80,6 +79,14 @@ class Product extends Model implements AuditableContract
     /****************************************
      **             Relations
      ***************************************/
+
+    /**
+     * Get all the variations of the product.
+     */
+    public function user()
+    {
+        return $this->belongsTo(\App\User::class);
+    }
 
     /**
      * Get all the variations of the product.

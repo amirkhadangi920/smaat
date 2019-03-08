@@ -118,6 +118,14 @@ class User extends Authenticatable implements AuditableContract , LikerContract
     }
 
     /**
+     * Get all the products that the user regirster them
+     */
+    public function products ()
+    {
+        return $this->hasMany(Product::class);
+    }
+
+    /**
      * Get all the promocodes that owned the promocode & adverb
      */
     public function promocodes ()
