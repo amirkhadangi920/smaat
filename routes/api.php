@@ -41,6 +41,11 @@ Route::group([
         Route::resource('/product', 'ProductController');
     });
     
+    $this->group([ 'namespace' => 'Financial' ], function () {
+
+        Route::resource('/shipping_method', 'ShippingMethodContrller');
+    });
+    
     $this->group([ 'namespace' => 'Group' ], function () {
 
         Route::resource('/category', 'CategoryController');

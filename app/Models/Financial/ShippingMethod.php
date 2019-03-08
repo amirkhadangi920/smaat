@@ -1,16 +1,16 @@
 <?php
 
-namespace App\Models;
+namespace App\Models\Financial;
 
 use Illuminate\Database\Eloquent\Model;
-use App\Models\Financial\Order;
 
-class Shipping_method extends Model
+class ShippingMethod extends Model
 {
     /****************************************
      **             Attributes
      ***************************************/
-    /**
+    
+     /**
      * The attributes that are mass assignable.
      *
      * @var array
@@ -19,6 +19,19 @@ class Shipping_method extends Model
         'name' , 'description' , 'logo' , 'cost' , 'minimum'  , 'is_active'
     ];
 
+    /**
+     * The attributes that should be cast to native types.
+     *
+     * @var array
+     */
+    protected $casts = [
+        'is_active' => 'boolean'
+    ];
+
+
+    /****************************************
+     **             Relations
+     ***************************************/
 
     /**
      * Get all the orders of the shipping method
