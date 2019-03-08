@@ -37,6 +37,6 @@ class FeatureBaseController extends MainController
      */
     public function afterUpdate($request, $feature)
     {
-        $this->afterCreate($request, $feature);
+        $feature->categories()->sync( $request->categories );
     }
 }

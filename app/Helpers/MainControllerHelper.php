@@ -53,6 +53,18 @@ trait MainControllerHelper
     }
 
     /**
+     * Find an get a data from Database,
+     * or abort 404 not found exception if can't find
+     *
+     * @param ID $feature
+     * @return Model
+     */
+    public function createNewModel($data)
+    {
+        return $this->model::create( $data );
+    }
+
+    /**
      * Get the portion of request class
      *
      * @param Request $request
@@ -74,7 +86,7 @@ trait MainControllerHelper
     {
         if ( isset($this->image_field) )
         {
-            return $this->model::create(
+            return $this->createNewModel(
                 $this->getRequest(
                     $this->requestWithImage( $request, $this->image_field )
                 )
@@ -82,7 +94,7 @@ trait MainControllerHelper
         }
         else
         {
-            return $this->model::create( $this->getRequest( $request ) );
+            return $this->createNewModel( $this->getRequest( $request ) );
         }
     }
     

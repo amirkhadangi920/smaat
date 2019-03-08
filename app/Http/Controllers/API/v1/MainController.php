@@ -19,7 +19,7 @@ class MainController extends Controller
     {
         return $this->resource::collection( $this->getAllData() )->additional([
             'message' => __('messages.return.all', [
-                'data' => __("types.{$this->type}.title")
+                'data' => __("types.{$this->type}.plural")
             ])
         ]);
     }

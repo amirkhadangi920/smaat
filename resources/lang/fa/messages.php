@@ -12,7 +12,7 @@ return [
     */
 
     'return' => [
-        'all'       => 'لیست تمام :data ها',
+        'all'       => 'لیست تمام :data',
         'single'    => 'اطلاعات :data مورد نظر',
         'paginate'  => 'بخشی از :data ها'
     ],

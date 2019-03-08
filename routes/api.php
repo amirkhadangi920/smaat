@@ -28,10 +28,18 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 Route::group([
     'namespace' => 'API\v1',
     'prefix' => 'v1',
-    // 'middleware' => 'auth:api'
+    'middleware' => 'auth:api'
 ], function () {
 
-    Route::resource('/article', 'ArticleController');
+    $this->group([ 'namespace' => 'Blog' ], function () {
+
+        Route::resource('/article', 'ArticleController');
+    });
+
+    $this->group([ 'namespace' => 'Product' ], function () {
+
+        Route::resource('/product', 'ProductController');
+    });
     
     $this->group([ 'namespace' => 'Group' ], function () {
 
