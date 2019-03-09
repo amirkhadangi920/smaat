@@ -52,7 +52,6 @@ $factory->define(App\Models\Financial\OrderStatus::class, function (FakerEng $fa
     return [
         'title'         => $faker->name(),
         'description'   => $faker->sentence(), 
-        'cost'          => $faker->numberBetween(0, 1000), 
     ];
 });
 
