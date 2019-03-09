@@ -31,7 +31,33 @@ Route::group([
     // 'middleware' => 'auth:api'
 ], function () {
 
-    Route::resource('/article', 'ArticleController');
+    $this->group([ 'namespace' => 'Blog' ], function () {
+
+        Route::resource('/article', 'ArticleController');
+    });
+
+    $this->group([ 'namespace' => 'Product' ], function () {
+
+        Route::resource('/product', 'ProductController');
+    });
+
+    $this->group([ 'namespace' => 'Opinion', 'middleware' => 'auth:api' ], function () {
+
+        Route::put('/comment/accept/{comment}', 'CommentController@accept');
+        Route::resource('/comment', 'CommentController');
+
+        Route::put('/review/accept/{review}', 'ReviewController@accept');
+        Route::resource('/review', 'ReviewController');
+        
+        Route::put('/question_and_answer/accept/{question_and_answer}', 'QuestionAndAnswerController@accept');
+        Route::resource('/question_and_answer', 'QuestionAndAnswerController');
+    });
+    
+    $this->group([ 'namespace' => 'Financial' ], function () {
+
+        Route::resource('/shipping_method', 'ShippingMethodContrller');
+        Route::resource('/order_status', 'OrderStatusContrller');
+    });
     
     $this->group([ 'namespace' => 'Group' ], function () {
 
@@ -55,6 +81,6 @@ Route::group([
         Route::resource('/spec_header', 'SpecHeaderController')->only('store', 'update', 'destroy');
         Route::resource('/spec_row', 'SpecRowController')->only('store', 'update', 'destroy');
         
-        Route::resource('/spec_data', 'SpecDataController');
+        // Route::resource('/spec_data', 'SpecDataController');
     });
 });

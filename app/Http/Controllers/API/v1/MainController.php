@@ -19,13 +19,13 @@ class MainController extends Controller
     {
         return $this->resource::collection( $this->getAllData() )->additional([
             'message' => __('messages.return.all', [
-                'data' => __("types.{$this->type}.title")
+                'data' => __("types.{$this->type}.plural")
             ])
         ]);
     }
 
     /**
-     * Store a newly created group in storage.
+     * Store a newly created group in (stor)age.
      *
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
@@ -34,7 +34,7 @@ class MainController extends Controller
     {
         // $this->checkPermission("create-{$this->type}");
 
-        $data = $this->storeWithImageOrNot( $request );
+        $data = $this->storeData( $request );
 
         if ( method_exists($this, 'afterCreate') )
             $this->afterCreate($request, $data);
@@ -76,7 +76,7 @@ class MainController extends Controller
         
         $data = $this->getModel( $data);
 
-        $this->updateWithImageOrNot( $request, $data );
+        $this->updateData( $request, $data );
 
         if ( method_exists($this, 'afterUpdate') )
             $this->afterUpdate( $request, $data );
@@ -94,19 +94,16 @@ class MainController extends Controller
      * @param  String $features
      * @return Array\JSON
      */
-    public function destroy($features)
+    public function destroy($data)
     {
         // $this->checkPermission("delete-{$this->type}");
         
-        $features = explode(',', $features);
+        $data = explode(',', $data);
 
-        foreach ( $features as $feature )
-        {
-            $this->getModel( $feature )->delete();
-        }
+        $result = $this->model::whereIn($this->getPrimary(), $data )->delete();
 
-        $status = count($features) === 1 ? 'successful' : 'plural';
-        
+        $status = $this->getStatus($result);
+
         return response()->json([
             'message' => __("messages.delete.{$status}", [
                 'data' => __("types.{$this->type}.title")

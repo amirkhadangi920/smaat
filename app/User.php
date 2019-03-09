@@ -11,7 +11,6 @@ use OwenIt\Auditing\Auditable;
 use OwenIt\Auditing\Contracts\Auditable as AuditableContract;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use App\Traits\GenerateRandomID;
-// use Spatie\Permission\Traits\HasRoles;
 use Laravel\Passport\HasApiTokens;
 use Laratrust\Traits\LaratrustUserTrait;
 use App\Models\{
@@ -23,11 +22,8 @@ use App\Models\{
     Opinion\QuestionAndAnswer,
     Opinion\Review,
     Promocode\Promocode,
-    Financial\FactorItem,
     Discount\Discount
 };
-
-
 
 class User extends Authenticatable implements AuditableContract , LikerContract
 {
@@ -118,6 +114,14 @@ class User extends Authenticatable implements AuditableContract , LikerContract
     }
 
     /**
+     * Get all the products that the user regirster them
+     */
+    public function products ()
+    {
+        return $this->hasMany(Product::class);
+    }
+
+    /**
      * Get all the promocodes that owned the promocode & adverb
      */
     public function promocodes ()
@@ -152,7 +156,7 @@ class User extends Authenticatable implements AuditableContract , LikerContract
     /**
      * each user live in one city
      */
-    public function city ()
+    public function city()
     {
         return $this->belongsTo(City::class);
     }

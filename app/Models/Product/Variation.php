@@ -10,12 +10,11 @@ use App\Traits\GenerateRandomID;
 use OwenIt\Auditing\Auditable;
 use OwenIt\Auditing\Contracts\Auditable as AuditableContract;
 use App\Models\Feature\{
-                Size,
-                Color,
-                Warranty
-                };
-use App\Models\Financial\OrderItem;
-use App\Models\Financial\OrderPoint;
+    Size,
+    Color,
+    Warranty
+};
+use App\Models\Financial\{ OrderItem, OrderPoint };
 use App\Models\Discount\DiscountItem;
 use App\Models\Promocode\Promocode;
 
@@ -43,7 +42,8 @@ class Variation extends Model implements AuditableContract
         'color_id', 
         'warranty_id',
         'size_id',
-        'price',
+        'sales_price',
+        'purchase_price',
         'unit',
         'inventory',
         'sending_time',
@@ -101,6 +101,16 @@ class Variation extends Model implements AuditableContract
     public function color ()
     {
         return $this->belongsTo(Color::class);
+    }
+
+    /**
+     * Relation to size model
+     *
+     * @return Warranty Model
+     */
+    public function size ()
+    {
+        return $this->belongsTo(Size::class);
     }
 
     /**

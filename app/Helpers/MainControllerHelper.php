@@ -5,6 +5,30 @@ namespace App\Helpers;
 trait MainControllerHelper
 {
     /**
+     * Get the primary key of the model
+     *
+     * @return void
+     */
+    public function getPrimary()
+    {
+        return $this->primary_feild ?? 'id';
+    }
+
+    /**
+     * Return the status title messages for delete and accept
+     *
+     * @param integer $result
+     * @return string
+     */
+    public function getStatus($result)
+    {
+        if ( !$result )
+            return 'failed';
+        else
+            return $result === 1 ? 'successful' : 'plural';
+    }
+
+    /**
      * Get all data of the model,
      * used by index method controller
      *
@@ -53,6 +77,18 @@ trait MainControllerHelper
     }
 
     /**
+     * Find an get a data from Database,
+     * or abort 404 not found exception if can't find
+     *
+     * @param ID $feature
+     * @return Model
+     */
+    public function createNewModel($data)
+    {
+        return $this->model::create( $data );
+    }
+
+    /**
      * Get the portion of request class
      *
      * @param Request $request
@@ -70,11 +106,11 @@ trait MainControllerHelper
      * @param Request $request
      * @return void
      */
-    public function storeWithImageOrNot($request)
+    public function storeData($request)
     {
         if ( isset($this->image_field) )
         {
-            return $this->model::create(
+            return $this->createNewModel(
                 $this->getRequest(
                     $this->requestWithImage( $request, $this->image_field )
                 )
@@ -82,7 +118,7 @@ trait MainControllerHelper
         }
         else
         {
-            return $this->model::create( $this->getRequest( $request ) );
+            return $this->createNewModel( $this->getRequest( $request ) );
         }
     }
     
@@ -93,7 +129,7 @@ trait MainControllerHelper
      * @param Request $request
      * @return void
      */
-    public function updateWithImageOrNot($request, $data)
+    public function updateData($request, $data)
     {
         if ( isset($this->image_field) )
         {
