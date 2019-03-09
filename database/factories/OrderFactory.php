@@ -1,7 +1,7 @@
 <?php
 
 use Faker\Generator as FakerEng;
-use App\Models\Shipping_method;
+use App\Models\Financial\ShippingMethod;
 
 $factory->define(App\Models\Financial\Order::class, function (FakerEng $faker) {
     $descriptions = $datetimes = [];
@@ -31,7 +31,7 @@ $factory->define(App\Models\Financial\Order::class, function (FakerEng $faker) {
         'auth_code'         => $auth_code,
         'payment_code'      => $auth_code ? str_random(30) : null,
         'datetimes'         => $datetimes,
-        'shipping_method_id'=> nullable( factory(Shipping_method::class)->create()->id ),
+        'shipping_method_id'=> nullable( factory(ShippingMethod::class)->create()->id ),
         'status'            => [
             'created', 'awaiting_payment', 'paied', 'sending', 'sended', 'canceled', 'packaging'
         ][ rand(0, 6) ],
