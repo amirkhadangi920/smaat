@@ -11,7 +11,7 @@ use OwenIt\Auditing\Auditable;
 use OwenIt\Auditing\Contracts\Auditable as AuditableContract;
 use App\Models\Discount\Discount;
 use App\Models\Promocode\Promocode;
-use App\Models\Shipping_method;
+
 use App\Models\Places\City;
 
 class Order extends Model
@@ -133,7 +133,7 @@ class Order extends Model
      */
     public function shipping_method ()
     {
-        return $this->belongsTo(Shipping_method::class);
+        return $this->belongsTo(ShippingMethod::class);
     }
 
     /**

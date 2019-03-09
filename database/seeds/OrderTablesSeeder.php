@@ -14,7 +14,7 @@ class OrderTablesSeeder extends Seeder
     public function run( $data )
     {
         
-        $shippings = factory( App\Models\Shipping_method::class, 5 )->create();
+        $shippings = factory( App\Models\Financial\ShippingMethod::class, 5 )->create();
 
         $order_statuses = factory( App\Models\Financial\OrderStatus::class , 6 )->create();
         

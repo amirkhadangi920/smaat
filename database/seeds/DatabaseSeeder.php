@@ -22,7 +22,8 @@ class DatabaseSeeder extends Seeder
         
         $this->call(OptionTableSeeder::class);
 
-        $users = $this->call(UserTableSeeder::class, compact('cities') );
+        // $users = $this->call(UserTableSeeder::class, compact('cities') );
+        $users = $this->call(UserTableSeeder::class );
         
         echo "\e[31m\e[1m\e[100m{$users->count()}\e[49m Users \e[39mwas \e[32mcreated\n";
     
@@ -44,7 +45,8 @@ class DatabaseSeeder extends Seeder
         
 
         $this->call(OrderTablesSeeder::class, compact(
-            'users', 'products', 'cities', 'promocodes', 'categories'
+            // 'users', 'products', 'cities', 'promocodes', 'categories'
+            'users', 'products',  'promocodes', 'categories'
         ));
     }
 
