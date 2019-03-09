@@ -28,12 +28,12 @@ class SpecificationTablesSeeder extends Seeder
             'category_id' => $categories->random()->id
         ]);
 
-        factory(\App\Models\Spec\SpecHeader::class, 2)->create([
+        factory(\App\Models\Spec\SpecHeader::class, rand(1, 5) )->create([
             'spec_id' => $spec->id
         ])->each( function ( $spec_header ) use ( $spec ) {
 
             $this->spec_rows = $this->spec_rows->merge(
-                factory(\App\Models\Spec\SpecRow::class, 3)->create([
+                factory(\App\Models\Spec\SpecRow::class, rand(1, 5) )->create([
                     'spec_header_id' => $spec_header->id
                 ])
             );

@@ -11,17 +11,17 @@ class CategoryTablesSeeder extends Seeder
      */
     public function run()
     {
-        $categories = factory(\App\Models\Group\Category::class, 2)->create();
+        $categories = factory(\App\Models\Group\Category::class, rand(1, 5) )->create();
         $categories->each( function ( $category ) use ( &$categories ) {
 
             $categories = $categories->merge( $category->childs()->saveMany(
-                factory(\App\Models\Group\Category::class, 2)->make()
+                factory(\App\Models\Group\Category::class, rand(1, 5) )->make()
             ));
         });
         
         $categories->each( function( $category ) {
             $category->order_points()->saveMany( 
-                factory( App\Models\Financial\OrderPoint::class, 5 )->make()
+                factory( App\Models\Financial\OrderPoint::class, rand(1, 5) )->make()
                 );
             });
     

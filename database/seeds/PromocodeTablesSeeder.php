@@ -11,7 +11,7 @@ class PromocodeTablesSeeder extends Seeder
      */
     public function run($data)
     {
-        $promocodes = factory( App\Models\Promocode\Promocode::class, 5 )->create();
+        $promocodes = factory( App\Models\Promocode\Promocode::class, rand(1, 5) )->create();
         
         $promocodes->each( function( $promocode ) use( $data ) {
            

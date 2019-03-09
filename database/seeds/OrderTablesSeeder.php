@@ -14,9 +14,9 @@ class OrderTablesSeeder extends Seeder
     public function run( $data )
     {
         
-        $shippings = factory( App\Models\Financial\ShippingMethod::class, 5 )->create();
+        $shippings = factory( App\Models\Financial\ShippingMethod::class, rand(1, 5) )->create();
 
-        $order_statuses = factory( App\Models\Financial\OrderStatus::class , 6 )->create();
+        $order_statuses = factory( App\Models\Financial\OrderStatus::class , rand(1, 5) )->create();
         
         $orders = factory(\App\Models\Financial\Order::class, rand(5, 20))->create([
             
@@ -53,7 +53,7 @@ class OrderTablesSeeder extends Seeder
         $data['products']['variations']->each( function ( $variation ) use ( $discounts ) {
 
             $discounts->random()->discount_items()->saveMany( 
-                factory( App\Models\Discount\DiscountItem::class, 5 )->make([
+                factory( App\Models\Discount\DiscountItem::class, rand(1, 5) )->make([
 
                     'discount_id'    => $discounts->random()->id,
                     'variation_id'  => $variation->id,

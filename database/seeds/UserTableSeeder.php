@@ -11,7 +11,7 @@ class UserTableSeeder extends Seeder
      */
     public function run( $data )
     {
-        $users = factory(\App\User::class, 5)->create([
+        $users = factory(\App\User::class, 10)->create([
             // 'city_id' => $data['cities']->random()->id
         ]);
 
