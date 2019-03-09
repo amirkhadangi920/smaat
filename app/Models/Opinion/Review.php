@@ -4,7 +4,6 @@ namespace App\Models\Opinion;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use Cviebrock\EloquentSluggable\Sluggable;
 use OwenIt\Auditing\Auditable;
 use OwenIt\Auditing\Contracts\Auditable as AuditableContract;
 use App\Models\Product\Product;
@@ -23,6 +22,7 @@ class Review extends Model implements AuditableContract
      * @var array
      */
     protected $fillable = [
+        'product_id',
         'ranks',
         'advantages',
         'disadvantages',

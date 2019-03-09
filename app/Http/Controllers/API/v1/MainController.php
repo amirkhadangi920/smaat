@@ -94,19 +94,16 @@ class MainController extends Controller
      * @param  String $features
      * @return Array\JSON
      */
-    public function destroy($features)
+    public function destroy($data)
     {
         // $this->checkPermission("delete-{$this->type}");
         
-        $features = explode(',', $features);
+        $data = explode(',', $data);
 
-        foreach ( $features as $feature )
-        {
-            $this->getModel( $feature )->delete();
-        }
+        $result = $this->model::whereIn($this->getPrimary(), $data )->delete();
 
-        $status = count($features) === 1 ? 'successful' : 'plural';
-        
+        $status = $this->getStatus($result);
+
         return response()->json([
             'message' => __("messages.delete.{$status}", [
                 'data' => __("types.{$this->type}.title")

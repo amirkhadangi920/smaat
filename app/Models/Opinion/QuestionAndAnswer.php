@@ -23,8 +23,9 @@ class QuestionAndAnswer extends Model implements AuditableContract
      * @var array
      */
     protected $fillable = [
+        'product_id',
+        'question_id',
         'message',
-        // 'created_at'
     ];
 
     /**
@@ -64,5 +65,13 @@ class QuestionAndAnswer extends Model implements AuditableContract
     public function answers()
     {
         return $this->hasMany(QuestionAndAnswer::class, 'question_id');
+    }
+
+    /**
+     * Get the question of the answer
+     */
+    public function question()
+    {
+        return $this->belongsTo(QuestionAndAnswer::class);
     }
 }

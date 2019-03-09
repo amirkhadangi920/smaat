@@ -41,10 +41,15 @@ Route::group([
         Route::resource('/product', 'ProductController');
     });
 
-    $this->group([ 'namespace' => 'Opinion' ], function () {
+    $this->group([ 'namespace' => 'Opinion', 'middleware' => 'auth:api' ], function () {
 
+        Route::put('/comment/accept/{comment}', 'CommentController@accept');
         Route::resource('/comment', 'CommentController');
+
+        Route::put('/review/accept/{review}', 'ReviewController@accept');
         Route::resource('/review', 'ReviewController');
+        
+        Route::put('/question_and_answer/accept/{question_and_answer}', 'QuestionAndAnswerController@accept');
         Route::resource('/question_and_answer', 'QuestionAndAnswerController');
     });
     

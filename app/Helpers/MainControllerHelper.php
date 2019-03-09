@@ -5,6 +5,30 @@ namespace App\Helpers;
 trait MainControllerHelper
 {
     /**
+     * Get the primary key of the model
+     *
+     * @return void
+     */
+    public function getPrimary()
+    {
+        return $this->primary_feild ?? 'id';
+    }
+
+    /**
+     * Return the status title messages for delete and accept
+     *
+     * @param integer $result
+     * @return string
+     */
+    public function getStatus($result)
+    {
+        if ( !$result )
+            return 'failed';
+        else
+            return $result === 1 ? 'successful' : 'plural';
+    }
+
+    /**
      * Get all data of the model,
      * used by index method controller
      *

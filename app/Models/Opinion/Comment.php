@@ -25,6 +25,7 @@ class Comment extends Model implements AuditableContract , LikeableContract
      * @var array
      */
     protected $fillable = [
+        'article_id',
         'message'
     ];
     
@@ -64,5 +65,5 @@ class Comment extends Model implements AuditableContract , LikeableContract
     public function answers() {
   
         return $this->hasMany(self::class, 'parent_id');
-}
+    }
 }

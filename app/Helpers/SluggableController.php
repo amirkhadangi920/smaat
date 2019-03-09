@@ -5,6 +5,13 @@ namespace App\Helpers;
 Trait SluggableController
 {
     /**
+     * The field to manage as primary key
+     *
+     * @var boolean
+     */
+    protected $primary_feild = 'slug';
+
+    /**
      * Find an get a data from Database with slug field,
      * or abort 404 not found exception if can't find
      *
