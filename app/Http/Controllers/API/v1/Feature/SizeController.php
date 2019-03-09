@@ -3,14 +3,10 @@
 namespace App\Http\Controllers\API\v1\Feature;
 
 use App\Models\Feature\Size;
-use App\Http\Controllers\Controller;
 use App\Http\Resources\Feature\Size as SizeResource;
-use App\Traits\Controllers\FeatureControllers;
 
-class SizeController extends Controller
+class SizeController extends FeatureBaseController
 {
-    use FeatureControllers;
-
     /**
      * Type of this controller for use in messages
      *

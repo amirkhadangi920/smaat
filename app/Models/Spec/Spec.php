@@ -3,7 +3,7 @@
 namespace App\Models\Spec;
 
 use Illuminate\Database\Eloquent\Model;
-use App\Models\Category;
+use App\Models\Group\Category;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use OwenIt\Auditing\Auditable;
 use OwenIt\Auditing\Contracts\Auditable as AuditableContract;
@@ -51,7 +51,7 @@ class Spec extends Model implements AuditableContract
      * Get all the spec header of the spec.
      */
 
-    public function specHeaders ()
+    public function headers ()
     {
         return $this->hasMany(SpecHeader::class);
     }

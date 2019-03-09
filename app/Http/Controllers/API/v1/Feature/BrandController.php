@@ -3,13 +3,12 @@
 namespace App\Http\Controllers\API\v1\Feature;
 
 use App\Models\Feature\Brand;
-use App\Http\Controllers\Controller;
 use App\Http\Resources\Feature\Brand as BrandResource;
-use App\Traits\Controllers\FeatureControllers;
+use App\Helpers\SluggableController;
 
-class BrandController extends Controller
+class BrandController extends FeatureBaseController
 {
-    use FeatureControllers;
+    use SluggableController;
 
     /**
      * Type of this controller for use in messages
@@ -38,16 +37,4 @@ class BrandController extends Controller
      * @var string
      */
     protected $image_field = 'logo';
-
-    /**
-     * Override the getFeature() method of the trait
-     * to works with brand slugs
-     *
-     * @param [type] $feature
-     * @return void
-     */
-    public function getFeature($feature)
-    {
-        return $this->model::whereSlug($feature)->firstOrFail();
-    } 
 }

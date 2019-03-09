@@ -21,6 +21,7 @@ class SpecRow extends Model implements AuditableContract
      * @var array
      */
     protected $fillable = [
+        'spec_header_id',
         'title',
         'description',
         'label',
@@ -47,7 +48,7 @@ class SpecRow extends Model implements AuditableContract
      * @var array
      */
     protected $hidden = [
-        'password', 'remember_token',
+        'spec_header_id',
     ];
 
     /****************************************
@@ -58,7 +59,7 @@ class SpecRow extends Model implements AuditableContract
      * Get the all of the spec row that owned spec header 
      *
      */
-    public function specHeader ()
+    public function header ()
     {
         return $this->belongsTo(SpecHeader::class, 'spec_header_id');
     }
@@ -67,7 +68,7 @@ class SpecRow extends Model implements AuditableContract
      * If i want to give one spec data i use it.
      *
      */
-    public function specData ()
+    public function data ()
     {
         return $this->hasOne(SpecData::class, 'spec_row_id');
     }
@@ -76,7 +77,7 @@ class SpecRow extends Model implements AuditableContract
      * Get the all of the spec data that owned spec row 
      *
      */
-    public function specDatas ()
+    public function datas ()
     {
         return $this->hasMany(SpecData::class, 'spec_row_id');
     }

@@ -3,14 +3,10 @@
 namespace App\Http\Controllers\API\v1\Feature;
 
 use App\Models\Feature\Warranty;
-use App\Http\Controllers\Controller;
 use App\Http\Resources\Feature\Warranty as WarrantyResource;
-use App\Traits\Controllers\FeatureControllers;
 
-class WarrantyController extends Controller
+class WarrantyController extends FeatureBaseController
 {
-    use FeatureControllers;
-
     /**
      * Type of this controller for use in messages
      *

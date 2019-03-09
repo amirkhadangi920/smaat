@@ -1,11 +1,15 @@
 <?php
 
-namespace App\Traits\Controllers;
+namespace App\Http\Controllers\API\v1;
 
+use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use App\Helpers\MainControllerHelper;
 
-Trait GroupControllers
+class MainController extends Controller
 {
+    use MainControllerHelper;
+
     /**
      * Display a listing of the group.
      *
@@ -13,8 +17,7 @@ Trait GroupControllers
      */
     public function index()
     {
-        return response()->json([
-            'data' => $this->model::tree(),
+        return $this->resource::collection( $this->getAllData() )->additional([
             'message' => __('messages.return.all', [
                 'data' => __("types.{$this->type}.title")
             ])
@@ -29,11 +32,14 @@ Trait GroupControllers
      */
     public function store(Request $request)
     {
-        $this->checkPermission("create-{$this->type}");
+        // $this->checkPermission("create-{$this->type}");
 
-        $subject = $this->model::create( $this->requestWithImage( $request )->all() );
+        $data = $this->storeWithImageOrNot( $request );
+
+        if ( method_exists($this, 'afterCreate') )
+            $this->afterCreate($request, $data);
         
-        return (new $this->resource( $subject ))->additional([
+        return (new $this->resource( $data ))->additional([
             'message' => __('messages.create.successful', [
                 'data' => __("types.{$this->type}.title")
             ])
@@ -43,14 +49,14 @@ Trait GroupControllers
     /**
      * Display the specified group with it's breadcrumb.
      *
-     * @param  Subject $subject
-     * @return SubjectResource
+     * @param  Model $feature
+     * @return ModelResource
      */
-    public function show($group)
+    public function show($data)
     {
-        $group = $this->model::whereSlug($group)->firstOrFail();
+        $data = $this->getSingleData( $data );
 
-        return (new $this->resource( $group, $this->model::breadcrumb( $group ) ))->additional([
+        return (new $this->resource( $data ))->additional([
             'message' => __('messages.return.single', [
                 'data' => __("types.{$this->type}.title")
             ])
@@ -61,18 +67,21 @@ Trait GroupControllers
      * Update the specified group in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  $subject
+     * @param  $feature
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $group)
+    public function update(Request $request, $data)
     {
-        $this->checkPermission("update-{$this->type}");
-
-        $group = $this->model::whereSlug($group)->firstOrFail();
-
-        $group->update( $this->requestWithImage( $request, 'logo', $group )->all() );
+        // $this->checkPermission("update-{$this->type}");
         
-        return (new $this->resource( $group ))->additional([
+        $data = $this->getModel( $data);
+
+        $this->updateWithImageOrNot( $request, $data );
+
+        if ( method_exists($this, 'afterUpdate') )
+            $this->afterUpdate( $request, $data );
+        
+        return (new $this->resource( $data ))->additional([
             'message' => __('messages.update.successful', [
                 'data' => __("types.{$this->type}.title")
             ])
@@ -82,21 +91,21 @@ Trait GroupControllers
     /**
      * Remove the one or multiple groups from storage.
      *
-     * @param  String $groups
+     * @param  String $features
      * @return Array\JSON
      */
-    public function destroy($groups)
+    public function destroy($features)
     {
-        $groups = explode(',', $groups);
+        // $this->checkPermission("delete-{$this->type}");
+        
+        $features = explode(',', $features);
 
-        $this->checkPermission("delete-{$this->type}");
-
-        foreach ( $groups as $group )
+        foreach ( $features as $feature )
         {
-            Subject::whereSlug($group)->firstOrfail()->delete();
+            $this->getModel( $feature )->delete();
         }
 
-        $status = count($groups) === 1 ? 'successful' : 'plural';
+        $status = count($features) === 1 ? 'successful' : 'plural';
         
         return response()->json([
             'message' => __("messages.delete.{$status}", [
