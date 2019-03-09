@@ -17,7 +17,7 @@ use App\Models\Article;
 
 Route::get('/', function () {
 
-    
+    return 'Welcome to SmaaT web service';
 });
 
 // Route::resource('/article', 'panel\ArticleController');

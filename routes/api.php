@@ -28,7 +28,7 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 Route::group([
     'namespace' => 'API\v1',
     'prefix' => 'v1',
-    'middleware' => 'auth:api'
+    // 'middleware' => 'auth:api'
 ], function () {
 
     $this->group([ 'namespace' => 'Blog' ], function () {
@@ -40,10 +40,18 @@ Route::group([
 
         Route::resource('/product', 'ProductController');
     });
+
+    $this->group([ 'namespace' => 'Opinion' ], function () {
+
+        Route::resource('/comment', 'CommentController');
+        Route::resource('/review', 'ReviewController');
+        Route::resource('/question_and_answer', 'QuestionAndAnswerController');
+    });
     
     $this->group([ 'namespace' => 'Financial' ], function () {
 
         Route::resource('/shipping_method', 'ShippingMethodContrller');
+        Route::resource('/order_status', 'OrderStatusContrller');
     });
     
     $this->group([ 'namespace' => 'Group' ], function () {
@@ -68,6 +76,6 @@ Route::group([
         Route::resource('/spec_header', 'SpecHeaderController')->only('store', 'update', 'destroy');
         Route::resource('/spec_row', 'SpecRowController')->only('store', 'update', 'destroy');
         
-        Route::resource('/spec_data', 'SpecDataController');
+        // Route::resource('/spec_data', 'SpecDataController');
     });
 });
