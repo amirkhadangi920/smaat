@@ -29,20 +29,22 @@ class CreateOpinionTables extends Migration
             ]);
             $table->mediumText('message');
             $table->full_timestamps();
+            $table->boolean('is_accept')->defult(false);
         });
-
+        
         $schema->create('reviews', function (Blueprint $table) {
             $table->table([
                 'ranks' => 'array',
                 'advantages' => 'array',
                 'disadvantages' => 'array',
                 'message' => 'mediumText',
+                'is_accept' =>  'boolean|defult:false',
             ], [
                 'users' => true,
                 'products' => true,
-            ]);
+                ]);
         });
-
+        
         $schema->create('question_and_answers', function (Blueprint $table) {
             $table->id();
             $table->relations([
@@ -52,6 +54,7 @@ class CreateOpinionTables extends Migration
             $table->add_foreign('question_and_answers', true, 'unsignedInteger', 'question_id');
             $table->mediumText('message');
             $table->full_timestamps();
+            $table->boolean('is_accept')->defult(false);
         });
     }
 

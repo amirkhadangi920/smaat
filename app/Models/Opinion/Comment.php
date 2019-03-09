@@ -25,7 +25,7 @@ class Comment extends Model implements AuditableContract , LikeableContract
      * @var array
      */
     protected $fillable = [
-        'message'
+        'message' , 'is_accept'
     ];
     
     /**
@@ -40,6 +40,14 @@ class Comment extends Model implements AuditableContract , LikeableContract
      **             Relations
      ***************************************/
 
+     /**
+     * The attributes that should be cast to native types.
+     *
+     * @var array
+     */
+    protected $casts = [
+        'is-accept'      => 'boolean',
+    ];
     /**
      * Get the article that the comment has belongs to that
      */

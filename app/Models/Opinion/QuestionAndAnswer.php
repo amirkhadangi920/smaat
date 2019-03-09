@@ -23,7 +23,7 @@ class QuestionAndAnswer extends Model implements AuditableContract
      * @var array
      */
     protected $fillable = [
-        'message',
+        'message', 'is_accept'
         // 'created_at'
     ];
 
@@ -34,6 +34,14 @@ class QuestionAndAnswer extends Model implements AuditableContract
      */
     protected $dates = [ 'deleted_at' ];
     
+    /**
+     * The attributes that should be cast to native types.
+     *
+     * @var array
+     */
+    protected $casts = [
+        'is_accept'      => 'boolean',
+    ];
 
     /****************************************
      **             Relations
