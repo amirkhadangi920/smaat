@@ -32,10 +32,9 @@ class BlogTablesSeeder extends Seeder
         $articles->each( function ( $article ) use( $users ) {
 
             $article->comments()->saveMany(
-                factory(\App\Models\Opinion\Comment::class, rand(1, 10))->make([
+                 factory(\App\Models\Opinion\Comment::class, rand(1, 10))->make([
                 'user_id' => $users->random()->id
             ])
-
             )->each( function( $comment ) use($users) {
 
                 for( $i = 0 ; $i < rand(1, 15) ; $i++ )
@@ -45,6 +44,16 @@ class BlogTablesSeeder extends Seeder
 
             });    
         });
+        // $articles->each( function($article) use($comments , $users) {
+
+        //     $article->comments()->saveMany(
+        //          factory( App\Models\Opinion\Comment::class ))->make([
+
+        //             'parent_id' =>$comments->random()->id,
+        //             'user_id' =>$users->random()->id
+        //         ]);
+        //     });
+
             // dd('sa;klndklank');
         echo "\e[31mArticles with it's comments \e[39mwas \e[32mcreated\n";
     }
