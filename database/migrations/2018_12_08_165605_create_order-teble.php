@@ -22,7 +22,6 @@ class CreateOrderTeble extends Migration
         $schema->create('order_statuses', function (Blueprint $table) {
             $table->table([
                 'info',
-                'cost' => 'unsignedInteger',
             ]);
         });
 
