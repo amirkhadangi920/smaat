@@ -35,16 +35,22 @@ class BlogTablesSeeder extends Seeder
                 factory(\App\Models\Opinion\Comment::class, rand(1, 10))->make([
                 'user_id' => $users->random()->id
             ])
-
-            )->each( function( $comment ) use($users) {
+            )->each( function( $comment ) use($users , $article) {
 
                 for( $i = 0 ; $i < rand(1, 15) ; $i++ )
                 {
                     $comment->likeBy( $users->random()->id );
                 }
 
-            });    
-        });
+                $article->comments()->saveMany(
+                    factory( App\Models\Opinion\Comment::class, rand(1,15) )->make([
+                        
+                        'parent_id' =>$comment->id,
+                        'user_id' =>$users->random()->id
+                        ])
+                    );
+                });    
+            });
             // dd('sa;klndklank');
         echo "\e[31mArticles with it's comments \e[39mwas \e[32mcreated\n";
     }

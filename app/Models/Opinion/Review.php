@@ -26,7 +26,8 @@ class Review extends Model implements AuditableContract
         'ranks',
         'advantages',
         'disadvantages',
-        'message'
+        'message',
+        'is_accept'
     ];
     
     /**
@@ -38,6 +39,7 @@ class Review extends Model implements AuditableContract
         'ranks'         => 'array',
         'advantages'    => 'array',
         'disadvantages' => 'array',
+        'is_accept'      => 'boolean',
     ];
 
     /**

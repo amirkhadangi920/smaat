@@ -164,7 +164,7 @@ class User extends Authenticatable implements AuditableContract , LikerContract
     /**
      * Get all the questionAndAnsers of the users.
      */
-    public function questionAndAnswers()
+    public function questionAndAnswers ()
     {
         return $this->hasMany(QuestionAndAnswer::class);
     }
