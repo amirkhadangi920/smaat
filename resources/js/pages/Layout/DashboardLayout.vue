@@ -1,5 +1,6 @@
 <template>
   <div class="wrapper" :class="{ 'nav-open': $sidebar.showSidebar }">
+    
     <notifications></notifications>
 
     <side-bar>
@@ -31,6 +32,10 @@
       <sidebar-link to="/notifications">
         <md-icon>notifications</md-icon>
         <p>Notifications</p>
+      </sidebar-link>
+      <sidebar-link to="/nestedlist">
+        <md-icon>list</md-icon>
+        <p>List</p>
       </sidebar-link>
       <sidebar-link to="/upgrade" class="active-pro">
         <md-icon>unarchive</md-icon>

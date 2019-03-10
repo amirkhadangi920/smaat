@@ -3,7 +3,7 @@
 import Vue from "vue";
 import VueRouter from "vue-router";
 import App from "./App-start.vue";
-
+import './bootstrap'
 Vue.component('App-s' , App);
 // router setup
 import routes from "./routes/routes";
@@ -12,7 +12,11 @@ import routes from "./routes/routes";
 import GlobalComponents from "./globalComponents";
 import GlobalDirectives from "./globalDirectives";
 import Notifications from "./components/NotificationPlugin";
-import axios from 'axios';
+import axios from 'axios';                    //  axios 
+//  nested dragable list plugin 
+import VueDragTree from 'vue-drag-tree'
+import 'vue-drag-tree/dist/vue-drag-tree.min.css'
+
 // MaterialDashboard plugin
 import MaterialDashboard from "./material-dashboard";
 
@@ -32,6 +36,7 @@ Vue.use(GlobalComponents);
 Vue.use(GlobalDirectives);
 Vue.use(Notifications);
 Vue.use(axios);
+Vue.use(VueDragTree)
 /* eslint-disable no-new */
 new Vue({
   el: "#app",
