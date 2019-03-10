@@ -10,6 +10,16 @@ use App\Http\Controllers\API\v1\MainController;
 class SpecHeaderController extends MainController
 {
     /**
+     * Instantiate a new MainController instance.
+     */
+    public function __construct()
+    {
+        $this->middleware('auth:api', [
+            'only' => [ 'store', 'update', 'destroy', 'copy' ]
+        ]);
+    }
+
+    /**
      * Type of this controller for use in messages
      *
      * @var string
@@ -49,6 +59,8 @@ class SpecHeaderController extends MainController
      */
     public function copy (Request $request, SpecHeader $spec_header)
     {
+        $this->checkPermission("copy-{$this->type}");
+
         $new_header = $this->model::create( $this->getRequest( $request ) );
 
         $new_header->rows()->saveMany(

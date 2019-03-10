@@ -11,6 +11,16 @@ class OpinionBaseController extends MainController
     use HasUser;
 
     /**
+     * Instantiate a new MainController instance.
+     */
+    public function __construct()
+    {
+        $this->middleware('auth:api', [
+            'only' => [ 'store', 'update', 'destroy', 'accept' ]
+        ]);
+    }
+
+    /**
      * Accept or unaccept one or multiple opinions in storage.
      *
      * @param  String $opinions
@@ -18,7 +28,7 @@ class OpinionBaseController extends MainController
      */
     public function accept(Request $request, $opinions)
     {
-        // $this->checkPermission("accept-{$this->type}");
+        $this->checkPermission("accept-{$this->type}");
         
         $opinions = explode(',', $opinions);
 

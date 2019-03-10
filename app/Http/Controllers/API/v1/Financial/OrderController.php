@@ -13,6 +13,18 @@ use App\User;
 class OrderController extends MainController
 {
     /**
+     * Instantiate a new OrderController instance.
+     */
+    public function __construct()
+    {
+        $this->middleware('auth:api', [
+            'only' => [
+                'store', 'update', 'destroy', 'add', 'remove', 'description', 'status'
+            ]
+        ]);
+    }
+
+    /**
      * Type of this controller for use in messages
      *
      * @var string
@@ -129,7 +141,8 @@ class OrderController extends MainController
      */
     public function add(Order $order, Variation $variation, int $quantity = 1)
     {
-        // Validate input data and product status , stock_inventory
+        $this->checkPermission("manage-order-item");
+
         Validator::make([
                 'quantity'  => $quantity,
                 'label'     => $variation->product->label,
@@ -165,7 +178,9 @@ class OrderController extends MainController
      * @return void
      */
     public function remove(Order $order, Variation $variation)
-    {    
+    {
+        $this->checkPermission("manage-order-item");
+
         if ( $variation->order_item()->where('order_id', $order->id)->delete() )
         {
             return response()->json([
@@ -193,6 +208,8 @@ class OrderController extends MainController
      */
     public function description (Order $order)
     {
+        $this->checkPermission("add-order-description");
+
         Validator::make([ 'description' => request('description') ], [
             'description' => 'required|max:255|string',
         ])->validate();
@@ -216,6 +233,8 @@ class OrderController extends MainController
      */
     public function status(Order $order, $status)
     {
+        $this->checkPermission("change-order-status");
+
         Validator::make([ 'status' => $status ], [
             'status' => 'required|exists:order_statuses,id',
         ])->validate();

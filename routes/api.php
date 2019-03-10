@@ -28,7 +28,6 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 Route::group([
     'namespace' => 'API\v1',
     'prefix' => 'v1',
-    // 'middleware' => 'auth:api'
 ], function () {
 
     $this->group([ 'namespace' => 'Blog' ], function () {
@@ -41,7 +40,7 @@ Route::group([
         Route::resource('/product', 'ProductController');
     });
 
-    $this->group([ 'namespace' => 'Opinion', 'middleware' => 'auth:api' ], function () {
+    $this->group([ 'namespace' => 'Opinion' ], function () {
 
         Route::put('/comment/accept/{comment}', 'CommentController@accept');
         Route::resource('/comment', 'CommentController');
@@ -53,7 +52,7 @@ Route::group([
         Route::resource('/question_and_answer', 'QuestionAndAnswerController');
     });
     
-    $this->group([ 'namespace' => 'Financial', 'middleware' => 'auth:api' ], function () {
+    $this->group([ 'namespace' => 'Financial' ], function () {
 
         Route::resource('/shipping_method', 'ShippingMethodContrller');
         Route::resource('/order_status', 'OrderStatusContrller');

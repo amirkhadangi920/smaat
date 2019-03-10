@@ -11,6 +11,16 @@ class MainController extends Controller
     use MainControllerHelper;
 
     /**
+     * Instantiate a new MainController instance.
+     */
+    public function __construct()
+    {
+        $this->middleware('auth:api', [
+            'only' => [ 'store', 'update', 'destroy' ]
+        ]);
+    }
+
+    /**
      * Display a listing of the group.
      *
      * @return \Illuminate\Http\Response
@@ -32,7 +42,7 @@ class MainController extends Controller
      */
     public function store(Request $request)
     {
-        // $this->checkPermission("create-{$this->type}");
+        $this->checkPermission("create-{$this->type}");
 
         $data = $this->storeData( $request );
 
@@ -72,7 +82,7 @@ class MainController extends Controller
      */
     public function update(Request $request, $data)
     {
-        // $this->checkPermission("update-{$this->type}");
+        $this->checkPermission("update-{$this->type}");
         
         $data = $this->getModel( $data);
 
@@ -96,7 +106,7 @@ class MainController extends Controller
      */
     public function destroy($data)
     {
-        // $this->checkPermission("delete-{$this->type}");
+        $this->checkPermission("delete-{$this->type}");
         
         $data = explode(',', $data);
 
