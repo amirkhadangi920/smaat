@@ -47,9 +47,9 @@ class Controller extends BaseController
     public function requestWithGallery($request, $field_name = 'gallery', $model = null)
     {
         $gallery = [];
-        
-        if ( $model->photos ?? false )
-            $gallery = array_merge( $gallery, $model->photos );
+                
+        if ( $model->$field_name ?? false )
+            $gallery = array_merge( $gallery, $model->$field_name );
 
         if ($request->deleted_images)
         {

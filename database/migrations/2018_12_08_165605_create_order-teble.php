@@ -36,13 +36,12 @@ class CreateOrderTeble extends Migration
                 'tax'               => 'bigInteger|default:0',
 
                 'docs'              => 'array|comment:Array of documentation images',
-                'status'            => '20|default:created|comment:Status of the order',
                 'checkout'          => 'boolean|default:0',
                 'auth_code'         => '50|nullable',
                 'payment_code'      => '30|nullable',
                 // 'payment_jalali'    => 'timestamp',
                 'datetimes'         => 'mediumText|nullable',
-                'type'              => 'tinyInteger|comment:Type of factor, e.g sell, buy, sell_back etc...',
+                'type'              => 'tinyInteger|default:0|comment:Type of factor, e.g sell, buy, sell_back etc...',
                 'is_accept'         => 'boolean|default:0'
             ], [
                 'users',

@@ -14,7 +14,7 @@ use App\Models\Promocode\Promocode;
 
 use App\Models\Places\City;
 
-class Order extends Model
+class Order extends Model implements AuditableContract
 {
     use SoftDeletes, GenerateRandomID, Auditable;
 
@@ -43,19 +43,20 @@ class Order extends Model
      * @var array
      */
     protected $fillable = [
-        // 'discount_code_id',
+        'shipping_method_id',
+        'order_status_id',
+        'city_id',
         'descriptions',
         'destination',
         'postal_code',
         'offer',
         'total',
         'tax',
-        'created_at',
+        'docs',
         'auth_code',
         'payment_code',
         // 'payment_jalali',
         'datetimes',
-        'shipping_methods',
         'status',
         'paid_at',
         'jalali_paid_at',
@@ -69,7 +70,8 @@ class Order extends Model
     protected $casts = [
         'descriptions'  => 'array',
         'shipping'      => 'array',
-        'datetimes'     => 'array'
+        'datetimes'     => 'array',
+        'docs'          => 'array',
     ];
 
     /**
@@ -162,7 +164,7 @@ class Order extends Model
      * @param String $period
      * @return Collection
      */
-    public static function total ( $period )
+    public static function get_total ( $period )
     {
         /**
          * Highlighting type of requested period
