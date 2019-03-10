@@ -41,7 +41,26 @@ trait MainControllerHelper
         if ( isset( $this->relations ) )
             $data->with( $this->relations );
 
-        return $data->paginate(20);
+        return $data->paginate( $this->getPerPage() );
+    }
+
+    /**
+     * Get the dynamik per_page property of the models
+     *
+     * @param int|10 $max
+     * @param int|100 $min
+     * @return void
+     */
+    public function getPerPage(int $max = 100, int $min = 10)
+    {
+        if ( request('per_page') <= $min )
+            return $min;
+
+        elseif ( request('per_page') >= $max)
+            return $max;
+
+        else
+            return request('per_page');
     }
 
     /**

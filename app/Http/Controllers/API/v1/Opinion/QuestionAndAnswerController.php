@@ -59,6 +59,6 @@ class QuestionAndAnswerController extends OpinionBaseController
             ->whereNull('question_id')
             ->with($this->relations)
             ->latest()
-            ->paginate();
+            ->paginate( $this->getPerPage() );
     }
 }

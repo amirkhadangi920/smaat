@@ -80,7 +80,10 @@ class ProductController extends MainController
         return $this->model::select(
             'id', 'user_id', 'category_id', 'brand_id', 'slug',
             'name', 'description', 'photos', 'label', 'views_count'
-        )->with( $this->relations )->whereStatus(true)->latest()->paginate(20);
+        )->with( $this->relations )
+            ->whereStatus(true)
+            ->latest()
+            ->paginate( $this->getPerPage(20) );
     }
 
     /**

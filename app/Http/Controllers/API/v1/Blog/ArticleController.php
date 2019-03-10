@@ -66,7 +66,7 @@ class ArticleController extends MainController
     public function getAllData()
     {
         return $this->model::select('id', 'user_id', 'slug', 'title', 'description', 'image', 'reading_time')
-            ->with( $this->relations )->latest()->paginate(20);
+            ->with( $this->relations )->latest()->paginate( $this->getPerPage() );
     }
     
     /**

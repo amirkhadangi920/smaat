@@ -59,6 +59,6 @@ class CommentController extends OpinionBaseController
             ->whereNull('parent_id')
             ->with($this->relations)
             ->latest()
-            ->paginate();
+            ->paginate( $this->getPerPage() );
     }
 }
