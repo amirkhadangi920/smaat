@@ -53,10 +53,16 @@ Route::group([
         Route::resource('/question_and_answer', 'QuestionAndAnswerController');
     });
     
-    $this->group([ 'namespace' => 'Financial' ], function () {
+    $this->group([ 'namespace' => 'Financial', 'middleware' => 'auth:api' ], function () {
 
         Route::resource('/shipping_method', 'ShippingMethodContrller');
         Route::resource('/order_status', 'OrderStatusContrller');
+
+        $this->post('/order/{order}/add/{variation}/{quantity?}', 'OrderController@add');
+        $this->delete('/order/{order}/remove/{variation}', 'OrderController@remove');
+        $this->put('/order/description/{order}', 'OrderController@description');
+        $this->put('/order/status/{order}/{status}', 'OrderController@status');
+        Route::resource('/order', 'OrderController');
     });
     
     $this->group([ 'namespace' => 'Group' ], function () {
