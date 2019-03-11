@@ -15,7 +15,7 @@ class FeatureBaseController extends MainController
     protected $relations = [
         'categories:id,slug,title'
     ];
- 
+
     /**
      * The function that get the model and run after the model was created
      *

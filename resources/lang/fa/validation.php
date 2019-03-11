@@ -173,5 +173,12 @@ return [
         'size'                  => 'اندازه',
         'terms'                 => 'شرایط',
         'province'              => 'استان',
+        'logo'                  => 'لوگو',
+
+        /**
+         * Relations feilds
+         */
+        'categories' => 'گروه',
+        'categories.*' => 'گروه'
     ],
 ];

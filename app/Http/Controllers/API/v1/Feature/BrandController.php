@@ -5,6 +5,7 @@ namespace App\Http\Controllers\API\v1\Feature;
 use App\Models\Feature\Brand;
 use App\Http\Resources\Feature\Brand as BrandResource;
 use App\Helpers\SluggableController;
+use App\Http\Requests\v1\Feature\BrandRequest;
 
 class BrandController extends FeatureBaseController
 {
@@ -37,4 +38,28 @@ class BrandController extends FeatureBaseController
      * @var string
      */
     protected $image_field = 'logo';
+
+    // /**
+    //  * Get the request from url and pass it to storeData method
+    //  * to create a new brand in storage
+    //  *
+    //  * @param  Request  $request
+    //  * @return Array
+    //  */
+    // public function store(BrandRequest $request)
+    // {
+    //     return $this->storeWithRequest($request);
+    // }
+
+    // /**
+    //  * Get the request from url and pass it to updateData method
+    //  * to update the $brand in storage
+    //  *
+    //  * @param  Request  $request
+    //  * @return Array
+    //  */
+    // public function update(BrandRequest $request, Brand $brand)
+    // {
+    //     return $this->updateWithRequest($request, $brand);
+    // }
 }

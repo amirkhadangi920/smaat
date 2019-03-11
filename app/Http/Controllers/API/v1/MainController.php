@@ -5,8 +5,10 @@ namespace App\Http\Controllers\API\v1;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Helpers\MainControllerHelper;
+use App\Http\Requests\v1\Feature\BrandRequest;
+use App\Http\Requests\v1\MainRequest;
 
-class MainController extends Controller
+abstract class MainController extends Controller
 {
     use MainControllerHelper;
 
@@ -35,14 +37,26 @@ class MainController extends Controller
     }
 
     /**
+     * Get the request from url and pass it to storeData method
+     * to create a new brand in storage
+     *
+     * @param  Request  $request
+     * @return Array
+     */
+    public function store(Request $request)
+    {
+        return $this->storeWithRequest($request);
+    }
+
+    /**
      * Store a newly created group in (stor)age.
      *
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function storeWithRequest($request)
     {
-        $this->checkPermission("create-{$this->type}");
+        // $this->checkPermission("create-{$this->type}");
 
         $data = $this->storeData( $request );
 
@@ -74,17 +88,30 @@ class MainController extends Controller
     }
 
     /**
-     * Update the specified group in storage.
+     * Get the request from url and pass it to updateData method
+     * to update the $brand in storage
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  $feature
-     * @return \Illuminate\Http\Response
+     * @param  Request  $request
+     * @return Array
      */
     public function update(Request $request, $data)
     {
-        $this->checkPermission("update-{$this->type}");
-        
-        $data = $this->getModel( $data);
+        $data = $this->getModel($data);
+
+        return $this->updateWithRequest($request, $data);
+    }
+
+    /**
+     * Get the $request & $data,
+     * then Update the $data in storage.
+     *
+     * @param  Request  $request
+     * @param  Model $data
+     * @return JSON\Array
+     */
+    public function updateWithRequest($request, $data)
+    {
+        // $this->checkPermission("update-{$this->type}");
 
         $this->updateData( $request, $data );
 
@@ -106,7 +133,7 @@ class MainController extends Controller
      */
     public function destroy($data)
     {
-        $this->checkPermission("delete-{$this->type}");
+        // $this->checkPermission("delete-{$this->type}");
         
         $data = explode(',', $data);
 

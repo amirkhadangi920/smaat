@@ -35,7 +35,6 @@ class Brand extends Model implements AuditableContract
      * @var array
      */
     protected $casts = [
-        'depth' => 'integer',
         'logo' => 'array'
     ];
 
