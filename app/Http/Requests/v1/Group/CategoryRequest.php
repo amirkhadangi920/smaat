@@ -13,7 +13,7 @@ class CategoryRequest extends FormRequest
      */
     public function authorize()
     {
-        return false;
+        return true;
     }
 
     /**
@@ -27,7 +27,12 @@ class CategoryRequest extends FormRequest
             'title'             => 'required|string|min:50',
             'description'       => 'nullable|string|min:255',
             'logo'              => 'nullable|image|mimes:jpeg,jpg,png,gif|max:1024',
-            'scoring_feilds'    => 'nullable|string|array'
+            'scoring_feilds'    => 'nullable|string|array',
+
+            /**
+             * relateion 
+             */
+            'parent_id'         => 'nullable|integer|exists:categories,id'
         ];
     }
 }

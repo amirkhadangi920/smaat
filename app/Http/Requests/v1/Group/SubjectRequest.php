@@ -13,7 +13,7 @@ class SubjectRequest extends FormRequest
      */
     public function authorize()
     {
-        return false;
+        return true;
     }
 
     /**
@@ -27,6 +27,11 @@ class SubjectRequest extends FormRequest
             'title'             => 'required|string|min:50',
             'description'       => 'nullable|string|min:255',
             'logo'              => 'nullable|image|mimes:jpeg,jpg,png,gif|max:1024',
+
+            /**
+             * relateion 
+             */
+            'parent_id'         => 'nullable|integer|exists:subjects,id'
         ];
     }
 }
