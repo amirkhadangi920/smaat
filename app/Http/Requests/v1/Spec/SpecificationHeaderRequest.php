@@ -13,7 +13,7 @@ class SpecificationHeaderRequest extends FormRequest
      */
     public function authorize()
     {
-        return false;
+        return true;
     }
 
     /**
@@ -24,8 +24,13 @@ class SpecificationHeaderRequest extends FormRequest
     public function rules()
     {
         return [
-            'title'         => 'required|max:50|string',
-            'description'   => 'nullable|max:255|string'
+            'title'             => 'required|string|max:50',
+            'description'       => 'nullable|string|max:255',
+            
+            /**
+             * relateion 
+             */
+            'specs.*'           => 'required|integer|exists:specs,id',
         ];
     }
 }

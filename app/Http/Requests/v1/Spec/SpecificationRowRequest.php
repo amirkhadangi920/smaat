@@ -24,13 +24,18 @@ class SpecificationRowRequest extends FormRequest
     public function rules()
     {
         return [
-            'title'         => 'required|string|min:50',
-            'description'   => 'nullable|string|min:255',
-            'label'         => 'nullable|string|min:50',
-            'values'        => 'required|array|string',
-            'help'          => 'nullable|string|max:255',
-            'multiple'      => 'required|boolean',
-            'required'      => 'required|boolean'
+            'title'                     => 'required|string|min:50',
+            'description'               => 'nullable|string|min:255',
+            'label'                     => 'nullable|string|min:50',
+            'values'                    => 'required|array|string',
+            'help'                      => 'nullable|string|max:255',
+            'multiple'                  => 'required|boolean',
+            'required'                  => 'required|boolean',
+            
+            /**
+             * relateion 
+             */
+            'spec_headers.*'           => 'required|integer|exists:spec_headers,id',
         ];
     }
 }
