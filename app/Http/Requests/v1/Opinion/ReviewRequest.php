@@ -13,7 +13,7 @@ class ReviewRequest extends FormRequest
      */
     public function authorize()
     {
-        return false;
+        return true;
     }
 
     /**
@@ -24,11 +24,16 @@ class ReviewRequest extends FormRequest
     public function rules()
     {
         return [
-            'ranks'         => 'nullable|array',
-            'advantages'    => 'nullable|array',
-            'disadvantages' => 'nullable|array',
-            'message'       => 'required|array|string',
-            'is_accept'     => 'required|boolean',
+            'ranks'             => 'nullable|array',
+            'advantages'        => 'nullable|array',
+            'disadvantages'     => 'nullable|array',
+            'message'           => 'required|array|string',
+
+            /**
+             * relateion 
+             */
+            'users.*'           => 'required|array|exists:users,id',
+            'articles.*'        => 'required|array|exists:articles,id',
         ];
     }
 }

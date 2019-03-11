@@ -24,8 +24,14 @@ class QuestionAndAnswerRequest extends FormRequest
     public function rules()
     {
         return [
-            'message'   => 'required|array|string',
-            'is_accept' => 'required|boolean'
+            'message'         => 'required|array|string',
+
+            /**
+             * relateion 
+             */
+            'question_id'     => 'nullable|integer|exists:comments,id',
+            'users.*'         => 'required|array|exists:users,id',
+            'articles.*'      => 'required|array|exists:articles,id',
         ];
     }
 }

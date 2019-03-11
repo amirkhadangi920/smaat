@@ -13,7 +13,7 @@ class CommentRequest extends FormRequest
      */
     public function authorize()
     {
-        return false;
+        return true;
     }
 
     /**
@@ -24,8 +24,15 @@ class CommentRequest extends FormRequest
     public function rules()
     {
         return [
-            'message'   => 'required|array|string',
-            'is_accept' => 'required|boolean'
+            'message'       => 'required|array|string',
+
+            /**
+             * relateion 
+             */
+            'parent_id'     => 'nullable|integer|exists:comments,id',
+            'users.*'       => 'required|array|exists:users,id',
+            'articles.*'    => 'required|array|exists:articles,id',
+
         ];
     }
 }
