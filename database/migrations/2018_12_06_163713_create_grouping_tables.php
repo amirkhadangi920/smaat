@@ -23,7 +23,6 @@ class CreateGroupingTables extends Migration
         $schema->create('categories', function (Blueprint $table) {
             $table->table([
                 'sluggable_info',
-                'depth'          => 'tinyInteger|default:1|comment:Depth of the group e.g parent > child > sub-sbhild is 3',
                 'logo'           => 'nullable|array',
                 'scoring_feilds' => 'mediumText|nullable'
             ], ['self']);
@@ -32,7 +31,6 @@ class CreateGroupingTables extends Migration
         $schema->create('subjects', function (Blueprint $table) {
             $table->table([
                 'sluggable_info',
-                'depth'          => 'tinyInteger|default:1|comment:Depth of the group e.g parent > child > sub-sbhild is 3',
                 'logo'           => 'nullable|array',
             ], ['self']);
         });

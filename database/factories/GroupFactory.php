@@ -6,7 +6,6 @@ $factory->define(App\Models\Group\Category::class, function (FakerEng $faker) {
     return [
         'title'             => Faker::fullName(),
         'description'       => nullable( Faker::sentence() ),
-        'depth'             => $faker->numberBetween(1, 5),
         'logo'              => nullable( $faker->imageUrl(100, 100) ),
         'scoring_feilds'    => nullable( function () use ( $faker ) {
             $feilds = [];
@@ -21,7 +20,6 @@ $factory->define(App\Models\Group\Subject::class, function (FakerEng $faker) {
     return [
         'title'             => Faker::fullName(),
         'description'       => nullable( Faker::sentence() ),
-        'depth'             => $faker->numberBetween(1, 5),
         'logo'              => nullable( $faker->imageUrl(100, 100) ),
     ];
 });
