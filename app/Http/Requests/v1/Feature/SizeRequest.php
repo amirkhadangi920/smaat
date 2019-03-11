@@ -13,7 +13,7 @@ class SizeRequest extends FormRequest
      */
     public function authorize()
     {
-        return false;
+        return true;
     }
 
     /**
@@ -24,7 +24,9 @@ class SizeRequest extends FormRequest
     public function rules()
     {
         return [
-            'name'  => 'required|max:50|string'
+            'name'              => 'required|max:50|string',
+            'categories'        => 'nullable|array',
+            'categories.*'      => 'required|integer|exists:categories,id'
         ];
     }
 }

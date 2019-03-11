@@ -13,7 +13,7 @@ class ColorRequest extends FormRequest
      */
     public function authorize()
     {
-        return false;
+        return true;
     }
 
     /**
@@ -24,8 +24,11 @@ class ColorRequest extends FormRequest
     public function rules()
     {
         return [
-            'name'  => 'required|max:50|string',
-            'code'  => ['required', 'regex:/^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/']
+            'name'              => 'required|max:50|string',
+            'code'              => ['required', 'regex:/^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/'],
+            'categories'        => 'nullable|array',
+            'categories.*'      => 'required|integer|exists:categories,id',
+
         ];
     }
 }
