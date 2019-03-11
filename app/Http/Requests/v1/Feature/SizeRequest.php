@@ -24,7 +24,11 @@ class SizeRequest extends FormRequest
     public function rules()
     {
         return [
-            'name'              => 'required|max:50|string',
+            'name'              => 'required|string|max:50',
+
+            /**
+             * relateion 
+             */
             'categories'        => 'nullable|array',
             'categories.*'      => 'required|integer|exists:categories,id'
         ];
