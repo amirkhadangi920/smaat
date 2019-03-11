@@ -35,3 +35,5 @@ Route::get('/', function () {
 // https://laravel-auditing.herokuapp.com/docs/4.1/audit-presentation
 
 // https://github.com/cviebrock/eloquent-sluggable
+
+Route::view('/' , 'welcome');
