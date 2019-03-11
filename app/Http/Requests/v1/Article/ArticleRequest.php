@@ -32,8 +32,5 @@ class ArticleRequest extends FormRequest
         ];
     }
 }
-        => $faker->name(),
-           => $faker->text(255),
-                  => $faker->paragraph(),
-                 => $faker->imageUrl($width = 640, $height = 480),
+ 
  
