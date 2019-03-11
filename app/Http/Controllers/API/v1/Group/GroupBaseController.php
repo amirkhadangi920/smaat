@@ -28,18 +28,14 @@ class GroupBaseController extends MainController
     protected $image_field = 'logo';
 
     /**
-     * Display a listing of the group.
+     * Get all data of the model,
+     * used by index method controller
      *
-     * @return \Illuminate\Http\Response
+     * @return Collection
      */
-    public function index()
+    public function getAllData()
     {
-        return response()->json([
-            'data' => $this->model::tree(),
-            'message' => __('messages.return.all', [
-                'data' => __("types.{$this->type}.title")
-            ])
-        ]);
+        return $this->model::tree();
     }
 
     /**

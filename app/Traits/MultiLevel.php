@@ -30,7 +30,7 @@ trait MultiLevel
      */
     public static function tree()
     {
-        $groups = static::select('id', 'slug', 'title', 'logo')
+        $groups = static::select('id', 'slug', 'title', 'logo', 'description')
                 ->whereNull('parent_id')->latest()->get();
 
         $groups->each( function ( $group ) {
@@ -44,19 +44,19 @@ trait MultiLevel
      * Recursive function for geting the childs of the group,
      * if group has child, run this method on all of it's childs recursive
      *
-     * @param Model $groups
+     * @param Model $group
      * @return void
      */
-    public static function get_childs($groups)
+    public static function get_childs($group)
     {
-        $groups->load('childs:parent_id,slug,title');
+        $group->load('childs:id,parent_id,slug,title,logo,description');
 
-        if ( $groups->childs->isNotEmpty() )
+        if ( $group->childs->isNotEmpty() )
         {
-            foreach ( $groups->childs as $child )
+            foreach ( $group->childs as $child )
                 static::get_childs( $child );
         } else {
-            unset( $groups->childs );
+            unset( $group->childs );
         }
     }
 }
