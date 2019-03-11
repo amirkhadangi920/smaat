@@ -25,7 +25,7 @@ class UnitRequest extends FormRequest
     {
         return [
             'title'         => 'required|max:50|string',
-            'description'   => 'required|max:255|string'
+            'description'   => 'nullable|max:255|string'
         ];
     }
 }
