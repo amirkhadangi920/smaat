@@ -13,7 +13,7 @@ class ShippingMethodRequest extends FormRequest
      */
     public function authorize()
     {
-        return false;
+        return true;
     }
 
     /**
@@ -29,7 +29,6 @@ class ShippingMethodRequest extends FormRequest
             'logo'              => 'nullable|image|mimes:jpeg,jpg,png,gif|max:1024',
             'cost'              => 'required|digit|min:0',
             'minimum'           => 'required|digit|min:0',
-            'is_active'         => 'required|boolean'
         ];
     }
 }
