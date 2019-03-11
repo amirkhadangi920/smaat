@@ -29,6 +29,10 @@ class ArticleRequest extends FormRequest
             'body'          => 'required|string',
             'image'         => 'nullable|image|mimes:jpeg,jpg,png,gif|max:1024',
             'reading_time'  => 'nullable|digit_between:1,50',
+
+            /**
+             * relateion 
+             */
             'subjects'      => 'nullable|array',
             'subjects.*'    => 'required|integer|exists:subjects,id'
         ];
