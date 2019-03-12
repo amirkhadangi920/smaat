@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use OwenIt\Auditing\Auditable;
 use OwenIt\Auditing\Contracts\Auditable as AuditableContract;
 use App\Models\Group\Category;
+use App\Models\Product\Variation;
 
 class Size extends Model implements AuditableContract
 {
@@ -40,5 +41,16 @@ class Size extends Model implements AuditableContract
     public function categories()
     {
         return $this->morphToMany(Category::class, 'featureable');
+    }
+
+    /**
+     * Relation to variation model
+     * 
+     * @return OrderItem Model
+     */
+    
+    public function variations ()
+    {
+        return $this->hasMany(Variation::class);
     }
 }
