@@ -27,7 +27,7 @@ class ArticleRequest extends FormRequest
             'title'         => 'required|max:50|string',
             'description'   => 'nullable|string|max:255',
             'body'          => 'required|string',
-            'image'         => 'nullable|image|mimes:jpeg,jpg,png,gif|max:1024',
+            'image'         => 'image|mimes:jpeg,jpg,png,gif|max:1024',
             'reading_time'  => 'nullable|digit_between:1,50',
 
             /**
