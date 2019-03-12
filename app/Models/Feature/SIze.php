@@ -22,7 +22,10 @@ class Size extends Model implements AuditableContract
      *
      * @var array
      */
-    protected $fillable = [ 'name' ];
+    protected $fillable = [ 
+        'name' , 
+        'description'
+    ];
 
     /**
      * The attributes that should be mutated to dates.
