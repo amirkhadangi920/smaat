@@ -7,12 +7,13 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use OwenIt\Auditing\Auditable;
 use OwenIt\Auditing\Contracts\Auditable as AuditableContract;
 use Cviebrock\EloquentSluggable\Sluggable;
+use EloquentFilter\Filterable;
 use App\Models\Group\Category;
 use App\Models\Product\Product;
 
 class Brand extends Model implements AuditableContract
 {
-    use SoftDeletes, Auditable, Sluggable;
+    use SoftDeletes, Auditable, Sluggable, Filterable;
 
     /****************************************
      **             Attributes

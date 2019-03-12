@@ -4,6 +4,7 @@ namespace App\Http\Controllers\API\v1\Opinion;
 
 use App\Models\Opinion\Comment;
 use App\Http\Resources\Opinion\Comment as CommentResource;
+use App\ModelFilters\Opinion\CommentFilter;
 
 class CommentController extends OpinionBaseController
 {
@@ -48,6 +49,13 @@ class CommentController extends OpinionBaseController
     protected $resource = CommentResource::class;
 
     /**
+     * Filter class of this eloquent model
+     *
+     * @var ModelFilter
+     */
+    protected $filter = CommentFilter::class;
+
+    /**
      * Get all data of the model,
      * used by index method controller
      *
@@ -55,7 +63,8 @@ class CommentController extends OpinionBaseController
      */
     public function getAllData()
     {
-        return $this->model::select('id', 'parent_id', 'user_id', 'message', 'created_at')
+        return $this->model::select('id', 'parent_id', 'article_id', 'user_id', 'message', 'created_at')
+            ->filter( request()->all(), $this->filter )    
             ->whereNull('parent_id')
             ->with($this->relations)
             ->latest()

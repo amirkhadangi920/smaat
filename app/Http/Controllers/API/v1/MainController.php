@@ -5,8 +5,6 @@ namespace App\Http\Controllers\API\v1;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Helpers\MainControllerHelper;
-use App\Http\Requests\v1\Feature\BrandRequest;
-use App\Http\Requests\v1\MainRequest;
 
 abstract class MainController extends Controller
 {

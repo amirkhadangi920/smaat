@@ -15,9 +15,12 @@ class GroupBaseController extends MainController
      *
      * @var array
      */
+    protected $relations = [];
+
     protected $more_relations = [
         'parent',
-        'childs'
+        'childs',
+        'tags:name,slug'
     ];
 
     /**
@@ -36,6 +39,30 @@ class GroupBaseController extends MainController
     public function getAllData()
     {
         return $this->model::tree();
+    }
+
+    /**
+     * The function that get the model and run after the model was created
+     *
+     * @param Request $request
+     * @param Model $group
+     * @return void
+     */
+    public function afterCreate($request, $group)
+    {
+        $group->attachTags($request->keywords);
+    }
+
+    /**
+     * The function that get the model and run after the model was updated
+     *
+     * @param Request $request
+     * @param Model $group
+     * @return void
+     */
+    public function afterUpdate($request, $group)
+    {
+        $group->syncTags($request->keywords);
     }
 
     /**

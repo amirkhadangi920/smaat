@@ -4,6 +4,7 @@ namespace App\Http\Controllers\API\v1\Feature;
 
 use App\Models\Feature\Warranty;
 use App\Http\Resources\Feature\Warranty as WarrantyResource;
+use App\ModelFilters\Feature\WarrantyFilter;
 
 class WarrantyController extends FeatureBaseController
 {
@@ -27,6 +28,13 @@ class WarrantyController extends FeatureBaseController
      * @var [type]
      */
     protected $resource = WarrantyResource::class;
+
+    /**
+     * Filter class of this eloquent model
+     *
+     * @var ModelFilter
+     */
+    protected $filter = WarrantyFilter::class;
 
     /**
      * Name of the field that should upload an image from that

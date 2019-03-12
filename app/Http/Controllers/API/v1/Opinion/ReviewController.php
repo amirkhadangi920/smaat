@@ -4,6 +4,7 @@ namespace App\Http\Controllers\API\v1\Opinion;
 
 use App\Models\Opinion\Review;
 use App\Http\Resources\Opinion\Review as ReviewResource;
+use App\ModelFilters\Opinion\ReviewFilter;
 
 class ReviewController extends OpinionBaseController
 {
@@ -44,4 +45,12 @@ class ReviewController extends OpinionBaseController
      * @var [type]
      */
     protected $resource = ReviewResource::class;
+
+
+    /**
+     * Filter class of this eloquent model
+     *
+     * @var ModelFilter
+     */
+    protected $filter = ReviewFilter::class;
 }

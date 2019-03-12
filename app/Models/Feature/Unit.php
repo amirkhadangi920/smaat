@@ -5,9 +5,15 @@ namespace App\Models\Feature;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\Group\Category;
 use App\Models\Product\Product;
+use EloquentFilter\Filterable;
+use Illuminate\Database\Eloquent\SoftDeletes;
+use OwenIt\Auditing\Auditable;
+use OwenIt\Auditing\Contracts\Auditable as AuditableContract;
 
-class Unit extends Model
+class Unit extends Model implements AuditableContract
 {
+    use SoftDeletes, Auditable ,Filterable;
+
     /****************************************
      **             Attributes
      ***************************************/

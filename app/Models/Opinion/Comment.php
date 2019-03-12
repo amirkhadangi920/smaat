@@ -10,10 +10,11 @@ use Cviebrock\EloquentSluggable\Sluggable;
 use OwenIt\Auditing\Auditable;
 use OwenIt\Auditing\Contracts\Auditable as AuditableContract;
 use App\Models\Article;
+use EloquentFilter\Filterable;
 
 class Comment extends Model implements AuditableContract , LikeableContract
 {
-    use SoftDeletes, Auditable, Likeable;
+    use SoftDeletes, Auditable, Likeable, Filterable;
 
     /****************************************
      **             Attributes
@@ -25,7 +26,6 @@ class Comment extends Model implements AuditableContract , LikeableContract
      * @var array
      */
     protected $fillable = [
-        'message' ,
         'article_id',
         'message'
     ];

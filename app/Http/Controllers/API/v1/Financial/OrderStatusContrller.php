@@ -5,6 +5,7 @@ namespace App\Http\Controllers\API\v1\Financial;
 use App\Models\Financial\OrderStatus;
 use App\Http\Controllers\API\v1\MainController;
 use App\Http\Resources\Financial\OrderStatus as OrderStatusResource;
+use App\ModelFilters\Financial\OrderStatusFilter;
 
 class OrderStatusContrller extends MainController
 {
@@ -28,4 +29,11 @@ class OrderStatusContrller extends MainController
      * @var [type]
      */
     protected $resource = OrderStatusResource::class;
+
+    /**
+     * Filter class of this eloquent model
+     *
+     * @var ModelFilter
+     */
+    protected $filter = OrderStatusFilter::class;
 }

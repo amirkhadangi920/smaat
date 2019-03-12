@@ -36,7 +36,11 @@ trait MainControllerHelper
      */
     public function getAllData()
     {
-        $data = $this->model::latest();
+        if ( isset( $this->filter ) )
+            $data = $this->model::filter( request()->all(), $this->filter )->latest();
+        else
+            $data = $this->model::latest();
+
         
         if ( isset( $this->relations ) )
             $data->with( $this->relations );

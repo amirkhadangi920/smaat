@@ -8,10 +8,11 @@ use OwenIt\Auditing\Auditable;
 use OwenIt\Auditing\Contracts\Auditable as AuditableContract;
 use App\Models\Product\Variation;
 use App\Models\Group\Category;
+use EloquentFilter\Filterable;
 
 class Warranty extends Model implements AuditableContract
 {
-    use SoftDeletes, Auditable;
+    use SoftDeletes, Auditable, Filterable;
 
     /****************************************
      **             Attributes

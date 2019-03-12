@@ -5,6 +5,7 @@ namespace App\Http\Controllers\API\v1\Financial;
 use App\Models\Financial\ShippingMethod;
 use App\Http\Controllers\API\v1\MainController;
 use App\Http\Resources\Financial\ShippingMethod as ShippingMethodResource;
+use App\ModelFilters\Financial\ShippingMethodFilter;
 
 class ShippingMethodContrller extends MainController
 {
@@ -28,4 +29,11 @@ class ShippingMethodContrller extends MainController
      * @var [type]
      */
     protected $resource = ShippingMethodResource::class;
+
+    /**
+     * Filter class of this eloquent model
+     *
+     * @var ModelFilter
+     */
+    protected $filter = ShippingMethodFilter::class;
 }

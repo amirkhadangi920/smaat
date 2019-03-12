@@ -27,7 +27,7 @@ class WarrantyRequest extends FormRequest
             'title'         => 'required|string|max:50',
             'description'   => 'required|string|max:255',
             'logo'          => 'nullable|image|mimes:jpeg,jpg,png,gif|max:1024',
-            'expire'        => 'required|boolean|digits_between:1,5'
+            'expire'        => 'required|string'
         ];
     }
 }

@@ -1,9 +1,10 @@
 <?php
 
-use Faker\Generator as FakerEng;
+use Faker\Factory;
 
-$factory->define(App\Models\Product\Product::class, function (FakerEng $faker) {
-    $faker = \Faker\Factory::create('fa_IR');
+$faker = Factory::create('fa_IR');
+
+$factory->define(App\Models\Product\Product::class, function () use($faker) {
     return [
         'name'              => $faker->company,
         'second_name'       => $faker->company,

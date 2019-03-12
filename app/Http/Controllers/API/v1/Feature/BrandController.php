@@ -6,6 +6,7 @@ use App\Models\Feature\Brand;
 use App\Http\Resources\Feature\Brand as BrandResource;
 use App\Helpers\SluggableController;
 use App\Http\Requests\v1\Feature\BrandRequest;
+use App\ModelFilters\Feature\BrandFilter;
 
 class BrandController extends FeatureBaseController
 {
@@ -31,6 +32,13 @@ class BrandController extends FeatureBaseController
      * @var [type]
      */
     protected $resource = BrandResource::class;
+
+    /**
+     * Filter class of this eloquent model
+     *
+     * @var ModelFilter
+     */
+    protected $filter = BrandFilter::class;
 
     /**
      * Name of the field that should upload an image from that

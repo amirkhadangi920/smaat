@@ -23,6 +23,7 @@ class Category extends JsonResource
      */
     public function toArray($request)
     {
+        // return Parent::toArray($request);
         return [
             'link'          => "/api/v1/category/{$this->slug}",
             'title'         => $this->title,
@@ -34,6 +35,14 @@ class Category extends JsonResource
             'childs'        => $this->whenLoaded('childs', function () {
                 return $this->childs->map( function ($child) {
                     return $this->getChilds($child);
+                });
+            }),
+            'tags'          => $this->whenLoaded('tags', function () {
+                return $this->tags->map( function ($tag) {
+                    return [
+                        'link' => "/api/v1/tag/{$tag->slug}",
+                        'name' => $tag->name,
+                    ];
                 });
             })
         ];

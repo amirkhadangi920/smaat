@@ -9,6 +9,7 @@ use App\Models\Product\Variation;
 use Validator;
 use Zend\Diactoros\Request;
 use App\User;
+use App\ModelFilters\Financial\OrderFilter;
 
 class OrderController extends MainController
 {
@@ -65,6 +66,13 @@ class OrderController extends MainController
      * @var [type]
      */
     protected $resource = OrderResource::class;
+    
+    /**
+     * Filter class of this eloquent model
+     *
+     * @var ModelFilter
+     */
+    protected $filter = OrderFilter::class;
 
     /**
      * Find an get a data from Database,

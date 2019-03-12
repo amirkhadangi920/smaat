@@ -32,9 +32,9 @@ $factory->define(App\Models\Financial\Order::class, function (FakerEng $faker) {
         'payment_code'      => $auth_code ? str_random(30) : null,
         'datetimes'         => $datetimes,
         'shipping_method_id'=> nullable( factory(ShippingMethod::class)->create()->id ),
-        'status'            => [
-            'created', 'awaiting_payment', 'paied', 'sending', 'sended', 'canceled', 'packaging'
-        ][ rand(0, 6) ],
+        // 'status'            => [
+        //     'created', 'awaiting_payment', 'paied', 'sending', 'sended', 'canceled', 'packaging'
+        // ][ rand(0, 6) ],
     ];
 });
 

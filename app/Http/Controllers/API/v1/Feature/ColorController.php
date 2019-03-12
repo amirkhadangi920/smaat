@@ -4,6 +4,7 @@ namespace App\Http\Controllers\API\v1\Feature;
 
 use App\Models\Feature\Color;
 use App\Http\Resources\Feature\Color as ColorResource;
+use App\ModelFilters\Feature\ColorFilter;
 
 class ColorController extends FeatureBaseController
 {
@@ -27,4 +28,11 @@ class ColorController extends FeatureBaseController
      * @var [type]
      */
     protected $resource = ColorResource::class;
+
+    /**
+     * Filter class of this eloquent model
+     *
+     * @var ModelFilter
+     */
+    protected $filter = ColorFilter::class;
 }

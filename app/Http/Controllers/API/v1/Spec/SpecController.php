@@ -5,6 +5,7 @@ namespace App\Http\Controllers\API\v1\Spec;
 use App\Models\Spec\Spec;
 use App\Http\Resources\Spec\Spec as SpecResource;
 use App\Http\Controllers\API\v1\MainController;
+use App\ModelFilters\Spec\SpecFilter;
 
 class SpecController extends MainController
 {
@@ -42,4 +43,11 @@ class SpecController extends MainController
      * @var [type]
      */
     protected $resource = SpecResource::class;
+    
+    /**
+     * Filter class of this eloquent model
+     *
+     * @var ModelFilter
+     */
+    protected $filter = SpecFilter::class;
 }

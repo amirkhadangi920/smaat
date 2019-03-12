@@ -4,6 +4,7 @@ namespace App\Http\Controllers\API\v1\Opinion;
 
 use App\Models\Opinion\QuestionAndAnswer;
 use App\Http\Resources\Opinion\QuestionAndAnswer as QuestionAndAnswerResource;
+use App\ModelFilters\Opinion\QuestionAndAnswerFilter;
 
 class QuestionAndAnswerController extends OpinionBaseController
 {
@@ -46,6 +47,13 @@ class QuestionAndAnswerController extends OpinionBaseController
      * @var [type]
      */
     protected $resource = QuestionAndAnswerResource::class;
+    
+    /**
+     * Filter class of this eloquent model
+     *
+     * @var ModelFilter
+     */
+    protected $filter = QuestionAndAnswerFilter::class;
 
     /**
      * Get all data of the model,
@@ -55,7 +63,8 @@ class QuestionAndAnswerController extends OpinionBaseController
      */
     public function getAllData()
     {
-        return $this->model::select('id', 'question_id', 'user_id', 'message', 'created_at')
+        return $this->model::select('id', 'question_id', 'product_id', 'user_id', 'message', 'created_at')
+            ->filter( request()->all(), $this->filter )    
             ->whereNull('question_id')
             ->with($this->relations)
             ->latest()
