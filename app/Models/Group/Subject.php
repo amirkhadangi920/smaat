@@ -29,18 +29,9 @@ class Subject extends Model implements AuditableContract
         'parent_id',
         'title',
         'description',
-        'depth',
         'logo'
     ];
 
-    /**
-     * The attributes that should be cast to native types.
-     *
-     * @var array
-     */
-    protected $casts = [
-        'depth'             => 'integer'
-    ];
 
     /**
      * The attributes that should be mutated to dates.

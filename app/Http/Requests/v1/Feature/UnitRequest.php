@@ -13,7 +13,7 @@ class UnitRequest extends FormRequest
      */
     public function authorize()
     {
-        return false;
+        return true;
     }
 
     /**
@@ -24,8 +24,14 @@ class UnitRequest extends FormRequest
     public function rules()
     {
         return [
-            'title'         => 'required|max:50|string',
-            'description'   => 'required|max:255|string'
+            'title'             => 'required|string|max:50',
+            'description'       => 'nullable|string|max:255',
+
+            /**
+             * relateion 
+             */
+            'categories'        => 'nullable|array',
+            'categories.*'      => 'required|integer|exists:categories,id'
         ];
     }
 }

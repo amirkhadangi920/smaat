@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Requests\v1\Feature;
+namespace App\Http\Requests\v1\Opinion;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class SizeRequest extends FormRequest
+class ReviewRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -24,13 +24,16 @@ class SizeRequest extends FormRequest
     public function rules()
     {
         return [
-            'name'              => 'required|string|max:50',
+            'ranks'             => 'nullable|array',
+            'advantages'        => 'nullable|array',
+            'disadvantages'     => 'nullable|array',
+            'message'           => 'required|array|string',
 
             /**
              * relateion 
              */
-            'categories'        => 'nullable|array',
-            'categories.*'      => 'required|integer|exists:categories,id'
+            'users.*'           => 'required|array|exists:users,id',
+            'articles.*'        => 'required|array|exists:articles,id',
         ];
     }
 }

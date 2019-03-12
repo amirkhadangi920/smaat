@@ -20,7 +20,7 @@ $factory->define(App\Models\Financial\Order::class, function (FakerEng $faker) {
 
     return [
         'descriptions'      => nullable( $descriptions ),
-        'type'              => $faker->numberBetween(0, 100),
+        'type'              => $faker->numberBetween(0, 127),
         'destination'       => nullable( Faker::address() ),
         'postal_code'       => nullable( $faker->postcode ),
         'offer'             => $faker->numberBetween(0, 100000),
@@ -32,9 +32,8 @@ $factory->define(App\Models\Financial\Order::class, function (FakerEng $faker) {
         'payment_code'      => $auth_code ? str_random(30) : null,
         'datetimes'         => $datetimes,
         'shipping_method_id'=> nullable( factory(ShippingMethod::class)->create()->id ),
-        // 'status'            => [
-        //     'created', 'awaiting_payment', 'paied', 'sending', 'sended', 'canceled', 'packaging'
-        // ][ rand(0, 6) ],
+        'docs'              => nullable( $faker->words( rand(1, 10) ) ),
+        'checkout'          => $faker->boolean(),
     ];
 });
 

@@ -38,7 +38,6 @@ class Category extends Model implements AuditableContract
         'parent_id',
         'title',
         'description',
-        'depth',
         'logo',
         'scoring_feilds'
     ];
@@ -49,7 +48,6 @@ class Category extends Model implements AuditableContract
      * @var array
      */
     protected $casts = [
-        'depth'             => 'integer',
         'scoring_feilds'    => 'array',
         'logo'              => 'array'
     ];

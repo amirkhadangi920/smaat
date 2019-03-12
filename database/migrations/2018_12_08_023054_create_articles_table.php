@@ -24,7 +24,7 @@ class CreateArticlesTable extends Migration
             $table->table([
                 'sluggable_info',
                 'body',
-                'image' => 'nullable|array',
+                'image' => 'array',
                 'reading_time' => 'nullable|integer|comment:How much time need for reading the article in minute'
             ], [
                 'users',

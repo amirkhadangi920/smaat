@@ -44,5 +44,6 @@ $factory->define(App\Models\Feature\Warranty::class, function (Faker $faker) {
         'title'         => $warranties[$faker->numberBetween(0, 4)],
         'description'   => $faker->sentence(),
         'expire'        => $faker->numberBetween(1, 5) . ' ' . ['سال', 'ماه'][ $faker->boolean() ],
+        'logo'          => $faker->imageUrl(100 , 100)
     ];
 });

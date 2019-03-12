@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Requests\v1\Feature;
+namespace App\Http\Requests\v1\Spec;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class SizeRequest extends FormRequest
+class SpecificationHeaderRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -24,13 +24,13 @@ class SizeRequest extends FormRequest
     public function rules()
     {
         return [
-            'name'              => 'required|string|max:50',
-
+            'title'             => 'required|string|max:50',
+            'description'       => 'nullable|string|max:255',
+            
             /**
              * relateion 
              */
-            'categories'        => 'nullable|array',
-            'categories.*'      => 'required|integer|exists:categories,id'
+            'specs.*'           => 'required|integer|exists:specs,id',
         ];
     }
 }

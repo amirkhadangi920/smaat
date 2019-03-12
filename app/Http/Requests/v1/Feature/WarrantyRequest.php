@@ -13,7 +13,7 @@ class WarrantyRequest extends FormRequest
      */
     public function authorize()
     {
-        return false;
+        return true;
     }
 
     /**
@@ -24,10 +24,16 @@ class WarrantyRequest extends FormRequest
     public function rules()
     {
         return [
-            'title'         => 'required|string|max:50',
-            'description'   => 'required|string|max:255',
-            'logo'          => 'nullable|image|mimes:jpeg,jpg,png,gif|max:1024',
-            'expire'        => 'required|string'
+            'title'             => 'required|string|max:50',
+            'description'       => 'nullable|string|max:255',
+            'logo'              => 'nullable|image|mimes:jpeg,jpg,png,gif|max:1024',
+            'expire'            => 'required|boolean|digits_between:1,5',
+
+            /**
+             * relateion 
+             */
+            'categories'        => 'nullable|array',
+            'categories.*'      => 'required|integer|exists:categories,id'
         ];
     }
 }
