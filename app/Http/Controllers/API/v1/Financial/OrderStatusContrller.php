@@ -6,6 +6,7 @@ use App\Models\Financial\OrderStatus;
 use App\Http\Controllers\API\v1\MainController;
 use App\Http\Resources\Financial\OrderStatus as OrderStatusResource;
 use App\ModelFilters\Financial\OrderStatusFilter;
+use App\Http\Requests\v1\Order\OrderStatusRequest;
 
 class OrderStatusContrller extends MainController
 {
@@ -36,4 +37,28 @@ class OrderStatusContrller extends MainController
      * @var ModelFilter
      */
     protected $filter = OrderStatusFilter::class;
+
+    /**
+     * Get the request from url and pass it to storeData method
+     * to create a new order_status in storage
+     *
+     * @param  Request  $request
+     * @return Array
+     */
+    public function store(OrderStatusRequest $request)
+    {
+        return $this->storeWithRequest($request);
+    }
+
+    /**
+     * Get the request from url and pass it to updateData method
+     * to update the $order_status in storage
+     *
+     * @param  Request  $request
+     * @return Array
+     */
+    public function update(OrderStatusRequest $request, OrderStatus $order_status)
+    {
+        return $this->updateWithRequest($request, $order_status);
+    }
 }

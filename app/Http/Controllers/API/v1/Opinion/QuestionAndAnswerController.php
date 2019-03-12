@@ -5,6 +5,7 @@ namespace App\Http\Controllers\API\v1\Opinion;
 use App\Models\Opinion\QuestionAndAnswer;
 use App\Http\Resources\Opinion\QuestionAndAnswer as QuestionAndAnswerResource;
 use App\ModelFilters\Opinion\QuestionAndAnswerFilter;
+use App\Http\Requests\v1\Opinion\QuestionAndAnswerRequest;
 
 class QuestionAndAnswerController extends OpinionBaseController
 {
@@ -54,6 +55,30 @@ class QuestionAndAnswerController extends OpinionBaseController
      * @var ModelFilter
      */
     protected $filter = QuestionAndAnswerFilter::class;
+
+    /**
+     * Get the request from url and pass it to storeData method
+     * to create a new question_and_answer in storage
+     *
+     * @param  Request  $request
+     * @return Array
+     */
+    public function store(QuestionAndAnswerRequest $request)
+    {
+        return $this->storeWithRequest($request);
+    }
+
+    /**
+     * Get the request from url and pass it to updateData method
+     * to update the $question_and_answer in storage
+     *
+     * @param  Request  $request
+     * @return Array
+     */
+    public function update(QuestionAndAnswerRequest $request, QuestionAndAnswer $question_and_answer)
+    {
+        return $this->updateWithRequest($request, $question_and_answer);
+    }
 
     /**
      * Get all data of the model,

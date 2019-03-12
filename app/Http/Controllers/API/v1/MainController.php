@@ -35,18 +35,6 @@ abstract class MainController extends Controller
     }
 
     /**
-     * Get the request from url and pass it to storeData method
-     * to create a new brand in storage
-     *
-     * @param  Request  $request
-     * @return Array
-     */
-    public function store(Request $request)
-    {
-        return $this->storeWithRequest($request);
-    }
-
-    /**
      * Store a newly created group in (stor)age.
      *
      * @param  \Illuminate\Http\Request  $request
@@ -83,20 +71,6 @@ abstract class MainController extends Controller
                 'data' => __("types.{$this->type}.title")
             ])
         ]);;
-    }
-
-    /**
-     * Get the request from url and pass it to updateData method
-     * to update the $brand in storage
-     *
-     * @param  Request  $request
-     * @return Array
-     */
-    public function update(Request $request, $data)
-    {
-        $data = $this->getModel($data);
-
-        return $this->updateWithRequest($request, $data);
     }
 
     /**

@@ -5,6 +5,7 @@ namespace App\Http\Controllers\API\v1\Feature;
 use App\Models\Feature\Warranty;
 use App\Http\Resources\Feature\Warranty as WarrantyResource;
 use App\ModelFilters\Feature\WarrantyFilter;
+use App\Http\Requests\v1\Feature\WarrantyRequest;
 
 class WarrantyController extends FeatureBaseController
 {
@@ -42,4 +43,28 @@ class WarrantyController extends FeatureBaseController
      * @var string
      */
     protected $image_field = 'logo';
+
+    /**
+     * Get the request from url and pass it to storeData method
+     * to create a new warranty in storage
+     *
+     * @param  Request  $request
+     * @return Array
+     */
+    public function store(WarrantyRequest $request)
+    {
+        return $this->storeWithRequest($request);
+    }
+
+    /**
+     * Get the request from url and pass it to updateData method
+     * to update the $warranty in storage
+     *
+     * @param  Request  $request
+     * @return Array
+     */
+    public function update(WarrantyRequest $request, Warranty $warranty)
+    {
+        return $this->updateWithRequest($request, $warranty);
+    }
 }

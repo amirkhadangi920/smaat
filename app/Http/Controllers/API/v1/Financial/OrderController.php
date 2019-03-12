@@ -10,6 +10,7 @@ use Validator;
 use Zend\Diactoros\Request;
 use App\User;
 use App\ModelFilters\Financial\OrderFilter;
+use App\Http\Requests\v1\Order\OrderRequest;
 
 class OrderController extends MainController
 {
@@ -73,6 +74,30 @@ class OrderController extends MainController
      * @var ModelFilter
      */
     protected $filter = OrderFilter::class;
+
+    /**
+     * Get the request from url and pass it to storeData method
+     * to create a new order in storage
+     *
+     * @param  Request  $request
+     * @return Array
+     */
+    public function store(OrderRequest $request)
+    {
+        return $this->storeWithRequest($request);
+    }
+
+    /**
+     * Get the request from url and pass it to updateData method
+     * to update the $order in storage
+     *
+     * @param  Request  $request
+     * @return Array
+     */
+    public function update(OrderRequest $request, Order $order)
+    {
+        return $this->updateWithRequest($request, $order);
+    }
 
     /**
      * Find an get a data from Database,

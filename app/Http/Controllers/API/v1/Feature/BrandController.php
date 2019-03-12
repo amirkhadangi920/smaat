@@ -47,27 +47,27 @@ class BrandController extends FeatureBaseController
      */
     protected $image_field = 'logo';
 
-    // /**
-    //  * Get the request from url and pass it to storeData method
-    //  * to create a new brand in storage
-    //  *
-    //  * @param  Request  $request
-    //  * @return Array
-    //  */
-    // public function store(BrandRequest $request)
-    // {
-    //     return $this->storeWithRequest($request);
-    // }
+    /**
+     * Get the request from url and pass it to storeData method
+     * to create a new brand in storage
+     *
+     * @param  Request  $request
+     * @return Array
+     */
+    public function store(BrandRequest $request)
+    {
+        return $this->storeWithRequest($request);
+    }
 
-    // /**
-    //  * Get the request from url and pass it to updateData method
-    //  * to update the $brand in storage
-    //  *
-    //  * @param  Request  $request
-    //  * @return Array
-    //  */
-    // public function update(BrandRequest $request, Brand $brand)
-    // {
-    //     return $this->updateWithRequest($request, $brand);
-    // }
+    /**
+     * Get the request from url and pass it to updateData method
+     * to update the $brand in storage
+     *
+     * @param  Request  $request
+     * @return Array
+     */
+    public function update(BrandRequest $request, Brand $brand)
+    {
+        return $this->updateWithRequest($request, $brand);
+    }
 }

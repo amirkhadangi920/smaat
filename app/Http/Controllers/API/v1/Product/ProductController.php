@@ -8,6 +8,7 @@ use App\Http\Resources\Product\Product as ProductResource;
 use App\Helpers\{ SluggableController, HasUser };
 use App\Models\Spec\{ SpecRow, SpecData };
 use App\ModelFilters\Product\ProductFilter;
+use App\Http\Requests\v1\Product\ProductRequest;
 
 class ProductController extends MainController
 {
@@ -74,6 +75,30 @@ class ProductController extends MainController
             'variations.warranty:id,title,logo,expire',
             'tags:name,slug'
         ];
+    }
+
+    /**
+     * Get the request from url and pass it to storeData method
+     * to create a new product in storage
+     *
+     * @param  Request  $request
+     * @return Array
+     */
+    public function store(ProductRequest $request)
+    {
+        return $this->storeWithRequest($request);
+    }
+
+    /**
+     * Get the request from url and pass it to updateData method
+     * to update the $product in storage
+     *
+     * @param  Request  $request
+     * @return Array
+     */
+    public function update(ProductRequest $request, Product $product)
+    {
+        return $this->updateWithRequest($request, $product);
     }
 
     /**

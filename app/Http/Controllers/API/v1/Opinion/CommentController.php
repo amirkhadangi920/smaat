@@ -5,6 +5,7 @@ namespace App\Http\Controllers\API\v1\Opinion;
 use App\Models\Opinion\Comment;
 use App\Http\Resources\Opinion\Comment as CommentResource;
 use App\ModelFilters\Opinion\CommentFilter;
+use App\Http\Requests\v1\Opinion\CommentRequest;
 
 class CommentController extends OpinionBaseController
 {
@@ -54,6 +55,30 @@ class CommentController extends OpinionBaseController
      * @var ModelFilter
      */
     protected $filter = CommentFilter::class;
+
+    /**
+     * Get the request from url and pass it to storeData method
+     * to create a new comment in storage
+     *
+     * @param  Request  $request
+     * @return Array
+     */
+    public function store(CommentRequest $request)
+    {
+        return $this->storeWithRequest($request);
+    }
+
+    /**
+     * Get the request from url and pass it to updateData method
+     * to update the $comment in storage
+     *
+     * @param  Request  $request
+     * @return Array
+     */
+    public function update(CommentRequest $request, Comment $comment)
+    {
+        return $this->updateWithRequest($request, $comment);
+    }
 
     /**
      * Get all data of the model,

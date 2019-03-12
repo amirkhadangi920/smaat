@@ -8,6 +8,7 @@ use App\Helpers\SluggableController;
 use App\Helpers\HasUser;
 use App\Http\Resources\Blog\Article as ArticleResource;
 use App\ModelFilters\Blog\ArticleFilter;
+use App\Http\Requests\v1\Article\ArticleRequest;
 
 class ArticleController extends MainController
 {
@@ -82,6 +83,30 @@ class ArticleController extends MainController
             ->with( $this->relations )
             ->latest()
             ->paginate( $this->getPerPage() );
+    }
+
+    /**
+     * Get the request from url and pass it to storeData method
+     * to create a new article in storage
+     *
+     * @param  Request  $request
+     * @return Array
+     */
+    public function store(ArticleRequest $request)
+    {
+        return $this->storeWithRequest($request);
+    }
+
+    /**
+     * Get the request from url and pass it to updateData method
+     * to update the $brand in storage
+     *
+     * @param  Request  $request
+     * @return Array
+     */
+    public function update(ArticleRequest $request, Article $article)
+    {
+        return $this->updateWithRequest($request, $article);
     }
     
     /**
