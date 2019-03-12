@@ -5,8 +5,6 @@ namespace App\Http\Controllers\API\v1;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Helpers\MainControllerHelper;
-use App\Http\Requests\v1\Feature\BrandRequest;
-use App\Http\Requests\v1\MainRequest;
 
 abstract class MainController extends Controller
 {
@@ -34,18 +32,6 @@ abstract class MainController extends Controller
                 'data' => __("types.{$this->type}.plural")
             ])
         ]);
-    }
-
-    /**
-     * Get the request from url and pass it to storeData method
-     * to create a new brand in storage
-     *
-     * @param  Request  $request
-     * @return Array
-     */
-    public function store(Request $request)
-    {
-        return $this->storeWithRequest($request);
     }
 
     /**
@@ -85,20 +71,6 @@ abstract class MainController extends Controller
                 'data' => __("types.{$this->type}.title")
             ])
         ]);;
-    }
-
-    /**
-     * Get the request from url and pass it to updateData method
-     * to update the $brand in storage
-     *
-     * @param  Request  $request
-     * @return Array
-     */
-    public function update(Request $request, $data)
-    {
-        $data = $this->getModel($data);
-
-        return $this->updateWithRequest($request, $data);
     }
 
     /**

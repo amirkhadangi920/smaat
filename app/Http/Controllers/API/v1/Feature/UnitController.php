@@ -4,6 +4,8 @@ namespace App\Http\Controllers\API\v1\Feature;
 
 use App\Models\Feature\Unit;
 use App\Http\Resources\Feature\Unit as UnitResource;
+use App\ModelFilters\Feature\UnitFilter;
+use App\Http\Requests\v1\Feature\UnitRequest;
 
 class UnitController extends FeatureBaseController
 {
@@ -27,4 +29,35 @@ class UnitController extends FeatureBaseController
      * @var [type]
      */
     protected $resource = UnitResource::class;
+
+    /**
+     * Filter class of this eloquent model
+     *
+     * @var ModelFilter
+     */
+    protected $filter = UnitFilter::class;
+
+    /**
+     * Get the request from url and pass it to storeData method
+     * to create a new unit in storage
+     *
+     * @param  Request  $request
+     * @return Array
+     */
+    public function store(UnitRequest $request)
+    {
+        return $this->storeWithRequest($request);
+    }
+
+    /**
+     * Get the request from url and pass it to updateData method
+     * to update the $unit in storage
+     *
+     * @param  Request  $request
+     * @return Array
+     */
+    public function update(UnitRequest $request, Unit $unit)
+    {
+        return $this->updateWithRequest($request, $unit);
+    }
 }

@@ -14,10 +14,11 @@ use App\Models\Opinion\{ Review, QuestionAndAnswer };
 use Spatie\Tags\HasTags;
 use App\Models\Feature\Brand;
 use App\Models\Feature\Unit;
+use EloquentFilter\Filterable;
 
 class Product extends Model implements AuditableContract
 {
-    use SoftDeletes, Auditable, Sluggable, GenerateRandomID, HasTags;
+    use SoftDeletes, Auditable, Sluggable, GenerateRandomID, HasTags, Filterable;
 
     /****************************************
      **             Attributes
@@ -47,7 +48,6 @@ class Product extends Model implements AuditableContract
         'aparat_video',
         'status',
         'review',
-        'keywords',
         'advantages',
         'disadvantages',
         'label',
@@ -139,7 +139,7 @@ class Product extends Model implements AuditableContract
     /**
      * Get all the category that owned product.
      */
-    public function category ()
+    public function category()
     {
         return $this->belongsTo(Category::class);
     }
@@ -147,19 +147,11 @@ class Product extends Model implements AuditableContract
     /**
      * Get all the unit that owned product.
      */
-    public function unit ()
+    public function unit()
     {
         return $this->belongsTo(Unit::class);
     }
     
-    /**
-     * Get all the parentCategory that owned product.
-     */
-    public function parentCategory ()
-    {
-        return $this->belongsTo(Category::class, 'parent_category');
-    }
-
     /**
      * Get the variation that owned product.
      */

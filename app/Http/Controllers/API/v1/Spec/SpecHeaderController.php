@@ -6,6 +6,7 @@ use App\Models\Spec\SpecHeader;
 use Illuminate\Http\Request;
 use App\Http\Resources\Spec\SpecHeader as SpecHeaderResource;
 use App\Http\Controllers\API\v1\MainController;
+use App\Http\Requests\v1\Spec\SpecificationHeaderRequest;
 
 class SpecHeaderController extends MainController
 {
@@ -48,6 +49,30 @@ class SpecHeaderController extends MainController
      * @var [type]
      */
     protected $resource = SpecHeaderResource::class;
+
+    /**
+     * Get the request from url and pass it to storeData method
+     * to create a new spec_header in storage
+     *
+     * @param  Request  $request
+     * @return Array
+     */
+    public function store(SpecificationHeaderRequest $request)
+    {
+        return $this->storeWithRequest($request);
+    }
+
+    /**
+     * Get the request from url and pass it to updateData method
+     * to update the $spec_header in storage
+     *
+     * @param  Request  $request
+     * @return Array
+     */
+    public function update(SpecificationHeaderRequest $request, SpecHeader $spec_header)
+    {
+        return $this->updateWithRequest($request, $spec_header);
+    }
 
     /**
      * Make a copy of all the spec header rows

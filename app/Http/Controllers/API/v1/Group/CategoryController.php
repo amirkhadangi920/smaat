@@ -4,6 +4,7 @@ namespace App\Http\Controllers\API\v1\Group;
 
 use App\Models\Group\Category;
 use App\Http\Resources\Group\Category as CategoryResource;
+use App\Http\Requests\v1\Group\CategoryRequest;
 
 class CategoryController extends GroupBaseController
 {
@@ -27,4 +28,28 @@ class CategoryController extends GroupBaseController
      * @var [type]
      */
     protected $resource = CategoryResource::class;
+
+    /**
+     * Get the request from url and pass it to storeData method
+     * to create a new category in storage
+     *
+     * @param  Request  $request
+     * @return Array
+     */
+    public function store(CategoryRequest $request)
+    {
+        return $this->storeWithRequest($request);
+    }
+
+    /**
+     * Get the request from url and pass it to updateData method
+     * to update the $category in storage
+     *
+     * @param  Request  $request
+     * @return Array
+     */
+    public function update(CategoryRequest $request, Category $category)
+    {
+        return $this->updateWithRequest($request, $category);
+    }
 }

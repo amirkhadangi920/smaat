@@ -21,6 +21,7 @@
         "santigarcor/laratrust": "5.2.*",
         "spatie/laravel-medialibrary": "^7.0.0",
         "spatie/laravel-tags": "^2.2",
+        "tucker-eric/eloquentfilter": "^1.4",
         "ybazli/faker": "^1.0"
     },
     "require-dev": {

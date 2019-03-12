@@ -4,6 +4,8 @@ namespace App\Http\Controllers\API\v1\Opinion;
 
 use App\Models\Opinion\Review;
 use App\Http\Resources\Opinion\Review as ReviewResource;
+use App\ModelFilters\Opinion\ReviewFilter;
+use App\Http\Requests\v1\Opinion\ReviewRequest;
 
 class ReviewController extends OpinionBaseController
 {
@@ -44,4 +46,36 @@ class ReviewController extends OpinionBaseController
      * @var [type]
      */
     protected $resource = ReviewResource::class;
+
+
+    /**
+     * Filter class of this eloquent model
+     *
+     * @var ModelFilter
+     */
+    protected $filter = ReviewFilter::class;
+
+    /**
+     * Get the request from url and pass it to storeData method
+     * to create a new review in storage
+     *
+     * @param  Request  $request
+     * @return Array
+     */
+    public function store(ReviewRequest $request)
+    {
+        return $this->storeWithRequest($request);
+    }
+
+    /**
+     * Get the request from url and pass it to updateData method
+     * to update the $review in storage
+     *
+     * @param  Request  $request
+     * @return Array
+     */
+    public function update(ReviewRequest $request, Review $review)
+    {
+        return $this->updateWithRequest($request, $review);
+    }
 }

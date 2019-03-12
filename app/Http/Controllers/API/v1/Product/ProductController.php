@@ -5,10 +5,10 @@ namespace App\Http\Controllers\API\v1\Product;
 use App\Models\Product\Product;
 use App\Http\Controllers\API\v1\MainController;
 use App\Http\Resources\Product\Product as ProductResource;
-use App\Helpers\SluggableController;
-use App\Helpers\HasUser;
-use App\Models\Spec\SpecRow;
-use App\Models\Spec\SpecData;
+use App\Helpers\{ SluggableController, HasUser };
+use App\Models\Spec\{ SpecRow, SpecData };
+use App\ModelFilters\Product\ProductFilter;
+use App\Http\Requests\v1\Product\ProductRequest;
 
 class ProductController extends MainController
 {
@@ -46,6 +46,13 @@ class ProductController extends MainController
      * @var [type]
      */
     protected $resource = ProductResource::class;
+    
+    /**
+     * Filter class of this eloquent model
+     *
+     * @var ModelFilter
+     */
+    protected $filter = ProductFilter::class;
 
     /**
      * Name of the relation method of the User model to this model
@@ -66,7 +73,32 @@ class ProductController extends MainController
             'variations.color:id,name,code',
             'variations.size:id,name',
             'variations.warranty:id,title,logo,expire',
+            'tags:name,slug'
         ];
+    }
+
+    /**
+     * Get the request from url and pass it to storeData method
+     * to create a new product in storage
+     *
+     * @param  Request  $request
+     * @return Array
+     */
+    public function store(ProductRequest $request)
+    {
+        return $this->storeWithRequest($request);
+    }
+
+    /**
+     * Get the request from url and pass it to updateData method
+     * to update the $product in storage
+     *
+     * @param  Request  $request
+     * @return Array
+     */
+    public function update(ProductRequest $request, Product $product)
+    {
+        return $this->updateWithRequest($request, $product);
     }
 
     /**
@@ -80,7 +112,9 @@ class ProductController extends MainController
         return $this->model::select(
             'id', 'user_id', 'category_id', 'brand_id', 'slug',
             'name', 'description', 'photos', 'label', 'views_count'
-        )->with( $this->relations )
+        )
+            ->filter( request()->all(), $this->filter )
+            ->with( $this->relations )
             ->whereStatus(true)
             ->latest()
             ->paginate( $this->getPerPage(20) );
@@ -150,6 +184,7 @@ class ProductController extends MainController
     {
         $product->variations()->createMany( $request->variations );
         $product->accessories()->attach( $request->accessories );
+        $product->attachTags($request->keywords);
         
         if ( $spec_id = $product->category->spec->id ?? null )
             $product->update([ 'spec_id' => $spec_id ]);
@@ -169,6 +204,7 @@ class ProductController extends MainController
         $product->variations()->delete();
         $product->variations()->createMany( $request->variations );
         $product->accessories()->sync( $request->accessories );
+        $product->syncTags($request->keywords);
 
         if ( !$product->spec_id && $spec_id = $product->category->spec->id ?? null )
             $product->update([ 'spec_id' => $spec_id ]);

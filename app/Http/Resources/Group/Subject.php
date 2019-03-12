@@ -35,6 +35,14 @@ class Subject extends JsonResource
                 return $this->childs->map( function ($child) {
                     return $this->getChilds($child);
                 });
+            }),
+            'tags'          => $this->whenLoaded('tags', function () {
+                return $this->tags->map( function ($tag) {
+                    return [
+                        'link' => "/api/v1/tag/{$tag->slug}",
+                        'name' => $tag->name,
+                    ];
+                });
             })
         ];
     }

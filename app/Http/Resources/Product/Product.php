@@ -34,6 +34,14 @@ class Product extends JsonResource
             ]),
             'label'             => $this->label,
             'views_count'       => $this->views_count,
+            'tags'          => $this->whenLoaded('tags', function () {
+                return $this->tags->map( function ($tag) {
+                    return [
+                        'link' => "/api/v1/tag/{$tag->slug}",
+                        'name' => $tag->name,
+                    ];
+                });
+            }),
             'brand'             => $this->whenLoaded('brand', function () {
                 return [
                     'link'  => "/api/v1/brand/{$this->brand->slug}",

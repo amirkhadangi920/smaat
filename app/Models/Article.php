@@ -12,10 +12,11 @@ use App\Traits\GenerateRandomID;
 use App\Models\Opinion\Comment;
 use Spatie\Tags\HasTags;
 use App\Models\Group\Subject;
+use EloquentFilter\Filterable;
 
 class Article extends Model implements AuditableContract , LikeableContract
 {
-    use Sluggable, Auditable, GenerateRandomID, HasTags, Likeable;
+    use Sluggable, Auditable, GenerateRandomID, HasTags, Likeable, Filterable;
 
     /****************************************
      **             Attributes

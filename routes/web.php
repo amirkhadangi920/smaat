@@ -15,7 +15,7 @@ use App\Models\Article;
 |
 */
 
-Route::get('/', function () {
+Route::get('/api', function () {
 
     return 'Welcome to SmaaT web service';
 });

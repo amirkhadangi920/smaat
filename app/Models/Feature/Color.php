@@ -8,10 +8,11 @@ use OwenIt\Auditing\Auditable;
 use OwenIt\Auditing\Contracts\Auditable as AuditableContract;
 use App\Models\Group\Category;
 use App\Models\Product\Variation;
+use EloquentFilter\Filterable;
 
 class Color extends Model implements AuditableContract
 {
-    use SoftDeletes, Auditable;
+    use SoftDeletes, Auditable, Filterable;
 
     /****************************************
      **             Attributes

@@ -5,6 +5,8 @@ namespace App\Http\Controllers\API\v1\Spec;
 use App\Models\Spec\Spec;
 use App\Http\Resources\Spec\Spec as SpecResource;
 use App\Http\Controllers\API\v1\MainController;
+use App\ModelFilters\Spec\SpecFilter;
+use App\Http\Requests\v1\Spec\SpecificationRequest;
 
 class SpecController extends MainController
 {
@@ -42,4 +44,35 @@ class SpecController extends MainController
      * @var [type]
      */
     protected $resource = SpecResource::class;
+    
+    /**
+     * Filter class of this eloquent model
+     *
+     * @var ModelFilter
+     */
+    protected $filter = SpecFilter::class;
+
+    /**
+     * Get the request from url and pass it to storeData method
+     * to create a new spec in storage
+     *
+     * @param  Request  $request
+     * @return Array
+     */
+    public function store(SpecificationRequest $request)
+    {
+        return $this->storeWithRequest($request);
+    }
+
+    /**
+     * Get the request from url and pass it to updateData method
+     * to update the $spec in storage
+     *
+     * @param  Request  $request
+     * @return Array
+     */
+    public function update(SpecificationRequest $request, Spec $spec)
+    {
+        return $this->updateWithRequest($request, $spec);
+    }
 }

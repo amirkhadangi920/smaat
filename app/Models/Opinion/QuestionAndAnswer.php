@@ -8,10 +8,11 @@ use Cviebrock\EloquentSluggable\Sluggable;
 use OwenIt\Auditing\Auditable;
 use OwenIt\Auditing\Contracts\Auditable as AuditableContract;
 use App\Models\Product\Product;
+use EloquentFilter\Filterable;
 
 class QuestionAndAnswer extends Model implements AuditableContract
 {
-    use SoftDeletes, Auditable;
+    use SoftDeletes, Auditable, Filterable;
 
     /****************************************
      **             Attributes

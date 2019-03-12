@@ -23,7 +23,7 @@ class Brand extends JsonResource
                 
                 return [
                     'id'    => $category->id,
-                    'link'  => "/api/v1/category/{$category->slug}",
+                    'brand_link'  => "/api/v1/category/{$category->slug}",
                     'title' => $category->title,
                 ];
             })

@@ -11,12 +11,12 @@ use OwenIt\Auditing\Auditable;
 use OwenIt\Auditing\Contracts\Auditable as AuditableContract;
 use App\Models\Discount\Discount;
 use App\Models\Promocode\Promocode;
-
 use App\Models\Places\City;
+use EloquentFilter\Filterable;
 
 class Order extends Model implements AuditableContract
 {
-    use SoftDeletes, GenerateRandomID, Auditable;
+    use SoftDeletes, GenerateRandomID, Auditable, Filterable;
 
     /****************************************
      **             Attributes

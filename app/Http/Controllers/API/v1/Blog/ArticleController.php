@@ -7,6 +7,8 @@ use App\Http\Controllers\API\v1\MainController;
 use App\Helpers\SluggableController;
 use App\Helpers\HasUser;
 use App\Http\Resources\Blog\Article as ArticleResource;
+use App\ModelFilters\Blog\ArticleFilter;
+use App\Http\Requests\v1\Article\ArticleRequest;
 
 class ArticleController extends MainController
 {
@@ -36,12 +38,23 @@ class ArticleController extends MainController
         'user:id:first_name,last_name'
     ];
 
+    protected $more_relations = [
+        'tags:name,slug'
+    ];
+
     /**
      * Resource of this controller respnoses
      *
      * @var [type]
      */
     protected $resource = ArticleResource::class;
+
+    /**
+     * Filter class of this eloquent model
+     *
+     * @var ModelFilter
+     */
+    protected $filter = ArticleFilter::class;
 
     /**
      * Name of the field that should upload an image from that
@@ -66,7 +79,34 @@ class ArticleController extends MainController
     public function getAllData()
     {
         return $this->model::select('id', 'user_id', 'slug', 'title', 'description', 'image', 'reading_time')
-            ->with( $this->relations )->latest()->paginate( $this->getPerPage() );
+            ->filter( request()->all(), $this->filter )    
+            ->with( $this->relations )
+            ->latest()
+            ->paginate( $this->getPerPage() );
+    }
+
+    /**
+     * Get the request from url and pass it to storeData method
+     * to create a new article in storage
+     *
+     * @param  Request  $request
+     * @return Array
+     */
+    public function store(ArticleRequest $request)
+    {
+        return $this->storeWithRequest($request);
+    }
+
+    /**
+     * Get the request from url and pass it to updateData method
+     * to update the $brand in storage
+     *
+     * @param  Request  $request
+     * @return Array
+     */
+    public function update(ArticleRequest $request, Article $article)
+    {
+        return $this->updateWithRequest($request, $article);
     }
     
     /**
@@ -79,6 +119,7 @@ class ArticleController extends MainController
     public function afterCreate($request, $article)
     {
         $article->subjects()->attach( $request->subjects );
+        $article->attachTags($request->keywords);
     }
 
     /**
@@ -91,5 +132,6 @@ class ArticleController extends MainController
     public function afterUpdate($request, $article)
     {
         $article->subjects()->sync( $request->subjects );
+        $article->syncTags($request->keywords);
     }
 }
