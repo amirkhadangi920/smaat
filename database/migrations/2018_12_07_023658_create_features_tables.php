@@ -37,6 +37,7 @@ class CreateFeaturesTables extends Migration
         $schema->create('sizes', function ($table) {
             $table->table([
                 'name' => 50,
+                'description'   => 'nullable|string'
             ], [ ]);
         });
 
