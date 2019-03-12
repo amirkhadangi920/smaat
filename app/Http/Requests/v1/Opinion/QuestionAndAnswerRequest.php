@@ -31,7 +31,7 @@ class QuestionAndAnswerRequest extends FormRequest
              */
             'question_id'     => 'nullable|integer|exists:comments,id',
             'users.*'         => 'required|array|exists:users,id',
-            'articles.*'      => 'required|array|exists:articles,id',
+            'products.*'      => 'required|array|exists:products,id',
         ];
     }
 }
