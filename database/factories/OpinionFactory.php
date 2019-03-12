@@ -1,8 +1,10 @@
 <?php
 
-use Faker\Generator as FakerEng;
+use Faker\Factory;
 
-$factory->define(App\Models\Opinion\Review::class, function (FakerEng $faker) {
+$faker = Factory::create('fa_IR');
+
+$factory->define(App\Models\Opinion\Review::class, function () use($faker) {
     return [
         'ranks'         => [ null, function () use ( $faker ) {
             $ranks = [];
@@ -13,13 +15,13 @@ $factory->define(App\Models\Opinion\Review::class, function (FakerEng $faker) {
         'advantages'    => [ null, function () use ( $faker ) {
             $advantages = [];
             for ($i = 0; $i < rand(1, 5); ++$i)
-                $advantages[] = $faker->sentence();
+                $advantages[] = Faker::sentence();
             return $advantages;
         }][ $faker->boolean() ],
         'disadvantages' => [ null, function () use ( $faker ) {
             $disadvantages = [];
             for ($i = 0; $i < rand(1, 5); ++$i)
-                $disadvantages[] = $faker->sentence();
+                $disadvantages[] = Faker::sentence();
             return $disadvantages;
         }][ $faker->boolean() ],
         'message'       => Faker::sentence(),
@@ -28,7 +30,7 @@ $factory->define(App\Models\Opinion\Review::class, function (FakerEng $faker) {
     ];
 });
 
-$factory->define(App\Models\Opinion\Comment::class, function (FakerEng $faker) {
+$factory->define(App\Models\Opinion\Comment::class, function () use($faker) {
     return [
         'message'       => Faker::sentence(),
         'is_accept'      => $faker->boolean()
@@ -36,10 +38,10 @@ $factory->define(App\Models\Opinion\Comment::class, function (FakerEng $faker) {
     ];
 });
 
-$factory->define(App\Models\Opinion\QuestionAndAnswer::class, function (FakerEng $faker) {
+$factory->define(App\Models\Opinion\QuestionAndAnswer::class, function () use($faker) {
     return [
         'message'       => Faker::sentence(),
-        'is_accept'      => $faker->boolean()
+        'is_accept'     => $faker->boolean()
         // 'created_at'    => $faker->unixTime()
     ];
 });

@@ -1,6 +1,10 @@
 <?php
 
-use Faker\Factory as FakerEng;
+
+use Faker\Factory;
+
+$faker = Factory::create('fa_IR');
+
 use Ybazli\Faker\Facades\Faker;
 
 /*
@@ -14,8 +18,7 @@ use Ybazli\Faker\Facades\Faker;
 |
 */
 
-$factory->define(App\User::class, function ($faker) {
-    $faker = FakerEng::create('fa_IR');
+$factory->define(App\User::class, function () use($faker) {
     
     return [
         'first_name'        => nullable( $faker->firstName() ),
@@ -33,7 +36,7 @@ $factory->define(App\User::class, function ($faker) {
         'purchase_counts'   => rand(0, 20),
         'total_payments'    => rand(0, 50000000),
         'phones'            => nullable(
-            function () use ( $faker ) {
+            function () use ($faker) {
                 $phones = [];
                 $titles = [ 'home', 'mobile', 'work', 'special' ];
                 for ($i = 0; $i < rand(0, 5); ++$i)
