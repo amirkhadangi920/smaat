@@ -7,6 +7,18 @@ $faker = Factory::create('fa_IR');
 
 use Ybazli\Faker\Facades\Faker;
 
+
+$avatars = [
+    [
+        'img' => '/tests/avatars/man_1.png'  
+    ], [
+        'img' => '/tests/avatars/man_2.jpg'
+    ], [
+        'img' => '/tests/avatars/women_1.png'
+    ], [
+        'img' => '/tests/avatars/women_2.jpg'
+    ]
+];
 /*
 |--------------------------------------------------------------------------
 | Model Factories
@@ -18,15 +30,17 @@ use Ybazli\Faker\Facades\Faker;
 |
 */
 
-$factory->define(App\User::class, function () use($faker) {
+$factory->define(App\User::class, function () use($faker , $avatars) {
     
+    $select = rand( 0, count($avatars)-1 );
+
     return [
         'first_name'        => nullable( $faker->firstName() ),
         'last_name'         => nullable( $faker->lastName() ),
         'email'             => $faker->unique()->safeEmail,
         'email_verified_at' => now(),
         'password'          => '$2y$10$TKh8H1.PfQx37YgCzwiKb.KjNyWgaHb9cbcoQgdIVFlYg7B77UdFm', // secret
-        'avatar'            => nullable( $faker->imageUrl(50, 50) ),
+        'avatar'            => nullable( $avatars[$select]['img'] ),
         'address'           => nullable( $faker->address ),
         'postal_code'       => nullable( $faker->postcode ),
         'national_code'     => nullable( '0'.$faker->numberBetween(910000000, 959999999) ),
