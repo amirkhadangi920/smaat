@@ -38,7 +38,7 @@ class DatabaseSeeder extends Seeder
         $promocodes = $this->call(PromocodeTablesSeeder::class, compact('users', 'categories'));
 
         $products = $this->call(ProductTablesSeeder::class, compact(
-            'users', 'categories', 'specifications', 'features', 'units', 'promocodes', 'sizes'
+            'users', 'categories', 'specifications', 'features', 'promocodes'
         )); 
 
         $this->call(AbstractTablesSeeder::class, compact('users', 'products'));
