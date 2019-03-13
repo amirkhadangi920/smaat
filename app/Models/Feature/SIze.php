@@ -7,11 +7,8 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use OwenIt\Auditing\Auditable;
 use OwenIt\Auditing\Contracts\Auditable as AuditableContract;
 use App\Models\Group\Category;
-<<<<<<< HEAD
 use App\Models\Product\Variation;
-=======
 use EloquentFilter\Filterable;
->>>>>>> 467fa5fb7a8140a01eb4b944ea003e25e05f527c
 
 class Size extends Model implements AuditableContract
 {
