@@ -4,7 +4,6 @@ use Faker\Factory;
 
 $faker = Factory::create('fa_IR');
 
-
 $factory->define(App\Models\Feature\Brand::class, function () use($faker, $brands)  {
     
     $selected = rand(0, count($brands) - 1);
