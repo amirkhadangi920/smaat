@@ -25,7 +25,7 @@ class CreateArticlesTable extends Migration
                 'sluggable_info',
                 'body',
                 'image' => 'array',
-                'reading_time' => 'nullable|integer|comment:How much time need for reading the article in minute'
+                'reading_time' => 'nullable|medium_integer|comment:How much time need for reading the article in minute'
             ], [
                 'users',
             ], 'uuid');
