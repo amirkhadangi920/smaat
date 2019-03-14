@@ -9,10 +9,11 @@ use App\Helpers\HasUser;
 use App\Http\Resources\Blog\Article as ArticleResource;
 use App\ModelFilters\Blog\ArticleFilter;
 use App\Http\Requests\v1\Article\ArticleRequest;
+use App\Helpers\LikeableController;
 
 class ArticleController extends MainController
 {
-    use SluggableController, HasUser;
+    use SluggableController, HasUser, LikeableController;
 
     /**
      * Type of this controller for use in messages

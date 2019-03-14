@@ -19,6 +19,10 @@ class Comment extends JsonResource
             'link'              => "/api/v1/comment/{$this->id}",
             'message'           => $this->message,
             'registered_at'     => $this->created_at,
+            'votes'             => [
+                'likes' => $this->likesCount,
+                'dislikes' => $this->dislikesCount,
+            ],
             'article'           => $this->whenLoaded('article', function () {
                 return [
                     'id' => $this->article->id,

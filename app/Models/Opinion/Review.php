@@ -2,6 +2,8 @@
 
 namespace App\Models\Opinion;
 
+use Cog\Likeable\Contracts\Likeable as LikeableContract;
+use Cog\Likeable\Traits\Likeable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use OwenIt\Auditing\Auditable;
@@ -9,9 +11,9 @@ use OwenIt\Auditing\Contracts\Auditable as AuditableContract;
 use App\Models\Product\Product;
 use EloquentFilter\Filterable;
 
-class Review extends Model implements AuditableContract
+class Review extends Model implements AuditableContract, LikeableContract
 {
-    use SoftDeletes, Auditable, Filterable;
+    use SoftDeletes, Auditable, Likeable, Filterable;
 
     /****************************************
      **             Attributes

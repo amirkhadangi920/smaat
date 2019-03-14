@@ -39,7 +39,7 @@ class BlogTablesSeeder extends Seeder
 
                 for( $i = 0 ; $i < rand(1, 15) ; $i++ )
                 {
-                    $comment->likeBy( $users->random()->id );
+                    $comment->like( $users->random()->id );
                 }
 
                 $article->comments()->saveMany(

@@ -2,6 +2,8 @@
 
 namespace App\Models\Product;
 
+use Cog\Likeable\Contracts\Likeable as LikeableContract;
+use Cog\Likeable\Traits\Likeable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use OwenIt\Auditing\Auditable;
@@ -16,9 +18,9 @@ use App\Models\Feature\Brand;
 use App\Models\Feature\Unit;
 use EloquentFilter\Filterable;
 
-class Product extends Model implements AuditableContract
+class Product extends Model implements AuditableContract, LikeableContract
 {
-    use SoftDeletes, Auditable, Sluggable, GenerateRandomID, HasTags, Filterable;
+    use SoftDeletes, Auditable, Sluggable, GenerateRandomID, HasTags, Filterable, Likeable;
 
     /****************************************
      **             Attributes

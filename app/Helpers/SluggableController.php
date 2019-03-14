@@ -19,7 +19,7 @@ Trait SluggableController
      * @return Model
      */
     public function getSingleData($data)
-    {   
+    {
         if ( isset( $this->relations ) )
         {
             if ( isset( $this->more_relations ) )

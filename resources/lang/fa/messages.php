@@ -36,6 +36,15 @@ return [
             'تایید'
         ]
     ],
+    'like' => [
+        'successful' => ':type ":data" با موفقیت پسندیده شد',
+        'before' => 'شما یکبار این :type رو پسندیده اید'
+    ],
+    'dislike' => [
+        'successful' => ':type ":data" با موفقیت نپسندیده شد',
+        'before' => 'شما یکبار این :type رو نپسندیده اید'
+    ],
+
     'order' => [
         'item' => [
             'add' => [

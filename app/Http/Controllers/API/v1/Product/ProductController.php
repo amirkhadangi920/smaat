@@ -5,14 +5,14 @@ namespace App\Http\Controllers\API\v1\Product;
 use App\Models\Product\Product;
 use App\Http\Controllers\API\v1\MainController;
 use App\Http\Resources\Product\Product as ProductResource;
-use App\Helpers\{ SluggableController, HasUser };
+use App\Helpers\{ SluggableController, HasUser, LikeableController };
 use App\Models\Spec\{ SpecRow, SpecData };
 use App\ModelFilters\Product\ProductFilter;
 use App\Http\Requests\v1\Product\ProductRequest;
 
 class ProductController extends MainController
 {
-    use SluggableController, HasUser;
+    use SluggableController, HasUser, LikeableController;
 
     /**
      * Type of this controller for use in messages
@@ -63,6 +63,10 @@ class ProductController extends MainController
 
     public function __construct()
     {
+        $this->middleware('auth:api', [
+            'only' => [ 'store', 'update', 'destroy', 'like', 'dislike' ]
+        ]);
+
         $this->more_relations = [
             'unit:id,title',
             'accessories:id,brand_id,slug,name,photos,label',
@@ -128,7 +132,7 @@ class ProductController extends MainController
      * @return Model
      */
     public function getSingleData($product)
-    {
+    { 
         $product = $this->model::whereSlug($product)->firstOrFail();
 
         return $product->load( array_merge( $this->relations, $this->more_relations, [

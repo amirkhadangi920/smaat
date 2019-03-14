@@ -23,6 +23,10 @@ class Product extends JsonResource
             'description'       => $this->description,
             'aparat_video'      => "https://www.aparat.com/v/{$this->aparat_video}",
             'photos'            => $this->photos,
+            'votes'             => [
+                'likes' => $this->likesCount,
+                'dislikes' => $this->dislikesCount,
+            ],
             $this->mergeWhen($this->second_name, [
 
                 'second_name'       => $this->second_name,

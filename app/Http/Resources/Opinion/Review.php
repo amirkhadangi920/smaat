@@ -24,6 +24,10 @@ class Review extends JsonResource
             'disadvantages'     => $this->disadvantages,
             'message'           => $this->message,
             'registered_at'     => $this->created_at,
+            'votes'             => [
+                'likes' => $this->likesCount,
+                'dislikes' => $this->dislikesCount,
+            ],
             'product'           => $this->whenLoaded('product', function () {
                 return [
                     'id' => $this->product->id,

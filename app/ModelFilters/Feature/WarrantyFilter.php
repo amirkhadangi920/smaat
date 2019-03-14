@@ -29,7 +29,7 @@ class WarrantyFilter extends ModelFilter
      * @param boolean $logo
      * @return Builder
      */
-    public function has_logo($logo)
+    public function hasLogo($logo)
     {
         if ( $logo )
             return $this->whereNotNull('logo');

@@ -24,6 +24,10 @@ class Article extends JsonResource
             'body'              => $this->when( $this->body, $this->body ),
             'image'             => $this->image,
             'reading_time'      => $this->reading_time,
+            'votes'             => [
+                'likes' => $this->likesCount,
+                'dislikes' => $this->dislikesCount,
+            ],
             'writer'            => $this->whenLoaded('user', function () {
                 return [
                     'id' => $this->user->id,

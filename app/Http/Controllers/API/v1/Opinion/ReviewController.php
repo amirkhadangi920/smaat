@@ -6,9 +6,12 @@ use App\Models\Opinion\Review;
 use App\Http\Resources\Opinion\Review as ReviewResource;
 use App\ModelFilters\Opinion\ReviewFilter;
 use App\Http\Requests\v1\Opinion\ReviewRequest;
+use App\Helpers\LikeableController;
 
 class ReviewController extends OpinionBaseController
 {
+    use LikeableController;
+
     /**
      * Type of this controller for use in messages
      *

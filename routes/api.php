@@ -32,19 +32,27 @@ Route::group([
 
     $this->group([ 'namespace' => 'Blog' ], function () {
 
+        Route::get('/article/{article}/like', 'ArticleController@like');
+        Route::get('/article/{article}/dislike', 'ArticleController@dislike');
         Route::resource('/article', 'ArticleController');
     });
 
     $this->group([ 'namespace' => 'Product' ], function () {
 
+        Route::get('/product/{product}/like', 'ProductController@like');
+        Route::get('/product/{product}/dislike', 'ProductController@dislike');
         Route::resource('/product', 'ProductController');
     });
 
     $this->group([ 'namespace' => 'Opinion' ], function () {
 
+        Route::get('/comment/{comment}/like', 'CommentController@like');
+        Route::get('/comment/{comment}/dislike', 'CommentController@dislike');
         Route::put('/comment/accept/{comment}', 'CommentController@accept');
         Route::resource('/comment', 'CommentController');
 
+        Route::get('/review/{review}/like', 'ReviewController@like');
+        Route::get('/review/{review}/dislike', 'ReviewController@dislike');
         Route::put('/review/accept/{review}', 'ReviewController@accept');
         Route::resource('/review', 'ReviewController');
         

@@ -6,9 +6,12 @@ use App\Models\Opinion\Comment;
 use App\Http\Resources\Opinion\Comment as CommentResource;
 use App\ModelFilters\Opinion\CommentFilter;
 use App\Http\Requests\v1\Opinion\CommentRequest;
+use App\Helpers\LikeableController;
 
 class CommentController extends OpinionBaseController
 {
+    use LikeableController;
+
     /**
      * Type of this controller for use in messages
      *
