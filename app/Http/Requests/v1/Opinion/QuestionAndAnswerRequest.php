@@ -24,14 +24,11 @@ class QuestionAndAnswerRequest extends FormRequest
     public function rules()
     {
         return [
-            'message'         => 'required|array|string',
+            'message'           => 'required|string',
 
-            /**
-             * relateion 
-             */
-            'question_id'     => 'nullable|integer|exists:comments,id',
-            'users.*'         => 'required|array|exists:users,id',
-            'articles.*'      => 'required|array|exists:articles,id',
+            /* relateion */
+            'question_id'       => 'nullable|integer|exists:question_and_answers,id',
+            'product_id'        => 'required|string|exists:products,id',
         ];
     }
 }

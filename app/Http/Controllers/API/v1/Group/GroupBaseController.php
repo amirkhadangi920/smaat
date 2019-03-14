@@ -79,6 +79,6 @@ class GroupBaseController extends MainController
             'message' => __('messages.return.single', [
                 'data' => __("types.{$this->type}.title")
             ])
-        ]);;
+        ]);
     }
 }

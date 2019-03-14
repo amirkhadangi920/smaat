@@ -24,24 +24,21 @@ class OrderRequest extends FormRequest
     public function rules()
     {
         return [
-            'descriptions'      => 'nullable|array',
+            'description'       => 'nullable|string',
             'destination'       => 'nullable|string|max:255',
-            'postal_code'       => 'nullable|digit:10|max:10',  
-            'offer'             => 'nullable|digits_between:0,100000',
-            'total'             => 'nullable|digits_between:100000,10000000',
-            'datetimes'         => 'nullable|array|string',
+            'postal_code'       => 'nullable|digit:10',
+            'offer'             => 'nullable|digits_between:1,10',
+            'total'             => 'nullable|digits_between:1,10',
             'docs'              => 'nullable|array',
-            'checkout'          => 'boolean',
-            'type'              => 'required|digits_between:0,127',
+            'docs.*'            => 'required|image|mimes:jpeg,jpg,png|max:1024',
+            'checkout'          => 'requierd|boolean',
+            'type'              => 'required|integer|max:5',
 
-            /**
-             * relateion 
-             */
-            'users.*'           => 'required|array|exists:users,id',
-            'order_status.*'    => 'required|integer|exists:order_statuses,id',
-            'promocodes.*'      => 'required|integer|exists:promocodes,id',
-            'shippin_methods.*' => 'required|integer|exists:shippin_methods,id',
-            // 'cities.*'           => 'required|array|exists:city,id',
+            /* relateion */
+            'users_id'          => 'required|string|exists:users,id',
+            'order_status_id'   => 'required|integer|exists:order_statuses,id',
+            'shippin_method_id' => 'nullable|integer|exists:shippin_methods,id',
+            'city_id'           => 'nullable|integer|exists:city,id',
         ];
     }
 }

@@ -25,15 +25,16 @@ class ReviewRequest extends FormRequest
     {
         return [
             'ranks'             => 'nullable|array',
+            'ranks.*'           => 'required|string|max:100',
             'advantages'        => 'nullable|array',
+            'advantages.*'      => 'required|string|max:100',
             'disadvantages'     => 'nullable|array',
-            'message'           => 'required|array|string',
+            'disadvantages.*'   => 'required|string|max:100',
+            'message'           => 'required|string',
 
-            /**
-             * relateion 
-             */
-            'users.*'           => 'required|array|exists:users,id',
+            /* relateion */
             'articles.*'        => 'required|array|exists:articles,id',
+            'product_id'        => 'required|string|exists:products,id',
         ];
     }
 }

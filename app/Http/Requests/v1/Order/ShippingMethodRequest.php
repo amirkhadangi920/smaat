@@ -27,8 +27,8 @@ class ShippingMethodRequest extends FormRequest
             'name'              => 'required|string|min:50',
             'description'       => 'nullable|string|min:255',
             'logo'              => 'nullable|image|mimes:jpeg,jpg,png,gif|max:1024',
-            'cost'              => 'required|digit|min:0',
-            'minimum'           => 'required|digit|min:0',
+            'cost'              => 'required|digits_between:0,10|min:0',
+            'minimum'           => 'required|digits_between:0,10|min:0',
         ];
     }
 }

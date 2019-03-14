@@ -24,15 +24,11 @@ class CommentRequest extends FormRequest
     public function rules()
     {
         return [
-            'message'       => 'required|array|string',
+            'message'       => 'required|string',
 
-            /**
-             * relateion 
-             */
+            /* relateion */
             'parent_id'     => 'nullable|integer|exists:comments,id',
-            'users.*'       => 'required|array|exists:users,id',
-            'articles.*'    => 'required|array|exists:articles,id',
-
+            'articles_id'   => 'required|string|exists:articles,id',
         ];
     }
 }

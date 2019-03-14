@@ -32,7 +32,7 @@ class OpinionBaseController extends MainController
         
         $opinions = explode(',', $opinions);
 
-        $result = $this->model::whereIn('id', $opinions )->update(['is_accept' => $request->accept]);
+        $result = $this->model::whereIn('id', $opinions )->update(['is_accept' => (boolean) $request->accept]);
 
         $status = $this->getStatus($result);        
         

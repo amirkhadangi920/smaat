@@ -24,17 +24,18 @@ class ArticleRequest extends FormRequest
     public function rules()
     {
         return [
-            'title'         => 'required|max:50|string',
+            'title'         => 'required|string|max:50',
             'description'   => 'nullable|string|max:255',
             'body'          => 'required|string',
-            'image'         => 'image|mimes:jpeg,jpg,png,gif|max:1024',
-            'reading_time'  => 'nullable|digit_between:1,50',
-
-            /**
-             * relateion 
-             */
+            'image'         => 'required|image|mimes:jpeg,jpg,png,gif|max:1024',
+            'reading_time'  => 'nullable|digit_between:1,2',
+            
+            /* relateion */
             'subjects'      => 'nullable|array',
-            'subjects.*'    => 'required|integer|exists:subjects,id'
+            'subjects.*'    => 'required|integer|exists:subjects,id',
+            
+            'keywords'      => 'nullable|array',
+            'keywords.*'    => 'required|string|max:100',
         ];
     }
 }

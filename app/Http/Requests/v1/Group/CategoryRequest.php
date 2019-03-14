@@ -28,11 +28,13 @@ class CategoryRequest extends FormRequest
             'description'       => 'nullable|string|min:255',
             'logo'              => 'nullable|image|mimes:jpeg,jpg,png,gif|max:1024',
             'scoring_feilds'    => 'nullable|string|array',
+            'scoring_feilds.*'  => 'required|string|max:100',
 
-            /**
-             * relateion 
-             */
-            'parent_id'         => 'nullable|integer|exists:categories,id'
+            /* relateion */
+            'parent_id'         => 'nullable|integer|exists:categories,id',
+            
+            'keywords'          => 'nullable|array',
+            'keywords.*'        => 'required|string|max:100',
         ];
     }
 }
