@@ -1,8 +1,24 @@
 <?php
 
-use Faker\Factory as FakerEng;
+
+use Faker\Factory;
+
+$faker = Factory::create('fa_IR');
+
 use Ybazli\Faker\Facades\Faker;
 
+
+$avatars = [
+    [
+        'img' => '/tests/avatars/man_1.png'  
+    ], [
+        'img' => '/tests/avatars/man_2.jpg'
+    ], [
+        'img' => '/tests/avatars/women_1.png'
+    ], [
+        'img' => '/tests/avatars/women_2.jpg'
+    ]
+];
 /*
 |--------------------------------------------------------------------------
 | Model Factories
@@ -14,16 +30,17 @@ use Ybazli\Faker\Facades\Faker;
 |
 */
 
-$factory->define(App\User::class, function ($faker) {
-    $faker = FakerEng::create('fa_IR');
+$factory->define(App\User::class, function () use($faker , $avatars) {
     
+    $select = rand( 0, count($avatars)-1 );
+
     return [
         'first_name'        => nullable( $faker->firstName() ),
         'last_name'         => nullable( $faker->lastName() ),
         'email'             => $faker->unique()->safeEmail,
         'email_verified_at' => now(),
         'password'          => '$2y$10$TKh8H1.PfQx37YgCzwiKb.KjNyWgaHb9cbcoQgdIVFlYg7B77UdFm', // secret
-        'avatar'            => nullable( $faker->imageUrl(50, 50) ),
+        'avatar'            => nullable( $avatars[$select]['img'] ),
         'address'           => nullable( $faker->address ),
         'postal_code'       => nullable( $faker->postcode ),
         'national_code'     => nullable( '0'.$faker->numberBetween(910000000, 959999999) ),
@@ -33,7 +50,7 @@ $factory->define(App\User::class, function ($faker) {
         'purchase_counts'   => rand(0, 20),
         'total_payments'    => rand(0, 50000000),
         'phones'            => nullable(
-            function () use ( $faker ) {
+            function () use ($faker) {
                 $phones = [];
                 $titles = [ 'home', 'mobile', 'work', 'special' ];
                 for ($i = 0; $i < rand(0, 5); ++$i)

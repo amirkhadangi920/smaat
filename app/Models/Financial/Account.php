@@ -42,7 +42,9 @@ class Account extends Model
         // 'descriptions'  => 'array',
         // 'shipping'      => 'array',
         // 'datetimes'     => 'array'
+        // 'logo'              => 'array'
     ];
+   
 
     /**
      * The attributes that should be mutated to dates.

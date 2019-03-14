@@ -4,7 +4,44 @@ use Faker\Factory;
 
 $faker = Factory::create('fa_IR');
 
-$factory->define(App\Models\Product\Product::class, function () use($faker) {
+$products = [
+    [
+        'logo'  => '/tests/product_img/0.jpg'
+    ], [
+        'logo'  => '/tests/product_img/1.jpg'
+    ], [
+        'logo'  => '/tests/product_img/2.jpg'
+    ], [
+        'logo'  => '/tests/product_img/3.jpg'
+    ], [
+        'logo'  => '/tests/product_img/4.jpg'
+    ], [
+        'logo'  => '/tests/product_img/5.jpg'
+    ], [
+        'logo'  => '/tests/product_img/6.jpg'
+    ], [
+        'logo'  => '/tests/product_img/7.jpg'
+    ], [
+        'logo'  => '/tests/product_img/8.jpg'
+    ], [
+        'logo'  => '/tests/product_img/9.jpg'
+    ], [
+        'logo'  => '/tests/product_img/10.jpg'
+    ], [
+        'logo'  => '/tests/product_img/11.jpg'
+    ], [
+        'logo'  => '/tests/product_img/12.jpg'
+    ], [
+        'logo'  => '/tests/product_img/13.png'
+    ], [
+        'logo'  => '/tests/product_img/14.jpg'
+    ],
+
+];
+
+$factory->define(App\Models\Product\Product::class, function () use($faker, $products) {
+    
+    $selected = rand(0, count($products) - 1);
     return [
         'name'              => $faker->company,
         'second_name'       => $faker->company,
@@ -19,16 +56,17 @@ $factory->define(App\Models\Product\Product::class, function () use($faker) {
         'disadvantages'     => $faker->sentences( rand(1, 10) ),
         'label'             => $faker->numberBetween(0, 4),
         'views_count'       => $faker->numberBetween(0, 10000),
-        'photos'            => [ null, function () use ( $faker ) {
-            $photos = [];
-            for ($i = 0; $i < rand(0, 5); ++$i)
-                $photos[] = $faker->imageUrl(480, 320);
-            return $photos;
-        }][ $faker->boolean() ], 
+        // 'photos'            => [ null, function () use ( $faker ) {
+        //     $photos = [];
+        //     for ($i = 0; $i < rand(0, 5); ++$i)
+        //         $photos[] = $faker->imageUrl(480, 320);
+        //     return $photos;
+        // }][ $faker->boolean() ], 
+        'photos'            => nullable( image ( $products[$selected]['logo'] )),
     ];
 });
 
-$factory->define(App\Models\Product\Variation::class, function (FakerEng $faker) {
+$factory->define(App\Models\Product\Variation::class, function () use($faker) {
     
     $price = $faker->numberBetween(1000, 20000000);
     return [

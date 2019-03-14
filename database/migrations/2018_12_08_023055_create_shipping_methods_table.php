@@ -26,7 +26,7 @@ class CreateShippingMethodsTable extends Migration
                 'logo'      => 'nullable|array',
                 'cost'      => 'integer',
                 'minimum'   => 'integer|default:0|comment:Minimum factor total for this method',
-                'is_active' => 'boolean|default:1'
+                'is_active' => 'boolean|default:0'
             ]);
         });
     }

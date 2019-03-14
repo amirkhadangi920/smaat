@@ -25,12 +25,14 @@ class ProductTablesSeeder extends Seeder
         $data['categories']->each( function ( $category ) use ( $data ) {
 
             $this->products = $category->products()->saveMany(
-
+                
                 factory(\App\Models\Product\Product::class, 5)->make([
-                    'user_id' => $data['users']->random()->id,
-                    'brand_id' => $data['features']['brands']->random()->id,
-                    'spec_id' => $data['specifications']['spec_table']
-                ])
+                    'user_id'   => $data['users']->random()->id,
+                    'brand_id'  => $data['features']['brands']->random()->id,
+                    'unit_id'   => $data['features']['units']->random()->id,
+                    'spec_id'   => $data['specifications']['spec_table'],
+                    
+                    ])
 
             )->each( function( $product ) use ( $data ){
                  $product->questions()->saveMany(
@@ -52,8 +54,9 @@ class ProductTablesSeeder extends Seeder
                 $this->variations = $this->variations->merge(
                     $variations = $product->variations()->saveMany(
                         factory(\App\Models\Product\Variation::class, rand(1, 5))->make([
-                            'warranty_id' => $data['features']['warranties']->random()->id,
-                            'color_id' => $data['features']['colors']->random()->id,
+                            'warranty_id'   => $data['features']['warranties']->random()->id,
+                            'color_id'      => $data['features']['colors']->random()->id,
+                            'size_id'       => $data['features']['sizes']->random()->id,
                         ])
                     )
                 );
@@ -61,7 +64,7 @@ class ProductTablesSeeder extends Seeder
                 $variations->each( function( $variation ) use( $data ) {
                     $variation->promocodes()->sync( $data['promocodes']->random() );
                 });
-
+                
                 $variations->each( function( $variation ) {
                     $variation->order_points()->saveMany(
                         factory(App\Models\Financial\OrderPoint::class, rand(1, 5) )->make() 
@@ -90,7 +93,7 @@ class ProductTablesSeeder extends Seeder
                 });
             });
         });
-
+        
         return [
             'products'      => $this->products,
             'variations'    => $this->variations,

@@ -38,12 +38,11 @@ class DatabaseSeeder extends Seeder
         $promocodes = $this->call(PromocodeTablesSeeder::class, compact('users', 'categories'));
 
         $products = $this->call(ProductTablesSeeder::class, compact(
-            'users', 'categories', 'specifications', 'features','promocodes'
+            'users', 'categories', 'specifications', 'features', 'promocodes'
         )); 
 
         $this->call(AbstractTablesSeeder::class, compact('users', 'products'));
         
-
         $this->call(OrderTablesSeeder::class, compact(
             // 'users', 'products', 'cities', 'promocodes', 'categories'
             'users', 'products',  'promocodes', 'categories'
