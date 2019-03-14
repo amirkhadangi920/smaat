@@ -25,11 +25,9 @@ class SizeRequest extends FormRequest
     {
         return [
             'name'              => 'required|string|max:50',
-            'description'     => 'nullable|string|max:255',
+            'description'       => 'nullable|string|max:255',
 
-            /**
-             * relateion 
-             */
+            /* relateion */
             'categories'        => 'nullable|array',
             'categories.*'      => 'required|integer|exists:categories,id'
         ];

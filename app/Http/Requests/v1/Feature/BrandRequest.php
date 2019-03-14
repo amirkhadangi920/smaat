@@ -28,9 +28,7 @@ class BrandRequest extends FormRequest
             'description'       => 'nullable|string|max:255',
             'logo'                  => 'nullable|image|mimes:jpeg,jpg,png,gif|max:1024',
 
-            /**
-             * relateion 
-             */
+            /* relateion */
             'categories'        => 'nullable|array',
             'categories.*'      => 'required|integer|exists:categories,id'
         ];

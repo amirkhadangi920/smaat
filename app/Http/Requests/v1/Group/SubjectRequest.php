@@ -28,10 +28,11 @@ class SubjectRequest extends FormRequest
             'description'       => 'nullable|string|min:255',
             'logo'              => 'nullable|image|mimes:jpeg,jpg,png,gif|max:1024',
 
-            /**
-             * relateion 
-             */
-            'parent_id'         => 'nullable|integer|exists:subjects,id'
+            /* relateion */
+            'parent_id'         => 'nullable|integer|exists:subjects,id',
+
+            'keywords'          => 'nullable|array',
+            'keywords.*'        => 'required|string|max:100',
         ];
     }
 }

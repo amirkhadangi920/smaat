@@ -27,6 +27,7 @@ class Comment extends Model implements AuditableContract , LikeableContract
      */
     protected $fillable = [
         'article_id',
+        'parent_id',
         'message'
     ];
     

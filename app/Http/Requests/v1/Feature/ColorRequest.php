@@ -27,9 +27,7 @@ class ColorRequest extends FormRequest
             'name'              => 'required|string|max:50',
             'code'              => ['required', 'regex:/^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/'],
             
-            /**
-             * relateion 
-             */
+            /* relateion */
             'categories'        => 'nullable|array',
             'categories.*'      => 'required|integer|exists:categories,id',
 

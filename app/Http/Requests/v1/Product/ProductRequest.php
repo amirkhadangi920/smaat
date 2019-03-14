@@ -24,28 +24,40 @@ class ProductRequest extends FormRequest
     public function rules()
     {
         return [
-            'name'              => 'nullable|string|max:50',
+            'name'              => 'required|string|max:50',
             'second_name'       => 'nullable|string|max:50',
-            'code'              => ['nullable', 'regex:/^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/'],
-            'description'       => 'nullable|max:255|string',
-            'note'              => 'nullable|max:255|string',
-            // 'aparat_video'   => 'nullable|' ,
-            'status'            => 'nullable|boolean|digits_between:0,127',
+            'code'              => 'nullable|string|max:20',
+            'description'       => 'nullable|string|max:255',
+            'note'              => 'nullable|string|max:255',
+            'aparat_video'      => 'nullable|url',
+            'status'            => 'required|boolean',
             'review'            => 'nullable|string',
-            'keywords'          => 'required|array|string',  
-            'photos'            => 'nullable|image|mimes:jpeg,jpg,png,gif|max:1024',
-            'advantages'        => 'required|string|array',
-            'disadvantages'     => 'required|string|array',
-            'label'             => 'nullable|digit',
-            'views_count'       => 'required|digits_between:0,1000000',
+            'keywords'          => 'nullable|array',  
+            'keywords.*'        => 'required|string|max:100',  
+            'photos'            => 'required|array|min:1',
+            'photos.*'          => 'required|image|mimes:jpeg,jpg,png,gif|max:1024',
+            'advantages'        => 'nullable|array',
+            'advantages.*'      => 'required|string|max:100',
+            'disadvantages'     => 'nullable|array',
+            'disadvantages.*'   => 'required|string|max:100',
+            'label'             => 'nullable|integer',
 
-            /**
-             * relateion 
-             */
-            'users.*'           => 'required|array|exists:users,id',
-            'categories.*'      => 'required|integer|exists:categories,id',
+            /* relateion */
+            'category_id'       => 'nullable|integer|exists:categories,id',
+            'brand_id'          => 'nullable|integer|exists:brands,id',
+            'unit_id'           => 'nullable|integer|exists:units,id',
             'specs.*'           => 'required|integer|exists:speces,id',  
-            'accessories.*'     => 'required|integer|exists:product,id',  
+            'specs.*'           => 'required|integer|exists:speces,id',  
+            'accessories'       => 'nullable|array',  
+            'accessories.*'     => 'required|string|exists:products,id',
+
+            'variations'                => 'requierd|array|min:1',
+            'variations.*'              => 'requierd|array',
+            'variations.*.price'        => 'requierd|integer|asd|min:0',
+            'variations.*.inventory'    => 'nullable|integer|min:0',
+            'variations.*.color_id'     => 'nullable|integer|exists:colors,id',
+            'variations.*.size_id'      => 'nullable|integer|exists:sizes,id',
+            'variations.*.warranty_id'  => 'nullable|integer|exists:warranties,id',
         ];
     }
 }

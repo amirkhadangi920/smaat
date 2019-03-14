@@ -26,12 +26,10 @@ class WarrantyRequest extends FormRequest
         return [
             'title'             => 'required|string|max:50',
             'description'       => 'nullable|string|max:255',
+            'expire'            => 'required|string|max:20',
             'logo'              => 'nullable|image|mimes:jpeg,jpg,png,gif|max:1024',
-            'expire'            => 'required|boolean|digits_between:1,5',
 
-            /**
-             * relateion 
-             */
+            /* relateion */
             'categories'        => 'nullable|array',
             'categories.*'      => 'required|integer|exists:categories,id'
         ];
