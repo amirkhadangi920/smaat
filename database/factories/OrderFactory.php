@@ -52,7 +52,7 @@ $factory->define(App\Models\Financial\OrderItem::class, function () use($faker) 
 
 $factory->define(App\Models\Financial\OrderStatus::class, function () use($faker) {
     return [
-        'title'         => $faker->name(),
+        'title'               => [ 'در حال بررسی', 'بسته بندی ', 'چک کردن موجودی', 'تحویل بحش ارسال', 'در حال ارسال', ][rand( 0,  4)],
         'description'   => nullable( Faker::sentence() ) 
     ];
 });
