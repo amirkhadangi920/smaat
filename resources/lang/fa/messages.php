@@ -58,5 +58,18 @@ return [
         ],
     ],
 
+    'permission' => [
+        'attach' => [
+            'successful' => 'سطح دسترسی ":permission" به کاربر ":user" با موفقیت داده شد',
+            'before' => 'سطح دسترسی ":permission" قبلا به کاربر ":user" داده شده است'
+        ],
+        'detach' => [
+            'successful' => 'سطح دسترسی ":permission" از کاربر ":user" با موفقیت گرفته شد',
+            'before' => 'سطح دسترسی ":permission" قبلا از کاربر ":user" گرفته شده است'
+        ],
+    ],
+
+    'password_reset' => 'رمز عبور کاربر ":user" با موفقیت بروزرسانی شد',
+
     'copy_header_row' => 'کلیه سطرهای جدول با موفقیت برای عنوان جدید کپی شدند',
 ];

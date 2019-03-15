@@ -22,11 +22,11 @@ use App\Models\{
     Promocode\Promocode,
     Discount\Discount
 };
+use EloquentFilter\Filterable;
 
 class User extends Authenticatable implements AuditableContract
 {
-    use LaratrustUserTrait, HasApiTokens;
-    // use Notifiable, SoftDeletes, GenerateRandomID, Auditable, HasRoles;
+    use LaratrustUserTrait, HasApiTokens, Filterable;
     use Notifiable, SoftDeletes, GenerateRandomID, Auditable;
 
     /****************************************
@@ -49,6 +49,7 @@ class User extends Authenticatable implements AuditableContract
         'first_name',
         'last_name',
         'phones',
+        'social_links',
         'email',
         'password',
         'avatar',

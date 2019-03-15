@@ -13,14 +13,14 @@ use Illuminate\Http\Request;
 |
 */
 
-Route::post('login', 'API\UserController@login');
-Route::post('register', 'API\UserController@register');
-Route::group([
+$this->post('login', 'API\UserController@login');
+$this->post('register', 'API\UserController@register');
+$this->group([
     'middleware' => 'auth:api'
 ], function(){
-    Route::post('details', 'API\UserController@details');
+    $this->post('details', 'API\UserController@details');
 });
-Route::middleware('auth:api')->get('/user', function (Request $request) {
+$this->middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
 
@@ -30,70 +30,84 @@ Route::group([
     'prefix' => 'v1',
 ], function () {
 
+    $this->get('/location/provinces/{country}', 'LocationController@provinces');
+    $this->get('/location/cities/{province}', 'LocationController@cities');
+
     $this->group([ 'namespace' => 'Blog' ], function () {
 
-        Route::get('/article/{article}/like', 'ArticleController@like');
-        Route::get('/article/{article}/dislike', 'ArticleController@dislike');
-        Route::resource('/article', 'ArticleController');
+        $this->get('/article/{article}/like', 'ArticleController@like');
+        $this->get('/article/{article}/dislike', 'ArticleController@dislike');
+        $this->resource('/article', 'ArticleController');
     });
 
     $this->group([ 'namespace' => 'Product' ], function () {
 
-        Route::get('/product/{product}/like', 'ProductController@like');
-        Route::get('/product/{product}/dislike', 'ProductController@dislike');
-        Route::resource('/product', 'ProductController');
+        $this->get('/product/{product}/like', 'ProductController@like');
+        $this->get('/product/{product}/dislike', 'ProductController@dislike');
+        $this->resource('/product', 'ProductController');
     });
 
     $this->group([ 'namespace' => 'Opinion' ], function () {
 
-        Route::get('/comment/{comment}/like', 'CommentController@like');
-        Route::get('/comment/{comment}/dislike', 'CommentController@dislike');
-        Route::put('/comment/accept/{comment}', 'CommentController@accept');
-        Route::resource('/comment', 'CommentController');
+        $this->get('/comment/{comment}/like', 'CommentController@like');
+        $this->get('/comment/{comment}/dislike', 'CommentController@dislike');
+        $this->put('/comment/accept/{comment}', 'CommentController@accept');
+        $this->resource('/comment', 'CommentController');
 
-        Route::get('/review/{review}/like', 'ReviewController@like');
-        Route::get('/review/{review}/dislike', 'ReviewController@dislike');
-        Route::put('/review/accept/{review}', 'ReviewController@accept');
-        Route::resource('/review', 'ReviewController');
+        $this->get('/review/{review}/like', 'ReviewController@like');
+        $this->get('/review/{review}/dislike', 'ReviewController@dislike');
+        $this->put('/review/accept/{review}', 'ReviewController@accept');
+        $this->resource('/review', 'ReviewController');
         
-        Route::put('/question_and_answer/accept/{question_and_answer}', 'QuestionAndAnswerController@accept');
-        Route::resource('/question_and_answer', 'QuestionAndAnswerController');
+        $this->put('/question_and_answer/accept/{question_and_answer}', 'QuestionAndAnswerController@accept');
+        $this->resource('/question_and_answer', 'QuestionAndAnswerController');
     });
     
     $this->group([ 'namespace' => 'Financial' ], function () {
 
-        Route::resource('/shipping_method', 'ShippingMethodContrller');
-        Route::resource('/order_status', 'OrderStatusContrller');
+        $this->resource('/shipping_method', 'ShippingMethodContrller');
+        $this->resource('/order_status', 'OrderStatusContrller');
 
         $this->post('/order/{order}/add/{variation}/{quantity?}', 'OrderController@add');
         $this->delete('/order/{order}/remove/{variation}', 'OrderController@remove');
         $this->put('/order/description/{order}', 'OrderController@description');
         $this->put('/order/status/{order}/{status}', 'OrderController@status');
-        Route::resource('/order', 'OrderController');
+        $this->resource('/order', 'OrderController');
     });
     
     $this->group([ 'namespace' => 'Group' ], function () {
 
-        Route::resource('/category', 'CategoryController');
-        Route::resource('/subject', 'SubjectController');
+        $this->resource('/category', 'CategoryController');
+        $this->resource('/subject', 'SubjectController');
     });
 
     $this->group([ 'namespace' => 'Feature' ], function () {
 
-        Route::resource('/brand', 'BrandController');
-        Route::resource('/color', 'ColorController');
-        Route::resource('/size', 'SizeController');
-        Route::resource('/warranty', 'WarrantyController');
-        Route::resource('/unit', 'UnitController');
+        $this->resource('/brand', 'BrandController');
+        $this->resource('/color', 'ColorController');
+        $this->resource('/size', 'SizeController');
+        $this->resource('/warranty', 'WarrantyController');
+        $this->resource('/unit', 'UnitController');
+    });
+
+    $this->group([ 'namespace' => 'User' ], function () {
+
+        $this->resource('/role', 'RoleController');
+        
+        $this->post('/user/{user}/premission/{permission}/attach', 'UserController@attach_permission');
+        $this->delete('/user/{user}/premission/{permission}/detach', 'UserController@detach_permission');
+        $this->put('/user/{user}/password/reset', 'UserController@password_reset');
+        $this->get('/user/permissions', 'UserController@permissions');
+        $this->resource('/user', 'UserController');
     });
 
     $this->group([ 'namespace' => 'Spec' ], function () {
 
-        Route::resource('/spec', 'SpecController');
-        Route::post('/spec_header/copy/{spec_header}', 'SpecHeaderController@copy');
-        Route::resource('/spec_header', 'SpecHeaderController')->only('store', 'update', 'destroy');
-        Route::resource('/spec_row', 'SpecRowController')->only('store', 'update', 'destroy');
+        $this->resource('/spec', 'SpecController');
+        $this->post('/spec_header/copy/{spec_header}', 'SpecHeaderController@copy');
+        $this->resource('/spec_header', 'SpecHeaderController')->only('store', 'update', 'destroy');
+        $this->resource('/spec_row', 'SpecRowController')->only('store', 'update', 'destroy');
         
-        // Route::resource('/spec_data', 'SpecDataController');
+        // $this->resource('/spec_data', 'SpecDataController');
     });
 });

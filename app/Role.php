@@ -2,10 +2,15 @@
 
 namespace App;
 
-use Laratrust\Models\LaratrustPermission;
+use OwenIt\Auditing\Auditable;
+use OwenIt\Auditing\Contracts\Auditable as AuditableContract;
+use Laratrust\Models\LaratrustRole;
+use EloquentFilter\Filterable;
 
-class Permission extends LaratrustPermission
+class Role extends LaratrustRole implements AuditableContract
 {
+    use Auditable, Filterable;
+
     /****************************************
      **             Attributes
      ***************************************/
