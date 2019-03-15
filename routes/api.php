@@ -77,6 +77,8 @@ Route::group([
         $this->post('/discount/{discount}/add/{variation}', 'DiscountController@add');
         $this->delete('/discount/{discount}/remove/{variation}', 'DiscountController@remove');
         $this->resource('/discount', 'DiscountController');
+        
+        $this->resource('/promocode', 'PromocodeController');
     });
     
     $this->group([ 'namespace' => 'Group' ], function () {

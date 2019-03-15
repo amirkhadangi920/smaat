@@ -3,12 +3,17 @@
 namespace App\Models\Promocode;
 
 use Illuminate\Database\Eloquent\Model;
+use OwenIt\Auditing\Auditable;
+use OwenIt\Auditing\Contracts\Auditable as AuditableContract;
 use App\Models\Financial\Order;
 use App\Models\Group\Category;
 use App\Models\Product\Variation;
+use EloquentFilter\Filterable;
 
-class Promocode extends Model
+class Promocode extends Model implements AuditableContract
 {
+    use Auditable, Filterable;
+
     /****************************************
      **             Attributes
      ***************************************/
@@ -19,7 +24,6 @@ class Promocode extends Model
      * @var array
      */
     protected $fillable = [
-
         'code',
         'value',
         'min_total',
@@ -58,7 +62,7 @@ class Promocode extends Model
     /**
      * Get all the users that owned the promocode & adverb
      */
-    public function users ()
+    public function users()
     {
         return $this->belongsToMany(\App\User::class);
     }

@@ -27,7 +27,7 @@ class DiscountFilter extends ModelFilter
      * @param boolean $logo
      * @return Builder
      */
-    public function hasItems($status)
+    public function hasItem ($status)
     {
         if ( $status )
             return $this->has('items');

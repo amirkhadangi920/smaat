@@ -93,7 +93,7 @@ class Order extends Model implements AuditableContract
     /**
      * Get the user that create or buy the order
      */
-    public function user ()
+    public function user()
     {
         return $this->belongsTo(\App\User::class);
     }
