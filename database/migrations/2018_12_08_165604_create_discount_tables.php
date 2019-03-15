@@ -39,7 +39,7 @@ class CreateDiscountTables extends Migration
             $table->table([
                 'offer' => 'integer',
                 'quantity' => 'integer|nullable',
-                'sold_count' => 'integer'
+                'sold_count' => 'integer|default:0'
             ], [
                 'discounts',
                 'variations'

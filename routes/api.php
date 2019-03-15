@@ -73,6 +73,10 @@ Route::group([
         $this->put('/order/description/{order}', 'OrderController@description');
         $this->put('/order/status/{order}/{status}', 'OrderController@status');
         $this->resource('/order', 'OrderController');
+
+        $this->post('/discount/{discount}/add/{variation}', 'DiscountController@add');
+        $this->delete('/discount/{discount}/remove/{variation}', 'DiscountController@remove');
+        $this->resource('/discount', 'DiscountController');
     });
     
     $this->group([ 'namespace' => 'Group' ], function () {

@@ -58,6 +58,19 @@ return [
         ],
     ],
 
+    'discount' => [
+        'item' => [
+            'add' => [
+                'success' => 'محصول ":product" با موفقیت به تخفیف :discount اضافه شد',
+                'failed' => 'متاسفانه محصولی به تخفیف :discount اضافه نشد'
+            ],
+            'remove' => [
+                'success' => 'محصول ":product" با موفقیت از تخفیف :discount حذف شد',
+                'failed' => 'متاسفانه هیچ محصولی از تخفیف :discount حذف نشد'
+            ]
+        ],
+    ],
+
     'permission' => [
         'attach' => [
             'successful' => 'سطح دسترسی ":permission" به کاربر ":user" با موفقیت داده شد',
