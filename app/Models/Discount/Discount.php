@@ -8,10 +8,11 @@ use Cviebrock\EloquentSluggable\Sluggable;
 use OwenIt\Auditing\Auditable;
 use OwenIt\Auditing\Contracts\Auditable as AuditableContract;
 use App\Models\Group\Category;
+use EloquentFilter\Filterable;
 
 class Discount extends Model implements AuditableContract 
 {
-    use Sluggable, Auditable;
+    use Sluggable, Auditable, Filterable;
     /****************************************
      **             Attributes
      ***************************************/
@@ -62,7 +63,7 @@ class Discount extends Model implements AuditableContract
     /**
      * get the all discount items that owned the discount
      */
-    public function discount_items()
+    public function items()
     {
         return $this->hasMany(DiscountItem::class);
     }

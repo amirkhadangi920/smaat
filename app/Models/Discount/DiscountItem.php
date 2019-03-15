@@ -17,9 +17,9 @@ class DiscountItem extends Model
      * @var array
      */
     protected $fillable = [
+        'variation_id',
         'offer',
         'quantity',
-        'sold_count'
     ];
 
     /**
