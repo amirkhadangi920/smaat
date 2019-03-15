@@ -18,6 +18,7 @@ class Size extends JsonResource
             'id'                => $this->id,
             'link'              => "/api/v1/size/{$this->id}",
             'name'              => $this->name,
+            'description'       => $this->description,
             'categories'        => $this->categories->map( function ( $category ) {
                 
                 return [

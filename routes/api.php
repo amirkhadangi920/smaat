@@ -31,7 +31,7 @@ Route::group([
 ], function () {
 
     $this->get('/location/provinces/{country}', 'LocationController@provinces');
-    $this->get('/location/cities/{province}', 'LocationController@cities');
+    $this->get('/location/provinces/{province}/cities', 'LocationController@cities');
 
     $this->group([ 'namespace' => 'Blog' ], function () {
 

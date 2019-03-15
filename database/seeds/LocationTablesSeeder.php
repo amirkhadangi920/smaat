@@ -23,10 +23,11 @@ class LocationTablesSeeder extends Seeder
         DB::unprepared("ALTER TABLE `provinces` AUTO_INCREMENT = 1;");
 
         Country::create([
-            'longitude‎'=> '53.6880',
-            'latitude‎' => '32.4279',
-            'name'     => 'ایران',
-            'code'     => 'IR'
+            'id'           => 1,
+            'longitude‎'    => '53.6880',
+            'latitude‎'     => '32.4279',
+            'name'         => 'ایران',
+            'code'         => 'IR'
         ])->each( function ( $country ) {
             echo "\e[31mA country \e[39mwith name=\e[30m\e[101mIran\e[49m \e[39mwas \e[32mcreated\n";
             $provinces = [

@@ -16,10 +16,10 @@ class DatabaseSeeder extends Seeder
     {
         echo "\n";
 
-        // $this->call(AdminTableSeeder::class);
+        $this->call(AdminTableSeeder::class);
 
-        // $cities = $this->call(LocationTablesSeeder::class);
-        
+        $cities = $this->call(LocationTablesSeeder::class);
+
         $this->call(OptionTableSeeder::class);
 
         // $users = $this->call(UserTableSeeder::class, compact('cities') );
