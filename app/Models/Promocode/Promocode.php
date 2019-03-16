@@ -46,7 +46,7 @@ class Promocode extends Model implements AuditableContract
     /**
      * Get the all orders that owned promocode.
      */
-    public function orders ()
+    public function orders()
     {
         return $this->hasMany(Order::class);
     }

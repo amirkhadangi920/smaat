@@ -52,7 +52,7 @@ class Discount extends Model implements AuditableContract
      **             Relations
      ***************************************/
     
-     /**
+    /**
     * Get all of the discount's user.
     */
     public function user ()

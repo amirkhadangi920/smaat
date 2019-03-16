@@ -1,26 +1,33 @@
 <?php namespace App\ModelFilters\Spec;
 
-use EloquentFilter\ModelFilter;
+use App\ModelFilters\MainFilter;
+use App\ModelFilters\Query;
+use App\ModelFilters\SimpleOrdering;
 
-class SpecFilter extends ModelFilter
+class SpecFilter extends MainFilter
 {
+    use Query, SimpleOrdering;
+    
     /**
-     * Filter the Spec table that have a $string in it's name & description
+     * Define the search fields of this data type filter class 
      *
-     * @param string $string
-     * @return Builder
+     * @var array
      */
-    public function query($string)
-    {
-        if ( strlen($string) <= 3 ) return;
+    protected $search_fields = [
+        'title',
+        'description',
+    ];
 
-        return $this->where(function($query) use ($string)
-        {
-            return $query->whereLike('title', $string)
-                ->orWhere('description', 'LIKE', "$$string$");
-        });
-    }
-
+    /**
+     * Define the search fields of this data type filter class 
+     *
+     * @var array
+     */
+    protected $ordering_items = [
+        'headers'       => 'relation',
+        'products'      => 'relation',
+    ];
+    
     /**
      * Filter the the Spec table that have headers or not
      *
@@ -29,10 +36,7 @@ class SpecFilter extends ModelFilter
      */
     public function hasHeader($status)
     {
-        if ( $status )
-            return $this->has('headers');
-        else
-            return $this->has('headers', '=', 0);
+        return $this->has_relation_or_not('headers', $status);
     }
     
     /**
@@ -43,10 +47,7 @@ class SpecFilter extends ModelFilter
      */
     public function hasRow($status)
     {
-        if ( $status )
-            return $this->has('headers.rows');
-        else
-            return $this->has('headers.rows', '=', 0);
+        return $this->has_relation_or_not('rows', $status);
     }
 
     /**
@@ -57,9 +58,6 @@ class SpecFilter extends ModelFilter
      */
     public function categories($ids)
     {
-        return $this->whereHas('category', function($query) use ($ids)
-        {
-            $query->whereIn('id', $ids);
-        });
+        return $this->filter_relation('category', $ids);
     }
 }

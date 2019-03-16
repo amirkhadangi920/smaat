@@ -1,23 +1,19 @@
 <?php namespace App\ModelFilters\User;
 
-use EloquentFilter\ModelFilter;
+use App\ModelFilters\MainFilter;
+use App\ModelFilters\Query;
 
-class RoleFilter extends ModelFilter
+class RoleFilter extends MainFilter
 {
+    use Query;
+    
     /**
-     * Filter the Roles that have a $string in it's name or description
+     * Define the search fields of this data type filter class 
      *
-     * @param string $string
-     * @return Builder
+     * @var array
      */
-    public function query($string)
-    {
-        if ( strlen($string) <= 3 ) return;
-
-        return $this->where(function($query) use ($string)
-        {
-            return $query->whereLike('name', $string)
-                ->orWhere('description', 'LIKE', "$$string$");
-        });
-    }
+    protected $search_fields = [
+        'name',
+        'description',
+    ];
 }

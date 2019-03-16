@@ -16,7 +16,12 @@ class ShippingMethod extends Model
      * @var array
      */
     protected $fillable = [
-        'name' , 'description' , 'logo' , 'cost' , 'minimum'  , 'is_active'
+        'name',
+        'description',
+        'logo',
+        'cost',
+        'minimum',
+        'is_active'
     ];
 
     /**

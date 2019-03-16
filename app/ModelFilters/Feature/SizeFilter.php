@@ -1,33 +1,20 @@
 <?php namespace App\ModelFilters\Feature;
 
-use EloquentFilter\ModelFilter;
-
-class SizeFilter extends ModelFilter
+class SizeFilter extends FeatureBaseFilter
 {
     /**
-     * Filter the Sizes that have a $string in it's name
+     * Define this type of data had has_logo filter
      *
-     * @param string $string
-     * @return Builder
+     * @var boolean
      */
-    public function query($string)
-    {
-        if ( strlen($string) <= 3 ) return;
-
-        return $this->whereLike('name', $string);
-    }
+    protected $has_logo = false;
 
     /**
-     * Filter the Sizes that have specific categoroy
+     * Define the search fields of this data type filter class 
      *
-     * @param array $ids
-     * @return Builder
+     * @var array
      */
-    public function categories($ids)
-    {
-        return $this->whereHas('categories', function($query) use ($ids)
-        {
-            $query->whereIn('id', $ids);
-        });
-    }
+    protected $search_fields = [
+        'name',
+    ];
 }

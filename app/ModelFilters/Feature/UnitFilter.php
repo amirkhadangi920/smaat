@@ -1,37 +1,21 @@
 <?php namespace App\ModelFilters\Feature;
 
-use EloquentFilter\ModelFilter;
-
-class UnitFilter extends ModelFilter
+class UnitFilter extends FeatureBaseFilter
 {
     /**
-     * Filter the Units that have a $string in it's title & description
+     * Define this type of data had has_logo filter
      *
-     * @param string $string
-     * @return Builder
+     * @var boolean
      */
-    public function query($string)
-    {
-        if ( strlen($string) <= 3 ) return;
-
-        return $this->where(function($query) use ($string)
-        {
-            return $query->whereLike('title', $string)
-                ->orWhere('description', 'LIKE', "%$string%");
-        });
-    }
+    protected $has_logo = false;
 
     /**
-     * Filter the Units that have specific categoroy
+     * Define the search fields of this data type filter class 
      *
-     * @param array $ids
-     * @return Builder
+     * @var array
      */
-    public function categories($ids)
-    {
-        return $this->whereHas('categories', function($query) use ($ids)
-        {
-            $query->whereIn('id', $ids);
-        });
-    }
+    protected $search_fields = [
+        'title',
+        'description',
+    ];
 }

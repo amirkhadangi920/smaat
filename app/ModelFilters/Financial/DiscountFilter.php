@@ -1,25 +1,33 @@
 <?php namespace App\ModelFilters\Financial;
 
-use EloquentFilter\ModelFilter;
+use App\ModelFilters\MainFilter;
+use App\ModelFilters\Query;
+use App\ModelFilters\SimpleOrdering;
 
-class DiscountFilter extends ModelFilter
+class DiscountFilter extends MainFilter
 {
-    /**
-     * Filter the Discounts that have a $string in it's title & description
-     *
-     * @param string $string
-     * @return Builder
-     */
-    public function query($string)
-    {
-        if ( strlen($string) <= 3 ) return;
+    use Query, SimpleOrdering;
 
-        return $this->where(function($query) use ($string)
-        {
-            return $query->whereLike('title', $string)
-                ->orWhere('description', 'LIKE', "$$string$");
-        });
-    }
+    /**
+     * Define the search fields of this data type filter class 
+     *
+     * @var array
+     */
+    protected $search_fields = [
+        'title',
+        'description',
+    ];
+
+    /**
+     * Define the search fields of this data type filter class 
+     *
+     * @var array
+     */
+    protected $ordering_items = [
+        'start_at'      => 'feild',
+        'expired_at'    => 'feild',
+        'orders'        => 'relation',
+    ];
 
     /**
      * Filter the discounts that have items or not
@@ -29,10 +37,7 @@ class DiscountFilter extends ModelFilter
      */
     public function hasItem ($status)
     {
-        if ( $status )
-            return $this->has('items');
-        else
-            return $this->has('items', '=', 0);
+        return $this->has_relation_or_not('items', $status);
     }
 
     /**
@@ -43,9 +48,6 @@ class DiscountFilter extends ModelFilter
      */
     public function categories($ids)
     {
-        return $this->whereHas('category', function($query) use ($ids)
-        {
-            $query->whereIn('id', $ids);
-        });
+        return $this->filter_relation('category', $ids);
     }
 }

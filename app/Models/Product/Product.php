@@ -10,12 +10,11 @@ use OwenIt\Auditing\Auditable;
 use OwenIt\Auditing\Contracts\Auditable as AuditableContract;
 use Cviebrock\EloquentSluggable\Sluggable;
 use App\Traits\GenerateRandomID;
-use App\Models\Spec\{ SpecData, Spec };
-use App\Models\Group\Category;
 use App\Models\Opinion\{ Review, QuestionAndAnswer };
 use Spatie\Tags\HasTags;
-use App\Models\Feature\Brand;
-use App\Models\Feature\Unit;
+use App\Models\Spec\{ SpecData, Spec };
+use App\Models\Group\Category;
+use App\Models\Feature\{ Brand, Unit };
 use EloquentFilter\Filterable;
 
 class Product extends Model implements AuditableContract, LikeableContract
@@ -176,120 +175,6 @@ class Product extends Model implements AuditableContract, LikeableContract
     public function spec ()
     {
         return $this->belongsTo(Spec::class);
-    }
-
-    public static function productCard ($query = null, $options = [])
-    {
-        $feilds = ['id', 'name', 'photo', 'label', 'category_id', 'brand_id'];
-        if ( auth()->check() )
-            $feilds = array_merge( $feilds, [ 'code', 'status' ]);
-
-        if ( isset($options['more']) )
-            $feilds = array_merge( $feilds, [ 'advantages', 'disadvantages', 'code' ]);
-        
-        $relations = [
-            'variation:id,product_id,color_id,warranty_id,price,unit,offer,offer_deadline,stock_inventory',
-            'variation.color:id,name,value',
-            'variation.warranty:id,title,expire',
-            'category:id,title',
-            'brand:id,title',
-        ];
-        if ( isset($options['orderby']) )
-        {
-            if ( $options['orderby'] == 'most_expensive' )
-            {
-                $relations['variation'] = function ($query) {
-                    $query->orderBy('price', 'asc');
-                };
-            }
-            elseif ($options['orderby'] == 'cheapest')
-            {
-                $relations['variation'] = function ($query) {
-                    $query->orderBy('price', 'desc');
-                };
-            }
-        }
-        $result = Static::select($feilds)->with( $relations );
-        
-        if ( !auth()->check() )
-        {
-            $result->where('status', 1);
-        }
-
-        if ( isset($options['products']) )
-        {
-            $result->whereIn('id', $options['products']);
-        }
-
-        if ( isset($options['category']) )
-        {
-            $result->where('category_id', $options['category']);
-        }
-
-        if ($query)
-            $result->where('name', 'like', '%'.$query.'%');
-
-        if ( isset($options['color']) )
-        {
-            $result->whereHas('variations', function ($query) use ($options) {
-                $query->whereIn('color_id', $options['color']);
-            });
-        }
-
-        if ( isset($options['price_from']) )
-        {
-            $result->whereHas('variations', function ($query) use ($options) {
-                $query->where('price', '>', $options['price_from'] * 1000);
-            });
-        }
-
-        if ( isset($options['price_to']) )
-        {
-            $result->whereHas('variations', function ($query) use ($options) {
-                $query->where('price', '<', $options['price_to'] * 1000);
-            });
-        }
-         
-        if ( isset($options['brand']) )
-            $result->whereIn('brand_id', $options['brand']);
-        
-        if ( isset($options['orderby']) && $options['orderby'] == 'oldest' )
-        {
-            return $result->orderBy('created_at', 'desc')->paginate(20);
-        }
-        if ( !isset($options['orderby']) || isset($options['orderby']) && $options['orderby'] == 'newest' )
-        {
-            $result->latest();
-        } 
-        return $result->paginate(20);
-    }
-
-    public static function productInfo ($product, $options = [])
-    {
-        $relations = [
-            // Specification table full relations
-            'spec:id',
-            'spec.specHeaders:id,spec_id,title,description',
-            'spec.specHeaders.specRows:id,spec_header_id,title,label,values,help,multiple',
-            'spec.specHeaders.specRows.specData' => function ($query) use ($product) {
-                $query->where('product_id', $product->id);
-            },
-            // Product variations full relations
-            'variations',
-            'variations.color:id,name,value',
-            'variations.warranty:id,title,expire',
-            'category:id,title',
-            'brand:id,title',
-        ];
-        if ( isset($options['reviews']) )
-        {
-            $relations[] = 'reviews';
-            $relations[] = 'reviews.user:id,first_name,last_name,avatar';
-            $relations['reviews'] = function ( $query ) {
-                $query->orderBy('created_at', 'desc');
-            };
-        }
-        return $product->load($relations);
     }
 
     public static function related_products (Product $product)

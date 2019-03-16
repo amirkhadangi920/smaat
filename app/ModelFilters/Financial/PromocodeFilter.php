@@ -1,9 +1,26 @@
 <?php namespace App\ModelFilters\Financial;
 
-use EloquentFilter\ModelFilter;
+use App\ModelFilters\MainFilter;
+use App\ModelFilters\SimpleOrdering;
 
-class PromocodeFilter extends ModelFilter
+class PromocodeFilter extends MainFilter
 {
+    use SimpleOrdering;
+
+    /**
+     * Define the search fields of this data type filter class 
+     *
+     * @var array
+     */
+    protected $ordering_items = [
+        'value'         => 'feild',
+        'min_total'     => 'feild',
+        'expired_at'    => 'feild',
+        'orders'        => 'relation',
+        'categories'    => 'relation',
+        'variations'    => 'relation',
+    ];
+
     /**
      * Filter the Promocodes base on it's code
      *
@@ -37,10 +54,7 @@ class PromocodeFilter extends ModelFilter
      */
     public function users($ids)
     {
-        return $this->whereHas('users', function($query) use ($ids)
-        {
-            $query->whereIn('id', $ids);
-        });
+        return $this->filter_relation('users', $ids);
     }
 
     /**
@@ -51,10 +65,7 @@ class PromocodeFilter extends ModelFilter
      */
     public function categories($ids)
     {
-        return $this->whereHas('categories', function($query) use ($ids)
-        {
-            $query->whereIn('id', $ids);
-        });
+        return $this->filter_relation('categories', $ids);
     }
 
     /**
@@ -65,9 +76,6 @@ class PromocodeFilter extends ModelFilter
      */
     public function variations($ids)
     {
-        return $this->whereHas('variations', function($query) use ($ids)
-        {
-            $query->whereIn('id', $ids);
-        });
+        return $this->filter_relation('variations', $ids);
     }
 }

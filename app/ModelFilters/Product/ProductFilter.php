@@ -1,28 +1,36 @@
 <?php namespace App\ModelFilters\Product;
 
-use EloquentFilter\ModelFilter;
+use App\ModelFilters\MainFilter;
+use App\ModelFilters\Query;
+use App\ModelFilters\SimpleOrdering;
 
-class ProductFilter extends ModelFilter
+class ProductFilter extends MainFilter
 {
-    /**
-     * Filter the Products that have a $string
-     * in it's name, second name & description
-     *
-     * @param string $string
-     * @return Builder
-     */
-    public function query($string)
-    {
-        if ( strlen($string) <= 3 ) return;
+    use Query, SimpleOrdering;
 
-        return $this->where(function($query) use ($string)
-        {
-            return $query->whereLike('name', $string)
-                ->orWhere('second_name', 'LIKE', "$$string$")
-                ->orWhere('description', 'LIKE', "$$string$");
-        });
-    }
+    /**
+     * Define the search fields of this data type filter class 
+     *
+     * @var array
+     */
+    protected $ordering_items = [
+        'favorites'  => 'relation',
+        'reviews'  => 'relation',
+        'questions'  => 'relation',
+        'accessories'  => 'relation',
+    ];
     
+    /**
+     * Define the search fields of this data type filter class 
+     *
+     * @var array
+     */
+    protected $search_fields = [
+        'name',
+        'second_name',
+        'description',
+    ];
+
     /**
      * Filter the Products base on it's codes
      *
@@ -37,40 +45,34 @@ class ProductFilter extends ModelFilter
     /**
      * Filter the Products base on it's label
      *
-     * @param string $label
+     * @param string $labels
      * @return Builder
      */
-    public function label($label)
+    public function label($labels)
     {
-        return $this->whereLike('label', $label);
+        return $this->whereIn('label', $labels);
     }
 
     /**
      * Filter the Products that has advantages or not
      *
-     * @param boolean $logo
+     * @param boolean $status
      * @return Builder
      */
     public function hasAdvantages($status)
     {
-        if ( $status )
-            return $this->whereNotNull('advantages');
-        else
-            return $this->whereNull('advantages');
+        return $this->has_field_or_not('advantages', $status);
     }
 
     /**
      * Filter the Products that has disadvantages or not
      *
-     * @param boolean $logo
+     * @param boolean $status
      * @return Builder
      */
     public function hasDisadvantages($status)
     {
-        if ( $status )
-            return $this->whereNotNull('disadvantages');
-        else
-            return $this->whereNull('disadvantages');
+        return $this->has_field_or_not('disadvantages', $status);
     }
 
     /**
@@ -81,10 +83,7 @@ class ProductFilter extends ModelFilter
      */
     public function hasVideo($status)
     {
-        if ( $status )
-            return $this->whereNotNull('aparat_video');
-        else
-            return $this->whereNull('aparat_video');
+        return $this->has_field_or_not('aparat_video', $status);
     }
 
     /**
@@ -95,10 +94,7 @@ class ProductFilter extends ModelFilter
      */
     public function hasReviews($status)
     {
-        if ( $status )
-            return $this->has('reviews');
-        else
-            return $this->has('reviews', '=', 0);
+        return $this->has_relation_or_not('reviews', $status);
     }
 
     /**
@@ -109,10 +105,7 @@ class ProductFilter extends ModelFilter
      */
     public function hasTable($status)
     {
-        if ( $status )
-            return $this->has('spec_data');
-        else
-            return $this->has('spec_data', '=', 0);
+        return $this->has_relation_or_not('spec_data', $status);
     }
 
     /**
@@ -123,10 +116,7 @@ class ProductFilter extends ModelFilter
      */
     public function hasAccessory($status)
     {
-        if ( $status )
-            return $this->has('accessories');
-        else
-            return $this->has('accessories', '=', 0);
+        return $this->has_relation_or_not('accessories', $status);
     }
 
     /**
@@ -137,10 +127,7 @@ class ProductFilter extends ModelFilter
      */
     public function categories($ids)
     {
-        return $this->whereHas('category', function($query) use ($ids)
-        {
-            $query->whereIn('id', $ids);
-        });
+        return $this->filter_relation('category', $ids);
     }
     
     /**
@@ -151,10 +138,7 @@ class ProductFilter extends ModelFilter
      */
     public function units($ids)
     {
-        return $this->whereHas('unit', function($query) use ($ids)
-        {
-            $query->whereIn('id', $ids);
-        });
+        return $this->filter_relation('unit', $ids);
     }
     
     /**
@@ -165,10 +149,7 @@ class ProductFilter extends ModelFilter
      */
     public function brands($ids)
     {
-        return $this->whereHas('brand', function($query) use ($ids)
-        {
-            $query->whereIn('id', $ids);
-        });
+        return $this->filter_relation('brand', $ids);
     }
     
     /**
@@ -179,10 +160,7 @@ class ProductFilter extends ModelFilter
      */
     public function colors($ids)
     {
-        return $this->whereHas('variation.color', function($query) use ($ids)
-        {
-            $query->whereIn('id', $ids);
-        });
+        return $this->filter_relation('variation.color', $ids);
     }
 
     /**
@@ -193,10 +171,7 @@ class ProductFilter extends ModelFilter
      */
     public function sizes($ids)
     {
-        return $this->whereHas('variation.size', function($query) use ($ids)
-        {
-            $query->whereIn('id', $ids);
-        });
+        return $this->filter_relation('variation.size', $ids);
     }
 
     /**
@@ -207,9 +182,6 @@ class ProductFilter extends ModelFilter
      */
     public function warranties($ids)
     {
-        return $this->whereHas('variation.warranty', function($query) use ($ids)
-        {
-            $query->whereIn('id', $ids);
-        });
+        return $this->filter_relation('variation.warranty', $ids);
     }
 }

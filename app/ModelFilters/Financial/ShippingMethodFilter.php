@@ -1,37 +1,42 @@
 <?php namespace App\ModelFilters\Financial;
 
-use EloquentFilter\ModelFilter;
+use App\ModelFilters\MainFilter;
+use App\ModelFilters\Query;
+use App\ModelFilters\SimpleOrdering;
 
-class ShippingMethodFilter extends ModelFilter
+class ShippingMethodFilter extends MainFilter
 {
-    /**
-     * Filter the Shipping method that have a $string in it's name & description
-     *
-     * @param string $string
-     * @return Builder
-     */
-    public function query($string)
-    {
-        if ( strlen($string) <= 3 ) return;
+    use Query, SimpleOrdering;
 
-        return $this->where(function($query) use ($string)
-        {
-            return $query->whereLike('name', $string)
-                ->orWhere('description', 'LIKE', "$$string$");
-        });
-    }
+    /**
+     * Define the search fields of this data type filter class 
+     *
+     * @var array
+     */
+    protected $search_fields = [
+        'name',
+        'description',
+    ];
+
+    /**
+     * Define the search fields of this data type filter class 
+     *
+     * @var array
+     */
+    protected $ordering_items = [
+        'cost'      => 'feild',
+        'minimum'   => 'feild',
+        'orders'    => 'relation',
+    ];
 
     /**
      * Filter the Shipping method that have a logo or not
      *
-     * @param boolean $logo
+     * @param boolean $status
      * @return Builder
      */
-    public function hasLogo($logo)
+    public function hasLogo($status)
     {
-        if ( $logo )
-            return $this->whereNotNull('logo');
-        else
-            return $this->whereNull('logo');
+        return $this->has_field_or_not('logo', $status);
     }
 }

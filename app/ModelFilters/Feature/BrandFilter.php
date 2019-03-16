@@ -1,51 +1,21 @@
 <?php namespace App\ModelFilters\Feature;
 
-use EloquentFilter\ModelFilter;
-
-class BrandFilter extends ModelFilter
+class BrandFilter extends FeatureBaseFilter
 {
     /**
-     * Filter the Brands that have a $string in it's name or description
+     * Define this type of data had has_logo filter
      *
-     * @param string $string
-     * @return Builder
+     * @var boolean
      */
-    public function query($string)
-    {
-        if ( strlen($string) <= 3 ) return;
-
-        return $this->where(function($query) use ($string)
-        {
-            return $query->whereLike('name', $string)
-                ->orWhere('description', 'LIKE', "%$string%");
-        });
-    }
+    protected $has_logo = true;
 
     /**
-     * Filter the Brands that have a logo or not
+     * Define the search fields of this data type filter class 
      *
-     * @param boolean $logo
-     * @return Builder
+     * @var array
      */
-    public function hasLogo($logo)
-    {
-        if ( $logo )
-            return $this->whereNotNull('logo');
-        else
-            return $this->whereNull('logo');
-    }
-
-    /**
-     * Filter the Brands that have specific categoriy
-     *
-     * @param array $ids
-     * @return Builder
-     */
-    public function categories($ids)
-    {
-        return $this->whereHas('categories', function($query) use ($ids)
-        {
-            $query->whereIn('id', $ids);
-        });
-    }
+    protected $search_fields = [
+        'name',
+        'description',
+    ];
 }

@@ -1,9 +1,23 @@
 <?php namespace App\ModelFilters\Financial;
 
-use EloquentFilter\ModelFilter;
+use App\ModelFilters\MainFilter;
+use App\ModelFilters\SimpleOrdering;
 
-class OrderFilter extends ModelFilter
+class OrderFilter extends MainFilter
 {
+    use SimpleOrdering;
+
+    /**
+     * Define the search fields of this data type filter class 
+     *
+     * @var array
+     */
+    protected $ordering_items = [
+        'offer'     => 'feild',
+        'total'     => 'feild',
+        'paid_at'   => 'feild',
+    ];
+
     /**
      * Filter the Orders base on it's id
      *
@@ -45,10 +59,7 @@ class OrderFilter extends ModelFilter
      */
     public function hasDescriptions($status)
     {
-        if ( $status )
-            return $this->whereNotNull('descriptions');
-        else
-            return $this->whereNull('descriptions');
+        return $this->has_field_or_not('descriptions', $status);
     }
 
     /**
@@ -59,10 +70,7 @@ class OrderFilter extends ModelFilter
      */
     public function hasDocs($status)
     {
-        if ( $status )
-            return $this->whereNotNull('docs');
-        else
-            return $this->whereNull('docs');
+        return $this->has_field_or_not('docs', $status);
     }
 
     /**
@@ -73,10 +81,7 @@ class OrderFilter extends ModelFilter
      */
     public function hasDiscount($status)
     {
-        if ( $status )
-            return $this->has('discount');
-        else
-            return $this->has('discount', '=', 0);
+        return $this->has_relation_or_not('discount', $status);
     }
 
     /**
@@ -87,10 +92,7 @@ class OrderFilter extends ModelFilter
      */
     public function isPaid($status)
     {
-        if ( $status )
-            return $this->whereNotNull('paid_at');
-        else
-            return $this->whereNull('paid_at');
+        return $this->has_field_or_not('paid_at', $status);
     }
 
     /**
@@ -101,10 +103,7 @@ class OrderFilter extends ModelFilter
      */
     public function buyers($ids)
     {
-        return $this->whereHas('user', function($query) use ($ids)
-        {
-            $query->whereIn('id', $ids);
-        });
+        return $this->filter_relation('user', $ids);
     }
 
     /**
@@ -115,10 +114,7 @@ class OrderFilter extends ModelFilter
      */
     public function statuses($ids)
     {
-        return $this->whereHas('order_status', function($query) use ($ids)
-        {
-            $query->whereIn('id', $ids);
-        });
+        return $this->filter_relation('order_status', $ids);
     }
     
     /**
@@ -129,10 +125,7 @@ class OrderFilter extends ModelFilter
      */
     public function shipping_methods($ids)
     {
-        return $this->whereHas('shipping_method', function($query) use ($ids)
-        {
-            $query->whereIn('id', $ids);
-        });
+        return $this->filter_relation('shipping_method', $ids);
     }
     
     /**
@@ -143,9 +136,6 @@ class OrderFilter extends ModelFilter
      */
     public function cities($ids)
     {
-        return $this->whereHas('city', function($query) use ($ids)
-        {
-            $query->whereIn('id', $ids);
-        });
+        return $this->filter_relation('city', $ids);
     }
 }

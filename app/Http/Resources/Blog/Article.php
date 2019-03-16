@@ -14,8 +14,6 @@ class Article extends JsonResource
      */
     public function toArray($request)
     {
-        // return parent::toArray($request);
-
         return [
             'id'              => $this->id,
             'link'              => "/api/v1/article/{$this->slug}",

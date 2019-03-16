@@ -1,9 +1,32 @@
 <?php namespace App\ModelFilters\Opinion;
 
-use EloquentFilter\ModelFilter;
+use App\ModelFilters\MainFilter;
+use App\ModelFilters\SimpleOrdering;
 
-class CommentFilter extends ModelFilter
+class CommentFilter extends MainFilter
 {
+    use SimpleOrdering;
+    
+    /**
+     * Define the search fields of this data type filter class 
+     *
+     * @var array
+     */
+    protected $ordering_items = [
+        'answers' => 'relation'
+    ];
+
+    /**
+     * Filter the comments that have answer or not
+     *
+     * @param boolean $status
+     * @return Builder
+     */
+    public function hasAnswer($status)
+    {
+        return $this->has_relation_or_not('answers', $status);
+    }
+
     /**
      * Filter the Comments that wrote by specific user
      *
@@ -12,24 +35,7 @@ class CommentFilter extends ModelFilter
      */
     public function writers($ids)
     {
-        return $this->whereHas('user', function($query) use ($ids)
-        {
-            $query->whereIn('id', $ids);
-        });
-    }
-
-    /**
-     * Filter the comments that have answer or not
-     *
-     * @param boolean $logo
-     * @return Builder
-     */
-    public function hasAnswer($answer)
-    {
-        if ( $answer )
-            return $this->has('answers');
-        else
-            return $this->has('answers', '=', 0);
+        return $this->filter_relation('user', $ids);
     }
 
     /**
@@ -40,9 +46,6 @@ class CommentFilter extends ModelFilter
      */
     public function articles($ids)
     {
-        return $this->whereHas('article', function($query) use ($ids)
-        {
-            $query->whereIn('id', $ids);
-        });
+        return $this->filter_relation('article', $ids);
     }
 }

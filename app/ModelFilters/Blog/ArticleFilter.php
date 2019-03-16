@@ -1,24 +1,44 @@
 <?php namespace App\ModelFilters\Blog;
 
-use EloquentFilter\ModelFilter;
+use App\ModelFilters\MainFilter;
+use App\ModelFilters\Query;
+use App\ModelFilters\SimpleOrdering;
 
-class ArticleFilter extends ModelFilter
+class ArticleFilter extends MainFilter
 {
+    use Query, SimpleOrdering;
+
     /**
-     * Filter the Articles that have a $string in it's name or description
+     * Define the search fields of this data type filter class 
      *
-     * @param string $string
+     * @var array
+     */
+    protected $search_fields = [
+        'title',
+        'description',
+    ];
+
+    /**
+     * Define the search fields of this data type filter class 
+     *
+     * @var array
+     */
+    protected $ordering_items = [
+        'reading_time'  => 'feild',
+        'comments'      => 'relation',
+        'likes'         => 'relation',
+        'dislikes'      => 'relation'
+    ];
+
+    /**
+     * Filter the Articles that have subject or not
+     *
+     * @param boolean $status
      * @return Builder
      */
-    public function query($string)
+    public function hasSubject($status)
     {
-        if ( strlen($string) <= 3 ) return;
-
-        return $this->where(function($query) use ($string)
-        {
-            return $query->whereLike('title', $string)
-                ->orWhere('description', 'LIKE', "%$string%");
-        });
+        return $this->has_relation_or_not('subjects', $status);
     }
 
     /**
@@ -27,9 +47,9 @@ class ArticleFilter extends ModelFilter
      * @param string $id
      * @return Builder
      */
-    public function writer($id)
+    public function writers($ids)
     {
-        return $this->where('user_id', $id);
+        return $this->filter_relation('user', $ids);
     }
 
     /**
@@ -40,9 +60,6 @@ class ArticleFilter extends ModelFilter
      */
     public function subjects($ids)
     {
-        return $this->whereHas('subjects', function($query) use ($ids)
-        {
-            $query->whereIn('id', $ids);
-        });
+        return $this->filter_relation('subjects', $ids);
     }
 }

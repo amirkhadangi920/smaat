@@ -1,22 +1,11 @@
 <?php namespace App\ModelFilters\Opinion;
 
-use EloquentFilter\ModelFilter;
+use App\ModelFilters\MainFilter;
+use App\ModelFilters\SimpleOrdering;
 
-class ReviewFilter extends ModelFilter
+class ReviewFilter extends MainFilter
 {
-    /**
-     * Filter the Reviews that wrote by specific user
-     *
-     * @param string $id
-     * @return Builder
-     */
-    public function writers($ids)
-    {
-        return $this->whereHas('user', function($query) use ($ids)
-        {
-            $query->whereIn('id', $ids);
-        });
-    }
+    use SimpleOrdering;
 
     /**
      * Filter the Reviews that has advantages or not
@@ -26,10 +15,7 @@ class ReviewFilter extends ModelFilter
      */
     public function hasAdvantages($status)
     {
-        if ( $status )
-            return $this->whereNotNull('advantages');
-        else
-            return $this->whereNull('advantages');
+        return $this->has_field_or_not('advantages', $status);
     }
 
     /**
@@ -40,10 +26,18 @@ class ReviewFilter extends ModelFilter
      */
     public function hasDisadvantages($status)
     {
-        if ( $status )
-            return $this->whereNotNull('disadvantages');
-        else
-            return $this->whereNull('disadvantages');
+        return $this->has_field_or_not('disadvantages', $status);
+    }
+
+    /**
+     * Filter the Reviews that wrote by specific user
+     *
+     * @param string $id
+     * @return Builder
+     */
+    public function writers($ids)
+    {
+        return $this->filter_relation('user', $ids);
     }
 
     /**
@@ -54,9 +48,6 @@ class ReviewFilter extends ModelFilter
      */
     public function products($ids)
     {
-        return $this->whereHas('product', function($query) use ($ids)
-        {
-            $query->whereIn('id', $ids);
-        });
+        return $this->filter_relation('product', $ids);
     }
 }

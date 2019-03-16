@@ -1,38 +1,21 @@
 <?php namespace App\ModelFilters\Feature;
 
-use EloquentFilter\ModelFilter;
-
-class ColorFilter extends ModelFilter
+class ColorFilter extends FeatureBaseFilter
 {
     /**
-     * Filter the Colors that have a $string
-     * in it's name or color code value
+     * Define this type of data had has_logo filter
      *
-     * @param string $string
-     * @return Builder
+     * @var boolean
      */
-    public function query($string)
-    {
-        if ( strlen($string) <= 3 ) return;
-
-        return $this->where(function($query) use ($string)
-        {
-            return $query->whereLike('name', $string)
-                ->orWhere('code', $string);
-        });
-    }
+    protected $has_logo = false;
 
     /**
-     * Filter the Colors that have specific categoroy
+     * Define the search fields of this data type filter class 
      *
-     * @param array $ids
-     * @return Builder
+     * @var array
      */
-    public function categories($ids)
-    {
-        return $this->whereHas('categories', function($query) use ($ids)
-        {
-            $query->whereIn('id', $ids);
-        });
-    }
+    protected $search_fields = [
+        'name',
+        'code',
+    ];
 }
