@@ -25,7 +25,7 @@ class PromocodeRequest extends FormRequest
     {
         return [
             'code'                  => 'required|string|max:50',
-            'value'                 => 'required|integer|digits_between:1,10',
+            'value'                 => 'required|integer|min:1|max:99',
             'min_total'             => 'nullable|integer|digits_between:1,10',
             'expired_at'            => 'required|date|after:now',
 

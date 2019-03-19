@@ -52,7 +52,7 @@ class OrderTablesSeeder extends Seeder
 
         $data['products']['variations']->each( function ( $variation ) use ( $discounts ) {
 
-            $discounts->random()->discount_items()->saveMany( 
+            $discounts->random()->items()->saveMany( 
                 factory( App\Models\Discount\DiscountItem::class, rand(1, 5) )->make([
 
                     'discount_id'    => $discounts->random()->id,

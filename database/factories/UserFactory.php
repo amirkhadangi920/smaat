@@ -7,7 +7,6 @@ $faker = Factory::create('fa_IR');
 
 use Ybazli\Faker\Facades\Faker;
 
-
 $avatars = [
     [
         'img' => '/tests/avatars/man_1.png'  
@@ -19,6 +18,7 @@ $avatars = [
         'img' => '/tests/avatars/women_2.jpg'
     ]
 ];
+
 /*
 |--------------------------------------------------------------------------
 | Model Factories

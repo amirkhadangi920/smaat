@@ -49,8 +49,10 @@ class CreateDiscountTables extends Migration
         $schema->create('promocodes', function (Blueprint $table) {
             $table->table([
                 'code'          => 50,
-                'value'         => 'integer',
+                'value'         => 'tinyInteger',
                 'min_total'     => 'integer|default:0',
+                'max'           => 'integer|nullable',
+                'quantity'      => 'integer|nullable',
                 'reward_type'   => '20|default:buy|comment:e.g buy, birthday, gift etc...',
             ], [], 'int', ['expired_at']);
         });

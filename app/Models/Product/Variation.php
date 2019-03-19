@@ -71,6 +71,8 @@ class Variation extends Model implements AuditableContract
         'deleted_at',
         'offer_deadline'
     ];
+
+
     /****************************************
      **             Relations
      ***************************************/
@@ -139,10 +141,19 @@ class Variation extends Model implements AuditableContract
      * 
      * @return discountItem Model
      */
-    
-    public function discount_item ()
+    public function discount_items()
     {
         return $this->hasMany(DiscountItem::class);
+    }
+
+    /**
+     * Relation to discount item model
+     * 
+     * @return discountItem Model
+     */
+    public function discount_item()
+    {
+        return $this->hasOne(DiscountItem::class);
     }
 
     /**
@@ -154,6 +165,41 @@ class Variation extends Model implements AuditableContract
     public function order_points ()
     {
         return $this->morphMany(OrderPoint::class, 'orderable');
+    }
+
+
+    /****************************************
+     **         Scopes & Mutators
+     ***************************************/
+    
+    /**
+     * Get the product price or it's offer
+     * if it has an offer
+     *
+     * @return integer
+     */
+    public function getFinalPriceAttribute()
+    {
+        if ( $offer = $this->getOffer() )
+            return $offer;
+        
+        else
+            return $this->sales_price;
+    }
+
+    /****************************************
+     **               Methods
+     ***************************************/
+
+    public function getOffer()
+    {
+        if ( !($discount = $this->discount_item->discount ?? false) )
+            return null;
+
+        if ( $discount->start_at->lt(now()) && $discount->expired_at->gt(now()) )
+            return $this->discount_item->offer;
+        else
+            return null;
     }
 
     /**

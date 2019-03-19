@@ -19,6 +19,13 @@ class OrderItem extends Model implements AuditableContract
      ***************************************/
     
     /**
+     * The attributes specifies that table has char type id
+     *
+     * @var boolean
+     */
+    public $incrementing = false;
+    
+    /**
      * The attributes that are mass assignable.
      *
      * @var array
@@ -59,11 +66,41 @@ class OrderItem extends Model implements AuditableContract
         return $this->belongsTo(Order::class);
     }
 
-    // /**
-    //  * Get all the items of the user
-    //  */
-    // public function user ()
-    // {
-    //     return $this->belongsTo(\App\User::class);
-    // }
+
+    /****************************************
+     **               Methods
+     ***************************************/
+
+    public function priceAndOffer()
+    {
+        $this->price = $this->variation->sales_price;
+            
+        if ( $offer = $this->variation->getOffer() )
+        {
+            if ( $offer = $this->price - $offer > 0) 
+                $this->offer = $this->price - $offer;
+        }
+
+        return $this;
+    }
+
+    public function checkInventory()
+    {
+        if ( $this->variation->inventory && $this->variation->inventory <= $this->count )
+            $this->count = $this->variation->inventory;
+        
+        return $this;
+    }
+
+    public function checkLabel()
+    {
+        if ( !is_null( $this->variation->product->label ?? null ) )
+            $this->delete();
+    }
+
+    public function checkQuantity()
+    {
+        if ( $this->variation->inventory && $this->variation->inventory === 0 )
+            $this->delete();
+    }
 }

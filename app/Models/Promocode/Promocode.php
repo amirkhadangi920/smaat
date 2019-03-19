@@ -9,10 +9,11 @@ use App\Models\Financial\Order;
 use App\Models\Group\Category;
 use App\Models\Product\Variation;
 use EloquentFilter\Filterable;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Promocode extends Model implements AuditableContract
 {
-    use Auditable, Filterable;
+    use SoftDeletes, Auditable, Filterable;
 
     /****************************************
      **             Attributes
@@ -27,7 +28,19 @@ class Promocode extends Model implements AuditableContract
         'code',
         'value',
         'min_total',
+        'max',
+        'quantity',
         'reward_type',
+        'expired_at'
+    ];
+
+    /**
+     * The attributes that should be mutated to dates.
+     *
+     * @var array
+     */
+    protected $dates = [
+        'deleted_at',
         'expired_at'
     ];
 
@@ -54,7 +67,7 @@ class Promocode extends Model implements AuditableContract
     /**
      * Get all the categories that owned the promocode & adverb
      */
-    public function categories ()
+    public function categories()
     {
         return $this->belongsToMany(Category::class);
     }
@@ -74,5 +87,9 @@ class Promocode extends Model implements AuditableContract
     {
         return $this->belongsToMany(Variation::class);
     }
+
+
+    /****************************************
+     **               Methods
+     ***************************************/
 }
-    

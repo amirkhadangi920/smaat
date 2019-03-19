@@ -46,7 +46,11 @@ class Discount extends Model implements AuditableContract
      *
      * @var array
      */
-    protected $dates = ['deleted_at'];
+    protected $dates = [
+        'deleted_at',
+        'start_at',
+        'expired_at'
+    ];
     
     /****************************************
      **             Relations

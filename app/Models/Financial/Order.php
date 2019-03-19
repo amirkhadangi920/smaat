@@ -52,9 +52,8 @@ class Order extends Model implements AuditableContract
         'offer',
         'total',
         'tax',
+        'shipping_cost',
         'docs',
-        'auth_code',
-        'payment_code',
         // 'payment_jalali',
         'datetimes',
         'status',
@@ -146,6 +145,157 @@ class Order extends Model implements AuditableContract
         return $this->belongsTo(City::class);
     }
 
+
+    /****************************************
+     **               Methods
+     ***************************************/
+
+    public function total()
+    {
+        return $this->total = $this->items->sum(function ($item) {
+            return $item->price * $item->count;
+        });
+    }
+
+    public function calculateTotal()
+    {
+        return ( $this->total + $this->shipping_cost ) - $this->offer;
+    }
+
+    public function promocodeHasExpired()
+    {
+        if ( $this->promocode->expired_at->lt(now()) )
+            $this->promocode = null;
+
+        return $this;
+    }
+
+    public function promocodeCheckMinimum()
+    {
+        if ( $this->total() <= $this->promocode->min_total )
+            $this->promocode = null;
+
+        return $this;
+    }
+
+    public function promocodeCheckQuantity()
+    {
+        if ( !is_null( $this->promocode->quantity ) && $this->promocode->quantity < 1 )
+            $this->promocode = null;
+
+        return $this;
+    }
+
+    public function promocodeCheckValidUsers()
+    {
+        $users = $this->promocode->users;
+
+        if ( $users->isNotEmpty() && $users->whereIn('id', auth()->user()->id )->count() !== 1 )
+            $this->promocode = null;
+
+        return $this;
+    }
+
+    public function promocodeCheckBeforeUsed()
+    {
+        $orders = auth()->user()->orders()->where('order_status_id', '!=', 1);
+            
+        if ( $orders->where('promocode_id', $this->promocode_id)->get()->count() !== 0 )
+            $this->promocode = null;
+
+        return $this;
+    }
+
+    public function canUsePromocode()
+    {
+        if ( $this->promocode )
+        {
+            $this->promocodeHasExpired()
+                 ->promocodeCheckMinimum()
+                 ->promocodeCheckQuantity()
+                 ->promocodeCheckBeforeUsed();
+        }
+        
+        return $this;
+    }
+
+    public function promocodeGetValidVariations()
+    {
+        $variations = $this->promocode->variations;
+
+        if ( $variations->isNotEmpty() )
+            return $variations = $variations->whereIn('id', $this->items->pluck('variation.id') );
+
+        return collect();
+    }
+
+    public function promocodeGetValidCategories()
+    {
+        $categories = $this->promocode->categories;
+
+        if ( $categories->isNotEmpty() )
+        {
+            $categories = $categories->whereIn( 'id',
+                $this->items->pluck('variation.product.category.id')
+            )->pluck('id');
+
+            return $this->items->whereIn('variation.product.category.id', $categories)->pluck('variation');
+        }
+
+        return collect();
+    }
+
+    public function promocodeGetValidVariationsOffer($variations)
+    {
+        $cart_items = $this->items->keyBy('variation.id');
+
+        $order_total = $variations->sum(function ($item) use($cart_items) {
+            
+            return $item->final_price * $cart_items[ $item->id ]->count;
+        });
+
+        $offer = (integer) ( ( $order_total * $this->promocode->value ) / 100 );
+        
+        if ( $this->promocode->max && $this->promocode->max < $offer )
+            $offer = $this->promocode->max;
+
+        return $offer;
+    }
+
+    public function calculatePromocodeOffer()
+    {
+        if ( !$this->promocode ) return $this;
+        
+        $variations = $this->promocodeGetValidVariations()->merge(
+            $this->promocodeGetValidCategories()
+        );
+
+        $this->offer = $this->promocodeGetValidVariationsOffer( $variations );
+    
+        return $this;
+    }
+
+    public function usePromocode()
+    {
+        if ( !$this->promocode || !$this->promocode->quantity ) return $this;
+
+        
+
+        $this->promocode->decrement('quantity');
+
+        dd( $this->promocode );
+
+        return $this;
+    }
+
+    public function calculateShippingCost()
+    {
+        if ( !$this->shipping_method ) return $this;
+        
+        $this->shipping_cost = $this->shipping_method->cost;
+
+        return $this;
+    }
 
     /**
      * return list of orders

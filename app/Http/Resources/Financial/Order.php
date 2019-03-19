@@ -14,8 +14,6 @@ class Order extends JsonResource
      */
     public function toArray($request)
     {
-        // return parent::toArray($request);
-
         return [
             'id'                => $this->id,
             'link'              => "/api/v1/order/{$this->id}",
@@ -24,6 +22,8 @@ class Order extends JsonResource
             'postal_code'       => $this->postal_code,
             'offer'             => $this->offer,
             'total'             => $this->total,
+            'shipping_cost'     => $this->shipping_cost,
+            'final_total'       => $this->total + $this->shipping_cost - $this->offer,
             'docs'              => $this->docs,
             'auth_code'         => $this->auth_code,
             'payment_code'      => $this->payment_code,
@@ -86,7 +86,7 @@ class Order extends JsonResource
                         'label'         => $item->variation->product->label ?? null,
                         'inventory'     => $item->variation->inventory ?? null,
                         'sending_time'  => $item->variation->sending_time ?? null,
-                        'price'         => $item->price,
+                        'price'         => $item->variation->sales_price ?? null,
                         'offer'         => $item->offer,
                         'count'         => $item->count,
                         'description'   => $item->description,

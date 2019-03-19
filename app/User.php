@@ -46,6 +46,7 @@ class User extends Authenticatable implements AuditableContract
      * @var array
      */
     protected $fillable = [
+        'city_id',
         'first_name',
         'last_name',
         'phones',
