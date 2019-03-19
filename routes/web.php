@@ -36,4 +36,6 @@ Route::get('/api', function () {
 
 // https://github.com/cviebrock/eloquent-sluggable
 
-Route::view('/' , 'welcome');
+$dashboard_template = 'black';
+
+Route::view('/dashboard' , "dashboards.{$dashboard_template}");

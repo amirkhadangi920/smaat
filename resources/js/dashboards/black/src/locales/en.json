@@ -1,0 +1,124 @@
+{
+  "dashboard": {
+    "completedTasks": "وظایف تکمیل شده",
+    "dailySales": "فروش روزانه",
+    "performance": "کارایی",
+    "simpleTable": "جدول ساده",
+    "totalShipments": "مجموع حمل و نقل",
+    "chartCategories": [
+      "حساب ها",
+      "خرید",
+      "جلسات"
+    ],
+    "tasks": "وظایف({count})",
+    "today": "امروز",
+    "dropdown": {
+      "action": "عمل",
+      "anotherAction": "یکی دیگر از اقدام",
+      "somethingElse": "یک چیز دیگر"
+    },
+    "usersTable": {
+      "title": "جدول ساده",
+      "columns": [
+        "اسم",
+        "کشور",
+        "شهر",
+        "حقوق"
+      ],
+      "data": [
+        {
+          "id": 1,
+          "name": "Dakota Rice",
+          "salary": "$36.738",
+          "country": "ایران",
+          "city": "تهران"
+        },
+        {
+          "id": 2,
+          "name": "Minerva Hooper",
+          "salary": "$23,789",
+          "country": "ایران",
+          "city": "مشهد"
+        },
+        {
+          "id": 3,
+          "name": "Sage Rodriguez",
+          "salary": "$56,142",
+          "country": "ایران",
+          "city": "اصفهان"
+        },
+        {
+          "id": 4,
+          "name": "Philip Chaney",
+          "salary": "$38,735",
+          "country": "ایران",
+          "city": "تهران"
+        },
+        {
+          "id": 5,
+          "name": "Doris Greene",
+          "salary": "$63,542",
+          "country": "ایران",
+          "city": "تهران"
+        },
+        {
+          "id": 6,
+          "name": "Mason Porter",
+          "salary": "$98,615",
+          "country": "ایران",
+          "city": "Gloucester"
+        },
+        {
+          "id": 7,
+          "name": "Jon Porter",
+          "salary": "$78,615",
+          "country": "ایران",
+          "city": "تهران"
+        }
+      ]
+    },
+    "taskList": [
+      {
+        "title": "به روز رسانی مستندات",
+        "description": "Dwuamish Head, Seattle, WA 8:47 AM",
+        "done": false
+      },
+      {
+        "title": "GDPR انطباق",
+        "description": "GDPR یک مقررات است که به کسب و کار نیاز دارد تا از اطلاعات شخصی و حریم خصوصی شهروندان اروپایی برای انجام معاملات در کشورهای عضو اتحادیه اروپا محافظت کند.",
+        "done": true
+      },
+      {
+        "title": "مسائل را حل کنید",
+        "description": "پنجاه درصد از همه پاسخ دهندگان گفتند که بیشتر احتمال دارد در یک شرکت خریداری شوند",
+        "done": false
+      },
+      {
+        "title": "رهایی v2.0.0",
+        "description": "Ra Ave SW, Seattle, WA 98116, SUA 11:19 AM",
+        "done": false
+      },
+      {
+        "title": "فایل های پردازش شده را صادر کنید",
+        "description": "این گزارش همچنین نشان می دهد که مصرف کنندگان به راحتی یک شرکت را یک بار نقض کرده و اطلاعات شخصیشان را به نمایش می گذارد.",
+        "done": false
+      },
+      {
+        "title": "Arival at export process",
+        "description": "Capitol Hill, Seattle, WA 12:34 AM",
+        "done": false
+      }
+    ]
+  },
+  "sidebar": {
+    "title": "داشبورد",
+    "dashboard": "داشبورد",
+    "icons": "آیکون",
+    "maps": "نقشه",
+    "notifications": "اعلان",
+    "userProfile": "مشخصات کاربر",
+    "tableList": "جداول",
+    "typography": "تایپوگرافی",
+    "rtlSupport": "چپ به راست"
+  }
+}
