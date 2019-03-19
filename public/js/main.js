@@ -63762,8 +63762,10 @@ __webpack_require__.r(__webpack_exports__);
  // configure router
 
 var router = new vue_router__WEBPACK_IMPORTED_MODULE_0__["default"]({
+  mode: 'history',
+  base: '/',
+  fallback: true,
   routes: _routes__WEBPACK_IMPORTED_MODULE_1__["default"],
-  // short for routes: routes
   linkExactActiveClass: "active",
   scrollBehavior: function scrollBehavior(to) {
     if (to.hash) {

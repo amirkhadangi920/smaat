@@ -15,10 +15,14 @@ use App\Models\Article;
 |
 */
 
-Route::get('/api', function () {
+Route::get('{path}', function() {
 
-    return 'Welcome to SmaaT web service';
-});
+    $dashboard_template = 'black';
+
+    return view("dashboards.{$dashboard_template}");
+})->where('path', '.*');
+
+// Route::view('/{vue?}', "dashboards.{$dashboard_template}")->where('vue', '[\/\w\.-]*');
 
 // Route::resource('/article', 'panel\ArticleController');
 
@@ -35,7 +39,3 @@ Route::get('/api', function () {
 // https://laravel-auditing.herokuapp.com/docs/4.1/audit-presentation
 
 // https://github.com/cviebrock/eloquent-sluggable
-
-$dashboard_template = 'black';
-
-Route::view('/dashboard' , "dashboards.{$dashboard_template}");

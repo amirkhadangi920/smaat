@@ -3,7 +3,10 @@ import routes from "./routes";
 
 // configure router
 const router = new VueRouter({
-  routes, // short for routes: routes
+  mode: 'history',
+  base: '/',
+  fallback: true,
+  routes,
   linkExactActiveClass: "active",
   scrollBehavior: (to) => {
     if (to.hash) {
