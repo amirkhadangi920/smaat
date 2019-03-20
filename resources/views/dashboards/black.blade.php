@@ -8,9 +8,14 @@
 
         <!-- Fonts -->
         <link href="https://fonts.googleapis.com/css?family=Nunito:200,600" rel="stylesheet" type="text/css">
-
+        {{-- <link href='https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900|Material+Icons' rel="stylesheet"> --}}
+        <link href="/css/font.css" rel="stylesheet" type="text/css">
         <!-- Styles -->
-
+        <style>
+            body {
+                background: #f5f6fa !important;
+            }
+        </style>
     </head>
     <body>
         <div id="app">

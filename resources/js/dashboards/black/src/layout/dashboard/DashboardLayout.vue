@@ -10,6 +10,7 @@
         <sidebar-link to="/table-list" :name="$t('sidebar.tableList')" icon="tim-icons icon-puzzle-10"/>
         <sidebar-link to="/typography" :name="$t('sidebar.typography')" icon="tim-icons icon-align-center"/>
         <sidebar-link to="/dashboard?enableRTL=true" :name="$t('sidebar.rtlSupport')" icon="tim-icons icon-world"/>
+        <sidebar-link to="/brand" :name="$t('sidebar.list') + ' ' + $t('sidebar.brand')" icon="tim-icons icon-world"/>
       </template>
     </side-bar>
     <div class="main-panel">

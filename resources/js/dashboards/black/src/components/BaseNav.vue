@@ -59,7 +59,7 @@ export default {
     },
     effect: {
       type: String,
-      default: "dark",
+      default: "light",
       description: "Effect of the navbar (light|dark)"
     },
     round: {

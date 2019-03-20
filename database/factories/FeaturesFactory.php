@@ -9,9 +9,10 @@ $factory->define(App\Models\Feature\Brand::class, function () use($faker, $brand
     $selected = rand(0, count($brands) - 1);
     
     return [
-        'logo'              => image ( $brands[$selected]['logo'] ),
-        'name'            => $brands[$selected]['name'],
-        'logo'              => nullable( image ( $brands[$selected]['logo'] ))
+        'logo'          => image ( $brands[$selected]['logo'] ),
+        'name'          => $brands[$selected]['name'],
+        'description'   => nullable( $faker->sentence() ),
+        'logo'          => nullable( image ( $brands[$selected]['logo'] ))
     ];
 });
 

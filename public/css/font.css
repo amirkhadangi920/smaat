@@ -1,0 +1,102 @@
+
+/* =========================
+start of imporing fonts file
+========================= */
+
+/* Import Roua font files */
+@font-face {
+    font-family: 'Roya';
+    src: url('../fonts/Persian/Roya/BRoya.eot'); /* IE9 Compat Modes */
+    src: url('../fonts/Persian/Roya/BRoya.eot?#iefix') format('embedded-opentype'), /* IE6-IE8 */
+         url('../fonts/Persian/Roya/BRoya.woff2') format('woff2'), /* Super Modern Browsers */
+         url('../fonts/Persian/Roya/BRoya.woff') format('woff'), /* Pretty Modern Browsers */
+         url('../fonts/Persian/Roya/BRoya.ttf')  format('truetype'), /* Safari, Android, iOS */
+         url('../fonts/Persian/Roya/BRoya.svg') format('svg'); /* Legacy iOS */
+}
+/* Import Roua bold font files */
+@font-face {
+    font-family: 'Roya';
+    font-family: 'bold';
+    src: url('../fonts/Persian/Roya/BRoyaBold.eot'); /* IE9 Compat Modes */
+    src: url('../fonts/Persian/Roya/BRoyaBold.eot?#iefix') format('embedded-opentype'), /* IE6-IE8 */
+         url('../fonts/Persian/Roya/BRoyaBold.woff2') format('woff2'), /* Super Modern Browsers */
+         url('../fonts/Persian/Roya/BRoyaBold.woff') format('woff'), /* Pretty Modern Browsers */
+         url('../fonts/Persian/Roya/BRoyaBold.ttf')  format('truetype'), /* Safari, Android, iOS */
+         url('../fonts/Persian/Roya/BRoyaBold.svg') format('svg'); /* Legacy iOS */
+}
+
+/* Import Vazir font files */
+@font-face {
+    font-family: 'Vazir';
+    src: url('../fonts/Persian/Vazir/Vazir.eot'); /* IE9 Compat Modes */
+    src: url('../fonts/Persian/Vazir/Vazir.eot?#iefix') format('embedded-opentype'), /* IE6-IE8 */
+         url('../fonts/Persian/Vazir/Vazir.woff2') format('woff2'), /* Super Modern Browsers */
+         url('../fonts/Persian/Vazir/Vazir.woff') format('woff'), /* Pretty Modern Browsers */
+         url('../fonts/Persian/Vazir/Vazir.ttf')  format('truetype'), /* Safari, Android, iOS */
+         url('../fonts/Persian/Vazir/Vazir.svg') format('svg'); /* Legacy iOS */
+}
+
+/* Import Vazir Bold font files */
+@font-face {
+    font-family: 'Vazir';
+    font-weight: bold;
+    src: url('../fonts/Persian/Vazir/VazirBold.eot'); /* IE9 Compat Modes */
+    src: url('../fonts/Persian/Vazir/VazirBold.eot?#iefix') format('embedded-opentype'), /* IE6-IE8 */
+         url('../fonts/Persian/Vazir/VazirBold.woff2') format('woff2'), /* Super Modern Browsers */
+         url('../fonts/Persian/Vazir/VazirBold.woff') format('woff'), /* Pretty Modern Browsers */
+         url('../fonts/Persian/Vazir/VazirBold.ttf')  format('truetype'), /* Safari, Android, iOS */
+         url('../fonts/Persian/Vazir/VazirBold.svg') format('svg'); /* Legacy iOS */
+}
+
+/* Import Yekan font files */
+@font-face {
+    font-family: 'Yekan';
+    src: url('../fonts/Persian/Yekan/Yekan.eot'); /* IE9 Compat Modes */
+    src: url('../fonts/Persian/Yekan/Yekan.eot?#iefix') format('embedded-opentype'), /* IE6-IE8 */
+         url('../fonts/Persian/Yekan/Yekan.woff2') format('woff2'), /* Super Modern Browsers */
+         url('../fonts/Persian/Yekan/Yekan.woff') format('woff'), /* Pretty Modern Browsers */
+         url('../fonts/Persian/Yekan/Yekan.ttf')  format('truetype'), /* Safari, Android, iOS */
+         url('../fonts/Persian/Yekan/Yekan.svg') format('svg'); /* Legacy iOS */
+}
+
+/* Import Yekan Bold font files */
+@font-face {
+    font-family: 'Yekan';
+    font-weight: bold;
+    src: url('../fonts/Persian/Yekan/YekanBold.eot'); /* IE9 Compat Modes */
+    src: url('../fonts/Persian/Yekan/YekanBold.eot?#iefix') format('embedded-opentype'), /* IE6-IE8 */
+         url('../fonts/Persian/Yekan/YekanBold.woff2') format('woff2'), /* Super Modern Browsers */
+         url('../fonts/Persian/Yekan/YekanBold.woff') format('woff'), /* Pretty Modern Browsers */
+         url('../fonts/Persian/Yekan/YekanBold.ttf')  format('truetype'), /* Safari, Android, iOS */
+         url('../fonts/Persian/Yekan/YekanBold.svg') format('svg'); /* Legacy iOS */
+}
+
+
+/* =================
+start of using fonts
+================= */
+html, body, div, span, applet, object, iframe,
+p, blockquote, pre, a, abbr, acronym, address,
+big, cite, code,del, dfn, em, ins, kbd, q,
+s, samp, small, strike, strong, sub, sup, tt, 
+var, b, u, center,
+dl, dt, dd, ol, ul, li,
+fieldset, label, legend,
+table, caption, tbody, tfoot, thead, tr, td,
+article, aside, canvas, details, embed, 
+figure, figcaption, footer, header, hgroup, 
+menu, nav, output, ruby, section, summary,
+time, mark, audio, video {
+    
+    font-family: Vazir !important;
+}
+
+h1, h2, h3, h4, h5, h6, th{
+
+    font-family: Roya !important;
+}
+
+form, input, textarea, button, input[type="button"], a {
+
+    font-family: Yekan !important;
+}
