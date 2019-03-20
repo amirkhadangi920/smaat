@@ -1,7 +1,7 @@
 <template>
   <nav class="navbar navbar-expand-lg navbar-absolute"
        :class="{'bg-white': showMenu, 'navbar-transparent': !showMenu}">
-    <div class="container-fluid">
+    <div class="container-fluid" dir="rtl">
       <div class="navbar-wrapper">
         <div class="navbar-toggle d-inline" :class="{toggled: $sidebar.showSidebar}">
           <button type="button"
@@ -150,4 +150,5 @@
   };
 </script>
 <style>
+
 </style>
