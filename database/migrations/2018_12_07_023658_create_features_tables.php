@@ -22,8 +22,8 @@ class CreateFeaturesTables extends Migration
 
         $schema->create('brands', function ($table) {
             $table->table([
+                'info' => 'param:name',
                 'logo' => 'nullable|array',
-                'sluggable_info' => 'param:name'
             ], [ ]);
         });
 

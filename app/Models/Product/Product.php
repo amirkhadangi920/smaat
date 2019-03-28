@@ -8,7 +8,6 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use OwenIt\Auditing\Auditable;
 use OwenIt\Auditing\Contracts\Auditable as AuditableContract;
-use Cviebrock\EloquentSluggable\Sluggable;
 use App\Traits\GenerateRandomID;
 use App\Models\Opinion\{ Review, QuestionAndAnswer };
 use Spatie\Tags\HasTags;
@@ -19,7 +18,7 @@ use EloquentFilter\Filterable;
 
 class Product extends Model implements AuditableContract, LikeableContract
 {
-    use SoftDeletes, Auditable, Sluggable, GenerateRandomID, HasTags, Filterable, Likeable;
+    use SoftDeletes, Auditable, GenerateRandomID, HasTags, Filterable, Likeable;
 
     /****************************************
      **             Attributes
@@ -182,19 +181,5 @@ class Product extends Model implements AuditableContract, LikeableContract
         return Static::select('id', 'category_id', 'name', 'photo')
             ->with('variation:id,product_id,price,unit,offer,offer_deadline')
             ->where('category_id', $product->category_id)->take(4)->get();
-    }
-
-    /**
-     * Return the sluggable configuration array for this model.
-     *
-     * @return array
-     */
-    public function sluggable()
-    {
-        return [
-            'slug' => [
-                'source' => 'name'
-            ]
-        ];
     }
 }

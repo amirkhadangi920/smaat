@@ -5,7 +5,6 @@ namespace App\Models;
 use Cog\Likeable\Contracts\Likeable as LikeableContract;
 use Cog\Likeable\Traits\Likeable;
 use Illuminate\Database\Eloquent\Model;
-use Cviebrock\EloquentSluggable\Sluggable;
 use OwenIt\Auditing\Auditable;
 use OwenIt\Auditing\Contracts\Auditable as AuditableContract;
 use App\Traits\GenerateRandomID;
@@ -16,7 +15,7 @@ use EloquentFilter\Filterable;
 
 class Article extends Model implements AuditableContract , LikeableContract
 {
-    use Sluggable, Auditable, GenerateRandomID, HasTags, Likeable, Filterable;
+    use Auditable, GenerateRandomID, HasTags, Likeable, Filterable;
 
     /****************************************
      **             Attributes
@@ -76,24 +75,5 @@ class Article extends Model implements AuditableContract , LikeableContract
     public function subjects ()
     {
         return $this->belongsToMany(Subject::class);
-    } 
-
-
-    /****************************************
-     **              Methods
-     ***************************************/
-
-    /**
-     * Return the sluggable configuration array for this model.
-     *
-     * @return array
-     */
-    public function sluggable()
-    {
-        return [
-            'slug' => [
-                'source' => 'title'
-            ]
-        ];
     }
 }

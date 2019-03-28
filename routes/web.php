@@ -15,6 +15,11 @@ use App\Models\Article;
 |
 */
 
+Route::post('/test', function() {
+
+    return request()->all();
+})->middleware('auth:api');
+
 Route::get('{path}', function() {
 
     $dashboard_template = 'black';

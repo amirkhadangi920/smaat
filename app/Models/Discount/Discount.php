@@ -4,7 +4,6 @@ namespace App\Models\Discount;
 
 use Illuminate\Database\Eloquent\Model;
 use App\Models\Financial\Order;
-use Cviebrock\EloquentSluggable\Sluggable;
 use OwenIt\Auditing\Auditable;
 use OwenIt\Auditing\Contracts\Auditable as AuditableContract;
 use App\Models\Group\Category;
@@ -12,7 +11,7 @@ use EloquentFilter\Filterable;
 
 class Discount extends Model implements AuditableContract 
 {
-    use Sluggable, Auditable, Filterable;
+    use Auditable, Filterable;
     /****************************************
      **             Attributes
      ***************************************/
@@ -91,18 +90,4 @@ class Discount extends Model implements AuditableContract
     /****************************************
      **              Methods
      ***************************************/
-
-    /**
-     * Return the sluggable configuration array for this model.
-     *
-     * @return array
-     */
-    public function sluggable()
-    {
-        return [
-            'slug' => [
-                'source' => 'title'
-            ]
-        ];
-    }
 }

@@ -22,7 +22,7 @@ class CreateGroupingTables extends Migration
 
         $schema->create('categories', function (Blueprint $table) {
             $table->table([
-                'sluggable_info',
+                'info',
                 'logo'           => 'nullable|array',
                 'scoring_feilds' => 'mediumText|nullable'
             ], ['self']);
@@ -30,7 +30,7 @@ class CreateGroupingTables extends Migration
 
         $schema->create('subjects', function (Blueprint $table) {
             $table->table([
-                'sluggable_info',
+                'info',
                 'logo'           => 'nullable|array',
             ], ['self']);
         });

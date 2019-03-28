@@ -46,7 +46,7 @@ class MainFilter extends ModelFilter
      */
     public function filter_relation($relation, $ids, $field = 'id')
     {
-        if( !is_array($ids) ) return;
+        if( !is_array($ids) ) $ids = [ $ids ];
 
         return $this->whereHas($relation, function($query) use ($ids, $field)
         {

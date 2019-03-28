@@ -22,7 +22,7 @@ class CreateArticlesTable extends Migration
 
         $schema->create('articles', function (Blueprint $table) {
             $table->table([
-                'sluggable_info',
+                'info',
                 'body',
                 'image' => 'array',
                 'reading_time' => 'nullable|mediumInteger|comment:How much time need for reading the article in minute'

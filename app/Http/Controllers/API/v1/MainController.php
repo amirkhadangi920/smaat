@@ -109,14 +109,14 @@ abstract class MainController extends Controller
         
         $data = explode(',', $data);
 
-        $result = $this->model::whereIn($this->getPrimary(), $data )->delete();
-
+        $result = $this->model::whereIn('id', $data)->delete();
+        
         $status = $this->getStatus($result);
 
         return response()->json([
             'message' => __("messages.delete.{$status}", [
                 'data' => __("types.{$this->type}.title")
             ])
-        ]); 
+        ], $result === count($data) ? 200 : 400);
     }
 }

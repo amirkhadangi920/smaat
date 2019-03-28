@@ -22,7 +22,6 @@ class CreateProductsTables extends Migration
         
         $schema->create('products', function (Blueprint $table) {
             $table->table([
-                'slug'          => 100,
                 'name'          => 50,
                 'second_name'   => '50|nullable',
                 'code'          => '20|nullable',

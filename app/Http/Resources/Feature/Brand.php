@@ -15,7 +15,8 @@ class Brand extends JsonResource
     public function toArray($request)
     {
         return [
-            'link'              => "/api/v1/brand/{$this->slug}",
+            'id'                => $this->id,
+            'link'              => "/api/v1/brand/{$this->id}",
             'logo'              => $this->logo,
             'name'              => $this->name,
             'description'       => $this->description,
@@ -23,7 +24,7 @@ class Brand extends JsonResource
                 
                 return [
                     'id'    => $category->id,
-                    'brand_link'  => "/api/v1/category/{$category->slug}",
+                    'link'  => "/api/v1/category/{$category->slug}",
                     'title' => $category->title,
                 ];
             })

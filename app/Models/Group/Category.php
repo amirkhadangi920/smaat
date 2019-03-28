@@ -6,7 +6,6 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use OwenIt\Auditing\Contracts\Auditable as AuditableContract;
 use OwenIt\Auditing\Auditable;
-use Cviebrock\EloquentSluggable\Sluggable;
 use Spatie\Tags\HasTags;
 use App\Models\Feature\{
     Brand,
@@ -23,7 +22,7 @@ use App\Traits\MultiLevel;
 
 class Category extends Model implements AuditableContract
 {
-    use SoftDeletes, Sluggable, Auditable, HasTags, MultiLevel;
+    use SoftDeletes, Auditable, HasTags, MultiLevel;
 
     /****************************************
      **             Attributes
@@ -176,33 +175,5 @@ class Category extends Model implements AuditableContract
     public function discounts ()
     {
         return $this->belongsToMany(Discount::class);
-    }
-
-    /****************************************
-     **              Methods
-     ***************************************/
-
-    /**
-     * Return the sluggable configuration array for this model.
-     *
-     * @return array
-     */
-    public function sluggable()
-    {
-        return [
-            'slug' => [
-                'source' => 'title'
-            ]
-        ];
-    }
-
-    /**
-     * Get the route key for the model.
-     *
-     * @return string
-     */
-    public function getRouteKeyName()
-    {
-        return 'slug';
     }
 }

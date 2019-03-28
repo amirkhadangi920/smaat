@@ -25,6 +25,7 @@ class Category extends JsonResource
     {
         // return Parent::toArray($request);
         return [
+            'id'            => $this->id,
             'link'          => "/api/v1/category/{$this->slug}",
             'title'         => $this->title,
             'logo'          => $this->logo,
@@ -58,8 +59,9 @@ class Category extends JsonResource
     public function getChilds($category)
     {
         return [
+            'id'            => $category->id,
             'link'          => "/api/v1/category/{$category->slug}",
-            'title'         => $category->slug,
+            'title'         => $category->title,
             'logo'          => $category->logo,
             'description'   => $category->description,
             'childs'        => $this->when($category->childs ?? false, function () use($category) {

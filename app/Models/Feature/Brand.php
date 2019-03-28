@@ -6,14 +6,13 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use OwenIt\Auditing\Auditable;
 use OwenIt\Auditing\Contracts\Auditable as AuditableContract;
-use Cviebrock\EloquentSluggable\Sluggable;
 use EloquentFilter\Filterable;
 use App\Models\Group\Category;
 use App\Models\Product\Product;
 
 class Brand extends Model implements AuditableContract
 {
-    use SoftDeletes, Auditable, Sluggable, Filterable;
+    use SoftDeletes, Auditable, Filterable;
 
     /****************************************
      **             Attributes
@@ -72,28 +71,4 @@ class Brand extends Model implements AuditableContract
     /****************************************
      **              Methods
      ***************************************/
-
-    /**
-     * Return the sluggable configuration array for this model.
-     *
-     * @return array
-     */
-    public function sluggable()
-    {
-        return [
-            'slug' => [
-                'source' => 'name'
-            ]
-        ];
-    }
-
-    /**
-     * Get the route key for the model.
-     *
-     * @return string
-     */
-    public function getRouteKeyName()
-    {
-        return 'slug';
-    }
 }

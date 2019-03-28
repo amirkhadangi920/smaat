@@ -11,7 +11,7 @@ class FeatureBaseFilter extends MainFilter
     /**
      * Filter the Features that have a logo or not
      *
-     * @param boolean $logo
+     * @param boolean $status
      * @return Builder
      */
     public function hasLogo($status)
@@ -19,6 +19,18 @@ class FeatureBaseFilter extends MainFilter
         if ( !($this->has_logo ?? false) ) return;
         
         $this->has_field_or_not('logo', $status);
+    }
+
+    /**
+     * Filter the Features that have specific categories or not
+     *
+     * @param boolean $status
+     * @return Builder
+     */
+    public function hasCategories($status)
+    {
+        
+        $this->has_relation_or_not('categories', $status);
     }
 
     /**
