@@ -20,7 +20,8 @@ class QuestionAndAnswer extends JsonResource
             'id'                => $this->id,
             'link'              => "/api/v1/question_and_answer/{$this->id}",
             'message'           => $this->message,
-            'registered_at'     => $this->created_at,
+            'create_time'       => $this->getOriginal('created_at'),
+            'last_update_time'  => $this->getOriginal('updated_at'),
             'question'          => $this->when( $this->question_id, function () {
                 $this->load('question');
                 

@@ -28,8 +28,9 @@ class CreateOpinionTables extends Migration
                 'articles' => true,
             ]);
             $table->mediumText('message');
-            $table->full_timestamps();
             $table->boolean('is_accept')->defult(false);
+            $table->dateTime('jalali_created_at')->nullable();
+            $table->full_timestamps();
         });
         
         $schema->create('reviews', function (Blueprint $table) {
@@ -39,10 +40,11 @@ class CreateOpinionTables extends Migration
                 'disadvantages' => 'array',
                 'message' => 'mediumText',
                 'is_accept' =>  'boolean|defult:false',
+                'jalali_created_at' => 'datetime|nullable'
             ], [
                 'users' => true,
                 'products' => true,
-                ]);
+            ]);
         });
         
         $schema->create('question_and_answers', function (Blueprint $table) {
@@ -53,8 +55,9 @@ class CreateOpinionTables extends Migration
             ]);
             $table->add_foreign('question_and_answers', true, 'unsignedInteger', 'question_id');
             $table->mediumText('message');
-            $table->full_timestamps();
             $table->boolean('is_accept')->defult(false);
+            $table->dateTime('jalali_created_at')->nullable();
+            $table->full_timestamps();
         });
     }
 

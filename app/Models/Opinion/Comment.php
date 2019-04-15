@@ -10,10 +10,11 @@ use OwenIt\Auditing\Auditable;
 use OwenIt\Auditing\Contracts\Auditable as AuditableContract;
 use App\Models\Article;
 use EloquentFilter\Filterable;
+use App\Helpers\CreateTimeline;
 
 class Comment extends Model implements AuditableContract , LikeableContract
 {
-    use SoftDeletes, Auditable, Likeable, Filterable;
+    use SoftDeletes, Auditable, Likeable, Filterable, CreateTimeline;
 
     /****************************************
      **             Attributes

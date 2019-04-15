@@ -25,6 +25,8 @@ class ShippingMethod extends JsonResource
             'cost'          => $this->cost,
             'minimum'       => $this->minimum,
             'is_active'     => $this->is_active,
+            'create_time'       => $this->getOriginal('created_at'),
+            'last_update_time'  => $this->getOriginal('updated_at'),
         ];
     }
 }

@@ -13,7 +13,7 @@ class FeatureBaseController extends MainController
      * @var array
      */
     protected $relations = [
-        'categories:id,slug,title'
+        'categories:id,title'
     ];
 
     /**

@@ -19,10 +19,12 @@ class Product extends JsonResource
         return [
             'id'                => $this->id,
             'link'              => "/api/v1/product/{$this->slug}",
-            'name'              => $this->title,
+            'name'              => $this->name,
             'description'       => $this->description,
             'aparat_video'      => "https://www.aparat.com/v/{$this->aparat_video}",
             'photos'            => $this->photos,
+            'create_time'       => $this->getOriginal('created_at'),
+            'last_update_time'  => $this->getOriginal('updated_at'),
             'votes'             => [
                 'likes' => $this->likesCount,
                 'dislikes' => $this->dislikesCount,

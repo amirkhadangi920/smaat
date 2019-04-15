@@ -6,6 +6,7 @@ use App\Models\Feature\Size;
 use App\Http\Resources\Feature\Size as SizeResource;
 use App\ModelFilters\Feature\SizeFilter;
 use App\Http\Requests\v1\Feature\SizeRequest;
+use App\Http\Resources\Feature\SizeCollection;
 
 class SizeController extends FeatureBaseController
 {
@@ -29,6 +30,13 @@ class SizeController extends FeatureBaseController
      * @var [type]
      */
     protected $resource = SizeResource::class;
+
+    /**
+     * Resource Collection of this controller respnoses
+     *
+     * @var [type]
+     */
+    protected $collection = SizeCollection::class;
     
     /**
      * Filter class of this eloquent model

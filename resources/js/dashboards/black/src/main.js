@@ -1,7 +1,18 @@
-import Vue from "vue";
+import Vue from 'vue';
 
 import ElementUI from 'element-ui';
 import 'element-ui/lib/theme-chalk/index.css';
+Vue.use(ElementUI);
+
+import VueParticles from 'vue-particles'
+Vue.use(VueParticles)
+
+import VueMaterial from 'vue-material'
+import 'vue-material/dist/vue-material.min.css'
+Vue.use(VueMaterial)
+
+import CKEditor from '@ckeditor/ckeditor5-vue';
+Vue.use( CKEditor );
 
 import VueRouter from "vue-router";
 import RouterPrefetch from 'vue-router-prefetch'
@@ -15,24 +26,25 @@ import './registerServiceWorker'
 
 import axios from 'axios'
 import VueAxios from 'vue-axios'
-
-import VueSweetalert2 from 'vue-sweetalert2';
-import VModal from 'vue-js-modal'
-
 window.axios = axios;
 
+import jQuery from 'jquery'
+window.jQuery = window.$ = jQuery
+
+import VueSweetalert2 from 'vue-sweetalert2';
+
+import store from './stores/main'
 
 Vue.use(BlackDashboard);
 Vue.use(VueRouter);
 Vue.use(RouterPrefetch);
-Vue.use(ElementUI);
 Vue.use(VueAxios, axios);
 Vue.use(VueSweetalert2);
-Vue.use(VModal)
 
 /* eslint-disable no-new */
 new Vue({
   router,
   i18n,
+  store,
   render: h => h(App)
 }).$mount("#app");

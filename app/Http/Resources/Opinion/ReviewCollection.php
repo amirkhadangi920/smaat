@@ -3,6 +3,7 @@
 namespace App\Http\Resources\Opinion;
 
 use Illuminate\Http\Resources\Json\ResourceCollection;
+use App\Models\Opinion\Review;
 
 class ReviewCollection extends ResourceCollection
 {
@@ -14,6 +15,12 @@ class ReviewCollection extends ResourceCollection
      */
     public function toArray($request)
     {
-        return parent::toArray($request);
+        return [
+            'data' => $this->collection,
+            'meta' => [
+                'trash' => Review::onlyTrashed()->count()
+            ],
+            'chart' => Review::create_timeline()
+        ];
     }
 }

@@ -7,6 +7,7 @@ use App\Http\Resources\Opinion\Review as ReviewResource;
 use App\ModelFilters\Opinion\ReviewFilter;
 use App\Http\Requests\v1\Opinion\ReviewRequest;
 use App\Helpers\LikeableController;
+use App\Http\Resources\Opinion\ReviewCollection;
 
 class ReviewController extends OpinionBaseController
 {
@@ -32,7 +33,7 @@ class ReviewController extends OpinionBaseController
      * @var array
      */
     protected $relations = [
-        'product:id,slug,name,photos,label',
+        'product:id,name,photos,label',
         'user:id,first_name,last_name,avatar',
     ];
 
@@ -49,6 +50,13 @@ class ReviewController extends OpinionBaseController
      * @var [type]
      */
     protected $resource = ReviewResource::class;
+
+    /**
+     * Resource Collection of this controller respnoses
+     *
+     * @var [type]
+     */
+    protected $collection = ReviewCollection::class;
 
 
     /**

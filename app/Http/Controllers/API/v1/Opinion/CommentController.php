@@ -7,6 +7,7 @@ use App\Http\Resources\Opinion\Comment as CommentResource;
 use App\ModelFilters\Opinion\CommentFilter;
 use App\Http\Requests\v1\Opinion\CommentRequest;
 use App\Helpers\LikeableController;
+use App\Http\Resources\Opinion\CommentCollection;
 
 class CommentController extends OpinionBaseController
 {
@@ -32,7 +33,7 @@ class CommentController extends OpinionBaseController
      * @var array
      */
     protected $relations = [
-        'article:id,slug,title',
+        'article:id,title',
         'user:id,first_name,last_name,avatar',
         'answers:id,parent_id,user_id,message,created_at',
         'answers.user:id,first_name,last_name,avatar'
@@ -51,6 +52,13 @@ class CommentController extends OpinionBaseController
      * @var [type]
      */
     protected $resource = CommentResource::class;
+
+    /**
+     * Resource Collection of this controller respnoses
+     *
+     * @var [type]
+     */
+    protected $collection = CommentCollection::class;
 
     /**
      * Filter class of this eloquent model
@@ -91,7 +99,7 @@ class CommentController extends OpinionBaseController
      */
     public function getAllData()
     {
-        return $this->model::select('id', 'parent_id', 'article_id', 'user_id', 'message', 'created_at')
+        return $this->model::select('id', 'parent_id', 'article_id', 'user_id', 'message', 'created_at', 'updated_at')
             ->filter( request()->all(), $this->filter )    
             ->whereNull('parent_id')
             ->with($this->relations)

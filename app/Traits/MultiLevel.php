@@ -14,13 +14,13 @@ trait MultiLevel
         $breadcrumb = collect([$group]);
 
         if ( is_null($group->parent_id) )
-            return $breadcrumb->pluck('title', 'slug');
+            return $breadcrumb->pluck('title', 'id');
         
         do {
             $breadcrumb->push( $breadcrumb->last()->parent );
         } while ( $breadcrumb->last()->parent );
 
-        return $breadcrumb->pluck('title', 'slug');
+        return $breadcrumb->pluck('title', 'id');
     }
 
     /**
@@ -30,7 +30,7 @@ trait MultiLevel
      */
     public static function tree()
     {
-        $groups = static::select('id', 'slug', 'title', 'logo', 'description')
+        $groups = static::select('id', 'title', 'logo', 'description')
                 ->whereNull('parent_id')->latest()->get();
 
         $groups->each( function ( $group ) {
@@ -49,7 +49,7 @@ trait MultiLevel
      */
     public static function get_childs($group)
     {
-        $group->load('childs:id,parent_id,slug,title,logo,description');
+        $group->load('childs:id,parent_id,title,logo,description');
 
         if ( $group->childs->isNotEmpty() )
         {

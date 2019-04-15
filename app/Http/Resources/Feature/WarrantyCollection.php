@@ -3,6 +3,7 @@
 namespace App\Http\Resources\Feature;
 
 use Illuminate\Http\Resources\Json\ResourceCollection;
+use App\Models\Feature\Warranty;
 
 class WarrantyCollection extends ResourceCollection
 {
@@ -14,6 +15,12 @@ class WarrantyCollection extends ResourceCollection
      */
     public function toArray($request)
     {
-        return parent::toArray($request);
+        return [
+            'data' => $this->collection,
+            'meta' => [
+                'trash' => Warranty::onlyTrashed()->count()
+            ],
+            'chart' => Warranty::create_timeline()
+        ];
     }
 }

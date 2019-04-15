@@ -54,10 +54,10 @@ class LaratrustSeeder extends Seeder
             $this->command->info("Creating '{$key}' user");
 
             // Create default user for each role
-            $user = \App\User::create([
+            $user = \App\User::firstOrCreate([
                 // 'first_name' => ucwords(str_replace('_', ' ', $key)),
-                'email' => $key.'@app.com',
-                'password' => bcrypt('password')
+                'email' => 'amirkhadangi920@gmail.com',
+                'password' => bcrypt('123456')
             ]);
 
             $user->attachRole($role);

@@ -38,6 +38,7 @@ class CreateProductsTables extends Migration
                 'views_count'   => 'unsignedInteger|default:0',
                 'avg_vote'      => 'unsignedInteger|default:0',
                 'votes_count'   => 'unsignedInteger|default:0',
+                'jalali_created_at' => 'datetime|nullable'
             ], [
                 'users',
                 'categories' => true,

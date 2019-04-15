@@ -30,7 +30,7 @@ class FeatureTablesSeeder extends Seeder
     {
         $categories = $this->categories;
 
-        $this->data[ $key ] = factory($model, rand(1, 10))->create()
+        $this->data[ $key ] = factory($model, rand(5, 20))->create()
             ->each( function ( $feature ) use ( $categories ) {
 
                 $feature->categories()->sync( $categories->take( rand(1, 5) )->pluck('id') );

@@ -3,6 +3,7 @@
 namespace App\Http\Resources\Financial;
 
 use Illuminate\Http\Resources\Json\ResourceCollection;
+use App\Models\Financial\ShippingMethod;
 
 class ShippingMethodCollection extends ResourceCollection
 {
@@ -14,6 +15,12 @@ class ShippingMethodCollection extends ResourceCollection
      */
     public function toArray($request)
     {
-        return parent::toArray($request);
+        return [
+            'data' => $this->collection,
+            'meta' => [
+                'trash' => ShippingMethod::onlyTrashed()->count()
+            ],
+            'chart' => ShippingMethod::create_timeline()
+        ];
     }
 }

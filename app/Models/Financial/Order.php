@@ -13,10 +13,11 @@ use App\Models\Discount\Discount;
 use App\Models\Promocode\Promocode;
 use App\Models\Places\City;
 use EloquentFilter\Filterable;
+use App\Helpers\CreateTimeline;
 
 class Order extends Model implements AuditableContract
 {
-    use SoftDeletes, GenerateRandomID, Auditable, Filterable;
+    use SoftDeletes, GenerateRandomID, Auditable, Filterable, CreateTimeline;
 
     /****************************************
      **             Attributes

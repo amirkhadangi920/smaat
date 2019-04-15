@@ -15,10 +15,18 @@ use App\Models\Article;
 |
 */
 
-Route::post('/test', function() {
+Route::get('/test/amir', function() {
 
-    return request()->all();
-})->middleware('auth:api');
+    return factory(\App\Models\Financial\OrderStatus::class, 20)->create();
+    // return factory(\App\Models\Financial\Order::class, 10)->create([
+    //     'user_id' => \App\User::all()->random()->id,
+    //     'order_status_id' => \App\Models\Financial\OrderStatus::all()->random()->id
+    // ]);
+    // return factory(\App\Models\Opinion\Review::class, 10)->create([
+    //     'user_id' => \App\User::all()->random()->id,
+    //     'product_id' => \App\Models\Product\Product::all()->random()->id
+    // ]);
+});
 
 Route::get('{path}', function() {
 

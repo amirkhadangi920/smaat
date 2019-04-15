@@ -1,6 +1,7 @@
 <?php
 
 use Faker\Factory;
+use Morilog\Jalali\Jalalian;
 
 $faker = Factory::create('fa_IR');
 
@@ -16,7 +17,8 @@ $factory->define(App\Models\Group\Category::class, function () use($faker, $bran
             for ($i = 0; $i < rand(1, 8); ++$i)
                 $feilds[] = Faker::sentence();
             return $feilds;
-        })
+        }),
+        'jalali_created_at' => Jalalian::forge("now - {$faker->numberBetween(2, 360)} days")
     ];
 });
 
@@ -27,6 +29,8 @@ $factory->define(App\Models\Group\Subject::class, function () use($faker, $brand
         'title'             => Faker::fullName(),
         'description'       => nullable( Faker::sentence() ),
         'logo'              => nullable( image ( $brands[$selected]['logo'] )),
+        'jalali_created_at' => Jalalian::forge("now - {$faker->numberBetween(2, 360)} days")
+        
     ];
 });
 

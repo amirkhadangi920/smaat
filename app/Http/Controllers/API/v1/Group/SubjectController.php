@@ -5,6 +5,7 @@ namespace App\Http\Controllers\API\v1\Group;
 use App\Models\Group\Subject;
 use App\Http\Resources\Group\Subject as SubjectResource;
 use App\Http\Requests\v1\Group\SubjectRequest;
+use App\Http\Resources\Group\SubjectCollection;
 
 class SubjectController extends GroupBaseController
 {
@@ -29,6 +30,13 @@ class SubjectController extends GroupBaseController
      */
     protected $resource = SubjectResource::class;
     
+    /**
+     * Resource Collection of this controller respnoses
+     *
+     * @var [type]
+     */
+    protected $collection = SubjectCollection::class;
+
     /**
      * Get the request from url and pass it to storeData method
      * to create a new category in storage

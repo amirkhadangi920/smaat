@@ -7,6 +7,7 @@ use App\Http\Controllers\API\v1\MainController;
 use App\Http\Resources\Financial\ShippingMethod as ShippingMethodResource;
 use App\ModelFilters\Financial\ShippingMethodFilter;
 use App\Http\Requests\v1\Order\ShippingMethodRequest;
+use App\Http\Resources\Financial\ShippingMethodCollection;
 
 class ShippingMethodContrller extends MainController
 {
@@ -30,6 +31,13 @@ class ShippingMethodContrller extends MainController
      * @var [type]
      */
     protected $resource = ShippingMethodResource::class;
+
+    /**
+     * Resource Collection of this controller respnoses
+     *
+     * @var [type]
+     */
+    protected $collection = ShippingMethodCollection::class;
 
     /**
      * Filter class of this eloquent model

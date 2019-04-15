@@ -3,9 +3,16 @@
 namespace App\Models\Financial;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
+use OwenIt\Auditing\Auditable;
+use OwenIt\Auditing\Contracts\Auditable as AuditableContract;
+use EloquentFilter\Filterable;
+use App\Helpers\CreateTimeline;
 
-class OrderStatus extends Model
+class OrderStatus extends Model implements AuditableContract
 {
+    use SoftDeletes, Auditable, Filterable, CreateTimeline;
+
     /****************************************
      **             Attributes
      ***************************************/
@@ -18,6 +25,7 @@ class OrderStatus extends Model
     protected $fillable = [
         'title',
         'description',
+        'color'
     ];
 
     /**

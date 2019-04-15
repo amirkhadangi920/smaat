@@ -25,7 +25,8 @@ class CreateArticlesTable extends Migration
                 'info',
                 'body',
                 'image' => 'array',
-                'reading_time' => 'nullable|mediumInteger|comment:How much time need for reading the article in minute'
+                'reading_time' => 'nullable|mediumInteger|comment:How much time need for reading the article in minute',
+                'jalali_created_at' => 'datetime|nullable'
             ], [
                 'users',
             ], 'uuid');

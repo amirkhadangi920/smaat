@@ -9,10 +9,11 @@ use OwenIt\Auditing\Contracts\Auditable as AuditableContract;
 use Spatie\Tags\HasTags;
 use App\Models\Article;
 use App\Traits\MultiLevel;
+use App\Helpers\CreateTimeline;
 
 class Subject extends Model implements AuditableContract
 {
-    use SoftDeletes, Auditable, HasTags, MultiLevel;
+    use SoftDeletes, Auditable, HasTags, MultiLevel, CreateTimeline;
 
     /****************************************
      **             Attributes

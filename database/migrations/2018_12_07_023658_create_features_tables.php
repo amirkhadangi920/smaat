@@ -24,21 +24,24 @@ class CreateFeaturesTables extends Migration
             $table->table([
                 'info' => 'param:name',
                 'logo' => 'nullable|array',
-            ], [ ]);
+                'jalali_created_at' => 'datetime|nullable'
+            ]);
         });
 
         $schema->create('colors', function ($table) {
             $table->table([
                 'name' => 30,
                 'code' => '9|comment:Hexadecimal code of the color, e.g #43df12',
-            ], [ ]);
+                'jalali_created_at' => 'datetime|nullable'
+            ]);
         });
 
         $schema->create('sizes', function ($table) {
             $table->table([
                 'name' => 50,
-                'description'   => 'nullable|string'
-            ], [ ]);
+                'description'   => 'nullable|string',
+                'jalali_created_at' => 'datetime|nullable'
+            ]);
         });
 
         $schema->create('warranties', function ($table) {
@@ -46,13 +49,15 @@ class CreateFeaturesTables extends Migration
                 'info',
                 'logo' => 'nullable|array',
                 'expire' => 20,
-            ], [ ]);
+                'jalali_created_at' => 'datetime|nullable'
+            ]);
         });
 
         $schema->create('units', function ($table) {
             $table->table([
                 'info',
-            ], [ ]);
+                'jalali_created_at' => 'datetime|nullable'
+            ]);
         });
 
         $schema->create('featureables', function ($table) {

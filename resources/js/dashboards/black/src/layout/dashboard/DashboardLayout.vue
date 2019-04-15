@@ -1,21 +1,97 @@
 <template>
   <div class="wrapper">
-    <side-bar>
+    <side-bar 
+      title="SmaaT"
+      logo="/images/logo.jpg"
+      :style="{background: 'linear-gradient(0deg, #33002a 0%, #8b387d 100%)'}">
       <template slot="links">
-        <sidebar-link to="/dashboard" :name="$t('sidebar.dashboard')" icon="tim-icons icon-chart-pie-36"/>
-        <sidebar-link to="/icons" :name="$t('sidebar.icons')" icon="tim-icons icon-atom"/>
-        <sidebar-link to="/maps" :name="$t('sidebar.maps')" icon="tim-icons icon-pin"/>
-        <sidebar-link to="/notifications" :name="$t('sidebar.notifications')" icon="tim-icons icon-bell-55"/>
-        <sidebar-link to="/profile" :name="$t('sidebar.userProfile')" icon="tim-icons icon-single-02"/>
-        <sidebar-link to="/table-list" :name="$t('sidebar.tableList')" icon="tim-icons icon-puzzle-10"/>
-        <sidebar-link to="/typography" :name="$t('sidebar.typography')" icon="tim-icons icon-align-center"/>
-        <sidebar-link to="/dashboard?enableRTL=true" :name="$t('sidebar.rtlSupport')" icon="tim-icons icon-world"/>
-        <sidebar-link to="/brand" :name="$t('sidebar.list') + ' ' + $t('sidebar.brand')" icon="tim-icons icon-world"/>
+        <canvas id="granim-canvas"></canvas>
+
+        <el-menu
+          dir="rtl"
+          default-active="2"
+          :default-openeds="[opened_index]"
+          unique-opened
+          class="el-menu-vertical-demo"
+          >
+          <el-submenu index="1">
+            <template slot="title">
+              <i class="tim-icons icon-badge"></i>
+              <span>ویژگی ها</span>
+            </template>
+            <el-menu-item>
+              <sidebar-link to="/brand" :name="$t('sidebar.list') + ' ' + $t('sidebar.brand')" icon="tim-icons icon-atom"/>      
+            </el-menu-item>
+            <el-menu-item>
+              <sidebar-link to="/unit" :name="$t('sidebar.list') + ' ' + $t('sidebar.unit')" icon="tim-icons icon-app"/>
+            </el-menu-item>
+            <el-menu-item>
+              <sidebar-link to="/size" :name="$t('sidebar.list') + ' ' + $t('sidebar.size')" icon="tim-icons icon-chart-bar-32"/>
+            </el-menu-item>
+            <el-menu-item>
+              <sidebar-link to="/warranty" :name="$t('sidebar.list') + ' ' + $t('sidebar.warranty')" icon="tim-icons icon-bank"/>
+            </el-menu-item>
+            <el-menu-item>
+              <sidebar-link to="/color" :name="$t('sidebar.list') + ' ' + $t('sidebar.color')" icon="tim-icons icon-palette"/>
+            </el-menu-item>
+            <el-menu-item>
+              <sidebar-link to="/specification" :name="$t('sidebar.list') + ' ' + $t('sidebar.spec')" icon="tim-icons icon-palette"/>
+            </el-menu-item>
+          </el-submenu>
+          <el-submenu index="2">
+            <template slot="title">
+              <i class="tim-icons icon-book-bookmark"></i>
+              <span>وبلاگ</span>
+            </template>
+            <el-menu-item>
+              <sidebar-link to="/article" :name="$t('sidebar.list') + ' ' + $t('sidebar.article')" icon="tim-icons icon-paper"/>      
+            </el-menu-item>
+            <el-menu-item>
+              <sidebar-link to="/comment" :name="$t('sidebar.list') + ' ' + $t('sidebar.comment')" icon="tim-icons icon-notes"/>      
+            </el-menu-item>
+            <el-menu-item>
+              <sidebar-link to="/subject" :name="$t('sidebar.list') + ' ' + $t('sidebar.subject')" icon="tim-icons icon-notes"/>      
+            </el-menu-item>
+          </el-submenu>
+          <el-submenu index="3">
+            <template slot="title">
+              <i class="tim-icons icon-book-bookmark"></i>
+              <span>محصول</span>
+            </template>
+            <el-menu-item>
+              <sidebar-link to="/product" :name="$t('sidebar.list') + ' ' + $t('sidebar.product')" icon="tim-icons icon-bag-16"/>      
+            </el-menu-item>
+            <el-menu-item>
+              <sidebar-link to="/category" :name="$t('sidebar.list') + ' ' + $t('sidebar.category')" icon="tim-icons icon-bag-16"/>      
+            </el-menu-item>
+            <el-menu-item>
+              <sidebar-link to="/review" :name="$t('sidebar.list') + ' ' + $t('sidebar.review')" icon="tim-icons icon-bag-16"/>      
+            </el-menu-item>
+            <el-menu-item>
+              <sidebar-link to="/question_and_answer" :name="$t('sidebar.list') + ' ' + $t('sidebar.question_and_answer')" icon="tim-icons icon-bag-16"/>      
+            </el-menu-item>
+          </el-submenu>
+          <el-submenu index="4">
+            <template slot="title">
+              <i class="tim-icons icon-book-bookmark"></i>
+              <span>فروشگاه</span>
+            </template>
+            <el-menu-item>
+              <sidebar-link to="/order" :name="$t('sidebar.list') + ' ' + $t('sidebar.order')" icon="tim-icons icon-bag-16"/>      
+            </el-menu-item>
+            <el-menu-item>
+              <sidebar-link to="/shipping_method" :name="$t('sidebar.list') + ' ' + $t('sidebar.shipping_method')" icon="tim-icons icon-bag-16"/>      
+            </el-menu-item>
+            <el-menu-item>
+              <sidebar-link to="/order_status" :name="$t('sidebar.list') + ' ' + $t('sidebar.order_status')" icon="tim-icons icon-bag-16"/>      
+            </el-menu-item>
+          </el-submenu>
+        </el-menu>
       </template>
     </side-bar>
     <div class="main-panel">
+      <vue-particles color="#dedede" :moveSpeed="1" shapeType="triangle" :particlesNumber="120"></vue-particles>
       <top-navbar></top-navbar>
-
       <dashboard-content @click.native="toggleSidebar">
 
       </dashboard-content>
@@ -24,19 +100,129 @@
     </div>
   </div>
 </template>
-<style lang="scss">
+
+<style>
+
+#particles-js {
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  transition: opacity 400ms;
+}
+
+.show {
+  opacity: 1 !important;
+}
+
+.el-menu {
+  background: transparent !important;
+  padding: 0px !important;
+  text-align: right;
+}
+.el-menu-item {
+  padding-right: 0px !important;
+}
+.el-submenu__icon-arrow {
+  float: left !important;
+  margin-top: -15px !important;
+}
+
+.el-submenu__title i {
+  margin: 0px;
+  margin-top: 10px;
+}
+
+.el-submenu__title:hover, .el-menu-item:focus, .el-menu-item:hover {
+  background: transparent;
+}
+.el-menu-item, .el-submenu__title {
+  color: #fff !important;
+}
+
+#granim-canvas {
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  height: 100%;
+  width: 100%;
+  border-radius: 4px;
+}
+
+.alert.open.top.left.alert-danger {
+  text-align: right;
+}
+
+*::-webkit-scrollbar-track
+{
+	background-color: transparent;
+	border-radius: 5px;
+}
+
+*::-webkit-scrollbar
+{
+	width: 5px;
+	background-color: transparent;
+}
+
+*::-webkit-scrollbar-thumb
+{
+	border-radius: 3px;
+	background-color: #FFF;
+	background-image: -webkit-gradient(linear,
+									   40% 0%,
+									   75% 84%,
+									   from(#ef5690),
+									   to(#c717a1),
+									   color-stop(.6,#eb4584))
+}
 </style>
+
 <script>
 import TopNavbar from "./TopNavbar.vue";
 import ContentFooter from "./ContentFooter.vue";
 import DashboardContent from "./Content.vue";
 import MobileMenu from "./MobileMenu";
+
+import Granim from 'granim'
+
 export default {
   components: {
     TopNavbar,
     ContentFooter,
     DashboardContent,
     MobileMenu
+  },
+  data() {
+    return {
+      opened_index: this.$route.meta.index
+    }
+  },
+  mounted() {
+    this.$store.dispatch('getPermissions')
+  },
+  created() {    
+    setTimeout( () => {
+      var granimInstance = new Granim({
+        element: '#granim-canvas',
+        name: 'granim',
+        opacity: [1, 1],
+        direction: 'diagonal',
+        stateTransitionSpeed: 20000,
+        states : {
+            "default-state": {
+                gradients: [
+                    ['#8b387d', '#33002a'],
+                    ['#fd5d93', '#910e7d'],
+                    ['#574ee1', '#a804f2'],
+                    ['#68002c', '#310129']
+                ]
+            }
+        }
+      });
+
+      $('#particles-js').addClass('show')
+    }, 100)
   },
   methods: {
     toggleSidebar() {

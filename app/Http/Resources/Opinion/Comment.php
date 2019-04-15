@@ -18,7 +18,8 @@ class Comment extends JsonResource
             'id'                => $this->id,
             'link'              => "/api/v1/comment/{$this->id}",
             'message'           => $this->message,
-            'registered_at'     => $this->created_at,
+            'create_time'       => $this->getOriginal('created_at'),
+            'last_update_time'  => $this->getOriginal('updated_at'),
             'votes'             => [
                 'likes' => $this->likesCount,
                 'dislikes' => $this->dislikesCount,

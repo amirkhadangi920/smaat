@@ -17,4 +17,14 @@ const router = new VueRouter({
   }
 });
 
+
+router.beforeEach((to, from, next) => {
+  if ( to.meta.auth && !localStorage.getItem('API_TOKEN') ) {
+      window.location = "/login"
+      return;
+  }
+
+  next();
+})
+
 export default router;

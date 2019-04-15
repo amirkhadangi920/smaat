@@ -7,6 +7,7 @@ use App\Http\Resources\Spec\Spec as SpecResource;
 use App\Http\Controllers\API\v1\MainController;
 use App\ModelFilters\Spec\SpecFilter;
 use App\Http\Requests\v1\Spec\SpecificationRequest;
+use App\Http\Resources\Spec\SpecCollection;
 
 class SpecController extends MainController
 {
@@ -30,7 +31,7 @@ class SpecController extends MainController
      * @var array
      */
     protected $relations = [
-        'category:id,slug,title'
+        'category:id,title'
     ];
 
     protected $more_relations = [
@@ -44,6 +45,13 @@ class SpecController extends MainController
      * @var [type]
      */
     protected $resource = SpecResource::class;
+
+    /**
+     * Resource Collection of this controller respnoses
+     *
+     * @var [type]
+     */
+    protected $collection = SpecCollection::class;
     
     /**
      * Filter class of this eloquent model

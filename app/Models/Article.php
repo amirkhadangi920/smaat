@@ -12,10 +12,12 @@ use App\Models\Opinion\Comment;
 use Spatie\Tags\HasTags;
 use App\Models\Group\Subject;
 use EloquentFilter\Filterable;
+use App\Helpers\CreateTimeline;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Article extends Model implements AuditableContract , LikeableContract
 {
-    use Auditable, GenerateRandomID, HasTags, Likeable, Filterable;
+    use Auditable, SoftDeletes, GenerateRandomID, HasTags, Likeable, Filterable, CreateTimeline;
 
     /****************************************
      **             Attributes
@@ -38,6 +40,15 @@ class Article extends Model implements AuditableContract , LikeableContract
         'description',
         'body',
         'image'
+    ];
+
+    /**
+     * The attributes that should be cast to native types.
+     *
+     * @var array
+     */
+    protected $casts = [
+        'image' => 'array',
     ];
 
     /**

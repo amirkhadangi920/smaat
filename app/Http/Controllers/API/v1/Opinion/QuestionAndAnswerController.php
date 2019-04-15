@@ -6,6 +6,7 @@ use App\Models\Opinion\QuestionAndAnswer;
 use App\Http\Resources\Opinion\QuestionAndAnswer as QuestionAndAnswerResource;
 use App\ModelFilters\Opinion\QuestionAndAnswerFilter;
 use App\Http\Requests\v1\Opinion\QuestionAndAnswerRequest;
+use App\Http\Resources\Opinion\QuestionAndAnswerCollection;
 
 class QuestionAndAnswerController extends OpinionBaseController
 {
@@ -29,7 +30,7 @@ class QuestionAndAnswerController extends OpinionBaseController
      * @var array
      */
     protected $relations = [
-        'product:id,slug,name,photos,label',
+        'product:id,name,photos,label',
         'user:id,first_name,last_name,avatar',
         'answers:id,user_id,question_id,message,created_at',
         'answers.user:id,first_name,last_name,avatar'
@@ -48,6 +49,13 @@ class QuestionAndAnswerController extends OpinionBaseController
      * @var [type]
      */
     protected $resource = QuestionAndAnswerResource::class;
+
+    /**
+     * Resource Collection of this controller respnoses
+     *
+     * @var [type]
+     */
+    protected $collection = QuestionAndAnswerCollection::class;
     
     /**
      * Filter class of this eloquent model
@@ -88,7 +96,7 @@ class QuestionAndAnswerController extends OpinionBaseController
      */
     public function getAllData()
     {
-        return $this->model::select('id', 'question_id', 'product_id', 'user_id', 'message', 'created_at')
+        return $this->model::select('id', 'question_id', 'product_id', 'user_id', 'message', 'created_at', 'updated_at')
             ->filter( request()->all(), $this->filter )    
             ->whereNull('question_id')
             ->with($this->relations)

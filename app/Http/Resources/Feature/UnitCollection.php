@@ -3,6 +3,7 @@
 namespace App\Http\Resources\Feature;
 
 use Illuminate\Http\Resources\Json\ResourceCollection;
+use App\Models\Feature\Unit;
 
 class UnitCollection extends ResourceCollection
 {
@@ -14,6 +15,12 @@ class UnitCollection extends ResourceCollection
      */
     public function toArray($request)
     {
-        return parent::toArray($request);
+        return [
+            'data' => $this->collection,
+            'meta' => [
+                'trash' => Unit::onlyTrashed()->count()
+            ],
+            'chart' => Unit::create_timeline()
+        ];
     }
 }

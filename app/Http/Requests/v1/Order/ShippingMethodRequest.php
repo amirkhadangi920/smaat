@@ -24,11 +24,23 @@ class ShippingMethodRequest extends FormRequest
     public function rules()
     {
         return [
-            'name'              => 'required|string|min:50',
-            'description'       => 'nullable|string|min:255',
+            'name'              => 'required|string|max:50',
+            'description'       => 'nullable|string|max:255',
             'logo'              => 'nullable|image|mimes:jpeg,jpg,png,gif|max:1024',
             'cost'              => 'required|digits_between:0,10|min:0',
-            'minimum'           => 'required|digits_between:0,10|min:0',
+            'minimum'           => 'nullable|digits_between:0,10|min:0',
+        ];
+    }
+    
+    /**
+     * Get custom attributes for validator errors.
+     *
+     * @return array
+     */
+    public function attributes()
+    {
+        return [
+            'minimum' => 'حداقل مبلغ سفارش'
         ];
     }
 }

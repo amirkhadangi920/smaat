@@ -24,7 +24,8 @@ class CreateGroupingTables extends Migration
             $table->table([
                 'info',
                 'logo'           => 'nullable|array',
-                'scoring_feilds' => 'mediumText|nullable'
+                'scoring_feilds' => 'mediumText|nullable',
+                'jalali_created_at' => 'datetime|nullable'
             ], ['self']);
         });
 
@@ -32,6 +33,7 @@ class CreateGroupingTables extends Migration
             $table->table([
                 'info',
                 'logo'           => 'nullable|array',
+                'jalali_created_at' => 'datetime|nullable'
             ], ['self']);
         });
 

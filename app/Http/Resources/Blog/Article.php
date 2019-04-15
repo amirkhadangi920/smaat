@@ -16,12 +16,14 @@ class Article extends JsonResource
     {
         return [
             'id'              => $this->id,
-            'link'              => "/api/v1/article/{$this->slug}",
+            'link'              => "/api/v1/article/{$this->id}",
             'title'             => $this->title,
             'description'       => $this->description,
             'body'              => $this->when( $this->body, $this->body ),
             'image'             => $this->image,
             'reading_time'      => $this->reading_time,
+            'create_time'       => $this->getOriginal('created_at'),
+            'last_update_time'  => $this->getOriginal('updated_at'),
             'votes'             => [
                 'likes' => $this->likesCount,
                 'dislikes' => $this->dislikesCount,

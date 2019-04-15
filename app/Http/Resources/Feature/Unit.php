@@ -19,6 +19,8 @@ class Unit extends JsonResource
             'link'              => "/api/v1/unit/{$this->id}",
             'title'             => $this->title,
             'description'       => $this->description,
+            'create_time'       => $this->getOriginal('created_at'),
+            'last_update_time'  => $this->getOriginal('updated_at'),
             'categories'        => $this->categories->map( function ( $category ) {
                 
                 return [

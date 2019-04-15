@@ -15,10 +15,11 @@ use App\Models\Spec\{ SpecData, Spec };
 use App\Models\Group\Category;
 use App\Models\Feature\{ Brand, Unit };
 use EloquentFilter\Filterable;
+use App\Helpers\CreateTimeline;
 
 class Product extends Model implements AuditableContract, LikeableContract
 {
-    use SoftDeletes, Auditable, GenerateRandomID, HasTags, Filterable, Likeable;
+    use SoftDeletes, Auditable, GenerateRandomID, HasTags, Filterable, Likeable, CreateTimeline;
 
     /****************************************
      **             Attributes

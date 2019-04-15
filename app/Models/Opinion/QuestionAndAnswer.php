@@ -9,10 +9,11 @@ use OwenIt\Auditing\Auditable;
 use OwenIt\Auditing\Contracts\Auditable as AuditableContract;
 use App\Models\Product\Product;
 use EloquentFilter\Filterable;
+use App\Helpers\CreateTimeline;
 
 class QuestionAndAnswer extends Model implements AuditableContract
 {
-    use SoftDeletes, Auditable, Filterable;
+    use SoftDeletes, Auditable, Filterable, CreateTimeline;
 
     /****************************************
      **             Attributes

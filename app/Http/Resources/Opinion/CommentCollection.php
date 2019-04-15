@@ -3,6 +3,7 @@
 namespace App\Http\Resources\Opinion;
 
 use Illuminate\Http\Resources\Json\ResourceCollection;
+use App\Models\Opinion\Comment;
 
 class CommentCollection extends ResourceCollection
 {
@@ -14,6 +15,12 @@ class CommentCollection extends ResourceCollection
      */
     public function toArray($request)
     {
-        return parent::toArray($request);
+        return [
+            'data' => $this->collection,
+            'meta' => [
+                'trash' => Comment::onlyTrashed()->count()
+            ],
+            'chart' => Comment::create_timeline()
+        ];
     }
 }

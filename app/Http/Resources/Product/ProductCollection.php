@@ -3,6 +3,7 @@
 namespace App\Http\Resources\Product;
 
 use Illuminate\Http\Resources\Json\ResourceCollection;
+use App\Models\Product\Product;
 
 class ProductCollection extends ResourceCollection
 {
@@ -14,6 +15,12 @@ class ProductCollection extends ResourceCollection
      */
     public function toArray($request)
     {
-        return parent::toArray($request);
+        return [
+            'data' => $this->collection,
+            'meta' => [
+                'trash' => Product::onlyTrashed()->count()
+            ],
+            'chart' => Product::create_timeline()
+        ];
     }
 }

@@ -3,13 +3,10 @@
 namespace App\Http\Controllers\API\v1\Group;
 
 use Illuminate\Http\Request;
-use App\Helpers\SluggableController;
 use App\Http\Controllers\API\v1\MainController;
 
 class GroupBaseController extends MainController
 {
-    use SluggableController;
-
     /**
      * More realtion to use in show method of the controller
      *

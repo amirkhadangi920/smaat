@@ -4,14 +4,12 @@ namespace App\Http\Controllers\API\v1\Feature;
 
 use App\Models\Feature\Brand;
 use App\Http\Resources\Feature\Brand as BrandResource;
-use App\Helpers\SluggableController;
 use App\Http\Requests\v1\Feature\BrandRequest;
 use App\ModelFilters\Feature\BrandFilter;
+use App\Http\Resources\Feature\BrandCollection;
 
 class BrandController extends FeatureBaseController
 {
-    use SluggableController;
-
     /**
      * Type of this controller for use in messages
      *
@@ -32,6 +30,13 @@ class BrandController extends FeatureBaseController
      * @var [type]
      */
     protected $resource = BrandResource::class;
+    
+    /**
+     * Resource Collection of this controller respnoses
+     *
+     * @var [type]
+     */
+    protected $collection = BrandCollection::class;
 
     /**
      * Filter class of this eloquent model

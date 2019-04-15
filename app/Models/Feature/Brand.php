@@ -9,10 +9,11 @@ use OwenIt\Auditing\Contracts\Auditable as AuditableContract;
 use EloquentFilter\Filterable;
 use App\Models\Group\Category;
 use App\Models\Product\Product;
+use App\Helpers\CreateTimeline;
 
 class Brand extends Model implements AuditableContract
 {
-    use SoftDeletes, Auditable, Filterable;
+    use SoftDeletes, Auditable, Filterable, CreateTimeline;
 
     /****************************************
      **             Attributes

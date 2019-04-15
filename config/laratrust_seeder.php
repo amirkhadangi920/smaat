@@ -3,8 +3,17 @@
 return [
     'role_structure' => [
         'owner' => [
+            'brand' => 'c,u,d',
+            'color' => 'c,u,d',
+            'unit' => 'c,u,d',
+            'size' => 'c,u,d',
+            'warranty' => 'c,u,d',
+            
             'article' => 'c,u,d',
             'product' => 'c,u,d',
+
+            'shipping_method' => 'c,u,d',
+            'order_status' => 'c,u,d',
         ],
     ],
     // 'permission_structure' => [

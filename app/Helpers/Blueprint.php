@@ -273,7 +273,8 @@ class Blueprint extends BaseBlueprint
             'mediumText', 'text',        
             'tinyInteger', 'smallInteger', 'integer', 'bigInteger',
             'unsignedInteger', 'unsignedBigInteger',
-            'boolean', 'array', 'json', 'timestamp',
+            'boolean', 'array', 'json',
+            'timestamp', 'datetime'
         ];
     
         foreach ( $all_types as $type )

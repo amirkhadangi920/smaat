@@ -25,7 +25,8 @@ class OrderStatusRequest extends FormRequest
     {
         return [
             'title'         => 'required|string|max:50',
-            'description'   => 'nullable|string|max:255',      
+            'description'   => 'nullable|string|max:255',
+            'code'          => ['required', 'regex:/^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/'],  
         ];
     }
 }

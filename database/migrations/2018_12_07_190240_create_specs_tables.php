@@ -25,6 +25,7 @@ class CreateSpecsTables extends Migration
             $table->reltoCategories();
             $table->info();
             $table->full_timestamps();
+            $table->dateTime('jalali_created_at')->nullable();
         });
 
         $schema->create('spec_headers', function (Blueprint $table) {

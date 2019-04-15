@@ -3,6 +3,7 @@
 namespace App\Http\Resources\Feature;
 
 use Illuminate\Http\Resources\Json\ResourceCollection;
+use App\Models\Feature\Size;
 
 class SizeCollection extends ResourceCollection
 {
@@ -14,6 +15,12 @@ class SizeCollection extends ResourceCollection
      */
     public function toArray($request)
     {
-        return parent::toArray($request);
+        return [
+            'data' => $this->collection,
+            'meta' => [
+                'trash' => Size::onlyTrashed()->count()
+            ],
+            'chart' => Size::create_timeline()
+        ];
     }
 }

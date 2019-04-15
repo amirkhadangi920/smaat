@@ -3,6 +3,7 @@
 namespace App\Http\Resources\Group;
 
 use Illuminate\Http\Resources\Json\ResourceCollection;
+use App\Models\Group\Category;
 
 class CategoryCollection extends ResourceCollection
 {
@@ -14,6 +15,13 @@ class CategoryCollection extends ResourceCollection
      */
     public function toArray($request)
     {
-        return parent::toArray($request);
+        return [
+            'data' => $this->collection,
+            'meta' => [
+                'total' => Category::count(),
+                'trash' => Category::onlyTrashed()->count()
+            ],
+            'chart' => Category::create_timeline()
+        ];
     }
 }

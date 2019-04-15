@@ -19,6 +19,8 @@ class Spec extends JsonResource
             'link'              => "/api/v1/spec/{$this->id}",
             'title'             => $this->title,
             'description'       => $this->description,
+            'create_time'       => $this->getOriginal('created_at'),
+            'last_update_time'  => $this->getOriginal('updated_at'),
             'category'          => $this->whenLoaded('category', function () {
                 return [
                     'link'  => "/api/v1/category/{$this->category->slug}",
@@ -39,11 +41,11 @@ class Spec extends JsonResource
                                     'link'          => "/api/v1/spec_row/{$row->id}",
                                     'title'         => $row->title,
                                     'description'   => $row->description,
-                                    'label'         => $this->label,
+                                    'label'         => $row->label,
                                     'values'        => $row->values,
                                     'help'          => $row->help,
-                                    'multiple'      => $this->multiple,
-                                    'required'      => $this->required,
+                                    'multiple'      => $row->multiple,
+                                    'required'      => $row->required,
                                 ];
                             });
                         }),

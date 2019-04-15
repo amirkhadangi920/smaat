@@ -9,10 +9,11 @@ use EloquentFilter\Filterable;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use OwenIt\Auditing\Auditable;
 use OwenIt\Auditing\Contracts\Auditable as AuditableContract;
+use App\Helpers\CreateTimeline;
 
 class Unit extends Model implements AuditableContract
 {
-    use SoftDeletes, Auditable ,Filterable;
+    use SoftDeletes, Auditable ,Filterable, CreateTimeline;
 
     /****************************************
      **             Attributes

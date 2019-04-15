@@ -5,14 +5,15 @@ namespace App\Http\Controllers\API\v1\Product;
 use App\Models\Product\Product;
 use App\Http\Controllers\API\v1\MainController;
 use App\Http\Resources\Product\Product as ProductResource;
-use App\Helpers\{ SluggableController, HasUser, LikeableController };
+use App\Helpers\{ HasUser, LikeableController };
 use App\Models\Spec\{ SpecRow, SpecData };
 use App\ModelFilters\Product\ProductFilter;
 use App\Http\Requests\v1\Product\ProductRequest;
+use App\Http\Resources\Product\ProductCollection;
 
 class ProductController extends MainController
 {
-    use SluggableController, HasUser, LikeableController;
+    use HasUser, LikeableController;
 
     /**
      * Type of this controller for use in messages
@@ -34,8 +35,8 @@ class ProductController extends MainController
      * @var array
      */
     protected $relations = [
-        'category:id,slug,title',
-        'brand:id,slug,name'
+        'category:id,title',
+        'brand:id,name'
     ];
 
     protected $more_relations;
@@ -46,6 +47,13 @@ class ProductController extends MainController
      * @var [type]
      */
     protected $resource = ProductResource::class;
+
+    /**
+     * Resource Collection of this controller respnoses
+     *
+     * @var [type]
+     */
+    protected $collection = ProductCollection::class;
     
     /**
      * Filter class of this eloquent model
@@ -69,7 +77,7 @@ class ProductController extends MainController
 
         $this->more_relations = [
             'unit:id,title',
-            'accessories:id,brand_id,slug,name,photos,label',
+            'accessories:id,brand_id,name,photos,label',
             'variations:id,product_id,warranty_id,color_id,size_id,purchase_price,sales_price,inventory,sending_time',
             'variations' => function ( $query ) {
                 $query->whereStatus(1);
@@ -114,8 +122,8 @@ class ProductController extends MainController
     public function getAllData()
     {
         return $this->model::select(
-            'id', 'user_id', 'category_id', 'brand_id', 'slug',
-            'name', 'description', 'photos', 'label', 'views_count'
+            'id', 'user_id', 'category_id', 'brand_id', 'name', 'description',
+            'photos', 'label', 'views_count', 'created_at', 'updated_at'
         )
             ->filter( request()->all(), $this->filter )
             ->with( $this->relations )
@@ -133,7 +141,7 @@ class ProductController extends MainController
      */
     public function getSingleData($product)
     { 
-        $product = $this->model::whereSlug($product)->firstOrFail();
+        $product = $this->model::firstOrFail($product);
 
         return $product->load( array_merge( $this->relations, $this->more_relations, [
             'spec:id',
@@ -222,7 +230,7 @@ class ProductController extends MainController
      * Create records for specification data for specific product
      *
      * @param Request $request
-     * @param slug $product
+     * @param id $product
      * @return void
      */
     public function createSpecData($request, $product)

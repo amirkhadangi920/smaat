@@ -1,6 +1,7 @@
 <?php
 
 use Faker\Factory;
+use Morilog\Jalali\Jalalian;
 
 $faker = Factory::create('fa_IR');
 
@@ -63,6 +64,7 @@ $factory->define(App\Models\Product\Product::class, function () use($faker, $pro
         //     return $photos;
         // }][ $faker->boolean() ], 
         'photos'            => nullable( image ( $products[$selected]['logo'] )),
+        'jalali_created_at' => Jalalian::forge("now - {$faker->numberBetween(2, 360)} days")
     ];
 });
 

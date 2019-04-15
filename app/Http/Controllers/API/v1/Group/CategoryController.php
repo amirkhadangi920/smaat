@@ -5,6 +5,7 @@ namespace App\Http\Controllers\API\v1\Group;
 use App\Models\Group\Category;
 use App\Http\Resources\Group\Category as CategoryResource;
 use App\Http\Requests\v1\Group\CategoryRequest;
+use App\Http\Resources\Group\CategoryCollection;
 
 class CategoryController extends GroupBaseController
 {
@@ -28,6 +29,13 @@ class CategoryController extends GroupBaseController
      * @var [type]
      */
     protected $resource = CategoryResource::class;
+
+    /**
+     * Resource Collection of this controller respnoses
+     *
+     * @var [type]
+     */
+    protected $collection = CategoryCollection::class;
 
     /**
      * Get the request from url and pass it to storeData method

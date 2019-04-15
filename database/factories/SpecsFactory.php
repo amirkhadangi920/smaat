@@ -1,13 +1,15 @@
 <?php
 
 use Faker\Factory;
+use Morilog\Jalali\Jalalian;
 
 $faker = Factory::create('fa_IR');
 
 $factory->define(App\Models\Spec\Spec::class, function () use($faker) {
     return [
         'title'         => $faker->name(),
-        'description'   => [ null, Faker::sentence() ][ $faker->boolean() ]
+        'description'   => [ null, Faker::sentence() ][ $faker->boolean() ],
+        'jalali_created_at' => Jalalian::forge("now - {$faker->numberBetween(2, 360)} days")
     ];
 });
 

@@ -1,6 +1,7 @@
 <?php
 
 use Faker\Factory;
+use Morilog\Jalali\Jalalian;
 
 $faker = Factory::create('fa_IR');
 
@@ -25,7 +26,8 @@ $factory->define(App\Models\Opinion\Review::class, function () use($faker) {
             return $disadvantages;
         }][ $faker->boolean() ],
         'message'       => Faker::sentence(),
-        'is_accept'      => $faker->boolean()
+        'is_accept'      => $faker->boolean(),
+        'jalali_created_at' => Jalalian::forge("now - {$faker->numberBetween(2, 360)} days")
         // 'created_at'    => $faker->unixTime()
     ];
 });
@@ -33,7 +35,8 @@ $factory->define(App\Models\Opinion\Review::class, function () use($faker) {
 $factory->define(App\Models\Opinion\Comment::class, function () use($faker) {
     return [
         'message'       => Faker::sentence(),
-        'is_accept'      => $faker->boolean()
+        'is_accept'      => $faker->boolean(),
+        'jalali_created_at' => Jalalian::forge("now - {$faker->numberBetween(2, 360)} days")
         // 'created_at'    => $faker->unixTime()
     ];
 });
@@ -41,7 +44,8 @@ $factory->define(App\Models\Opinion\Comment::class, function () use($faker) {
 $factory->define(App\Models\Opinion\QuestionAndAnswer::class, function () use($faker) {
     return [
         'message'       => Faker::sentence(),
-        'is_accept'     => $faker->boolean()
+        'is_accept'     => $faker->boolean(),
+        'jalali_created_at' => Jalalian::forge("now - {$faker->numberBetween(2, 360)} days")
         // 'created_at'    => $faker->unixTime()
     ];
 });

@@ -1,10 +1,11 @@
 <?php
 
 use Faker\Factory;
+use Morilog\Jalali\Jalalian;
+use App\Models\Financial\ShippingMethod;
 
 $faker = Factory::create('fa_IR');
 
-use App\Models\Financial\ShippingMethod;
 
 $factory->define(App\Models\Financial\Order::class, function () use($faker) {
     $descriptions = $datetimes = [];
@@ -36,6 +37,7 @@ $factory->define(App\Models\Financial\Order::class, function () use($faker) {
         'shipping_method_id'=> nullable( factory(ShippingMethod::class)->create()->id ),
         'docs'              => nullable( $faker->words( rand(1, 10) ) ),
         'checkout'          => $faker->boolean(),
+        'jalali_created_at' => Jalalian::forge("now - {$faker->numberBetween(2, 360)} days")
     ];
 });
 
@@ -51,8 +53,10 @@ $factory->define(App\Models\Financial\OrderItem::class, function () use($faker) 
 
 $factory->define(App\Models\Financial\OrderStatus::class, function () use($faker) {
     return [
-        'title'               => [ 'در حال بررسی', 'بسته بندی ', 'چک کردن موجودی', 'تحویل بحش ارسال', 'در حال ارسال', ][rand( 0,  4)],
-        'description'   => nullable( Faker::sentence() ) 
+        'title'             => [ 'در حال بررسی', 'بسته بندی ', 'چک کردن موجودی', 'تحویل بحش ارسال', 'در حال ارسال', ][rand( 0,  4)],
+        'description'       => nullable( Faker::sentence() ),
+        'color'             => $faker->hexcolor,
+        'jalali_created_at' => Jalalian::forge("now - {$faker->numberBetween(2, 360)} days")
     ];
 });
 

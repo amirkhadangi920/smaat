@@ -19,10 +19,11 @@ use App\Models\Product\Product;
 use App\Models\Discount\Discount;
 use App\Models\Financial\OrderPoint;
 use App\Traits\MultiLevel;
+use App\Helpers\CreateTimeline;
 
 class Category extends Model implements AuditableContract
 {
-    use SoftDeletes, Auditable, HasTags, MultiLevel;
+    use SoftDeletes, Auditable, HasTags, MultiLevel, CreateTimeline;
 
     /****************************************
      **             Attributes

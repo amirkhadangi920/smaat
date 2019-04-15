@@ -3,6 +3,7 @@
 namespace App\Http\Resources\Financial;
 
 use Illuminate\Http\Resources\Json\ResourceCollection;
+use App\Models\Financial\OrderStatus;
 
 class OrderStatusCollection extends ResourceCollection
 {
@@ -14,6 +15,12 @@ class OrderStatusCollection extends ResourceCollection
      */
     public function toArray($request)
     {
-        return parent::toArray($request);
+        return [
+            'data' => $this->collection,
+            'meta' => [
+                'trash' => OrderStatus::onlyTrashed()->count()
+            ],
+            'chart' => OrderStatus::create_timeline()
+        ];   
     }
 }

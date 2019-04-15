@@ -92,7 +92,7 @@
               </li>
               <div class="dropdown-divider"></div>
               <li class="nav-link">
-                <a href="#" class="nav-item dropdown-item">Log out</a>
+                <a class="nav-item dropdown-item" @click="logOut">خروج</a>
               </li>
             </base-dropdown>
           </ul>
@@ -128,6 +128,10 @@
       };
     },
     methods: {
+      logOut() {
+        localStorage.removeItem('API_TOKEN');
+        this.$router.push('/login')
+      },
       capitalizeFirstLetter(string) {
         return string.charAt(0).toUpperCase() + string.slice(1);
       },

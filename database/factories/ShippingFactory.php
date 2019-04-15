@@ -1,6 +1,7 @@
 <?php
 
 use Faker\Factory;
+use Morilog\Jalali\Jalalian;
 
 $faker = Factory::create('fa_IR');
 
@@ -14,7 +15,7 @@ $factory->define(App\Models\Financial\ShippingMethod::class, function () use($fa
         'logo'                  => nullable( image ( $brands[$selected]['logo'] )),
         'cost'                   => $faker->numberBetween( 1000, 900000000),
         'minimum'          => $faker->numberBetween(0,1000),
-        'is_active'            => $faker->boolean() 
-        
+        'is_active'            => $faker->boolean(),
+        'jalali_created_at' => Jalalian::forge("now - {$faker->numberBetween(2, 360)} days")
     ];
 });

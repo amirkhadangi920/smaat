@@ -26,7 +26,8 @@ class CreateShippingMethodsTable extends Migration
                 'logo'      => 'nullable|array',
                 'cost'      => 'integer',
                 'minimum'   => 'integer|default:0|comment:Minimum factor total for this method',
-                'is_active' => 'boolean|default:0'
+                'is_active' => 'boolean|default:0',
+                'jalali_created_at' => 'datetime|nullable'
             ]);
         });
     }

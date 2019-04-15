@@ -3,17 +3,16 @@
 namespace App\Http\Controllers\API\v1\Blog;
 
 use App\Models\Article;
-use App\Http\Controllers\API\v1\MainController;
-use App\Helpers\SluggableController;
-use App\Helpers\HasUser;
-use App\Http\Resources\Blog\Article as ArticleResource;
 use App\ModelFilters\Blog\ArticleFilter;
+use App\Helpers\{ HasUser, LikeableController };
+use App\Http\Controllers\API\v1\MainController;
+use App\Http\Resources\Blog\Article as ArticleResource;
 use App\Http\Requests\v1\Article\ArticleRequest;
-use App\Helpers\LikeableController;
+use App\Http\Resources\Blog\ArticleCollection;
 
 class ArticleController extends MainController
 {
-    use SluggableController, HasUser, LikeableController;
+    use HasUser, LikeableController;
 
     /**
      * Type of this controller for use in messages
@@ -51,6 +50,13 @@ class ArticleController extends MainController
     protected $resource = ArticleResource::class;
 
     /**
+     * Resource Collection of this controller respnoses
+     *
+     * @var [type]
+     */
+    protected $collection = ArticleCollection::class;
+
+    /**
      * Filter class of this eloquent model
      *
      * @var ModelFilter
@@ -79,7 +85,9 @@ class ArticleController extends MainController
      */
     public function getAllData()
     {
-        return $this->model::select('id', 'user_id', 'slug', 'title', 'description', 'image', 'reading_time')
+        return $this->model::select(
+                'id', 'user_id', 'title', 'description', 'image', 'reading_time', 'created_at', 'updated_at'
+            )
             ->filter( request()->all(), $this->filter )    
             ->with( $this->relations )
             ->latest()

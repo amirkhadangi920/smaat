@@ -3,6 +3,7 @@
 namespace App\Http\Resources\Spec;
 
 use Illuminate\Http\Resources\Json\ResourceCollection;
+use App\Models\Spec\Spec;
 
 class SpecCollection extends ResourceCollection
 {
@@ -14,6 +15,12 @@ class SpecCollection extends ResourceCollection
      */
     public function toArray($request)
     {
-        return parent::toArray($request);
+        return [
+            'data' => $this->collection,
+            'meta' => [
+                'trash' => Spec::onlyTrashed()->count()
+            ],
+            'chart' => Spec::create_timeline()
+        ];
     }
 }

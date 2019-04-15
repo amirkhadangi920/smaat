@@ -3,6 +3,7 @@
 namespace App\Http\Resources\Feature;
 
 use Illuminate\Http\Resources\Json\ResourceCollection;
+use App\Models\Feature\Color;
 
 class ColorCollection extends ResourceCollection
 {
@@ -14,6 +15,12 @@ class ColorCollection extends ResourceCollection
      */
     public function toArray($request)
     {
-        return parent::toArray($request);
+        return [
+            'data' => $this->collection,
+            'meta' => [
+                'trash' => Color::onlyTrashed()->count()
+            ],
+            'chart' => Color::create_timeline()
+        ];
     }
 }

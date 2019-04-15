@@ -17,10 +17,13 @@ class OrderStatus extends JsonResource
         // return parent::toArray($request);
 
         return [
-            'id'            => $this->id,
-            'link'          => "/api/v1/order_status/{$this->id}",
-            'title'         => $this->title,
-            'description'   => $this->description,
+            'id'                => $this->id,
+            'link'              => "/api/v1/order_status/{$this->id}",
+            'title'             => $this->title,
+            'description'       => $this->description,
+            'color'             => $this->color,
+            'create_time'       => $this->getOriginal('created_at'),
+            'last_update_time'  => $this->getOriginal('updated_at'),
         ];
     }
 }

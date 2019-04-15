@@ -3,6 +3,7 @@
 namespace App\Http\Resources\Group;
 
 use Illuminate\Http\Resources\Json\ResourceCollection;
+use App\Models\Group\Subject;
 
 class SubjectCollection extends ResourceCollection
 {
@@ -14,6 +15,13 @@ class SubjectCollection extends ResourceCollection
      */
     public function toArray($request)
     {
-        return parent::toArray($request);
+        return [
+            'data' => $this->collection,
+            'meta' => [
+                'total' => Subject::count(),
+                'trash' => Subject::onlyTrashed()->count()
+            ],
+            'chart' => Subject::create_timeline()
+        ];
     }
 }

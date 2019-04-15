@@ -11,6 +11,7 @@ use Zend\Diactoros\Request;
 use App\User;
 use App\ModelFilters\Financial\OrderFilter;
 use App\Http\Requests\v1\Order\OrderRequest;
+use App\Http\Resources\Financial\OrderCollection;
 
 class OrderController extends MainController
 {
@@ -47,7 +48,7 @@ class OrderController extends MainController
      */
     protected $relations = [
         'user',
-        'order_status:id,title,description,cost',
+        'order_status:id,title,description',
     ];
     
     protected $more_relations = [
@@ -67,6 +68,13 @@ class OrderController extends MainController
      * @var [type]
      */
     protected $resource = OrderResource::class;
+
+    /**
+     * Resource Collection of this controller respnoses
+     *
+     * @var [type]
+     */
+    protected $collection = OrderCollection::class;
     
     /**
      * Filter class of this eloquent model

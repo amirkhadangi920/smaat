@@ -3,9 +3,16 @@
 namespace App\Models\Financial;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
+use OwenIt\Auditing\Auditable;
+use OwenIt\Auditing\Contracts\Auditable as AuditableContract;
+use EloquentFilter\Filterable;
+use App\Helpers\CreateTimeline;
 
-class ShippingMethod extends Model
+class ShippingMethod extends Model implements AuditableContract
 {
+    use SoftDeletes, Auditable, Filterable, CreateTimeline;
+    
     /****************************************
      **             Attributes
      ***************************************/

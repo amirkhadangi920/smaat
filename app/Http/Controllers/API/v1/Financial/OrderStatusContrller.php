@@ -7,6 +7,7 @@ use App\Http\Controllers\API\v1\MainController;
 use App\Http\Resources\Financial\OrderStatus as OrderStatusResource;
 use App\ModelFilters\Financial\OrderStatusFilter;
 use App\Http\Requests\v1\Order\OrderStatusRequest;
+use App\Http\Resources\Financial\OrderStatusCollection;
 
 class OrderStatusContrller extends MainController
 {
@@ -30,6 +31,13 @@ class OrderStatusContrller extends MainController
      * @var [type]
      */
     protected $resource = OrderStatusResource::class;
+
+    /**
+     * Resource Collection of this controller respnoses
+     *
+     * @var [type]
+     */
+    protected $collection = OrderStatusCollection::class;
 
     /**
      * Filter class of this eloquent model

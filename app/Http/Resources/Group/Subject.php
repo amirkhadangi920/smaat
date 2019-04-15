@@ -24,7 +24,8 @@ class Subject extends JsonResource
     public function toArray($request)
     {
         return [
-            'link'          => "/api/v1/category/{$this->slug}",
+            'id'            => $this->id,
+            'link'          => "/api/v1/category/{$this->id}",
             'title'         => $this->title,
             'logo'          => $this->logo,
             'description'   => $this->description,
@@ -57,8 +58,9 @@ class Subject extends JsonResource
     public function getChilds($subject)
     {
         return [
-            'link'          => "/api/v1/category/{$subject->slug}",
-            'title'         => $subject->slug,
+            'id'            => $subject->id,
+            'link'          => "/api/v1/category/{$subject->id}",
+            'title'         => $subject->title,
             'logo'          => $subject->logo,
             'description'   => $subject->description,
             'childs'        => $this->when($subject->childs ?? false, function () use($subject) {

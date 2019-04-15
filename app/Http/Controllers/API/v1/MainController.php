@@ -27,7 +27,7 @@ abstract class MainController extends Controller
      */
     public function index()
     {
-        return $this->resource::collection( $this->getAllData() )->additional([
+        return (new $this->collection( $this->getAllData() ) )->additional([
             'message' => __('messages.return.all', [
                 'data' => __("types.{$this->type}.plural")
             ])

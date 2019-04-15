@@ -3,6 +3,7 @@
 namespace App\Http\Resources\Blog;
 
 use Illuminate\Http\Resources\Json\ResourceCollection;
+use App\Models\Article;
 
 class ArticleCollection extends ResourceCollection
 {
@@ -14,6 +15,12 @@ class ArticleCollection extends ResourceCollection
      */
     public function toArray($request)
     {
-        return parent::toArray($request);
+        return [
+            'data' => $this->collection,
+            'meta' => [
+                'trash' => Article::onlyTrashed()->count()
+            ],
+            'chart' => Article::create_timeline()
+        ];
     }
 }

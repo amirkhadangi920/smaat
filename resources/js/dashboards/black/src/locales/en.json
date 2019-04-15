@@ -122,6 +122,21 @@
     "tableList": "جداول",
     "typography": "تایپوگرافی",
     "rtlSupport": "چپ به راست",
-    "brand": "برند"
+    "brand": "برند",
+    "size": "سایز",
+    "color": "رنگ",
+    "warranty": "گارانتی",
+    "unit": "واحد",
+    "spec": "جدول مشخصات",
+    "article": "مقاله",
+    "comment": "نظر",
+    "subject": "موضوع",
+    "product": "محصول",
+    "category": "دسته بندی",
+    "review": "نقد و بررسی",
+    "question_and_answer": "پرسش و پاسخ",
+    "shipping_method": "روش ارسال",
+    "order_status": "وضعیت سفارش",
+    "order": "سفارش"
   }
 }

@@ -23,7 +23,8 @@ class Review extends JsonResource
             'advantages'        => $this->advantages,
             'disadvantages'     => $this->disadvantages,
             'message'           => $this->message,
-            'registered_at'     => $this->created_at,
+            'create_time'       => $this->getOriginal('created_at'),
+            'last_update_time'  => $this->getOriginal('updated_at'),
             'votes'             => [
                 'likes' => $this->likesCount,
                 'dislikes' => $this->dislikesCount,

@@ -3,6 +3,8 @@
 namespace App\Http\Resources\Feature;
 
 use Illuminate\Http\Resources\Json\ResourceCollection;
+use App\Models\Feature\Brand;
+use Morilog\Jalali\Jalalian;
 
 class BrandCollection extends ResourceCollection
 {
@@ -14,6 +16,12 @@ class BrandCollection extends ResourceCollection
      */
     public function toArray($request)
     {
-        return parent::toArray($request);
+        return [
+            'data' => $this->collection,
+            'meta' => [
+                'trash' => Brand::onlyTrashed()->count()
+            ],
+            'chart' => Brand::create_timeline()
+        ];
     }
 }

@@ -30,6 +30,8 @@ class Order extends JsonResource
             'datetimes'         => $this->datetimes,
             'is_accept'         => $this->is_accept,
             'paid_at'           => $this->paid_at,
+            'create_time'       => $this->getOriginal('created_at'),
+            'last_update_time'  => $this->getOriginal('updated_at'),
             'user'              => $this->whenLoaded('user', function () {
                 return [
                     'id'                => $this->user->id,
