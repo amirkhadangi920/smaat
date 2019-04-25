@@ -9,8 +9,10 @@ class BlogTablesSeeder extends Seeder
      *
      * @return void
      */
-    public function run( $users )
+    public function run()
     {
+        $users = App\User::latest()->get()->take(10);
+
         $subjects = factory(\App\Models\Group\Subject::class, rand(1,5))->create();
 
         $subjects->each( function ( $subject ) use ( &$subjects ) {

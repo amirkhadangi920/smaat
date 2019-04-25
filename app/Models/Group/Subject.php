@@ -10,10 +10,11 @@ use Spatie\Tags\HasTags;
 use App\Models\Article;
 use App\Traits\MultiLevel;
 use App\Helpers\CreateTimeline;
+use App\Helpers\HasTenant;
 
 class Subject extends Model implements AuditableContract
 {
-    use SoftDeletes, Auditable, HasTags, MultiLevel, CreateTimeline;
+    use SoftDeletes, Auditable, HasTags, MultiLevel, CreateTimeline, HasTenant;
 
     /****************************************
      **             Attributes

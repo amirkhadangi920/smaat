@@ -174,6 +174,7 @@ return [
         'terms'                 => 'شرایط',
         'province'              => 'استان',
         'logo'                  => 'لوگو',
+        'color'                 => 'رنگ',
 
         /**
          * Relations feilds

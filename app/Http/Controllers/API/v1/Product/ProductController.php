@@ -141,7 +141,7 @@ class ProductController extends MainController
      */
     public function getSingleData($product)
     { 
-        $product = $this->model::firstOrFail($product);
+        $product = $this->model::findOrFail($product);
 
         return $product->load( array_merge( $this->relations, $this->more_relations, [
             'spec:id',

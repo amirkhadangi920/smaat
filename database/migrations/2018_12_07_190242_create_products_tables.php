@@ -40,6 +40,7 @@ class CreateProductsTables extends Migration
                 'votes_count'   => 'unsignedInteger|default:0',
                 'jalali_created_at' => 'datetime|nullable'
             ], [
+                'tenants',
                 'users',
                 'categories' => true,
                 'brands' => true,
@@ -59,6 +60,7 @@ class CreateProductsTables extends Migration
                 'sending_time'          => 'tinyInteger|default:1|commnt:Sending time of this product variation in day, e.g 2days',
                 'status'                => 'boolean|default:1|comment:Enable/Disable showing the variation',
             ], [
+                'tenants',
                 'products',
                 'warranties' => true,
                 'colors' => true,

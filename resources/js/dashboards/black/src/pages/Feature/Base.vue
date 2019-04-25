@@ -259,7 +259,7 @@ export default {
         imageUrl: ''
       })
 
-      this.$refs.categories.setCheckedKeys([]);
+      setTimeout(() => this.$refs.categories.setCheckedKeys([]) , 100);
 
       this.setAttr('is_open', true)
       this.setAttr('is_creating', true)
@@ -278,9 +278,10 @@ export default {
       data.imageFile = null
       data.imageUrl = row.logo ? row.logo.small : ''
 
-      this.$refs.categories.setCheckedKeys([]);
-
-      this.setAttr('selected', data)
+      setTimeout(() => {
+        this.$refs.categories.setCheckedKeys([])
+        this.setAttr('selected', data)
+      }, 100);
 
       this.setAttr('is_open', true)
       this.setAttr('is_creating', false)

@@ -10,15 +10,16 @@ use EloquentFilter\Filterable;
 use App\Models\Group\Category;
 use App\Models\Product\Product;
 use App\Helpers\CreateTimeline;
+use App\Helpers\HasTenant;
 
 class Brand extends Model implements AuditableContract
 {
-    use SoftDeletes, Auditable, Filterable, CreateTimeline;
+    use SoftDeletes, Auditable, Filterable, CreateTimeline, HasTenant;
 
     /****************************************
      **             Attributes
      ***************************************/
-    
+
     /**
      * The attributes that are mass assignable.
      *

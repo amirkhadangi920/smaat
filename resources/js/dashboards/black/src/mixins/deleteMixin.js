@@ -47,7 +47,7 @@ export default {
           axios({
             method: 'delete',
             headers: {
-              'Authorization': `Bearer ${localStorage.getItem('API_TOKEN')}`
+              'Authorization': `Bearer ${localStorage.getItem('JWT')}`
             },
             url: row.link
           }).then(response => {
@@ -104,7 +104,7 @@ export default {
           axios({
             method: 'delete',
             headers: {
-              'Authorization': `Bearer ${localStorage.getItem('API_TOKEN')}`
+              'Authorization': `Bearer ${localStorage.getItem('JWT')}`
             },
             url: `/api/v1/${this.type}/${ids.join(',')}`
           }).then(response => {

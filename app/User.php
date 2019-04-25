@@ -8,7 +8,6 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use OwenIt\Auditing\Auditable;
 use OwenIt\Auditing\Contracts\Auditable as AuditableContract;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use App\Traits\GenerateRandomID;
 use Laravel\Passport\HasApiTokens;
 use Laratrust\Traits\LaratrustUserTrait;
 use App\Models\{
@@ -23,11 +22,13 @@ use App\Models\{
     Discount\Discount
 };
 use EloquentFilter\Filterable;
+use App\Helpers\HasTenantWthRandomID;
+use App\Helpers\CreateTimeline;
 
 class User extends Authenticatable implements AuditableContract
 {
-    use LaratrustUserTrait, HasApiTokens, Filterable;
-    use Notifiable, SoftDeletes, GenerateRandomID, Auditable;
+    use LaratrustUserTrait, HasApiTokens, Filterable, CreateTimeline;
+    use Notifiable, SoftDeletes, HasTenantWthRandomID, Auditable;
 
     /****************************************
      **             Attributes

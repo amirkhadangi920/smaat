@@ -20,6 +20,7 @@ class Comment extends JsonResource
             'message'           => $this->message,
             'create_time'       => $this->getOriginal('created_at'),
             'last_update_time'  => $this->getOriginal('updated_at'),
+            'is_accept'         => $this->is_accept,
             'votes'             => [
                 'likes' => $this->likesCount,
                 'dislikes' => $this->dislikesCount,
@@ -28,6 +29,7 @@ class Comment extends JsonResource
                 return [
                     'id' => $this->article->id,
                     'link' => "/api/v1/article/{$this->article->slug}",
+                    'image' => $this->article->image,
                     'title' => $this->article->title
                 ];
             }),
@@ -44,8 +46,10 @@ class Comment extends JsonResource
                         'id'                => $answer->id,
                         'link'              => "/api/v1/comment/{$answer->id}",
                         'message'           => $answer->message,
-                        'registered_at'     => $answer->created_at,
-                        'writer'            => $this->whenLoaded('user', function () use ($answer) {
+                        'is_accept'         => $answer->is_accept,
+                        'create_time'       => $answer->getOriginal('created_at'),
+                        'last_update_time'  => $answer->getOriginal('updated_at'),
+                        'writer'            => $this->when($answer->user, function () use ($answer) {
                             return [
                                 'id' => $answer->user->id,
                                 'full_name' => $answer->user->full_name,

@@ -11,10 +11,11 @@ use OwenIt\Auditing\Contracts\Auditable as AuditableContract;
 use App\Models\Article;
 use EloquentFilter\Filterable;
 use App\Helpers\CreateTimeline;
+use App\Helpers\HasTenant;
 
 class Comment extends Model implements AuditableContract , LikeableContract
 {
-    use SoftDeletes, Auditable, Likeable, Filterable, CreateTimeline;
+    use SoftDeletes, Auditable, Likeable, Filterable, CreateTimeline, HasTenant;
 
     /****************************************
      **             Attributes
@@ -49,7 +50,7 @@ class Comment extends Model implements AuditableContract , LikeableContract
      * @var array
      */
     protected $casts = [
-        'is-accept'      => 'boolean',
+        'is_accept'      => 'boolean',
     ];
     /**
      * Get the article that the comment has belongs to that
@@ -64,7 +65,7 @@ class Comment extends Model implements AuditableContract , LikeableContract
      *
      * @return User Model
      */
-    public function user ()
+    public function user()
     {
         return $this->belongsTo(\App\User::class);
     }

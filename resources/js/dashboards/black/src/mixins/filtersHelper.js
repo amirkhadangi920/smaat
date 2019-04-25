@@ -7,13 +7,16 @@ export default {
     },
     filters: {
         created(date) {
-            return 'ثبت شده در ' + moment(date, "YYYY-MM-DD hh:mm:ss").calendar();
+            return 'ثبت شده در ' + moment(date, "YYYY-MM-DD ساعت HH:mm:ss").format('jYYYY/jM/jD ساعت HH:mm:ss');
         },
         edited(date) {
-            return 'اصلاح شده در ' + moment(date, "YYYY-MM-DD hh:mm:ss").calendar();
+            return 'اصلاح شده در ' + moment(date, "YYYY-MM-DD ساعت HH:mm:ss").format('jYYYY/jM/jD ساعت HH:mm:ss');
         },
         ago(date) {
             return moment(date, "YYYY-MM-DD hh:mm:ss").fromNow();
+        },
+        timestampAgo(date) {
+            return moment(date * 1000).fromNow();
         },
         comma(number) {
             return numeral(number).format('0,0')

@@ -56,13 +56,13 @@ export default new Vuex.Store({
             axios({
                 method: 'get',
                 headers: {
-                    'Authorization': `Bearer ${localStorage.getItem('API_TOKEN')}`
+                    'Authorization': `Bearer ${localStorage.getItem('JWT')}`
                 },
                 url: '/api/v1/user/permissions'
             }).then(({data}) => {
                 commit('setPermissions', data.data)
             }).catch(error => {
-                localStorage.removeItem('API_TOKEN')
+                localStorage.removeItem('JWT')
                 window.location = "/login"
             })
         },

@@ -23,7 +23,7 @@
     <template slot="modal">
       <div class="row">
         <div class="col-md-8">
-          <md-field :class="getValidationClass('name')">
+          <md-field :class="getValidationClass('title')">
             <label>نام وضعیت</label>
             <md-input v-model="title" :maxlength="$v.title.$params.maxLength.max" />
             <i class="md-icon tim-icons icon-tag"></i>
@@ -52,15 +52,9 @@
 </template>
 
 <script>
-import {Tooltip} from 'element-ui'
-import {BaseDropdown} from '../../components'
 import Datatable from '../../components/BaseDatatable.vue'
-import ICountUp from 'vue-countup-v2';
-import {mapActions, mapMutations} from 'vuex'
 import createMixin from '../../mixins/createMixin'
 import initDatatable from '../../mixins/initDatatable'
-import tilt from 'tilt.js'
-import {ElTree} from 'element-ui'
 
 import Binding, { bind } from '../../mixins/binding'
 
@@ -70,8 +64,6 @@ import { required, maxLength } from 'vuelidate/lib/validators'
 export default {
   components: {
     Datatable,
-    BaseDropdown,
-    ICountUp
   },
   mixins: [
     initDatatable,
@@ -81,23 +73,11 @@ export default {
   ],
   data() {
     return {
-        type: 'order_status',
-        group: 'shop',
-
-        defaultProps: {
-          children: 'childs',
-          label: 'title',
-        },
+      type: 'order_status',
+      group: 'shop',
     }
   },
-  created() {
-    setTimeout( () => $('.tilt').tilt({scale: 1.1}) ,300)
-    setTimeout( () => $('.tilt-fixed').tilt() ,300)
-  },
   methods: {
-    closePanel() {
-      this.$refs.datatable.closePanel();
-    },
     create() {
       this.setAttr('selected', {
         title: '',
@@ -123,54 +103,13 @@ export default {
     getData() {
       let data = new FormData();
 
-      this.fields.forEach(field => {
-        if ( ['logo', 'categories'].includes(field.field) ) return
+      ['title', 'description', 'color'].forEach(field => {
+        let value = this.selected( field )
 
-        let value = selected( field.field )
-
-        data.append(field.field, value ? value : '')
+        data.append(field, value ? value : '')
       });
-
-      this.$refs.categories.getCheckedKeys().forEach(category => {
-        data.append('categories[]', category);
-      });
-
-      if ( selected('imageFile') )
-        data.append('logo', selected('imageFile'))
 
       return data
-    },
-    
-    changeSelectedCategories() {
-      this.setAttr('selected', {
-        categories: this.$refs.categories.getCheckedKeys(),
-      })
-    },
-    filterLogo(command) {
-      this.setAttr('filters', { hasLogo: command })
-
-      this.changeTableData();
-    },
-    filterCategory(command) {
-      this.setAttr('filters', {
-        hasCategories: command,
-        categories: this.$refs.filter_categories.getCheckedKeys()
-      })
-
-      if ( typeof this.filter('categories') == 'object' && this.filter('categories').length == 0 ) {
-        this.setAttr('filters', {categories: []})
-      }
-
-      this.setAttr('filters', {
-        categories_string: this.$refs.filter_categories.getCheckedNodes()
-          .map( (category => category.title ))
-          .join(' ، ')
-      })
-
-      this.changeTableData();
-    },
-    filterSearch() {
-      this.changeTableData();
     },
   },
   validations: {
@@ -220,5 +159,8 @@ export default {
 img {
   max-height: 20px;
   margin-left: 10px;
+}
+.el-color-picker {
+  height: 33px;
 }
 </style>

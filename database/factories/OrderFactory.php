@@ -3,6 +3,7 @@
 use Faker\Factory;
 use Morilog\Jalali\Jalalian;
 use App\Models\Financial\ShippingMethod;
+use App\Models\Financial\OrderStatus;
 
 $faker = Factory::create('fa_IR');
 
@@ -13,14 +14,6 @@ $factory->define(App\Models\Financial\Order::class, function () use($faker) {
     if ( rand(0, 1) ) $descriptions['buyer'] = Faker::sentence();
 
     $auth_code = [ null, str_random(50) ][ $faker->boolean() ];
-
-    if ( rand(0, 1) ) $datetimes['created']             = $faker->dateTime();
-    if ( rand(0, 1) ) $datetimes['awaiting_payment']    = $faker->dateTime();
-    if ( rand(0, 1) ) $datetimes['paied']               = $faker->dateTime();
-    if ( rand(0, 1) ) $datetimes['sending']             = $faker->dateTime();
-    if ( rand(0, 1) ) $datetimes['canceled']            = $faker->dateTime();
-    if ( rand(0, 1) ) $datetimes['packaging']           = $faker->dateTime();
-
 
     return [
         'descriptions'      => nullable( $descriptions ),
@@ -33,7 +26,12 @@ $factory->define(App\Models\Financial\Order::class, function () use($faker) {
         // 'payment_jalali'    => jdate( time() - ( rand(1, 1000) * rand(1, 1000) )),
         'ref_id'            => nullable( $faker->numberBetween(1000000000000, 10000000000000) ),
         'trans_id'          => nullable( str_random(100) ),
-        'datetimes'         => $datetimes,
+        // 'datetimes'         => function() use($faker) {
+        //     return [
+        //         'status' => OrderStatus::all()->random()->id,
+        //         'time' => $faker->dateTimeBetween('-2 years', 'now')
+        //     ]
+        // },
         'shipping_method_id'=> nullable( factory(ShippingMethod::class)->create()->id ),
         'docs'              => nullable( $faker->words( rand(1, 10) ) ),
         'checkout'          => $faker->boolean(),

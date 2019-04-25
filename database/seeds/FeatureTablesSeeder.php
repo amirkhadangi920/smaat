@@ -1,11 +1,18 @@
 <?php
 
-use Illuminate\Database\Seeder;
+use App\Helpers\CustomSeeder;
+use App\Models\Group\Category;
+use App\Models\Feature\{ 
+    Color,
+    Warranty,
+    Brand,
+    Size,
+    Unit
+};
+use Illuminate\Support\Str;
 
-class FeatureTablesSeeder extends Seeder
+class FeatureTablesSeeder extends CustomSeeder
 {
-    protected $data;
-
     protected $categories;
 
     /**
@@ -13,27 +20,30 @@ class FeatureTablesSeeder extends Seeder
      *
      * @return void
      */
-    public function run( $categories )
+    public function run()
     {
-        $this->categories = $categories;
+        $this->tenant_id = $this->getTenant();
+        $this->categories = Category::all()->take(20);
 
-        $this->createData('colors', \App\Models\Feature\Color::class);
-        $this->createData('warranties', \App\Models\Feature\Warranty::class);
-        $this->createData('brands', \App\Models\Feature\Brand::class);
-        $this->createData('sizes', \App\Models\Feature\Size::class);
-        $this->createData('units', \App\Models\Feature\Unit::class);
-
-        return $this->data;
+        $this->createData(Color::class, ['id', 'name', 'code']);
+        $this->createData(Warranty::class , ['id', 'title', 'expire']);
+        $this->createData(Brand::class, ['id', 'name']);
+        $this->createData(Size::class, ['id', 'name']);
+        $this->createData(Unit::class, ['id', 'title']);
     }
 
-    public function createData($key, $model)
+    public function createData($model, $fields = ['id'])
     {
-        $categories = $this->categories;
-
-        $this->data[ $key ] = factory($model, rand(5, 20))->create()
-            ->each( function ( $feature ) use ( $categories ) {
-
-                $feature->categories()->sync( $categories->take( rand(1, 5) )->pluck('id') );
-            });
+        $this->createTable(
+            function($count) use($model, $fields) {
+                return factory($model, $count)->create([
+                    'tenant_id' => $this->tenant_id
+                ])->each( function ( $feature ) {
+        
+                    $feature->categories()->sync( $this->categories->take( rand(1, 5) )->pluck('id') );
+                });
+            },
+            $fields, [], str_replace('-', ' ', Str::kebab( class_basename($model) ))
+        );
     }
 }

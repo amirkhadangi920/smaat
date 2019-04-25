@@ -10,10 +10,11 @@ use App\Models\Group\Category;
 use App\Models\Product\Variation;
 use EloquentFilter\Filterable;
 use App\Helpers\CreateTimeline;
+use App\Helpers\HasTenant;
 
 class Size extends Model implements AuditableContract
 {
-    use SoftDeletes, Auditable, Filterable, CreateTimeline;
+    use SoftDeletes, Auditable, Filterable, CreateTimeline, HasTenant;
 
     /****************************************
      **             Attributes

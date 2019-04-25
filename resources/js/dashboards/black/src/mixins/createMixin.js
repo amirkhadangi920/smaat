@@ -73,32 +73,29 @@ export default {
         headers: {
           'Content-Type': 'application/x-www-form-urlencoded',
           'Accept': 'application/json',
-          'Authorization': `Bearer ${localStorage.getItem('API_TOKEN')}`
+          'Authorization': `Bearer ${localStorage.getItem('JWT')}`
         },
         url: options.url !== undefined ? options.url : `/api/v1/${options.type}`,
         data: options.data
-      }).then(
-        response => {
-          var msg = groupData.is_creating[this.type] ? 'ثبت شد' : 'بروزرسانی شد'
-
-
-          if ( groupData.is_creating[this.type] ) {
-            this.setAttr('counts', {
-              total: this.attr('counts').total + 1,
-            })
-          }
-
-          this.$swal.fire({
-            title: msg,
-            text: `${options.label} با موفقیت ${msg}:)`,
-            type: 'success',
-            showConfirmButton: false,
-            timer: 1000,
+      }).then(response => {
+        var msg = groupData.is_creating[this.type] ? 'ثبت شد' : 'بروزرسانی شد'
+        
+        if ( groupData.is_creating[this.type] ) {
+          this.setAttr('counts', {
+            total: this.attr('counts').total + 1,
           })
-
-          options.callback(response.data.data)
         }
-      ).catch(error => {
+
+        this.$swal.fire({
+          title: msg,
+          text: `${options.label} با موفقیت ${msg}:)`,
+          type: 'success',
+          showConfirmButton: false,
+          timer: 1000,
+        })
+
+        options.callback(response.data.data)
+      }).catch(error => {
         if (error.response) {
           console.log( error.response )
 

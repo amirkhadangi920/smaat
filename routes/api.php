@@ -13,22 +13,17 @@ use Illuminate\Http\Request;
 |
 */
 
-$this->post('login', 'API\UserController@login');
-$this->post('register', 'API\UserController@register');
-$this->group([
-    'middleware' => 'auth:api'
-], function(){
-    $this->post('details', 'API\UserController@details');
-});
-$this->middleware('auth:api')->get('/user', function (Request $request) {
-    return $request->user();
-});
-
-
 Route::group([
     'namespace' => 'API\v1',
     'prefix' => 'v1',
 ], function () {
+    
+    $this->post('login', 'UserController@login');
+    $this->post('register', 'UserController@register');
+    $this->group(['middleware' => 'auth:api'], function(){
+        $this->post('check', 'UserController@check_token');
+        $this->post('details', 'UserController@details');
+    });
 
     $this->get('/location/provinces/{country}', 'LocationController@provinces');
     $this->get('/location/provinces/{province}/cities', 'LocationController@cities');

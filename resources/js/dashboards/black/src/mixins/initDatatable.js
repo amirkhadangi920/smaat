@@ -2,8 +2,14 @@ export default {
   mounted() {
     if( this.data().length === 0 )
     {
-      axios.get(`/api/v1/${this.type}`, {
-          params: this.filters
+      axios({
+        method: 'GET',
+        headers: {
+          'Accept': 'application/json',
+          'Authorization': `Bearer ${localStorage.getItem('JWT')}`
+        },
+        url: `/api/v1/${this.type}`,
+        data: { params: this.filters }
       }).then((response) => {
         this.setData( response.data.data )
 
@@ -21,7 +27,7 @@ export default {
 
       }).then(() => {
         setTimeout( () => this.load(true), 500 )
-      })
+      }).catch( error => console.log( error ) )
     } else {
       setTimeout( () => this.load(true), 500 )
     }
@@ -46,6 +52,9 @@ export default {
         data: final_data
       })
     },
+    can(permission) {
+      return !this.$store.state.permissions.includes(permission)
+    },
 
     data() {
       return this.$store.state[this.group][this.type]
@@ -64,7 +73,6 @@ export default {
       this.setAttr('has_loaded', status)
     },
     
-
     changeTableData()
     {
       axios.get(`/api/v1/${this.type}`, {

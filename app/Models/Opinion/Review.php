@@ -11,10 +11,11 @@ use OwenIt\Auditing\Contracts\Auditable as AuditableContract;
 use App\Models\Product\Product;
 use EloquentFilter\Filterable;
 use App\Helpers\CreateTimeline;
+use App\Helpers\HasTenant;
 
 class Review extends Model implements AuditableContract, LikeableContract
 {
-    use SoftDeletes, Auditable, Likeable, Filterable, CreateTimeline;
+    use SoftDeletes, Auditable, Likeable, Filterable, CreateTimeline, HasTenant;
 
     /****************************************
      **             Attributes

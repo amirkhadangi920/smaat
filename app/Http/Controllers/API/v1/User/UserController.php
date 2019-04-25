@@ -11,6 +11,7 @@ use App\Http\Resources\User\Permission as PermissionResource;
 use App\Permission;
 use App\Http\Requests\User\v1\PasswordResetRequest;
 use Illuminate\Support\Facades\Hash;
+use App\Http\Resources\User\UserCollection;
 
 class UserController extends MainController
 {
@@ -58,6 +59,13 @@ class UserController extends MainController
      * @var [type]
      */
     protected $resource = UserResource::class;
+    
+    /**
+     * Resource Collection of this controller respnoses
+     *
+     * @var [type]
+     */
+    protected $collection = UserCollection::class;
 
     /**
      * Filter class of this eloquent model

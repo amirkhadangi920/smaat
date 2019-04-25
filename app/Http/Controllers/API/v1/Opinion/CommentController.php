@@ -33,9 +33,9 @@ class CommentController extends OpinionBaseController
      * @var array
      */
     protected $relations = [
-        'article:id,title',
+        'article:id,title,image',
         'user:id,first_name,last_name,avatar',
-        'answers:id,parent_id,user_id,message,created_at',
+        'answers:id,parent_id,user_id,message,is_accept,created_at,updated_at',
         'answers.user:id,first_name,last_name,avatar'
     ];
 
@@ -99,7 +99,9 @@ class CommentController extends OpinionBaseController
      */
     public function getAllData()
     {
-        return $this->model::select('id', 'parent_id', 'article_id', 'user_id', 'message', 'created_at', 'updated_at')
+        return $this->model::select(
+                'id', 'parent_id', 'article_id', 'user_id', 'message', 'is_accept', 'created_at', 'updated_at'
+            )
             ->filter( request()->all(), $this->filter )    
             ->whereNull('parent_id')
             ->with($this->relations)

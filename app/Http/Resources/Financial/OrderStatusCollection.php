@@ -18,7 +18,8 @@ class OrderStatusCollection extends ResourceCollection
         return [
             'data' => $this->collection,
             'meta' => [
-                'trash' => OrderStatus::onlyTrashed()->count()
+                'total' => OrderStatus::count(),
+                'trash' => OrderStatus::onlyTrashed()->count(),
             ],
             'chart' => OrderStatus::create_timeline()
         ];   

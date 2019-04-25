@@ -24,6 +24,7 @@ class CreateOpinionTables extends Migration
             $table->id();
             $table->add_foreign();
             $table->relations([
+                'tenants',
                 'users' => true,
                 'articles' => true,
             ]);
@@ -42,6 +43,7 @@ class CreateOpinionTables extends Migration
                 'is_accept' =>  'boolean|defult:false',
                 'jalali_created_at' => 'datetime|nullable'
             ], [
+                'tenants',
                 'users' => true,
                 'products' => true,
             ]);
@@ -50,6 +52,7 @@ class CreateOpinionTables extends Migration
         $schema->create('question_and_answers', function (Blueprint $table) {
             $table->id();
             $table->relations([
+                'tenants',
                 'users' => true,
                 'products' => true,
             ]);

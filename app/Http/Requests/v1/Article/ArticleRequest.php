@@ -23,12 +23,12 @@ class ArticleRequest extends FormRequest
      */
     public function rules()
     {
-        return [
+        $rules = [
             'title'         => 'required|string|max:50',
             'description'   => 'nullable|string|max:255',
             'body'          => 'required|string',
             'image'         => 'required|image|mimes:jpeg,jpg,png,gif|max:1024',
-            'reading_time'  => 'nullable|digit_between:1,2',
+            'reading_time'  => 'nullable|digits_between:1,2',
             
             /* relateion */
             'subjects'      => 'nullable|array',
@@ -37,6 +37,11 @@ class ArticleRequest extends FormRequest
             'keywords'      => 'nullable|array',
             'keywords.*'    => 'required|string|max:100',
         ];
+
+        if (request()->method() === 'PUT')
+            $rules['image'] = 'nullable|image|mimes:jpeg,jpg,png,gif|max:1024';
+
+        return $rules;
     }
 }
  

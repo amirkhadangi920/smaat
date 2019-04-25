@@ -14,10 +14,12 @@ use App\Models\Group\Subject;
 use EloquentFilter\Filterable;
 use App\Helpers\CreateTimeline;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use App\Helpers\HasTenantWthRandomID;
 
 class Article extends Model implements AuditableContract , LikeableContract
 {
-    use Auditable, SoftDeletes, GenerateRandomID, HasTags, Likeable, Filterable, CreateTimeline;
+    use Auditable, SoftDeletes, HasTags;
+    use Likeable, Filterable, CreateTimeline, HasTenantWthRandomID;
 
     /****************************************
      **             Attributes
@@ -39,6 +41,7 @@ class Article extends Model implements AuditableContract , LikeableContract
         'title',
         'description',
         'body',
+        'reading_time',
         'image'
     ];
 

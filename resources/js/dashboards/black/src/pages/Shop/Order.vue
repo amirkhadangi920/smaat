@@ -4,6 +4,7 @@
     :group="group"
     label="سفارش"
     :fields="getFields"
+    :canSearch="false"
     
     :methods="{
       create: create,
@@ -19,126 +20,59 @@
       <p>{{ slotProps.row.user.full_name }}</p>
     </template>
 
-    <template v-slot:shipping_cost-body="slotProps">
-      <p>{{ slotProps.row.shipping_cost | price }}</p>
-    </template>
-
     <template v-slot:offer-body="slotProps">
-      <p>{{ slotProps.row.offer | price }}</p>
-    </template>
-
-    <template v-slot:total-body="slotProps">
-      <p>{{ slotProps.row.total | price }}</p>
+      <p>{{ slotProps.row.offer | price }} <span class="text-muted text-small" :style="{fontSize: '10px'}">تومان</span></p>
     </template>
 
     <template v-slot:final_total-body="slotProps">
-      <p>{{ slotProps.row.final_total | price }}</p>
+      <p>{{ slotProps.row.final_total | price }} <span class="text-muted text-small" :style="{fontSize: '10px'}">تومان</span></p>
     </template>
 
     <template v-slot:status-body="slotProps">
-      <span class="badge badge-default">{{ slotProps.row.status.title }}</span>
-    </template>
-
-    <template slot="filter-labels" v-if="false">
-      <span class="pull-right text-muted ml-2" v-show="hasFilter">فیتلر های اعمال شده :</span>
-
-      <span
-        class="badge badge-default p-2 ml-2 pull-right"
-        @click="filterLogo(null)"
-        v-show="filter('hasLogo') == 1">
-        فقط عکس دار ها
-        <i class="tim-icons icon-simple-remove remove-button"></i>
-      </span>
-      <span
-        class="badge badge-default p-2 ml-2 pull-right"
-        @click="filterLogo(null)"
-        v-show="filter('hasLogo') == 0">
-        فقط بدون عکس
-        <i class="tim-icons icon-simple-remove remove-button"></i>
-      </span>
-
-      <span
-        class="badge badge-default p-2 ml-2 pull-right"
-        @click="filterCategory(null)"
-        v-show="filter('hasCategories') == 1">
-        فقط با دسته بندی ها
-        <i class="tim-icons icon-simple-remove remove-button"></i>
-      </span>
-      <span 
-        class="badge badge-default p-2 ml-2 pull-right"
-        @click="filterCategory(null)"
-        v-show="filter('hasCategories') == 0">
-        فقط بدون دسته بندی ها
-        <i class="tim-icons icon-simple-remove remove-button"></i>
-      </span>
-
-      <span
-        class="badge badge-default p-2 ml-2 pull-right"
-        @click="$refs.filter_categories.setCheckedNodes([]); filterCategory( filter('hasCategories') )"
-        v-show="filter('categories') && filter('categories_string')">
-        فقط برای گروه {{ filter('categories').length !== 1 ? 'های' : '' }} : <b>{{ filter('categories_string') }}</b>
-        <i class="tim-icons icon-simple-remove remove-button"></i>
-      </span>
-
-      <span
-        class="badge badge-default p-2 ml-2 pull-right"
-        @click="$store.state[group].filters[type].query = null; filterSearch()"
-        v-show="filter('query')">
-        جستجو برای : {{ filter('query') }}
-        <i class="tim-icons icon-simple-remove remove-button"></i>
-      </span>
-    </template>
-    
-    <template slot="modal" v-if="false">
-      <slot></slot>
-
-      <br v-if="has_logo" />
-      <base-input :label="'لوگوی ' + label" v-if="has_logo">
-        <el-upload
-          class="avatar-uploader"
-          action="/"
-          :auto-upload="false"
-          :show-file-list="false"
-          :on-change="addImage">
-          <img v-if="$store.state[group].selected[type].imageUrl" :src="$store.state[group].selected[type].imageUrl" class="avatar">
-          <i v-else class="el-icon-plus avatar-uploader-icon"></i>
-        </el-upload>
-        <small slot="helperText" id="emailHelp" class="form-text text-muted">لوگوی مورد نظر خود را انتخاب
-          کنید</small>
-      </base-input>
-      <br />
-      <base-input :label="'دسته بندی های ' + label">
-        <el-tree
-          dir="ltr"
-          :data="$store.state.group.categories"
-          :props="defaultProps"
-          :accordion="true"
-          ref="categories"
-          show-checkbox
-          node-key="id"
-          @check-change="changeSelectedCategories"
-          :default-checked-keys="selected('categories')"
-          :default-expanded-keys="selected('categories')"
-          empty-text="هیچ دسته بندی ای یافت نشد :("
+      <el-select
+        :disabled="can('change-order-status')"
+        @change="changeStatus(slotProps.index, $event)"
+        v-model="slotProps.row.status.id"
+        :style="{ borderColor: slotProps.row.status.color }"
+        placeholder="تغییر روش ارسال"
+      >
+        <el-option
+          v-for="item in $store.state.shop.order_status"
+          :key="item.id"
+          :label="item.title"
+          :value="item.id"
         >
-        </el-tree>
-      </base-input>
-      <small slot="helperText" id="emailHelp" class="form-text text-muted">برای انتخاب هر دسته بندی تیک قبل آن را انتخاب کنید</small>
+          <div class="status-item" :style="{ borderLeft: `7px solid ${item.color}` }">
+            {{ item.title }}
+          </div>
+        </el-option>
+      </el-select>
     </template>
+
+    <template #custom-operations="slotProps">
+      <el-tooltip content="مشاهده اطلاعات">
+        <base-button simple class="ml-2" @click="$router.push(`/panel/order/${slotProps.row.id}`)" type="info" size="sm" icon>
+          i
+        </base-button>
+      </el-tooltip>
+    </template>
+
+    <template slot="filter-labels"></template>
+    <template slot="modal"></template>
   </datatable>
 </template>
 
 <script>
-import {Tooltip} from 'element-ui'
 import {BaseDropdown} from '../../components'
 import Datatable from '../../components/BaseDatatable.vue'
 import ICountUp from 'vue-countup-v2';
-import {mapActions, mapMutations} from 'vuex'
+import tilt from 'tilt.js'
+
 import createMixin from '../../mixins/createMixin'
 import initDatatable from '../../mixins/initDatatable'
 import filtersHelper from '../../mixins/filtersHelper.js'
-import tilt from 'tilt.js'
-import {ElTree} from 'element-ui'
+
+import moment from 'moment'
 
 export default {
   components: {
@@ -153,23 +87,21 @@ export default {
   ],
   data() {
     return {
-        type: 'order',
-        group: 'shop',
-
-        defaultProps: {
-          children: 'childs',
-          label: 'title',
-        },
+      type: 'order',
+      group: 'shop',
     }
+  },
+  mounted() {
+    this.$store.dispatch('getData', {
+      group: 'shop',
+      type: 'order_status',
+    })
   },
   created() {
     setTimeout( () => $('.tilt').tilt({scale: 1.1}) ,300)
     setTimeout( () => $('.tilt-fixed').tilt() ,300)
   },
   methods: {
-    closePanel() {
-      this.$refs.datatable.closePanel();
-    },
     create() {
       this.setAttr('selected', {
         name: '',
@@ -205,6 +137,32 @@ export default {
       this.setAttr('is_open', true)
       this.setAttr('is_creating', false)
     },
+
+    changeStatus(index, status) {
+      var selected_status = this.$store.state.shop.order_status.filter(item => item.id === status)[0];
+
+      axios({
+        method: 'PUT',
+        headers: {
+          'Authorization': `Bearer ${localStorage.getItem('JWT')}`
+        },
+        url: `/api/v1/order/status/${this.data()[index].id}/${selected_status.id}`,
+      }).then(({data}) => {
+        this.data()[index].status = selected_status;
+        this.data()[index].last_update_time = moment().format('YYYY-MM-DD HH:mm:ss');
+        this.setData( this.data() )
+        
+        this.$notify({
+          title: 'تغییر کرد',
+          message: `وضعیت سفارش مورد نظر با موفقیت به ${selected_status.title} تغییر کرد :)`,
+          timeout: 1500,
+          type: 'success',
+          verticalAlign: 'top',
+          horizontalAlign: 'left',
+        })
+      }).catch( error => console.log(error.response) );
+    },
+
     getData() {
       let data = new FormData();
 
@@ -225,38 +183,6 @@ export default {
 
       return data
     },
-    
-    changeSelectedCategories() {
-      this.setAttr('selected', {
-        categories: this.$refs.categories.getCheckedKeys(),
-      })
-    },
-    filterLogo(command) {
-      this.setAttr('filters', { hasLogo: command })
-
-      this.changeTableData();
-    },
-    filterCategory(command) {
-      this.setAttr('filters', {
-        hasCategories: command,
-        categories: this.$refs.filter_categories.getCheckedKeys()
-      })
-
-      if ( typeof this.filter('categories') == 'object' && this.filter('categories').length == 0 ) {
-        this.setAttr('filters', {categories: []})
-      }
-
-      this.setAttr('filters', {
-        categories_string: this.$refs.filter_categories.getCheckedNodes()
-          .map( (category => category.title ))
-          .join(' ، ')
-      })
-
-      this.changeTableData();
-    },
-    filterSearch() {
-      this.changeTableData();
-    },
   },
   computed: {
     getFields() {
@@ -266,20 +192,12 @@ export default {
           label: 'خریدار',
           icon: 'icon-caps-small'
         }, {
-          field: 'shipping_cost',
-          label: 'هزینه ارسال',
-          icon: 'icon-badge'
-        }, {
           field: 'offer',
           label: 'تخفیف',
           icon: 'icon-badge'
         }, {
-          field: 'total',
-          label: 'جمع فاکتور',
-          icon: 'icon-badge'
-        }, {
           field: 'final_total',
-          label: 'جمع نهایی',
+          label: 'جمع فاکتور',
           icon: 'icon-badge'
         }, {
           field: 'status',
@@ -287,14 +205,7 @@ export default {
           icon: 'icon-caps-small'
         },
       ]
-    },
-    
-    // hasFilter() {
-    //   return this.filter('query') != null 
-    //       || this.filter('hasLogo') != null
-    //       || this.filter('hasCategories') != null
-    //       || this.filter('categories').length != 0
-    // },
+    }
   },
   beforeRouteLeave (to, from, next) {
     this.$refs.datatable.closePanel()
@@ -304,9 +215,24 @@ export default {
 }
 </script>
 
-<style>
-img {
-  max-height: 20px;
-  margin-left: 10px;
+<style scope>
+.el-select {
+  border-radius: 5px;
+  border: 1.5px solid rgb(211, 211, 211);
+  transition: border-color 300ms;
+}
+.el-select-dropdown__item {
+  padding: 0px;
+}
+.status-item {
+  text-align: right;
+  padding: 0px 10px;
+}
+.el-input {
+  min-width: 140px;
+}
+.el-input__inner {
+  border-color: transparent !important;
+  font-weight: bold;
 }
 </style>

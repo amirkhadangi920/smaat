@@ -6,7 +6,6 @@ use Illuminate\Database\Eloquent\Model;
 use \Morilog\Jalali\Jalalian;
 use DB;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use App\Traits\GenerateRandomID;
 use OwenIt\Auditing\Auditable;
 use OwenIt\Auditing\Contracts\Auditable as AuditableContract;
 use App\Models\Discount\Discount;
@@ -14,10 +13,11 @@ use App\Models\Promocode\Promocode;
 use App\Models\Places\City;
 use EloquentFilter\Filterable;
 use App\Helpers\CreateTimeline;
+use App\Helpers\HasTenantWthRandomID;
 
 class Order extends Model implements AuditableContract
 {
-    use SoftDeletes, GenerateRandomID, Auditable, Filterable, CreateTimeline;
+    use SoftDeletes, HasTenantWthRandomID, Auditable, Filterable, CreateTimeline;
 
     /****************************************
      **             Attributes

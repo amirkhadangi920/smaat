@@ -20,6 +20,7 @@ class QuestionAndAnswer extends JsonResource
             'id'                => $this->id,
             'link'              => "/api/v1/question_and_answer/{$this->id}",
             'message'           => $this->message,
+            'is_accept'         => $this->is_accept,
             'create_time'       => $this->getOriginal('created_at'),
             'last_update_time'  => $this->getOriginal('updated_at'),
             'question'          => $this->when( $this->question_id, function () {
@@ -54,7 +55,9 @@ class QuestionAndAnswer extends JsonResource
                         'id'                => $answer->id,
                         'link'              => "/api/v1/question_and_answer/{$answer->id}",
                         'message'           => $answer->message,
-                        'registered_at'     => $answer->created_at,
+                        'is_accept'         => $answer->is_accept,
+                        'create_time'       => $answer->getOriginal('created_at'),
+                        'last_update_time'  => $answer->getOriginal('updated_at'),
                         'writer'            => $this->when($answer->user, function () use ($answer) {
                             return [
                                 'id' => $answer->user->id,

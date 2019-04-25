@@ -10,7 +10,7 @@ trait LikeableController
     public function __construct()
     {
         $this->middleware('auth:api', [
-            'only' => [ 'store', 'update', 'destroy', 'like', 'dislike' ]
+            'only' => [ 'store', 'update', 'destroy', 'accept', 'like', 'dislike' ]
         ]);
     }
     

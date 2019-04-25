@@ -5,6 +5,7 @@ namespace App\Http\Controllers\API\v1\Opinion;
 use App\Http\Controllers\API\v1\MainController;
 use Illuminate\Http\Request;
 use App\Helpers\HasUser;
+use Illuminate\Support\Facades\Validator;
 
 class OpinionBaseController extends MainController
 {
@@ -28,6 +29,8 @@ class OpinionBaseController extends MainController
      */
     public function accept(Request $request, $opinions)
     {
+        Validator::make($request->all(), [ 'accept' => 'required|boolean' ])->validate();
+
         $this->checkPermission("accept-{$this->type}");
         
         $opinions = explode(',', $opinions);

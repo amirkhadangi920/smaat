@@ -10,10 +10,11 @@ use App\Models\Product\Variation;
 use App\Models\Group\Category;
 use EloquentFilter\Filterable;
 use App\Helpers\CreateTimeline;
+use App\Helpers\HasTenant;
 
 class Warranty extends Model implements AuditableContract
 {
-    use SoftDeletes, Auditable, Filterable, CreateTimeline;
+    use SoftDeletes, Auditable, Filterable, CreateTimeline, HasTenant;
 
     /****************************************
      **             Attributes

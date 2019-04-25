@@ -26,7 +26,7 @@ class CreateUsersTable extends Migration
                 'last_name'         => '30|nullable',
                 'phones'            => 'array|comment:Array of user phone numbers',
                 'social_links'      => 'array|comment:Array of user social links, e.g instagram, telegram etc...',
-                'email'             => '100|unique',
+                'email'             => '100',
                 'email_verified_at' => 'timestamp|nullable',
                 'password'          => 100,
                 'avatar'            => 'nullable|array',
@@ -39,6 +39,7 @@ class CreateUsersTable extends Migration
                 'rememberToken',
                 'purchase_counts'   => 'unsignedInteger|default:0',
                 'total_payments'    => 'unsignedInteger|default:0',
+                'jalali_created_at' => 'datetime|nullable'
             ], [ 'cities' => true ], 'uuid', [ 'last_purchase' ]);
         });
     }

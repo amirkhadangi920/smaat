@@ -1,11 +1,7 @@
 <?php
+use App\Helpers\CustomSeeder;
 
-use Illuminate\Database\Seeder;
-use Ybazli\Faker\Facades\Faker;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Hash;
-
-class DatabaseSeeder extends Seeder
+class DatabaseSeeder extends CustomSeeder
 {
     /**
      * Seed the application's database.
@@ -14,38 +10,29 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-        echo "\n";
+        // $this->call(AdminTableSeeder::class);
 
-        $this->call(AdminTableSeeder::class);
+        $this->call(LocationTablesSeeder::class);
 
-        $cities = $this->call(LocationTablesSeeder::class);
+        // $this->call(OptionTableSeeder::class);
 
-        $this->call(OptionTableSeeder::class);
-
-        $users = $this->call(UserTableSeeder::class, compact('cities') );
-        // $users = $this->call(UserTableSeeder::class );
-        // echo "\e[31m\e[1m\e[100m{$users->count()}\e[49m Users \e[39mwas \e[32mcreated\n";
+        $this->call(UserTableSeeder::class);
     
-        $this->call(BlogTablesSeeder::class, $users);
+        $this->call(BlogTablesSeeder::class);
 
-        $categories = $this->call(CategoryTablesSeeder::class);    
+        $this->call(CategoryTablesSeeder::class);
 
-        $features = $this->call(FeatureTablesSeeder::class, $categories);
+        $this->call(FeatureTablesSeeder::class);
         
-        $specifications = $this->call(SpecificationTablesSeeder::class, $categories);
+        $this->call(SpecificationTablesSeeder::class);
         
-        $promocodes = $this->call(PromocodeTablesSeeder::class, compact('users', 'categories'));
+        $this->call(PromocodeTablesSeeder::class);
 
-        $products = $this->call(ProductTablesSeeder::class, compact(
-            'users', 'categories', 'specifications', 'features', 'promocodes'
-        )); 
+        $this->call(ProductTablesSeeder::class); 
 
-        $this->call(AbstractTablesSeeder::class, compact('users', 'products'));
+        $this->call(AbstractTablesSeeder::class);
         
-        $this->call(OrderTablesSeeder::class, compact(
-            // 'users', 'products', 'cities', 'promocodes', 'categories'
-            'users', 'products',  'promocodes', 'categories'
-        ));
+        $this->call(OrderTablesSeeder::class);
     }
 
     /**

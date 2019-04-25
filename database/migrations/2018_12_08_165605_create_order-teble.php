@@ -48,6 +48,7 @@ class CreateOrderTeble extends Migration
                 'is_accept'         => 'boolean|default:0',
                 'jalali_created_at' => 'datetime|nullable'
             ], [
+                'tenants',
                 'users',
                 'order_statuses',
                 'promocodes' => true,

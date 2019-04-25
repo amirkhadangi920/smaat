@@ -15,6 +15,7 @@ const mix = require('laravel-mix');
    // .sass('resources/sass/app.scss', 'public/css');
 
 mix.js('resources/js/dashboards/black/src/main.js', 'public/js')
+mix.js('resources/js/login/login.js', 'public/js')
 
 // mix.js('resources/js/dashboards/vue-material/src/main.js', 'public/js')
    // .sass('resources/sass/app.scss', 'public/css');

@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Database\Seeder;
+use App\Models\Group\Category;
 
 class PromocodeTablesSeeder extends Seeder
 {
@@ -9,16 +10,16 @@ class PromocodeTablesSeeder extends Seeder
      *
      * @return void
      */
-    public function run($data)
+    public function run()
     {
         $promocodes = factory( App\Models\Promocode\Promocode::class, rand(1, 5) )->create();
         
-        $promocodes->each( function( $promocode ) use( $data ) {
+        $promocodes->each( function( $promocode ) {
            
-            $promocode->categories()->sync( $data['categories']->random() );
+            $promocode->categories()->sync( Category::all()->random() );
         });
 
-        $data['users']->each( function( $user ) use( $promocodes ) {
+        App\User::latest()->get()->take(10)->each( function( $user ) use( $promocodes ) {
 
             $user->promocodes()->sync( $promocodes->random() );
         });

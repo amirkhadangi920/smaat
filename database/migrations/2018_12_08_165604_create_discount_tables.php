@@ -23,10 +23,12 @@ class CreateDiscountTables extends Migration
         $schema->create('discounts', function (Blueprint $table) {
             $table->table([
                 'info',
-                'logo'          => 'nullable|array',
-                'type'          => 'tinyInteger|nullable',
-                'status'        => 'tinyInteger|default:0'
+                'logo'              => 'nullable|array',
+                'type'              => 'tinyInteger|nullable',
+                'status'            => 'tinyInteger|default:0',
+                'jalali_created_at' => 'datetime|nullable'
             ], [
+                'tenants',
                 'users',
             ], 'int', ['start_at', 'expired_at']);
         });
@@ -48,13 +50,14 @@ class CreateDiscountTables extends Migration
 
         $schema->create('promocodes', function (Blueprint $table) {
             $table->table([
-                'code'          => 50,
-                'value'         => 'tinyInteger',
-                'min_total'     => 'integer|default:0',
-                'max'           => 'integer|nullable',
-                'quantity'      => 'integer|nullable',
-                'reward_type'   => '20|default:buy|comment:e.g buy, birthday, gift etc...',
-            ], [], 'int', ['expired_at']);
+                'code'              => 50,
+                'value'             => 'tinyInteger',
+                'min_total'         => 'integer|default:0',
+                'max'               => 'integer|nullable',
+                'quantity'          => 'integer|nullable',
+                'reward_type'       => '20|default:buy|comment:e.g buy, birthday, gift etc...',
+                'jalali_created_at' => 'datetime|nullable'
+            ], ['tenants'], 'int', ['expired_at']);
         });
 
         $schema->create('promocode_variation', function (Blueprint $table) {

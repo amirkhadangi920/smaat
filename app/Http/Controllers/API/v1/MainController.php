@@ -42,7 +42,7 @@ abstract class MainController extends Controller
      */
     public function storeWithRequest($request)
     {
-        // $this->checkPermission("create-{$this->type}");
+        $this->checkPermission("create-{$this->type}");
 
         $data = $this->storeData( $request );
 
@@ -83,7 +83,7 @@ abstract class MainController extends Controller
      */
     public function updateWithRequest($request, $data)
     {
-        // $this->checkPermission("update-{$this->type}");
+        $this->checkPermission("update-{$this->type}");
 
         $this->updateData( $request, $data );
 
@@ -105,7 +105,7 @@ abstract class MainController extends Controller
      */
     public function destroy($data)
     {
-        // $this->checkPermission("delete-{$this->type}");
+        $this->checkPermission("delete-{$this->type}");
         
         $data = explode(',', $data);
 

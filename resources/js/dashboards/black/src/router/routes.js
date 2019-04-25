@@ -21,23 +21,23 @@ import Article from '../pages/Blog/Article.vue'
 import Comment from '../pages/Blog/Comment.vue'
 import Subject from '../pages/Blog/Subject.vue'
 import Product from '../pages/Product/Product.vue'
+import ManageProduct from '../pages/Product/ManageProduct.vue'
 import Category from '../pages/Product/Category.vue'
 import Review from '../pages/Product/Review.vue'
 import QuestionAndAnswer from '../pages/Product/QuestionAndAnswer.vue'
 import OrderStatus from '../pages/Shop/OrderStatus.vue'
 import ShippingMethod from '../pages/Shop/ShippingMethod.vue'
 import Order from '../pages/Shop/Order.vue'
-
-import Login from '../pages/Login'
+import OrderInfo from '../pages/Shop/OrderInfo'
 
 const routes = [
   {
-    path: "/",
+    path: "/panel",
     component: DashboardLayout,
-    redirect: "/dashboard",
+    redirect: "/panel/dashboard",
     children: [
       {
-        path: "dashboard",
+        path: "/panel/dashboard",
         name: "dashboard",
         component: Dashboard,
         meta: { auth: true },
@@ -73,112 +73,126 @@ const routes = [
         component: TableList
       },
       {
-        path: "brand",
+        path: "/panel/brand",
         name: "مدیریت برند",
         component: Brand,
         meta: { index: '1', auth: true }
       },
       {
-        path: "size",
+        path: "/panel/size",
         name: "مدیریت سایز",
         component: Size,
         meta: { index: '1', auth: true }
       },
       {
-        path: "color",
+        path: "/panel/color",
         name: "مدیریت رنگ",
         component: Color,
         meta: { index: '1', auth: true }
       },
       {
-        path: "warranty",
+        path: "/panel/warranty",
         name: "مدیریت گارانتی",
         component: Warranty,
         meta: { index: '1', auth: true }
       },
       {
-        path: "unit",
+        path: "/panel/unit",
         name: "مدیریت واحد",
         component: Unit,
         meta: { index: '1', auth: true }
       },
       {
-        path: "specification",
+        path: "/panel/specification",
         name: "مدیریت جداول مشخصات",
         component: Specification,
         meta: { index: '1', auth: true }
       },
       {
-        path: "specification/:id",
+        path: "/panel/specification/:id",
         name: "مدیریت جدول مشخصات",
         component: SpecificationTable,
         meta: { index: '1', auth: true }
       },
       {
-        path: "article",
+        path: "/panel/article",
         name: "مدیریت مقالات",
         component: Article,
         meta: { index: '2', auth: true }
       },
       {
-        path: "comment",
+        path: "/panel/comment",
         name: "مدیریت نظرات",
         component: Comment,
         meta: { index: '2', auth: true }
       },
       {
-        path: "subject",
+        path: "/panel/subject",
         name: "مدیریت موضوعات",
         component: Subject,
         meta: { index: '2', auth: true }
       },
       {
-        path: "product",
+        path: "/panel/product",
         name: "مدیریت محصولات",
         component: Product,
         meta: { index: '3', auth: true }
       },
       {
-        path: "category",
+        path: "/panel/product/create",
+        name: "ثبت محصول جدید",
+        component: ManageProduct,
+        meta: { index: '3', auth: true }
+      },
+      {
+        path: "/panel/product/:id/edit",
+        name: "ویرایش محصول",
+        component: ManageProduct,
+        meta: { index: '3', auth: true }
+      },
+      {
+        path: "/panel/category",
         name: "مدیریت دسته بندی ها",
         component: Category,
         meta: { index: '3', auth: true }
       },
       {
-        path: "review",
+        path: "/panel/review",
         name: "مدیریت نقد و بررسی ها",
         component: Review,
         meta: { index: '3', auth: true }
       },
       {
-        path: "question_and_answer",
+        path: "/panel/question_and_answer",
         name: "مدیریت پرسش و پاسخ ها",
         component: QuestionAndAnswer,
         meta: { index: '3', auth: true }
       },
       {
-        path: "order_status",
+        path: "/panel/order_status",
         name: "مدیریت وضعیت های سفارش",
         component: OrderStatus,
         meta: { index: '4', auth: true }
       },
       {
-        path: "shipping_method",
+        path: "/panel/shipping_method",
         name: "مدیریت روش های ارسال",
         component: ShippingMethod,
         meta: { index: '4', auth: true }
       },
       {
-        path: "order",
+        path: "/panel/order",
         name: "مدیریت سفارشات",
         component: Order,
         meta: { index: '4', auth: true }
+      },
+      {
+        path: "/panel/order/:id",
+        name: "اطلاعات سفارش",
+        component: OrderInfo,
+        meta: { index: '4', auth: true }
       }
     ]
-  },
-  {
-    path: "/login",
-    component: Login
   },
   { path: "*", component: NotFound },
 ];

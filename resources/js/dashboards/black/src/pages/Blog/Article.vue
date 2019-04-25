@@ -137,7 +137,7 @@
 
     <template slot="modal">
       <div class="row">
-        <div class="col-8">
+        <div class="col-md-7">
           <md-field :class="getValidationClass('title')">
             <label>عنوان مقاله</label>
             <md-input v-model="title" :maxlength="$v.title.$params.maxLength.max" />
@@ -147,7 +147,7 @@
           </md-field>
         </div>
 
-        <div class="col-4">
+        <div class="col-md-5">
           <md-field :class="getValidationClass('reading_time')">
             <label>زمان مطالعه</label>
             <md-input v-model="reading_time" type="number" />
@@ -158,7 +158,6 @@
           </md-field>
         </div>
       </div>
-      <br/>
 
 
       <md-field :class="getValidationClass('description')">
@@ -273,17 +272,12 @@ export default {
     setTimeout( () => $('.tilt-fixed').tilt() ,300)
   },
   methods: {
-    closePanel() {
-      this.$refs.datatable.closePanel();
-    },
     changeSelectedSubjects() {
       this.setAttr('selected', {
         categories: this.$refs.subjects.getCheckedKeys(),
       })
     },
-
     create() {
-      console.log( this.attr('selected'))
       this.setAttr('selected', {
         title: '',
         description: '',
@@ -302,20 +296,22 @@ export default {
       axios(row.link).then(({data}) => {
         data = data.data
 
-        this.$refs.subjects.setCheckedKeys([]);
-
-        this.setAttr('selected', {
-          index: index,
-          link: data.link,
-          title: data.title,
-          description: data.description,
-          body: data.body,
-          tags: data.tags,
-          reading_time: data.reading_time,
-          subjects: data.subjects.map( subject => subject.id ),
-          imageFile: null,
-          imageUrl: data.image ? row.image.small : '',
-        })    
+        setTimeout(() => {
+          this.$refs.subjects.setCheckedKeys([]);
+  
+          this.setAttr('selected', {
+            index: index,
+            link: data.link,
+            title: data.title,
+            description: data.description,
+            body: data.body,
+            tags: data.tags,
+            reading_time: data.reading_time,
+            subjects: data.subjects.map( subject => subject.id ),
+            imageFile: null,
+            imageUrl: data.image ? row.image.small : '',
+          })
+        }, 100);
 
         this.setAttr('is_open', true)
         this.setAttr('is_creating', false)
@@ -324,37 +320,23 @@ export default {
     getData() {
       let data = new FormData();
 
-      this.fields.forEach(field => {
-        if ( ['logo', 'categories'].includes(field.field) ) return
-
-        let value = selected( field.field )
-
-        data.append(field.field, value ? value : '')
+      ['title', 'reading_time', 'description', 'body'].forEach(field => {
+        let value = this.selected(field)
+        data.append(field, value ? value : '')
       });
 
-      this.$refs.categories.getCheckedKeys().forEach(category => {
-        data.append('categories[]', category);
+      this.$refs.subjects.getCheckedKeys().forEach(category => {
+        data.append('subjects[]', category);
+      });
+      this.selected('tags').forEach(tag => {
+        data.append('keywords[]', tag.name);
       });
 
-      if ( selected('imageFile') )
-        data.append('logo', selected('imageFile'))
+      if ( this.selected('imageFile') )
+        data.append('image', this.selected('imageFile'))
 
       return data
-    },
-    getValidationClass (fieldName) {
-      const field = this.$v[fieldName]
-
-      if (field) {
-        return {
-          'md-invalid': field.$invalid && field.$dirty
-        }
-      }
-    },
-    validate() {
-      this.$v.$touch()
-
-      return !this.$v.$invalid;
-    },
+    }
   },
   validations: {
     title: {
@@ -373,7 +355,16 @@ export default {
     body: bind('body'),
     description: bind('description'),
     reading_time: bind('reading_time'),
-    tags: bind('tags'),
+    tags: {
+      get() {
+        return this.selected('tags').map( item => item.name )
+      },
+      set(value) {
+        this.setAttr('selected', {
+          tags: value.map(item => { return { name: item } })
+        })
+      }
+    },
 
     getFields() {
       return [

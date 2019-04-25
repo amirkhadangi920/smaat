@@ -10,10 +10,11 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use OwenIt\Auditing\Auditable;
 use OwenIt\Auditing\Contracts\Auditable as AuditableContract;
 use App\Helpers\CreateTimeline;
+use App\Helpers\HasTenant;
 
 class Unit extends Model implements AuditableContract
 {
-    use SoftDeletes, Auditable ,Filterable, CreateTimeline;
+    use SoftDeletes, Auditable ,Filterable, CreateTimeline, HasTenant;
 
     /****************************************
      **             Attributes

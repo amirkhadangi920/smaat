@@ -26,7 +26,7 @@ class CreateGroupingTables extends Migration
                 'logo'           => 'nullable|array',
                 'scoring_feilds' => 'mediumText|nullable',
                 'jalali_created_at' => 'datetime|nullable'
-            ], ['self']);
+            ], ['self', 'tenants']);
         });
 
         $schema->create('subjects', function (Blueprint $table) {
@@ -34,7 +34,7 @@ class CreateGroupingTables extends Migration
                 'info',
                 'logo'           => 'nullable|array',
                 'jalali_created_at' => 'datetime|nullable'
-            ], ['self']);
+            ], ['self', 'tenants']);
         });
 
         // $schema->create('groupings', function (Blueprint $table) {

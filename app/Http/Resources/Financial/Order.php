@@ -52,6 +52,7 @@ class Order extends JsonResource
                     'id' => $this->order_status->id,
                     'link' => "/api/v1/order_status/{$this->order_status->id}",
                     'title' => $this->order_status->title,
+                    'color' => $this->order_status->color,
                     'description' => $this->order_status->description
                 ];
             }),
@@ -80,19 +81,22 @@ class Order extends JsonResource
             'items'             => $this->whenLoaded('items', function () {
                 return $this->items->map( function ( $item ) {
                     return [
-                        'id'            => $item->id,
-                        'link'          => "/api/v1/product/{$item->variation->product->slug}",
-                        'name'          => $item->variation->product->name ?? null,
-                        'code'          => $item->variation->product->code ?? null,
-                        'photos'        => $item->variation->product->photos ?? null,
-                        'label'         => $item->variation->product->label ?? null,
-                        'inventory'     => $item->variation->inventory ?? null,
-                        'sending_time'  => $item->variation->sending_time ?? null,
-                        'price'         => $item->variation->sales_price ?? null,
-                        'offer'         => $item->offer,
-                        'count'         => $item->count,
-                        'description'   => $item->description,
-                        'color'         => $this->when($item->variation->color ?? false, function () use ($item) {
+                        'id'                => $item->id,
+                        'link'              => "/api/v1/product/{$item->variation->product->slug}",
+                        'name'              => $item->variation->product->name ?? null,
+                        'code'              => $item->variation->product->code ?? null,
+                        'photos'            => $item->variation->product->photos ?? null,
+                        'label'             => $item->variation->product->label ?? null,
+                        'inventory'         => $item->variation->inventory ?? null,
+                        'sending_time'      => $item->variation->sending_time ?? null,
+                        'price'             => $item->offer ?? $item->variation->sales_price ?? null,
+                        'offer'             => $item->offer,
+                        'count'             => $item->count,
+                        'description'       => $item->description,
+                        'create_time'       => $item->getOriginal('created_at'),
+                        'last_update_time'  => $item->getOriginal('updated_at'),
+                        'unit'              => $this->when($item->variation->product->unit ?? false, $item->variation->product->unit->title),
+                        'color'             => $this->when($item->variation->color ?? false, function () use ($item) {
                             return [
                                 'id' => $item->variation->color->id,
                                 'link' => "/api/v1/color/{$item->variation->color->id}",

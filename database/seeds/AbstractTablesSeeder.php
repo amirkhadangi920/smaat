@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Database\Seeder;
+use App\Models\Product\Product;
 
 class AbstractTablesSeeder extends Seeder
 {
@@ -9,24 +10,21 @@ class AbstractTablesSeeder extends Seeder
      *
      * @return void
      */
-    public function run($data)
+    public function run()
     {
-        // Add favorites products for the users
-        $data['users']->each( function ( $user ) use ( $data ) {
+        $users = App\User::latest()->get()->take(10);
+        $products = Product::latest()->get()->take(20);
 
-            for( $i = 0; $i < rand(1, 5); ++$i )
-            {
-                $user->favorites()->sync( $data['products']['products']->random() );
-            }
+        // Add favorites products for the users
+        $users->each( function ( $user ) use ($products) {
+
+            $user->favorites()->sync( $products->take( rand(1, 10)) );
         });
 
         // Add Accesories for the products
-        $data['products']['products']->each( function ( $product ) use ( &$data ) {
+        $products->each( function ( $product ) use ( $products ) {
 
-            for( $i = 0; $i < rand(1, 5); ++$i )
-            {
-                $product->accessories()->sync( $data['products']['products']->random() );
-            }
+            $product->accessories()->sync( $products->take( rand(1, 10)) );
         });
     }
 }

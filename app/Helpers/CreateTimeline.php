@@ -18,6 +18,7 @@ trait CreateTimeline
         ->get()
         ->pluck('count', 'month');
 
+        
         self::change_new_year_month($result);
         self::change_old_year_month($result);
 
@@ -28,10 +29,8 @@ trait CreateTimeline
     {
         for ( $i = jdate()->getMonth() + 1; $i <= 12; ++$i )
         {
-            // if(!isset($result[$i])) continue;
-
             $result[$i] = [
-                'month' => self::get_month_name( $i ),
+                'month' => self::get_month_name( $i ) . self::get_year(true),
                 'count' => isset($result[$i]) ? $result[$i] : 0
             ];
         }
@@ -41,13 +40,23 @@ trait CreateTimeline
     {
         for ( $i = 1; $i <= jdate()->getMonth(); ++$i )
         {
-            $result[] = [
-                'month' => self::get_month_name( $i ),
+            $result[12 + $i] = [
+                'month' => self::get_month_name( $i ) . self::get_year(),
                 'count' => isset($result[$i]) ? $result[$i] : 0
             ];
 
             unset( $result[$i] );
         }
+    }
+
+    public static function get_year(bool $minus = false)
+    {
+        $date = jdate();
+
+        if ($minus)
+            $date = $date->subYears(1);
+
+        return ' '.substr($date->getYear(), 2);
     }
 
     public static function get_month_name(int $month)

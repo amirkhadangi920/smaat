@@ -69,4 +69,15 @@ class OrderStatusContrller extends MainController
     {
         return $this->updateWithRequest($request, $order_status);
     }
+
+    /**
+     * Get all data of the model,
+     * used by index method controller
+     *
+     * @return Collection
+     */
+    public function getAllData()
+    {
+        return $this->model::filter( request()->all(), $this->filter )->get();
+    }
 }

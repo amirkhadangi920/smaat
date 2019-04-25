@@ -12,6 +12,7 @@ use App\User;
 use App\ModelFilters\Financial\OrderFilter;
 use App\Http\Requests\v1\Order\OrderRequest;
 use App\Http\Resources\Financial\OrderCollection;
+use App\Models\Financial\OrderStatus;
 
 class OrderController extends MainController
 {
@@ -22,7 +23,7 @@ class OrderController extends MainController
     {
         $this->middleware('auth:api', [
             'only' => [
-                'store', 'update', 'destroy', 'add', 'remove', 'description', 'status'
+                'index', 'store', 'update', 'destroy', 'add', 'remove', 'description', 'status'
             ]
         ]);
     }
@@ -48,7 +49,7 @@ class OrderController extends MainController
      */
     protected $relations = [
         'user',
-        'order_status:id,title,description',
+        'order_status:id,title,color,description',
     ];
     
     protected $more_relations = [
@@ -56,7 +57,8 @@ class OrderController extends MainController
         'shipping_method:id,name,description,logo,cost,minimum',
         'items',
         'items.variation:id,product_id,color_id,size_id,warranty_id,inventory,sending_time',
-        'items.variation.product:id,slug,name,code,note,photos,label',
+        'items.variation.product:id,unit_id,name,code,note,photos,label',
+        'items.variation.product.unit:id,   ',
         'items.variation.color:id,name,code',
         'items.variation.size:id,name',
         'items.variation.warranty:id,title,description,logo,expire',
@@ -105,6 +107,21 @@ class OrderController extends MainController
     public function update(OrderRequest $request, Order $order)
     {
         return $this->updateWithRequest($request, $order);
+    }
+
+    /**
+     * Get all data of the model,
+     * used by index method controller
+     *
+     * @return Collection
+     */
+    public function getAllData()
+    {
+        $this->checkPermission("read-order");
+
+        return $this->model::filter( request()->all(), $this->filter )
+            ->with( $this->relations )
+            ->paginate( $this->getPerPage() );
     }
 
     /**
@@ -272,17 +289,13 @@ class OrderController extends MainController
      * @param integer $status
      * @return JSON\Array
      */
-    public function status(Order $order, $status)
+    public function status(Order $order, OrderStatus $status)
     {
         $this->checkPermission("change-order-status");
 
-        Validator::make([ 'status' => $status ], [
-            'status' => 'required|exists:order_statuses,id',
-        ])->validate();
-
         $datetimes = collect( $order->datetimes ? $order->datetimes : [] );
 
-        if ( $datetimes->last()['status'] === $status )
+        if ( $datetimes->last()['status'] === $status->id )
         {
             return response()->json([
                 'message' => 'لطفا یک وضعیت جدید برای فاکتور انتخاب کنید'
@@ -291,10 +304,10 @@ class OrderController extends MainController
 
         $order->update([
             'datetimes' => $datetimes->push([
-                'status' => $status,
+                'status' => $status->id,
                 'time' => time()
             ]),
-            'order_status_id' => $status
+            'order_status_id' => $status->id
         ]);
 
         return response()->json([

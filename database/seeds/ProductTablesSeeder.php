@@ -1,14 +1,21 @@
 <?php
 
-use Illuminate\Database\Seeder;
+use App\Helpers\CustomSeeder;
 
-class ProductTablesSeeder extends Seeder
+use App\Models\Group\Category;
+use App\Models\Feature\Brand;
+use App\Models\Feature\Unit;
+use App\Models\Spec\Spec;
+use App\Models\Feature\Warranty;
+use App\Models\Feature\Color;
+use App\Models\Feature\Size;
+use App\Models\Promocode\Promocode;
+
+class ProductTablesSeeder extends CustomSeeder
 {
     public $products;
 
     public $variations;
-
-    // public $questionAndAnswers;
 
     public function __construct()
     {
@@ -20,49 +27,36 @@ class ProductTablesSeeder extends Seeder
      *
      * @return void
      */
-    public function run( $data )
+    public function run()
     {
-        $data['categories']->each( function ( $category ) use ( $data ) {
+        $categories = Category::all();
+        if ( $categories->count() === 0 )
+            return $this->command->error('Your havn\'t any categories :(');
 
-            $this->products = $category->products()->saveMany(
+        
+        $categories->random()->each( function ( $category ) {
+
+            $this->createProducts( $category );
+            
+            $this->products->each( function( $product ) {
                 
-                factory(\App\Models\Product\Product::class, 5)->make([
-                    'user_id'   => $data['users']->random()->id,
-                    'brand_id'  => $data['features']['brands']->random()->id,
-                    'unit_id'   => $data['features']['units']->random()->id,
-                    'spec_id'   => $data['specifications']['spec_table'],
-                    
-                    ])
-
-            )->each( function( $product ) use ( $data ){
-                 $product->questions()->saveMany(
-                     factory(\App\Models\Opinion\QuestionAndAnswer::class, rand(2, 5) )->make([
-                    'user_id' => $data['users']->random()->id
-                    ])
-                )->each( function ($questionAndAnswer) use ( $data ) {
-                    $questionAndAnswer->answers()->saveMany(
-                        factory(\App\Models\Opinion\QuestionAndAnswer::class, rand(5, 10) )->make([
-                            'user_id' => $data['users']->random()->id
-                        ])
-                    );
-                    
-                });
+                $this->createQuestionAndAnswers($product);
             });    
     
-            $this->products->each(function ($product) use ( $data ) {
+            $this->products->each(function ($product) {
 
                 $this->variations = $this->variations->merge(
                     $variations = $product->variations()->saveMany(
                         factory(\App\Models\Product\Variation::class, rand(1, 5))->make([
-                            'warranty_id'   => $data['features']['warranties']->random()->id,
-                            'color_id'      => $data['features']['colors']->random()->id,
-                            'size_id'       => $data['features']['sizes']->random()->id,
+                            'warranty_id'   => Warranty::all()->random()->id,
+                            'color_id'      => Color::all()->random()->id,
+                            'size_id'       => Size::all()->random()->id,
                         ])
                     )
                 );
                 
-                $variations->each( function( $variation ) use( $data ) {
-                    $variation->promocodes()->sync( $data['promocodes']->random() );
+                $variations->each( function( $variation ) {
+                    $variation->promocodes()->sync( Promocode::all()->random() );
                 });
                 
                 $variations->each( function( $variation ) {
@@ -71,25 +65,29 @@ class ProductTablesSeeder extends Seeder
                     );
                 });
 
-                $data['users']->each( function ( $user ) use ( $product, $data ) {
+                \App\User::all()->take( rand(5, 10) )->each( function ( $user ) use ( $product ) {
 
                     $product->reviews()->save(
                         factory(\App\Models\Opinion\Review::class)->make([
-                            'user_id' => $data['users']->random()->id
+                            'user_id' => App\User::all()->random()->id
                         ])
                     );
                 });
-               //     // echo $user->id.PHP_EOL;
-                $data['specifications']['rows']->each( function ( $spec_row ) use ( $product ) {
+                
 
-                    $product->spec_data()->save(
-                        factory(\App\Models\Spec\SpecData::class)->make([
-                            'spec_row_id'   => $spec_row->id,
-                            'data'          => ($spec_row->values)
-                                    ? rand(0, count($spec_row->values, true) - 1)
-                                    : Faker::fullName()
-                        ])
-                    );
+                Spec::first()->headers()->each( function($header) use($product) {
+
+                    $header->rows()->each( function ( $spec_row ) use ( $product ) {
+
+                        $product->spec_data()->save(
+                            factory(\App\Models\Spec\SpecData::class)->make([
+                                'spec_row_id'   => $spec_row->id,
+                                'data'          => ($spec_row->values)
+                                        ? rand(0, count($spec_row->values, true) - 1)
+                                        : Faker::fullName()
+                            ])
+                        );
+                    });
                 });
             });
         });
@@ -98,5 +96,46 @@ class ProductTablesSeeder extends Seeder
             'products'      => $this->products,
             'variations'    => $this->variations,
         ];
+    }
+
+    public function createProducts( $category )
+    {
+        return $this->products = $this->createTable(
+
+            function() use($category) {
+
+                return $category->products()->saveMany(
+                    factory(\App\Models\Product\Product::class, 5)->make([
+                        'user_id'   => App\User::all()->random()->id,
+                        'brand_id'  => Brand::all()->random()->id,
+                        'unit_id'   => Unit::all()->random()->id,
+                        'spec_id'   => Spec::all()->random()->id,  
+                    ])
+                );
+            },
+            [ 'id', 'name', 'code', 'user_id', 'status', 'brand_id', 'jalali_created_at' ],
+            [], 'product'
+        );
+    }
+
+    public function createQuestionAndAnswers($product)
+    {
+        return $this->createTable(
+            function() use($product) {
+                return $product->questions()->saveMany(
+                    factory(\App\Models\Opinion\QuestionAndAnswer::class, rand(2, 5) )->make([
+                        'user_id' => App\User::all()->random()->id,
+                    ])
+                )->each( function ($questionAndAnswer) {
+                    $questionAndAnswer->answers()->saveMany(
+                        factory(\App\Models\Opinion\QuestionAndAnswer::class, rand(5, 10) )->make([
+                            'user_id' => App\User::all()->random()->id,
+                        ])
+                    );
+                });
+            },
+            ['id', 'user_id', 'product_id'],
+            [], 'question and answer', "for product {$product->id}"
+        );
     }
 }

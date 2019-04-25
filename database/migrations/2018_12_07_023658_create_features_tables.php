@@ -25,7 +25,7 @@ class CreateFeaturesTables extends Migration
                 'info' => 'param:name',
                 'logo' => 'nullable|array',
                 'jalali_created_at' => 'datetime|nullable'
-            ]);
+            ], ['tenants']);
         });
 
         $schema->create('colors', function ($table) {
@@ -33,7 +33,7 @@ class CreateFeaturesTables extends Migration
                 'name' => 30,
                 'code' => '9|comment:Hexadecimal code of the color, e.g #43df12',
                 'jalali_created_at' => 'datetime|nullable'
-            ]);
+            ], ['tenants']);
         });
 
         $schema->create('sizes', function ($table) {
@@ -41,7 +41,7 @@ class CreateFeaturesTables extends Migration
                 'name' => 50,
                 'description'   => 'nullable|string',
                 'jalali_created_at' => 'datetime|nullable'
-            ]);
+            ], ['tenants']);
         });
 
         $schema->create('warranties', function ($table) {
@@ -50,14 +50,14 @@ class CreateFeaturesTables extends Migration
                 'logo' => 'nullable|array',
                 'expire' => 20,
                 'jalali_created_at' => 'datetime|nullable'
-            ]);
+            ], ['tenants']);
         });
 
         $schema->create('units', function ($table) {
             $table->table([
                 'info',
                 'jalali_created_at' => 'datetime|nullable'
-            ]);
+            ], ['tenants']);
         });
 
         $schema->create('featureables', function ($table) {

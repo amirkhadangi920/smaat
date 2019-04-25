@@ -4,7 +4,6 @@ namespace App\Traits;
 
 Trait GenerateRandomID
 {
-    
     public static function boot()
     {
         parent::boot();

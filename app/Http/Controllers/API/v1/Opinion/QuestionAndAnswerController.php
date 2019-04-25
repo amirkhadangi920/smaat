@@ -32,7 +32,7 @@ class QuestionAndAnswerController extends OpinionBaseController
     protected $relations = [
         'product:id,name,photos,label',
         'user:id,first_name,last_name,avatar',
-        'answers:id,user_id,question_id,message,created_at',
+        'answers:id,user_id,question_id,message,is_accept,created_at,updated_at',
         'answers.user:id,first_name,last_name,avatar'
     ];
 
@@ -96,7 +96,7 @@ class QuestionAndAnswerController extends OpinionBaseController
      */
     public function getAllData()
     {
-        return $this->model::select('id', 'question_id', 'product_id', 'user_id', 'message', 'created_at', 'updated_at')
+        return $this->model::select('id', 'question_id', 'product_id', 'user_id', 'message', 'is_accept', 'created_at', 'updated_at')
             ->filter( request()->all(), $this->filter )    
             ->whereNull('question_id')
             ->with($this->relations)

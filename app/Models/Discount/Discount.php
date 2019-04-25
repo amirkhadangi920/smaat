@@ -8,10 +8,11 @@ use OwenIt\Auditing\Auditable;
 use OwenIt\Auditing\Contracts\Auditable as AuditableContract;
 use App\Models\Group\Category;
 use EloquentFilter\Filterable;
+use App\Helpers\HasTenant;
 
 class Discount extends Model implements AuditableContract 
 {
-    use Auditable, Filterable;
+    use Auditable, Filterable, HasTenant;
     /****************************************
      **             Attributes
      ***************************************/

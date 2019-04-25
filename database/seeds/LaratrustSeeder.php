@@ -1,9 +1,9 @@
 <?php
 use Illuminate\Support\Facades\Schema;
-use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
+use App\Helpers\CustomSeeder;
 
-class LaratrustSeeder extends Seeder
+class LaratrustSeeder extends CustomSeeder
 {
     /**
      * Run the database seeds.
@@ -12,6 +12,14 @@ class LaratrustSeeder extends Seeder
      */
     public function run()
     {
+        $username = $this->command->ask('Please enter an Email address ', 'admin@site.com');
+        while(true)
+        {
+            $password = $this->command->secret('Please Enter an password ');
+            
+            if ( !is_null($password) ) break;
+        }
+
         $this->command->info('Truncating User, Role and Permission tables');
         $this->truncateLaratrustTables();
 
@@ -51,15 +59,13 @@ class LaratrustSeeder extends Seeder
             // Attach all permissions to the role
             $role->permissions()->sync($permissions);
 
-            $this->command->info("Creating '{$key}' user");
+            $this->command->info("Creating '{$username}' user");
 
             // Create default user for each role
-            $user = \App\User::firstOrCreate([
-                // 'first_name' => ucwords(str_replace('_', ' ', $key)),
-                'email' => 'amirkhadangi920@gmail.com',
-                'password' => bcrypt('123456')
+            $user = factory(\App\User::class)->create([
+                'email' => $username,
+                'password' => bcrypt( $password )    
             ]);
-
             $user->attachRole($role);
         }
 
@@ -71,10 +77,9 @@ class LaratrustSeeder extends Seeder
                 foreach ($modules as $module => $value) {
 
                     // Create default user for each permission set
-                    $user = \App\User::create([
-                        // 'name' => ucwords(str_replace('_', ' ', $key)),
-                        'email' => $key.'@app.com',
-                        'password' => bcrypt('password'),
+                    $user = factory(\App\User::class)->create([
+                        'email' => $username,
+                        'password' => bcrypt( $password ),
                         'remember_token' => str_random(10),
                     ]);
                     $permissions = [];

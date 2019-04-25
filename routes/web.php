@@ -1,8 +1,6 @@
 <?php
-
-use App\Models\Category;
-use App\Models\Article;
-
+use App\Role;
+use App\Permission;
 
 /*
 |--------------------------------------------------------------------------
@@ -15,25 +13,30 @@ use App\Models\Article;
 |
 */
 
-Route::get('/test/amir', function() {
+Route::get('/test/amir', function() {    
+    // return $permission = Permission::firstOrCreate([ 'name' => 'read-order' ]);
+    return \App\User::first()->attachPermission('read-order');
 
-    return factory(\App\Models\Financial\OrderStatus::class, 20)->create();
+    // return factory(\App\Models\Financial\OrderStatus::class, 20)->create();
     // return factory(\App\Models\Financial\Order::class, 10)->create([
     //     'user_id' => \App\User::all()->random()->id,
     //     'order_status_id' => \App\Models\Financial\OrderStatus::all()->random()->id
     // ]);
-    // return factory(\App\Models\Opinion\Review::class, 10)->create([
-    //     'user_id' => \App\User::all()->random()->id,
-    //     'product_id' => \App\Models\Product\Product::all()->random()->id
-    // ]);
+    return factory(\App\Models\Opinion\Review::class, 20)->create([
+        'user_id' => \App\User::all()->random()->id,
+        'product_id' => \App\Models\Product\Product::all()->random()->id
+    ]);
 });
 
-Route::get('{path}', function() {
-
+Route::get('/panel/{path?}', function() {
     $dashboard_template = 'black';
 
     return view("dashboards.{$dashboard_template}");
 })->where('path', '.*');
+
+Route::get('/login', function() {
+    return view('login');
+});
 
 // Route::view('/{vue?}', "dashboards.{$dashboard_template}")->where('vue', '[\/\w\.-]*');
 

@@ -6,6 +6,7 @@ use Faker\Factory;
 $faker = Factory::create('fa_IR');
 
 use Ybazli\Faker\Facades\Faker;
+use Morilog\Jalali\Jalalian;
 
 $avatars = [
     [
@@ -67,5 +68,6 @@ $factory->define(App\User::class, function () use($faker , $avatars) {
                 return $social_links;
             }
         ),
+        'jalali_created_at' => Jalalian::forge("now - {$faker->numberBetween(2, 360)} days")
     ];
 });

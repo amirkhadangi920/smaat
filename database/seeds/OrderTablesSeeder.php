@@ -1,35 +1,31 @@
 <?php
 
-use Illuminate\Support\Facades\Schema;
-use Illuminate\Database\Seeder;
-use Illuminate\Support\Facades\DB;
+use App\Helpers\CustomSeeder;
+use App\Models\{
+    Places\City,
+    Group\Category,
+    Product\Variation,
+    Discount\Discount,
+    Promocode\Promocode
+};
+use App\Models\Financial\{ OrderStatus, ShippingMethod, Order };
 
-class OrderTablesSeeder extends Seeder
+class OrderTablesSeeder extends CustomSeeder
 {
     /**
      * Run the database seeds.
      *
      * @return void
      */
-    public function run( $data )
+    public function run()
     {
-        
-        $shippings = factory( App\Models\Financial\ShippingMethod::class, rand(1, 5) )->create();
+        $this->createShippingMethods();
 
-        $order_statuses = factory( App\Models\Financial\OrderStatus::class , rand(1, 5) )->create();
+        $this->createOrderStatuses();
+
+        $orders = $this->createOrders();
         
-        $orders = factory(\App\Models\Financial\Order::class, rand(5, 20))->create([
-            
-            'user_id'              => $data['users']->random()->id,
-            'shipping_method_id'    => $shippings->random()->id,
-            // 'city_id'            => $data['cities']->random()->id,
-            'order_status_id'       => $order_statuses->random()->id,
-            'promocode_id'          => $data['promocodes']->random()->id,
-        ]);
-            
-        
-        $data['products']['variations']->each( function ( $variation ) use ( $orders ) {
-            
+        Variation::all()->take( rand(5, 10) )->each( function ( $variation ) use ( $orders ) {
             $orders->random()->items()->save(
                 factory(\App\Models\Financial\OrderItem::class)->make([
                     'variation_id'  => $variation->id,
@@ -38,27 +34,62 @@ class OrderTablesSeeder extends Seeder
                 ])
             );
         });
-
         
-        
-        $discounts = factory(\App\Models\Discount\Discount::class, rand(1, 5))->create([
-            'user_id' => $data['users']->random()->id
-        ]);
+        $discounts = $this->createDiscounts();
 
-        $data['categories']->each( function( $category ) use( $discounts ) {
-
+        Category::all()->take( rand(5, 10) )->each( function( $category ) use( $discounts ) {
             $category->discounts()->sync( $discounts->random() );
         });
 
-        $data['products']['variations']->each( function ( $variation ) use ( $discounts ) {
-
+        Variation::all()->take( rand(5, 10) )->each( function ( $variation ) use ( $discounts ) {
             $discounts->random()->items()->saveMany( 
                 factory( App\Models\Discount\DiscountItem::class, rand(1, 5) )->make([
-
                     'discount_id'    => $discounts->random()->id,
                     'variation_id'  => $variation->id,
                 ])
             );  
-        }); 
+        });
+    }
+
+    public function createShippingMethods()
+    {
+        return $this->shippings = $this->createTable(
+            ShippingMethod::class,
+            ['id', 'name', 'cost', 'is_active']
+        );
+    }
+    
+    public function createOrderStatuses()
+    {        
+        return $this->order_statuses = $this->createTable(
+            OrderStatus::class,
+            ['id', 'title', 'description', 'color']
+        );
+    }
+
+    public function createOrders()
+    {
+        return $this->orders = $this->createTable(
+            Order::class,
+            [
+                'id', 'user_id', 'offer', 'total', 'order_status_id', 'paid_at', 'created_at'
+            ],
+            [
+                'user_id'               => \App\User::all()->random()->id,
+                'shipping_method_id'    => $this->shippings->random()->id,
+                'city_id'               => City::all()->random()->id,
+                'order_status_id'       => $this->order_statuses->random()->id,
+                'promocode_id'          => Promocode::all()->random()->id,
+            ]
+        );
+    }
+
+    public function createDiscounts()
+    {
+        return $this->discounts = $this->createTable(
+            Discount::class,
+            ['id', 'title', 'type', 'status', 'start_at', 'expired_at'],
+            [ 'user_id' => \App\User::all()->random()->id ]
+        );
     }
 }

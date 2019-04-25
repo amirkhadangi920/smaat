@@ -20,22 +20,22 @@
               <span>ویژگی ها</span>
             </template>
             <el-menu-item>
-              <sidebar-link to="/brand" :name="$t('sidebar.list') + ' ' + $t('sidebar.brand')" icon="tim-icons icon-atom"/>      
+              <sidebar-link to="/panel/brand" :name="$t('sidebar.list') + ' ' + $t('sidebar.brand')" icon="tim-icons icon-atom"/>      
             </el-menu-item>
             <el-menu-item>
-              <sidebar-link to="/unit" :name="$t('sidebar.list') + ' ' + $t('sidebar.unit')" icon="tim-icons icon-app"/>
+              <sidebar-link to="/panel/unit" :name="$t('sidebar.list') + ' ' + $t('sidebar.unit')" icon="tim-icons icon-app"/>
             </el-menu-item>
             <el-menu-item>
-              <sidebar-link to="/size" :name="$t('sidebar.list') + ' ' + $t('sidebar.size')" icon="tim-icons icon-chart-bar-32"/>
+              <sidebar-link to="/panel/size" :name="$t('sidebar.list') + ' ' + $t('sidebar.size')" icon="tim-icons icon-chart-bar-32"/>
             </el-menu-item>
             <el-menu-item>
-              <sidebar-link to="/warranty" :name="$t('sidebar.list') + ' ' + $t('sidebar.warranty')" icon="tim-icons icon-bank"/>
+              <sidebar-link to="/panel/warranty" :name="$t('sidebar.list') + ' ' + $t('sidebar.warranty')" icon="tim-icons icon-bank"/>
             </el-menu-item>
             <el-menu-item>
-              <sidebar-link to="/color" :name="$t('sidebar.list') + ' ' + $t('sidebar.color')" icon="tim-icons icon-palette"/>
+              <sidebar-link to="/panel/color" :name="$t('sidebar.list') + ' ' + $t('sidebar.color')" icon="tim-icons icon-palette"/>
             </el-menu-item>
             <el-menu-item>
-              <sidebar-link to="/specification" :name="$t('sidebar.list') + ' ' + $t('sidebar.spec')" icon="tim-icons icon-palette"/>
+              <sidebar-link to="/panel/specification" :name="$t('sidebar.list') + ' ' + $t('sidebar.spec')" icon="tim-icons icon-palette"/>
             </el-menu-item>
           </el-submenu>
           <el-submenu index="2">
@@ -44,13 +44,13 @@
               <span>وبلاگ</span>
             </template>
             <el-menu-item>
-              <sidebar-link to="/article" :name="$t('sidebar.list') + ' ' + $t('sidebar.article')" icon="tim-icons icon-paper"/>      
+              <sidebar-link to="/panel/article" :name="$t('sidebar.list') + ' ' + $t('sidebar.article')" icon="tim-icons icon-paper"/>      
             </el-menu-item>
             <el-menu-item>
-              <sidebar-link to="/comment" :name="$t('sidebar.list') + ' ' + $t('sidebar.comment')" icon="tim-icons icon-notes"/>      
+              <sidebar-link to="/panel/comment" :name="$t('sidebar.list') + ' ' + $t('sidebar.comment')" icon="tim-icons icon-notes"/>      
             </el-menu-item>
             <el-menu-item>
-              <sidebar-link to="/subject" :name="$t('sidebar.list') + ' ' + $t('sidebar.subject')" icon="tim-icons icon-notes"/>      
+              <sidebar-link to="/panel/subject" :name="$t('sidebar.list') + ' ' + $t('sidebar.subject')" icon="tim-icons icon-notes"/>      
             </el-menu-item>
           </el-submenu>
           <el-submenu index="3">
@@ -59,16 +59,16 @@
               <span>محصول</span>
             </template>
             <el-menu-item>
-              <sidebar-link to="/product" :name="$t('sidebar.list') + ' ' + $t('sidebar.product')" icon="tim-icons icon-bag-16"/>      
+              <sidebar-link to="/panel/product" :name="$t('sidebar.list') + ' ' + $t('sidebar.product')" icon="tim-icons icon-bag-16"/>      
             </el-menu-item>
             <el-menu-item>
-              <sidebar-link to="/category" :name="$t('sidebar.list') + ' ' + $t('sidebar.category')" icon="tim-icons icon-bag-16"/>      
+              <sidebar-link to="/panel/category" :name="$t('sidebar.list') + ' ' + $t('sidebar.category')" icon="tim-icons icon-bag-16"/>      
             </el-menu-item>
             <el-menu-item>
-              <sidebar-link to="/review" :name="$t('sidebar.list') + ' ' + $t('sidebar.review')" icon="tim-icons icon-bag-16"/>      
+              <sidebar-link to="/panel/review" :name="$t('sidebar.list') + ' ' + $t('sidebar.review')" icon="tim-icons icon-bag-16"/>      
             </el-menu-item>
             <el-menu-item>
-              <sidebar-link to="/question_and_answer" :name="$t('sidebar.list') + ' ' + $t('sidebar.question_and_answer')" icon="tim-icons icon-bag-16"/>      
+              <sidebar-link to="/panel/question_and_answer" :name="$t('sidebar.list') + ' ' + $t('sidebar.question_and_answer')" icon="tim-icons icon-bag-16"/>      
             </el-menu-item>
           </el-submenu>
           <el-submenu index="4">
@@ -76,21 +76,21 @@
               <i class="tim-icons icon-book-bookmark"></i>
               <span>فروشگاه</span>
             </template>
-            <el-menu-item>
-              <sidebar-link to="/order" :name="$t('sidebar.list') + ' ' + $t('sidebar.order')" icon="tim-icons icon-bag-16"/>      
+            <el-menu-item v-if="this.$store.state.permissions.includes('read-order')">
+              <sidebar-link to="/panel/order" :name="$t('sidebar.list') + ' ' + $t('sidebar.order')" icon="tim-icons icon-bag-16"/>      
             </el-menu-item>
             <el-menu-item>
-              <sidebar-link to="/shipping_method" :name="$t('sidebar.list') + ' ' + $t('sidebar.shipping_method')" icon="tim-icons icon-bag-16"/>      
+              <sidebar-link to="/panel/shipping_method" :name="$t('sidebar.list') + ' ' + $t('sidebar.shipping_method')" icon="tim-icons icon-bag-16"/>      
             </el-menu-item>
             <el-menu-item>
-              <sidebar-link to="/order_status" :name="$t('sidebar.list') + ' ' + $t('sidebar.order_status')" icon="tim-icons icon-bag-16"/>      
+              <sidebar-link to="/panel/order_status" :name="$t('sidebar.list') + ' ' + $t('sidebar.order_status')" icon="tim-icons icon-bag-16"/>      
             </el-menu-item>
           </el-submenu>
         </el-menu>
       </template>
     </side-bar>
     <div class="main-panel">
-      <vue-particles color="#dedede" :moveSpeed="1" shapeType="triangle" :particlesNumber="120"></vue-particles>
+      <vue-particles color="#f1f1f1" :moveSpeed="1" shapeType="triangle" :particlesNumber="120"></vue-particles>
       <top-navbar></top-navbar>
       <dashboard-content @click.native="toggleSidebar">
 
@@ -149,7 +149,7 @@
   border-radius: 4px;
 }
 
-.alert.open.top.left.alert-danger {
+.alert.open.top.left {
   text-align: right;
 }
 

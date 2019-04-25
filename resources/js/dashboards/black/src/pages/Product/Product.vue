@@ -10,59 +10,11 @@
       edit: edit,
       store: store,
       update: update
-    }"
-    
-    ref="datatable">
+    }"  
+    ref="datatable"
+  >
 
-    <template slot="filter-labels" v-if="false">
-      <span class="pull-right text-muted ml-2" v-show="hasFilter">فیتلر های اعمال شده :</span>
-
-      <span
-        class="badge badge-default p-2 ml-2 pull-right"
-        @click="filterLogo(null)"
-        v-show="filter('hasLogo') == 1">
-        فقط عکس دار ها
-        <i class="tim-icons icon-simple-remove remove-button"></i>
-      </span>
-      <span
-        class="badge badge-default p-2 ml-2 pull-right"
-        @click="filterLogo(null)"
-        v-show="filter('hasLogo') == 0">
-        فقط بدون عکس
-        <i class="tim-icons icon-simple-remove remove-button"></i>
-      </span>
-
-      <span
-        class="badge badge-default p-2 ml-2 pull-right"
-        @click="filterCategory(null)"
-        v-show="filter('hasCategories') == 1">
-        فقط با دسته بندی ها
-        <i class="tim-icons icon-simple-remove remove-button"></i>
-      </span>
-      <span 
-        class="badge badge-default p-2 ml-2 pull-right"
-        @click="filterCategory(null)"
-        v-show="filter('hasCategories') == 0">
-        فقط بدون دسته بندی ها
-        <i class="tim-icons icon-simple-remove remove-button"></i>
-      </span>
-
-      <span
-        class="badge badge-default p-2 ml-2 pull-right"
-        @click="$refs.filter_categories.setCheckedNodes([]); filterCategory( filter('hasCategories') )"
-        v-show="filter('categories') && filter('categories_string')">
-        فقط برای گروه {{ filter('categories').length !== 1 ? 'های' : '' }} : <b>{{ filter('categories_string') }}</b>
-        <i class="tim-icons icon-simple-remove remove-button"></i>
-      </span>
-
-      <span
-        class="badge badge-default p-2 ml-2 pull-right"
-        @click="$store.state[group].filters[type].query = null; filterSearch()"
-        v-show="filter('query')">
-        جستجو برای : {{ filter('query') }}
-        <i class="tim-icons icon-simple-remove remove-button"></i>
-      </span>
-    </template>
+    <template slot="filter-labels"></template>
     
     <template v-slot:photos-body="slotProps">
       <img class="tilt" :src="slotProps.row.photos ? slotProps.row.photos.tiny : '/images/placeholder.png'" />
@@ -86,43 +38,6 @@
           <p class="text-muted hvr-icon-hang"><i class="tim-icons icon-heart-2 text-danger hvr-icon"></i> {{ slotProps.row.votes.likes }}</p>
         </el-tooltip>
       </div>
-    </template>
-
-    <template slot="modal" v-if="false">
-      <slot></slot>
-
-      <br v-if="has_logo" />
-      <base-input :label="'لوگوی ' + label" v-if="has_logo">
-        <el-upload
-          class="avatar-uploader"
-          action="/"
-          :auto-upload="false"
-          :show-file-list="false"
-          :on-change="addImage">
-          <img v-if="$store.state[group].selected[type].imageUrl" :src="$store.state[group].selected[type].imageUrl" class="avatar">
-          <i v-else class="el-icon-plus avatar-uploader-icon"></i>
-        </el-upload>
-        <small slot="helperText" id="emailHelp" class="form-text text-muted">لوگوی مورد نظر خود را انتخاب
-          کنید</small>
-      </base-input>
-      <br />
-      <base-input :label="'دسته بندی های ' + label">
-        <el-tree
-          dir="ltr"
-          :data="$store.state.group.categories"
-          :props="defaultProps"
-          :accordion="true"
-          ref="categories"
-          show-checkbox
-          node-key="id"
-          @check-change="changeSelectedCategories"
-          :default-checked-keys="selected('categories')"
-          :default-expanded-keys="selected('categories')"
-          empty-text="هیچ دسته بندی ای یافت نشد :("
-        >
-        </el-tree>
-      </base-input>
-      <small slot="helperText" id="emailHelp" class="form-text text-muted">برای انتخاب هر دسته بندی تیک قبل آن را انتخاب کنید</small>
     </template>
   </datatable>
 </template>
@@ -168,18 +83,7 @@ export default {
       this.$refs.datatable.closePanel();
     },
     create() {
-      this.setAttr('selected', {
-        name: '',
-        description: '',
-        categories: [],
-        imageFile: null,
-        imageUrl: ''
-      })
-
-      this.$refs.categories.setCheckedKeys([]);
-
-      this.setAttr('is_open', true)
-      this.setAttr('is_creating', true)
+      this.$router.push('/panel/product/create')
     },
     edit(index, row) {
       let data = {};

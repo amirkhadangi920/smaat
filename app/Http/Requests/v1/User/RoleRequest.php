@@ -3,6 +3,7 @@
 namespace App\Http\Requests\User\v1;
 
 use Illuminate\Foundation\Http\FormRequest;
+use App\Rules\UniqueTenant;
 
 class RoleRequest extends FormRequest
 {
@@ -24,7 +25,7 @@ class RoleRequest extends FormRequest
     public function rules()
     {
         $rules = [
-            'display_name'  => 'required|string|max:100|unique:roles,display_name',
+            'display_name'  => ['required', 'string', 'max:100', new UniqueTenant('roles')],
             'description'   => 'nullable|string|max:255',
             'permissions'   => 'required|array',
             'permissions.*' => 'required|integer|exists:permissions,id',

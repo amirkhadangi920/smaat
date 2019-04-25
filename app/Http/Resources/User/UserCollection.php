@@ -14,6 +14,12 @@ class UserCollection extends ResourceCollection
      */
     public function toArray($request)
     {
-        return parent::toArray($request);
+        return [
+            'data' => $this->collection,
+            'meta' => [
+                'trash' => \App\User::onlyTrashed()->count()
+            ],
+            'chart' => \App\User::create_timeline()
+        ];
     }
 }

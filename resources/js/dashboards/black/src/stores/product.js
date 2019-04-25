@@ -107,13 +107,6 @@ export default {
         },
 
         selected: {
-            product: {
-                name: '',
-                description: '',
-                categories: [],
-                logoFile: null,
-                imageUrl: ''
-            },
             review: {
                 name: '',
                 description: '',

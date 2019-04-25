@@ -14,11 +14,17 @@ return [
 
             'shipping_method' => 'c,u,d',
             'order_status' => 'c,u,d',
+
+            'comment' => 'c,a,d',
+            'review' => 'c,a,d',
+            'question_and_answer' => 'c,a,d',
+
+            'order' => 'r,c,u,d',
         ],
     ],
     // 'permission_structure' => [
     //     'cru_user' => [
-    //         // 'profile' => 'c,r,u'
+            // 'profile' => 'c,r,u'
     //     ],
     // ],
     'permissions_map' => [

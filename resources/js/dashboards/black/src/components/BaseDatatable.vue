@@ -4,21 +4,21 @@
       <div class="row mb-3">
         <div class="col-12">
           <div class="text-right pull-right">
-          <h1 class="animated bounceInRight delay-first">
-            جزئیات {{ label }} ها
-            <i class="tim-icons icon-align-left-2" :style="{fontSize: '25px'}"></i>
-          </h1>
-          <h6 class="text-muted animated bounceInRight delay-secound">کلیه نمودار ها و اطلاعات موجود درباره ی {{ label }} ها</h6>
+            <h1 class="animated bounceInRight delay-first">
+              جزئیات {{ label }} ها
+              <i class="tim-icons icon-align-left-2" :style="{fontSize: '25px'}"></i>
+            </h1>
+            <h6 class="text-muted animated bounceInRight delay-secound">کلیه نمودار ها و اطلاعات موجود درباره ی {{ label }} ها</h6>
           </div>
 
           <div class="animated bounceInLeft delay-secound">
-            <base-button @click="methods.create" :disabled="can(`create-${type}`)" size="sm" :type="can(`create-${type}`) ? 'default' : 'info'" class="pull-left">
+            <base-button @click="methods.create" v-if="canCreate" :disabled="can(`create-${type}`)" size="sm" :type="can(`create-${type}`) ? 'default' : 'info'" class="pull-left">
               <i class="tim-icons icon-pencil"></i>
               افزودن {{ label }} جدید
             </base-button>
             
             <transition name="fade">
-              <base-button @click="handleDeleteMultiple" v-show="attr('selected_items').length >= 1" size="sm" type="danger"
+              <base-button @click="handleDeleteMultiple" v-if="canDelete" v-show="attr('selected_items').length >= 1" size="sm" type="danger"
                 class="pull-left">
                 <i class="tim-icons icon-trash-simple"></i>
                 حذف
@@ -33,6 +33,8 @@
                 مورد انتخاب شده
               </base-button>
             </transition>
+
+            <slot name="custom-buttons"></slot>
           </div>
         </div>
       </div>
@@ -84,7 +86,7 @@
                   <h5 class="card-category">نمودار زمانی ثبت {{ label }} ها</h5>
                 </template>
                 <div class="chart-area">
-                  <line-chart style="height: 100%"
+                  <line-chart style="height: 100%"                    
                     ref="chart"
                     chart-id="green-line-chart"
                     :chart-data="greenLineChart.chartData"
@@ -109,7 +111,7 @@
           </div>
 
           <div class="animated bounceInLeft delay-secound mt-2">
-            <input type="text" :value="filter('query')" @keyup.enter="search" dir="rtl" class="form-control col-3 mr-2 d-inline-block" placeholder="جستجو کنید ...">
+            <input type="text" v-if="canSearch" :value="filter('query')" @keyup.enter="search" dir="rtl" class="form-control col-3 mr-2 d-inline-block" placeholder="جستجو کنید ...">
             
             <el-tooltip content="نمای جدول">
               <i class="tim-icons icon-bullet-list-67 mr-1"></i>
@@ -202,12 +204,12 @@
                         <input type="checkbox" :value="index" v-model="selected_items" @change="handleSelectedChange(index)" />
                       </checkbox>
                     </li>
-                    <li v-for="(field, index) in fields" :key="index" class="data-table-cell p-2 d-flex align-items-center justify-content-center" >
-                      <slot :name="field.field + '-body'" :row="item">
+                    <li v-for="(field, childIndex) in fields" :key="childIndex" class="data-table-cell p-2 d-flex align-items-center justify-content-center" >
+                      <slot :name="field.field + '-body'" :row="item" :index="index">
                         {{ item[ field.field ] }}
                       </slot>
                     </li>
-                    <li class="data-table-cell p-2 d-flex align-items-center justify-content-center" >
+                    <li class="data-table-cell p-2 d-flex align-items-center justify-content-center">
                       <div :style="{ fontSize: '12px' }">
                         <el-tooltip :content="item.create_time | created" placement="left">
                           <p class="text-muted hvr-icon-bob"><i class="tim-icons icon-check-2 text-info hvr-icon"></i> {{ item.create_time | ago }}</p>
@@ -222,21 +224,26 @@
                     </li>
                     <li class="data-table-cell operation-cell p-2 d-flex align-items-center justify-content-center">
                       <el-tooltip :content="'ویرایش ' + label">
-                        <base-button @click="methods.edit(index, item)" simple class="hvr-icon-spin ml-2" :disabled="can(`update-${type}`)" :type="can(`create-${type}`) ? 'default' : 'success'" size="sm" icon>
+                        <base-button v-if="canEdit" @click="methods.edit(index, item)" simple class="hvr-icon-spin ml-2" :disabled="can(`update-${type}`)" :type="can(`create-${type}`) ? 'default' : 'success'" size="sm" icon>
                           <i class="tim-icons icon-pencil hvr-icon"></i>
                         </base-button>
                       </el-tooltip>
 
                       <el-tooltip :content="'حذف ' + label">
-                        <base-button @click="handleDelete(index, item)" simple class="ml-2" :disabled="can(`delete-${type}`)" :type="can(`create-${type}`) ? 'default' : 'danger'" size="sm" icon>
+                        <base-button v-if="canDelete" @click="handleDelete(index, item)" simple class="ml-2" :disabled="can(`delete-${type}`)" :type="can(`create-${type}`) ? 'default' : 'danger'" size="sm" icon>
                           <i class="tim-icons icon-simple-remove"></i>
                         </base-button>
                       </el-tooltip>
+
+                      <slot name="custom-operations" :row="item" :index="index"></slot>
 
                       <base-button @click="moreInfo" simple v-if="item.description != null" type="default" size="sm" icon>
                         !
                       </base-button>
                     </li>
+
+                    <span class="animation-circle" :class="`type${(index % 3) + 1}`"></span>
+                    <span class="animation-circle small" v-if="index % 3 !== 1" :class="`type${3 - (index % 3)}`"></span>
                   </ul>
                   <span class="data-table-hidden-cell" @click="lessInfo">
                     {{ item.description }}
@@ -286,7 +293,7 @@
                   <slot name="edit-button" :row="item" :index="index"></slot>
                 
                   <el-tooltip :content="'حذف ' + label">
-                    <base-button @click="handleDelete(index, item)" type="danger" size="sm" icon>
+                    <base-button v-if="canDelete" @click="handleDelete(index, item)" type="danger" size="sm" icon>
                       <i class="tim-icons icon-simple-remove"></i>
                     </base-button>
                   </el-tooltip>
@@ -385,6 +392,22 @@
       fields: {
         type: Array,
         required: true
+      },
+      canCreate: {
+        type: Boolean,
+        default: true
+      },
+      canEdit: {
+        type: Boolean,
+        default: true
+      },
+      canDelete: {
+        type: Boolean,
+        default: true
+      },
+      canSearch: {
+        type: Boolean,
+        default: true
       },
     },
     components: {
@@ -534,6 +557,7 @@
         $('#particles-js').removeClass('show')
         $('footer.footer').fadeOut(500)
         $('#granim-canvas').fadeOut(500)
+        $('.navbar-brand').removeClass(['animated', 'fadeIn', 'delay-1s']).addClass(['animated', 'fadeOut'])
         $('.delay-first').removeClass('delay-first').addClass('delay-last-out');
         $('.delay-first').removeClass('delay-secound').addClass('delay-secound-out');
         $('.delay-last').removeClass('delay-last').addClass('delay-first-out');
@@ -586,7 +610,10 @@
   .md-field.md-invalid {
     border-bottom-color: #ff0000;
   }
-  
+  .md-field.md-focused:before {
+    background: #92006f;
+    bottom: -1px;
+  }
   .md-field .md-count {
     left: 0px;
     right: auto;
@@ -603,6 +630,15 @@
   .md-field .md-error {
     color: #ff0000;
     right: 0px;
+  }
+  .md-chip.md-deletable.md-duplicated {
+    background: #4c4c4c;
+  }
+  .md-menu-content-container {
+    background: #fff;
+  }
+  .md-list {
+    direction: rtl;
   }
 
   .fade-enter-active, .fade-leave-active {
@@ -759,10 +795,144 @@
     background: #fff;
     box-shadow: 0px 0px 60px -30px #ff00d3;
     position: relative;
-    border-radius: 10px;
+    border-radius: 10px 10px 10px 60px;
     transform: scale(1);
     transition: transform 200ms, margin-top 500ms, box-shadow 250ms;
-    /* transition: all 300ms !important; */
+  }
+  .data-table-row::before {
+    z-index: -1;
+    content: '';
+    position: absolute;
+    bottom: -339px;
+    right: -254px;
+    width: 600px;
+    height: 400px;
+    background: linear-gradient(to left, #fd5d9330, transparent);
+    border-radius: 50%;
+  }
+  .data-table-row::after {
+    z-index: -1;
+    content: '';
+    position: absolute;
+    bottom: -372px;
+    right: -96px;
+    width: 600px;
+    height: 400px;
+    background: linear-gradient(to left, #f56c6c59, transparent);
+    border-radius: 50%;
+  }
+  .data-table-row ul::before {
+    z-index: -1;
+    content: '';
+    position: absolute;
+    top: -280px;
+    left: -110px;
+    width: 300px;
+    height: 300px;
+    background: linear-gradient(to left, #fd5d9330, transparent);
+    border-radius: 50%;
+  }
+
+  .data-table-row ul .animation-circle {
+    content: '';
+    background: #fdb7ce30;
+    position: absolute;
+    top: 100px;
+    left: 150px;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    z-index: -1;
+    box-shadow: 0px 10px 50px -15px rgb(231, 109, 215);
+  }
+
+  .data-table-row ul .animation-circle.small {
+    width: 30px;
+    height: 30px;
+    background: #e782a430;
+    box-shadow: 0px 10px 50px -15px rgb(238, 88, 218);
+  }
+
+  .data-table-row ul li {
+    text-shadow: 0px 10px 37px #440139;
+  }
+
+  .animation-circle.type1 {
+    animation: moveCircle1 30s infinite;
+  }
+
+  .animation-circle.type2 {
+    animation: moveCircle2 20s infinite;
+  }
+  .animation-circle.type3 {
+    animation: moveCircle3 25s infinite;
+  }
+
+  @keyframes moveCircle1 {
+    0% {
+      top: 0px;
+      left: 50px;
+    }
+    30% {
+      top: 10px;
+      left: 300px;
+    }
+    60% {
+      top: 60px;
+      left: 30px;
+    }
+    80% {
+      top: 40px;
+      left: 200px;
+    }
+    100% {
+      top: 0px;
+      left: 50px;
+    }
+  }
+  @keyframes moveCircle2 {
+    0% {
+      top: 40px;
+      left: 30px;
+    }
+    30% {
+      top: 20px;
+      left: 200px;
+    }
+    60% {
+      top: 50px;
+      left: 100px;
+    }
+    80% {
+      top: 60px;
+      left: 500px;
+    }
+    100% {
+      top: 40px;
+      left: 30px;
+    }
+  }
+  @keyframes moveCircle3 {
+    0% {
+      top: 70px;
+      left: 400px;
+    }
+    30% {
+      top: 20px;
+      left: 200px;
+    }
+    60% {
+      top: 10px;
+      left: 250px;
+    }
+    80% {
+      top: 60px;
+      left: 300px;
+    }
+    100% {
+      top: 70px;
+      left: 400px;
+    }
   }
   
   .data-table-row:hover {
@@ -804,6 +974,7 @@
   
   .data-table img {
     max-height: 50px;
+    box-shadow: 0px 12px 40px -15px #000000a6;
   }
 
   .md-dialog {
@@ -855,7 +1026,8 @@
     z-index: 3;
     color: #fff !important;
     text-shadow: 0px 0px 10px #000;
-    font-size: 40px;
+    font-size: 35px;
+    margin-top: 10px;
     font-weight: bold;
   }
   .md-dialog-title p {
@@ -863,6 +1035,7 @@
     display: block;
     text-shadow: 0px 0px 10px #000;
     color: #f3f3f3 !important;
+    font-size: 14px;
     font-weight: bold;
     z-index: 1;
   }

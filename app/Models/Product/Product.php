@@ -8,7 +8,6 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use OwenIt\Auditing\Auditable;
 use OwenIt\Auditing\Contracts\Auditable as AuditableContract;
-use App\Traits\GenerateRandomID;
 use App\Models\Opinion\{ Review, QuestionAndAnswer };
 use Spatie\Tags\HasTags;
 use App\Models\Spec\{ SpecData, Spec };
@@ -16,10 +15,12 @@ use App\Models\Group\Category;
 use App\Models\Feature\{ Brand, Unit };
 use EloquentFilter\Filterable;
 use App\Helpers\CreateTimeline;
+use App\Helpers\HasTenantWthRandomID;
 
 class Product extends Model implements AuditableContract, LikeableContract
 {
-    use SoftDeletes, Auditable, GenerateRandomID, HasTags, Filterable, Likeable, CreateTimeline;
+    use SoftDeletes, Auditable, HasTenantWthRandomID, HasTags;
+    use Filterable, Likeable, CreateTimeline;
 
     /****************************************
      **             Attributes

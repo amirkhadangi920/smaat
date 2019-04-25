@@ -10,10 +10,11 @@ use App\Models\Group\Category;
 use App\Models\Product\Variation;
 use EloquentFilter\Filterable;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use App\Helpers\HasTenant;
 
 class Promocode extends Model implements AuditableContract
 {
-    use SoftDeletes, Auditable, Filterable;
+    use SoftDeletes, Auditable, Filterable, HasTenant;
 
     /****************************************
      **             Attributes

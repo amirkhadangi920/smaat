@@ -22,7 +22,7 @@ class Blueprint extends BaseBlueprint
             $table = strtolower( Str::plural( Str::replaceFirst('relto', '', $method) ) );
             
             if ( in_array($table, [
-                'users', 'products', 'variations', 'orders', 'banks', 'accounts', 'persons', 'articles'
+                'users', 'products', 'variations', 'orders', 'banks', 'accounts', 'persons', 'articles', 'tenants'
             ])) $feild_type = 'uuid';
             
             $this->add_foreign($table, $parameters[0] ?? false, $feild_type ?? 'unsignedInteger');

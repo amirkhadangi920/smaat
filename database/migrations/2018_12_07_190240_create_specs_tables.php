@@ -23,6 +23,7 @@ class CreateSpecsTables extends Migration
         $schema->create('specs', function (Blueprint $table) {
             $table->id();
             $table->reltoCategories();
+            $table->reltoTenants();
             $table->info();
             $table->full_timestamps();
             $table->dateTime('jalali_created_at')->nullable();
