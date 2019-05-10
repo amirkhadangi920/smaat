@@ -64,7 +64,7 @@ $factory->define(App\Models\Discount\Discount::class, function () use ($faker, $
         'logo'          => nullable( image ( $brands[$selected]['logo'] )),
         'type'          => nullable( $faker->numberBetween(0 , 100)),
         'status'        => $faker->numberBetween(0 , 100),
-        'start_at'      => $faker->dateTime(),
+        'started_at'    => $faker->dateTime(),
         'expired_at'    => $faker->dateTime()
     ];
 });

@@ -21,7 +21,7 @@ class UserController extends MainController
     public function __construct()
     {
         $this->middleware('auth:api', [
-            'only' => [ 'update', 'destroy', 'permissions' ]
+            'only' => [ 'index', 'show', 'update', 'destroy', 'permissions' ]
         ]);
     }
 
@@ -45,8 +45,7 @@ class UserController extends MainController
      * @var array
      */
     protected $relations = [
-        // 'subjects',
-        // 'user:id:first_name,last_name'
+        'roles:id,name,display_name',
     ];
 
     protected $more_relations = [
@@ -89,10 +88,23 @@ class UserController extends MainController
      * @return Array
      */
     public function update(UserRequest $request, User $user)
-    {
+    {   
         return $this->updateWithRequest($request, $user);
     }
 
+    /**
+     * The function that get the model and run after the model was updated
+     *
+     * @param Request $request
+     * @param Model $product
+     * @return void
+     */
+    public function afterUpdate($request, $user)
+    {
+        $user->syncPermissions( $request->permissions ?? [] );
+        $user->syncRoles( $request->roles ?? [] );
+    }
+    
     /**
      * Get the portion of request class
      *
@@ -101,10 +113,10 @@ class UserController extends MainController
      */
     public function getRequest( $request)
     {
-        return $request->only(
+        $result = $request->only(
             'city_id',
             'first_name',
-            'first_name',
+            'last_name',
             'phones',
             'social_links',
             'email',
@@ -112,6 +124,8 @@ class UserController extends MainController
             'address',
             'postal_code'
         );
+
+        return gettype( $result ) === 'array' ? $result : $result->all();
     }
 
     /**
@@ -122,10 +136,30 @@ class UserController extends MainController
      */
     public function getAllData()
     {
-        return $this->model::select('id', 'first_name', 'last_name', 'phones', 'email', 'avatar', 'address')
+        $this->checkPermission("read-user");
+
+        return $this->model::select(
+            'id', 'first_name', 'last_name', 'phones', 'email', 'avatar', 'address', 'created_at', 'updated_at'
+        )
             ->filter( request()->all(), $this->filter )
             ->latest()
             ->paginate( $this->getPerPage() );
+    }
+    
+    /**
+     * Find an get a data from Database,
+     * or abort 404 not found exception if can't find
+     *
+     * @param ID $feature
+     * @return Model
+     */
+    public function getSingleData($data)
+    {
+        $this->checkPermission("read-user");
+
+        $this->relations = array_merge( $this->relations, $this->more_relations );
+
+        return $this->model::with( $this->relations )->findOrFail($data);
     }
 
     /**

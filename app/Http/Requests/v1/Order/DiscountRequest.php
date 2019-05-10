@@ -27,8 +27,25 @@ class DiscountRequest extends FormRequest
             'title'                 => 'required|string|max:50',
             'description'           => 'nullable|string|max:255',
             'logo'                  => 'nullable|image|mimes:jpeg,jpg,png|max:1024',
-            'start_at'              => 'required|date|after:now',
-            'expired_at'            => 'required|date|after:start_at',
+            'started_at'            => 'required|date|date_format:Y-m-d H:i:s|after:' . jdate(),
+            'expired_at'            => 'required|date|date_format:Y-m-d H:i:s|after:started_at',
+
+            /* relateion */
+            'categories'            => 'nullable|array',
+            'categories.*'          => 'required|integer|exists:categories,id'
+        ];
+    }
+
+    /**
+     * Get custom attributes for validator errors.
+     *
+     * @return array
+     */
+    public function attributes()
+    {
+        return [
+            'started_at' => 'تاریخ شروع تخفیف',
+            'expired_at' => 'تاریخ پایان تخفیف',
         ];
     }
 }

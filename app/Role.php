@@ -7,10 +7,12 @@ use OwenIt\Auditing\Contracts\Auditable as AuditableContract;
 use Laratrust\Models\LaratrustRole;
 use EloquentFilter\Filterable;
 use App\Helpers\HasTenant;
+use App\Helpers\CreateTimeline;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Role extends LaratrustRole implements AuditableContract
 {
-    use Auditable, Filterable, HasTenant;
+    use SoftDeletes ,Auditable, Filterable, HasTenant, CreateTimeline;
 
     /****************************************
      **             Attributes

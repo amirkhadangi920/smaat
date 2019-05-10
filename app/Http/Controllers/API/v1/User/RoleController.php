@@ -7,9 +7,20 @@ use App\Http\Controllers\API\v1\MainController;
 use App\Http\Resources\User\Role as RoleResource;
 use App\ModelFilters\User\RoleFilter;
 use App\Http\Requests\User\v1\RoleRequest;
+use App\Http\Resources\User\RoleCollection;
 
 class RoleController extends MainController
 {
+    /**
+     * Instantiate a new MainController instance.
+     */
+    public function __construct()
+    {
+        $this->middleware('auth:api', [
+            'only' => [ 'index', 'show', 'store', 'update', 'destroy' ]
+        ]);
+    }
+
     /**
      * Type of this controller for use in messages
      *
@@ -30,8 +41,7 @@ class RoleController extends MainController
      * @var array
      */
     protected $relations = [
-        // 'subjects',
-        // 'user:id:first_name,last_name'
+        'permissions:id'
     ];
 
     protected $more_relations = [
@@ -44,6 +54,13 @@ class RoleController extends MainController
      * @var [type]
      */
     protected $resource = RoleResource::class;
+
+    /**
+     * Resource Collection of this controller respnoses
+     *
+     * @var [type]
+     */
+    protected $collection = RoleCollection::class;
 
     /**
      * Filter class of this eloquent model
@@ -76,6 +93,33 @@ class RoleController extends MainController
     public function update(RoleRequest $request, Role $role)
     {
         return $this->updateWithRequest($request, $role);
+    }
+
+    /**
+     * Get all data of the model,
+     * used by index method controller
+     *
+     * @return Collection
+     */
+    public function getAllData()
+    {
+        $this->checkPermission("read-role");
+
+        return $this->model::filter( request()->all(), $this->filter )->with($this->relations)->withCount('permissions')->latest()->get();
+    }
+
+    /**
+     * Find an get a data from Database,
+     * or abort 404 not found exception if can't find
+     *
+     * @param ID $feature
+     * @return Model
+     */
+    public function getSingleData($data)
+    {
+        $this->checkPermission("read-role");
+        
+        return $this->model::with( $this->more_relations )->findOrFail($data);
     }
 
     /**

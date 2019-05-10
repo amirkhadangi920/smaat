@@ -18,16 +18,19 @@ class Discount extends JsonResource
 
         return [
             'id'                => $this->id,
-            'link'              => "/api/v1/discount/{$this->slug}",
+            'link'              => "/api/v1/discount/{$this->id}",
+            'title'             => $this->title,
             'description'       => $this->description,
             'logo'              => $this->logo,
-            'started_at'        => $this->start_at,
-            'expired_at'        => $this->expired_at,
+            'started_at'        => $this->getOriginal('started_at'),
+            'expired_at'        => $this->getOriginal('expired_at'),
+            'create_time'       => $this->getOriginal('created_at'),
+            'last_update_time'  => $this->getOriginal('updated_at'),
             'categories'        => $this->categories->map( function ( $category ) {
                 
                 return [
                     'id'    => $category->id,
-                    'brand_link'  => "/api/v1/category/{$category->slug}",
+                    'link'  => "/api/v1/category/{$category->id}",
                     'title' => $category->title,
                 ];
             }),
@@ -35,7 +38,7 @@ class Discount extends JsonResource
                 return $this->items->map( function ( $item ) {
                     return [
                         'id'            => $item->id,
-                        'link'          => "/api/v1/product/{$item->variation->product->slug}",
+                        'link'          => "/api/v1/product/{$item->variation->product->id}",
                         'name'          => $item->variation->product->name ?? null,
                         'code'          => $item->variation->product->code ?? null,
                         'photos'        => $item->variation->product->photos ?? null,

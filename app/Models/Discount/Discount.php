@@ -9,10 +9,12 @@ use OwenIt\Auditing\Contracts\Auditable as AuditableContract;
 use App\Models\Group\Category;
 use EloquentFilter\Filterable;
 use App\Helpers\HasTenant;
+use App\Helpers\CreateTimeline;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Discount extends Model implements AuditableContract 
 {
-    use Auditable, Filterable, HasTenant;
+    use Auditable, Filterable, HasTenant, CreateTimeline, SoftDeletes;
     /****************************************
      **             Attributes
      ***************************************/
@@ -28,7 +30,7 @@ class Discount extends Model implements AuditableContract
         'logo',
         'type',
         'status',
-        'start_at',
+        'started_at',
         'expired_at'
     ];
 
@@ -48,7 +50,7 @@ class Discount extends Model implements AuditableContract
      */
     protected $dates = [
         'deleted_at',
-        'start_at',
+        'started_at',
         'expired_at'
     ];
     

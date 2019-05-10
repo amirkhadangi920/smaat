@@ -66,6 +66,7 @@ class User extends Authenticatable implements AuditableContract
      * @var array
      */
     protected $casts = [
+        'avatar'        => 'array',
         'phones'        => 'array',
         'social_links'  => 'array',
     ];

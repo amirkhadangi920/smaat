@@ -12,7 +12,18 @@ class LaratrustSeeder extends CustomSeeder
      */
     public function run()
     {
-        $username = $this->command->ask('Please enter an Email address ', 'admin@site.com');
+        $usernames = collect();
+        while(true)
+        {
+            $usernames->push( $this->command->ask('Please enter an Email address ', "admin". ( $usernames->count() + 1 ) ."@site.com") );
+
+            if ( $usernames->last() === 'end' )
+            {
+                $usernames->pop();
+                break;
+            };
+        }
+
         while(true)
         {
             $password = $this->command->secret('Please Enter an password ');
@@ -26,14 +37,18 @@ class LaratrustSeeder extends CustomSeeder
         $config = config('laratrust_seeder.role_structure');
         $userPermission = config('laratrust_seeder.permission_structure');
         $mapPermission = collect(config('laratrust_seeder.permissions_map'));
+        $actionsLabel = collect(config('laratrust_seeder.actions_label'));
+        $permissionsLabel = collect(config('laratrust_seeder.permissions_label'));
+        $roleLabel = collect(config('laratrust_seeder.roles_label'));
 
         foreach ($config as $key => $modules) {
 
             // Create a new role
-            $role = \App\Role::create([
-                'name' => $key,
-                'display_name' => ucwords(str_replace('_', ' ', $key)),
-                'description' => ucwords(str_replace('_', ' ', $key))
+            $role = \App\Role::firstOrcreate([
+                'name' => $key
+            ], [
+                'display_name' => $roleLabel[$key]['name'],
+                'description' => $roleLabel[$key]['description']
             ]);
             $permissions = [];
 
@@ -48,8 +63,8 @@ class LaratrustSeeder extends CustomSeeder
 
                     $permissions[] = \App\Permission::firstOrCreate([
                         'name' => $permissionValue . '-' . $module,
-                        'display_name' => ucfirst($permissionValue) . ' ' . ucfirst($module),
-                        'description' => ucfirst($permissionValue) . ' ' . ucfirst($module),
+                        'display_name' => $actionsLabel[ $permissionValue ] . ' ' . $permissionsLabel[ $module ],
+                        'description' => 'امکان ' . $actionsLabel[ $permissionValue ] . ' یک ' . $permissionsLabel[ $module ],
                     ])->id;
 
                     $this->command->info('Creating Permission to '.$permissionValue.' for '. $module);
@@ -59,14 +74,17 @@ class LaratrustSeeder extends CustomSeeder
             // Attach all permissions to the role
             $role->permissions()->sync($permissions);
 
-            $this->command->info("Creating '{$username}' user");
+            $usernames->each( function($username) use($password, $role) {
 
-            // Create default user for each role
-            $user = factory(\App\User::class)->create([
-                'email' => $username,
-                'password' => bcrypt( $password )    
-            ]);
-            $user->attachRole($role);
+                $this->command->info("Creating '{$username}' user");
+    
+                // Create default user for each role
+                $user = factory(\App\User::class)->create([
+                    'email' => $username,
+                    'password' => bcrypt( $password )    
+                ]);
+                $user->attachRole($role);
+            });
         }
 
         // Creating user with permissions

@@ -12,6 +12,12 @@ export default {
         edited(date) {
             return 'اصلاح شده در ' + moment(date, "YYYY-MM-DD ساعت HH:mm:ss").format('jYYYY/jM/jD ساعت HH:mm:ss');
         },
+        time(date, label) {
+            return `${label} در ` + moment(date, "YYYY-MM-DD ساعت HH:mm:ss").format('jYYYY/jM/jD ساعت HH:mm:ss');
+        },
+        jalaali(date) {
+            return moment( date ).format('jYYYY-jMM-jDD HH:mm:ss')
+        },
         ago(date) {
             return moment(date, "YYYY-MM-DD hh:mm:ss").fromNow();
         },

@@ -115,6 +115,15 @@ export default {
             spec: 1,
         },
 
+        chart_object: {
+            brand: null,
+            size: null,
+            warranty: null,
+            color: null,
+            unit: null,
+            spec: null,
+        },
+
         counts: {
             brand: {
                 total: 0,

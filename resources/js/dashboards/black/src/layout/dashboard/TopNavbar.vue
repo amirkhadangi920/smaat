@@ -13,7 +13,7 @@
             <span class="navbar-toggler-bar bar3"></span>
           </button>
         </div>
-        <a class="navbar-brand animated fadeIn delay-1s" href="#pablo">{{routeName}}</a>
+        <!-- <a class="navbar-brand animated fadeIn delay-1s" href="#pablo">{{routeName}}</a> -->
       </div>
       <button class="navbar-toggler" type="button"
               @click="toggleMenu"
@@ -153,6 +153,3 @@
     }
   };
 </script>
-<style>
-
-</style>

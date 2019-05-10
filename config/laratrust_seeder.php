@@ -20,6 +20,10 @@ return [
             'question_and_answer' => 'c,a,d',
 
             'order' => 'r,c,u,d',
+            'discount' => 'r,c,u,d,ad,rm',
+
+            'user' => 'r,u,d',
+            'role' => 'r,c,u,d',
         ],
     ],
     // 'permission_structure' => [
@@ -28,10 +32,53 @@ return [
     //     ],
     // ],
     'permissions_map' => [
-        'c' => 'create',
-        'r' => 'read',
-        'u' => 'update',
-        'd' => 'delete',
-        'a' => 'accept',
+        'c'     => 'create',
+        'r'     => 'read',
+        'u'     => 'update',
+        'd'     => 'delete',
+        'a'     => 'accept',
+        'ad'    => 'add-item',
+        'rm'    => 'remove-item',
+    ],
+
+    'actions_label' => [
+        'create'        => 'ثبت',
+        'read'          => 'مشاهده',
+        'update'        => 'ویرایش',
+        'delete'        => 'حذف',
+        'accept'        => 'تایید',
+        'add-item'      => 'افزودن به',
+        'remove-item'   => 'حذف از',
+    ],
+
+    'permissions_label' => [
+        'brand' => 'برند',
+        'color' => 'رنگ',
+        'unit' => 'واحد',
+        'size' => 'سایز',
+        'warranty' => 'گارانتی',
+        
+        'article' => 'مقاله',
+        'product' => 'محصول',
+
+        'shipping_method' => 'روش ارسال',
+        'order_status' => 'وضعیت سفارش',
+
+        'comment' => 'نظر',
+        'review' => 'نقد و بررسی',
+        'question_and_answer' => 'پرسش و پاسخ',
+
+        'order' => 'سفارش',
+        'discount' => 'تخفیف',
+
+        'user' => 'کاربر',
+        'role' => 'نقش',
+    ],
+
+    'roles_label' => [
+        'owner' => [
+            'name' => 'مدیر',
+            'description' => 'مالک فروشگاه اینترنتی'
+        ]
     ]
 ];

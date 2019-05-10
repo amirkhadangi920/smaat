@@ -13,7 +13,18 @@ use App\Permission;
 |
 */
 
-Route::get('/test/amir', function() {    
+Route::get('/test/amir', function() {
+
+    \App\Models\Discount\Discount::first()->items()->updateOrCreate([
+        'variation_id' => \App\Models\Product\Variation::all()->random()->id,
+    ], [
+        'offer'     => rand(0, 60),
+        'quantity'  => rand(1, 10),
+    ]);
+
+    return \App\Models\Discount\Discount::withCount('items')->first();
+
+    return factory(\App\User::class)->create();
     // return $permission = Permission::firstOrCreate([ 'name' => 'read-order' ]);
     return \App\User::first()->attachPermission('read-order');
 

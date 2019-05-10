@@ -13,7 +13,10 @@ class TenantSeeder extends CustomSeeder
      */
     public function run()
     {
+        \Artisan::call('cache:clear');
+        
         $tenant = Tenant::find( $this->getTenant() );
+
 
         $tenant->hostnames()->createMany([
             [

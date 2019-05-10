@@ -1,24 +1,16 @@
 <template>
   <transition name="fade">
     <div v-show="attr('has_loaded')">
-      <div class="row mb-3">
-        <div class="col-12">
-          <div class="text-right pull-right">
-            <h1 class="animated bounceInRight delay-first">
-              جزئیات {{ label }} ها
-              <i class="tim-icons icon-align-left-2" :style="{fontSize: '25px'}"></i>
-            </h1>
-            <h6 class="text-muted animated bounceInRight delay-secound">کلیه نمودار ها و اطلاعات موجود درباره ی {{ label }} ها</h6>
-          </div>
-
-          <div class="animated bounceInLeft delay-secound">
-            <base-button @click="methods.create" v-if="canCreate" :disabled="can(`create-${type}`)" size="sm" :type="can(`create-${type}`) ? 'default' : 'info'" class="pull-left">
+      <div class="row mb-3" :style="{ position: 'relative', zIndex: 2 }">
+        <div class="row col-12">
+          <div class="col-3 animated bounceInLeft delay-secound">
+            <base-button :style="{ color: '#ffffff', borderColor: '#ffffff' }" @click="methods.create" v-if="canCreate" simple :disabled="can(`create-${type}`)" size="sm" :type="can(`create-${type}`) ? 'info' : 'default'" class="pull-left">
               <i class="tim-icons icon-pencil"></i>
               افزودن {{ label }} جدید
             </base-button>
             
             <transition name="fade">
-              <base-button @click="handleDeleteMultiple" v-if="canDelete" v-show="attr('selected_items').length >= 1" size="sm" type="danger"
+              <base-button @click="handleDeleteMultiple" v-if="canDelete" simple v-show="attr('selected_items').length >= 1" size="sm" type="danger"
                 class="pull-left">
                 <i class="tim-icons icon-trash-simple"></i>
                 حذف
@@ -36,71 +28,88 @@
 
             <slot name="custom-buttons"></slot>
           </div>
+
+          <div class="col-9 text-right">
+            <div class="pull-right">
+              <h1 class="animated bounceInRight delay-first" :style="{ color: '#fff', fontWeight: 'bold' }">
+                جزئیات <span :style="{ color: 'orange' }">{{ label }}</span> ها
+                <i class="tim-icons icon-align-left-2" :style="{fontSize: '25px'}"></i>
+
+              </h1>
+              <h6 class="text-muted animated bounceInRight delay-secound">کلیه نمودار ها و اطلاعات موجود درباره ی {{ label }} ها</h6>
+            </div>
+            <div class="pull-left animated bounceInDown delay-last">
+              <flip-clock :options="{
+                label: false,
+                clockFace: 'TwentyFourHourClock'
+              }" />
+            </div>
+          </div>
         </div>
       </div>
 
       <transition name="fade">
         <slot name="charts">
-          <div class="row" dir="rtl">
-          
-            <div class="col-md-3">
-              <card class="text-right mb-4 animated bounceInRight delay-secound tilt" :style="{ marginBottom: '32px !important', transformStyle: 'preserve-3d' }">
-                <h5 class="card-category" style="transform: translateZ(20px)">کل {{ label }} های موجود</h5>
-                <h3 class="card-title" style="transform: translateZ(30px)">
-                  <i class="tim-icons icon-attach-87 text-success"></i>
-                  <ICountUp
-                    style="transform: translateZ(30px)"
-                    :endVal="attr('counts').total"
-                    :options="{
-                      useEasing: true,
-                      useGrouping: true,
-                      separator: ',',
-                      suffix: ' ' + label
-                    }"
-                  />
-                </h3>
-                <p class="card-text text-muted" :style="{fontSize: '10px', transform: 'translateZ(15px)'}">تعداد {{ label }} هایی که تا کنون در وبسایت ثبت شده است</p>
-              </card>
-              <card class="text-right mb-0 animated bounceInRight delay-last tilt responsive" :style="{ transformStyle: 'preserve-3d' }">
-                <h5 class="card-category" style="transform: translateZ(20px)">{{ label}} های حذف شده</h5>
-                <h3 class="card-title" style="transform: translateZ(30px)">
-                  <i class="tim-icons icon-trash-simple text-danger"></i>
-                  <ICountUp
-                    style="transform: translateZ(30px)"
-                    :endVal="attr('counts').trash"
-                    :options="{
-                      useEasing: true,
-                      useGrouping: true,
-                      separator: ',',
-                      suffix: ' ' + label
-                    }"
-                  />
-                </h3>
-                <p class="card-text text-muted" :style="{fontSize: '10px', transform: 'translateZ(15px)'}">تعداد {{ label }} هایی که تا کنون حذف کرده اید</p>
-              </card>
-            </div>
-
-            <div class="col-md-9 text-right animated bounceInLeft delay-secound">
+          <div class="row details mb-3" :style="{ position: 'relative', zIndex: 2 }" dir="rtl">
+            <div class="col-md-9 text-right animated bounceInRight delay-secound chart-card">
               <card type="chart" class="mb-3">
                 <template slot="header">
                   <h5 class="card-category">نمودار زمانی ثبت {{ label }} ها</h5>
                 </template>
                 <div class="chart-area">
-                  <line-chart style="height: 100%"                    
-                    ref="chart"
-                    chart-id="green-line-chart"
-                    :chart-data="greenLineChart.chartData"
-                    :gradient-stops="greenLineChart.gradientStops"
-                    :extra-options="greenLineChart.extraOptions">
-                  </line-chart>
+                  <canvas id="myChart" height="100%"></canvas>
                 </div>
+                <!-- <div class="chart-area" :style="{ height: '60px', position: 'absolute', top: '0px', right: '0px' }">
+                  <canvas id="miniChart" height="100%"></canvas>
+                </div> -->
               </card>
+            </div>
+
+            <div class="col-md-3">
+              <div class="tilt">
+                <card class="text-right mb-4 animated bounceInLeft delay-secound total-card" :style="{ marginBottom: '32px !important', transformStyle: 'preserve-3d' }">
+                  <i class="tim-icons icon-attach-87"></i>
+                  <h5 class="card-category" style="transform: translateZ(20px)">کل {{ label }} های موجود</h5>
+                  <h3 class="card-title" style="transform: translateZ(30px)">
+                    <ICountUp
+                      style="transform: translateZ(30px)"
+                      :endVal="attr('counts').total"
+                      :options="{
+                        useEasing: true,
+                        useGrouping: true,
+                        separator: ',',
+                        suffix: ' ' + label
+                      }"
+                    />
+                  </h3>
+                  <p class="card-text text-muted" :style="{fontSize: '10px', transform: 'translateZ(15px)'}">تعداد {{ label }} هایی که تا کنون در وبسایت ثبت شده است</p>
+                </card>
+              </div>
+              <div class="tilt" :style="{ position: 'relative', top: '0px', right: '0px' }">
+                <card class="text-right mb-0 animated bounceInLeft delay-last responsive trash-card" :style="{ transformStyle: 'preserve-3d' }">
+                  <i class="tim-icons icon-trash-simple"></i>
+                  <h5 class="card-category" style="transform: translateZ(20px)">{{ label}} های حذف شده</h5>
+                  <h3 class="card-title" style="transform: translateZ(30px)">
+                    <ICountUp
+                      style="transform: translateZ(30px)"
+                      :endVal="attr('counts').trash"
+                      :options="{
+                        useEasing: true,
+                        useGrouping: true,
+                        separator: ',',
+                        suffix: ' ' + label
+                      }"
+                    />
+                  </h3>
+                  <p class="card-text text-muted" :style="{fontSize: '10px', transform: 'translateZ(15px)'}">تعداد {{ label }} هایی که تا کنون حذف کرده اید</p>
+                </card>
+              </div>
             </div>
           </div>
         </slot>
       </transition>
 
-      <div class="row mt-3">
+      <div class="row table">
         <div class="col-12">
           <div class="text-right pull-right">
             <h1 class="animated bounceInRight delay-secound">
@@ -183,17 +192,17 @@
                 name="flip-list"
                 v-show="data().length !== 0"
                 @enter="enter"
+                @leave="leave"
                 @after-enter="afterEnter"
-                @before-leave="beforeLeave"
-                enter-active-class="animated zoomIn"
-                leave-active-class="animated zoomOut" 
                 tag="ul"
               >
+                <!-- enter-active-class="animated zoomIn"
+                leave-active-class="animated zoomOut"  -->
                 <li
                   v-for="(item, index) in $store.state[group][type]"
                   :key="item.id"
                   class="data-table-row"
-                  :style="{animationDelay: is_finished ? '0ms' : `${1000 + index * 50}ms`}"
+                  :style="{ transform: 'scale(0)', animationDelay: is_finished ? '0ms' : `${1000 + index * 50}ms`}"
                 >
                   <ul class="p-2 d-flex justify-content-center">
                     <li class="data-table-cell p-2 d-flex align-items-center justify-content-center" :style="{width: '40px'}">
@@ -224,26 +233,20 @@
                     </li>
                     <li class="data-table-cell operation-cell p-2 d-flex align-items-center justify-content-center">
                       <el-tooltip :content="'ویرایش ' + label">
-                        <base-button v-if="canEdit" @click="methods.edit(index, item)" simple class="hvr-icon-spin ml-2" :disabled="can(`update-${type}`)" :type="can(`create-${type}`) ? 'default' : 'success'" size="sm" icon>
-                          <i class="tim-icons icon-pencil hvr-icon"></i>
+                        <base-button v-if="canEdit" @click="methods.edit(index, item)" link class="hvr-icon-spin ml-2" :disabled="can(`update-${type}`)" :type="can(`create-${type}`) ? 'success' : 'default'" size="sm" icon>
+                          <i class="tim-icons icon-pencil hvr-icon" :style="{ fontSize: '18px !important' }"></i>
                         </base-button>
                       </el-tooltip>
 
                       <el-tooltip :content="'حذف ' + label">
-                        <base-button v-if="canDelete" @click="handleDelete(index, item)" simple class="ml-2" :disabled="can(`delete-${type}`)" :type="can(`create-${type}`) ? 'default' : 'danger'" size="sm" icon>
-                          <i class="tim-icons icon-simple-remove"></i>
+                        <base-button v-if="canDelete" @click="handleDelete(index, item)" link class="ml-2" :disabled="can(`delete-${type}`)" :type="can(`create-${type}`) ? 'danger' : 'default'" size="lg" icon>
+                          <i class="tim-icons icon-trash-simple" :style="{ fontSize: '18px !important' }"></i>
                         </base-button>
                       </el-tooltip>
-
-                      <slot name="custom-operations" :row="item" :index="index"></slot>
-
-                      <base-button @click="moreInfo" simple v-if="item.description != null" type="default" size="sm" icon>
-                        !
-                      </base-button>
                     </li>
 
-                    <span class="animation-circle" :class="`type${(index % 3) + 1}`"></span>
-                    <span class="animation-circle small" v-if="index % 3 !== 1" :class="`type${3 - (index % 3)}`"></span>
+                    <!-- <span class="animation-circle" :class="`type${(index % 3) + 1}`"></span>
+                    <span class="animation-circle small" v-if="index % 3 !== 1" :class="`type${3 - (index % 3)}`"></span> -->
                   </ul>
                   <span class="data-table-hidden-cell" @click="lessInfo">
                     {{ item.description }}
@@ -333,13 +336,18 @@
 
             <md-dialog-actions>
               <base-button
+                class="ml-2"
                 type="secondary"
+                simple
+                size="sm"
                 @click="setAttr('is_open', false)">
                 لغو
               </base-button>
               
-              <base-button 
-                :type="attr('is_creating') ? 'primary' : 'danger'"
+              <base-button
+                simple
+                size="sm" 
+                :type="attr('is_creating') ? 'danger' : 'warning'"
                 @click="attr('is_creating') ? methods.store() : methods.update()">
                 {{ attr('is_creating') ? 'ذخیره' : 'بروز رسانی' }} {{ label }}
               </base-button>
@@ -362,6 +370,7 @@
   import {BaseAlert} from '../../src/components'
   import Checkbox from './Checkbox.vue'
   import LineChart from '../components/Charts/LineChart';
+  import { FlipClock } from '@mvpleung/flipclock';
   
   import * as chartConfigs from '../components/Charts/config';
   import config from '../config';
@@ -370,6 +379,7 @@
   import { mapMutations } from 'vuex';
   import 'hover.css'
   import 'animate.css'
+  import anime from 'animejs'
 
   export default {
     props: {
@@ -409,6 +419,7 @@
         type: Boolean,
         default: true
       },
+      getdata: Array
     },
     components: {
       LineChart,
@@ -416,7 +427,8 @@
       Tooltip,
       BaseAlert,
       ICountUp,
-      Checkbox
+      Checkbox,
+      FlipClock
     },
     mixins: [
         deleteMixin,
@@ -429,10 +441,96 @@
         selected_items: this.attr('selected_items'),
         
         entered_count: 0,
-        is_finished: false
+        is_finished: false,
       }
     },
     created() {
+      return;
+
+      setTimeout( () => {
+        const startAt = 140
+        const endAt = 250
+        var setAnims = false
+        var frame, duration;
+
+        setInterval(() => {
+          // document.querySelector('.row.details').classList.toggle('small')          
+        }, 4000);
+
+
+        document.querySelector('.main-panel').addEventListener('scroll', (e) => {
+
+          if ( e.srcElement.scrollTop > startAt )
+          {
+            if ( !setAnims ) {
+              setAnims = true
+
+              animation.reverse();
+              animation.play()
+            }
+
+            const el = document.querySelector('.row.details');
+            const bg = document.querySelector('.content .background')
+            
+            const width = el.clientWidth;
+            const height = el.clientHeight;
+
+            el.style.position = 'fixed'
+            el.style.zIndex = 10
+            el.style.width = `${width}px`
+            el.style.top = `${20}px`
+
+            bg.style.position = 'fixed'
+            bg.style.top = '-190px'
+
+            document.querySelector('.row.table').style.marginTop = `${height}px`
+          } else {
+            if ( setAnims ) {
+              setAnims = false
+
+              animation.reverse();
+              animation.play();
+            }
+
+            const el = document.querySelector('.row.details');
+            const bg = document.querySelector('.content .background')
+
+            el.style.position = 'relative'
+            bg.style.position = 'absolute'
+            bg.style.top = '0px'
+            document.querySelector('.row.table').style.marginTop = '0px'
+          }
+
+          // console.log( e.srcElement.offsetHeight )
+          // console.log( Math.abs( e.srcElement.scrollHeight - e.srcElement.scrollTop ) / e.srcElement.offsetHeight )
+          // console.log( ( e.srcElement.scrollHeight - e.srcElement.offsetHeight ) - e.srcElement.scrollTop )
+        })
+      }, 500)
+
+      window.addEventListener('scroll', function(e){
+        // var scrollPos = window.scrollY
+        // var winHeight = window.innerHeight
+        // var docHeight = document.documentElement.scrollHeight
+        // var perc = 100 * scrollPos / (docHeight - winHeight)
+        // vm.$el.style.width = perc + '%'
+      })
+    
+      setTimeout(() => {
+          // anime({
+          //   targets: '.animation-circle',
+          //   top() {
+          //     return anime.random(0, 50)
+          //   },
+          //   left() {
+          //     return anime.random(0, 50)
+          //   },
+          //   loop: true,
+          //   duration: 5000,
+          //   direction: 'alternate'
+          // })
+      }, 1000);
+
+
       require('owl.carousel/dist/owl.carousel.js')
     
       setTimeout( () => $('.owl-carousel').owlCarousel({
@@ -493,8 +591,16 @@
 
       changeTableData()
       {
-        axios.get(`/api/v1/${this.type}`, {
-          params: this.attr('filters')
+        axios({
+          method: 'GET',
+          headers: {
+            'Accept': 'application/json',
+            'Authorization': `Bearer ${localStorage.getItem('JWT')}`
+          },
+          url: `/api/v1/${this.type}`,
+          data: {
+            params: this.attr('filters')
+          }
         }).then(({data}) => {
           setTimeout( () => {
             this.setData( data.data )
@@ -509,18 +615,51 @@
           this.changeTableData();
       },
 
-      enter(el) {
-        el.style.marginBottom = `-${el.offsetHeight + 15}px`
-        $(el).animate({marginBottom: 15})
+      enter(el, done) {
+        el.style.marginTop = `-${el.offsetHeight + 15}px`
+
+        anime({
+          targets: el,
+          marginTop: {
+            value: 0,
+          },
+          marginBottom: {
+            value: 15,
+          },
+          scale: {
+            value: 1,
+            delay: 150
+          },
+          round: 2,
+          easing: 'easeOutExpo',
+          complete() {
+            done()
+          }
+        })
+      },
+      leave(el, done) {
+        anime({
+          targets: el,
+          marginTop: {
+            value: -(el.offsetHeight + 15),
+            delay: 150
+          },
+          scale: {
+            value: 0
+          },
+          round: 2,
+          duration: 500,
+          easing: 'easeOutCubic',
+          complete() {
+            done()
+          }
+        })
       },
       afterEnter(el) {
         el.style.animationDelay = 'unset'
 
         if ( ++this.entered_count === this.tableData().length )
           this.is_finished = true
-      },
-      beforeLeave(el) {
-        el.style.marginTop = `-${el.offsetHeight + 15}px`
       },
 
       handleSelectAll(event) {
@@ -554,14 +693,13 @@
         }, 800)
       },
       closePanel() {
-        $('#particles-js').removeClass('show')
         $('footer.footer').fadeOut(500)
-        $('#granim-canvas').fadeOut(500)
         $('.navbar-brand').removeClass(['animated', 'fadeIn', 'delay-1s']).addClass(['animated', 'fadeOut'])
         $('.delay-first').removeClass('delay-first').addClass('delay-last-out');
         $('.delay-first').removeClass('delay-secound').addClass('delay-secound-out');
         $('.delay-last').removeClass('delay-last').addClass('delay-first-out');
         $('.bounceInUp').removeClass(['animated', 'bounceInUp']).addClass(['animated', 'bounceOutDown']);
+        $('.bounceInDown').removeClass(['animated', 'bounceInDown']).addClass(['animated', 'bounceOutUp']);
         $('.bounceInLeft').removeClass(['animated', 'bounceInLeft']).addClass(['animated', 'bounceOutLeft']);
         $('.bounceInRight').removeClass(['animated', 'bounceInLeft']).addClass(['animated', 'bounceOutRight']);
       },
@@ -599,6 +737,69 @@
 </script>
 
 <style>
+  .flip-clock-wrapper ul {
+    width: 30px;
+    height: 40px;
+  }
+  .flip-clock-wrapper ul li {
+    line-height: 50px;
+  }
+  .flip-clock-wrapper ul li a div div.inn {
+    background: rgb(32, 32, 32);
+    font-size: 20px;
+  }
+  .flip-clock-divider {
+    height: 55px;
+  }
+  .flip-clock-dot.top {
+    width: 6px;
+    height: 6px;
+    top: 18px;
+    background: #dfdfdf;
+  }
+  .flip-clock-dot.bottom {
+    width: 6px;
+    height: 6px;
+    bottom: 18px;
+    background: #dfdfdf;
+  }
+
+  .row.details.small .chart-card {
+    max-width: 30%;
+  }
+  .row.details.small .card-chart .card-body {
+    height: 70px;
+  }
+  .row.details.small .card-chart #myChart {
+    opacity: 0;
+  }
+  .row.details.small .card-chart #miniChart {
+    opacity: 1;
+  }
+  .row.details.small .card-chart .card-header {
+    margin-top: -45px;
+  }
+  .row.details.small .tilt:last-of-type {
+    top: -92px;
+    right: 65%;
+  }
+  .row.details.small .tilt .card {
+    width: 50%;
+    height: 60px;
+  }
+  .row.details.small .tilt .card .card-category {
+    margin-top: -85%;
+  }
+  .row.details.small .tilt .card .tim-icons {
+    font-size: 60px;
+  }
+  
+
+  .tilt .card {
+    width: 100%;
+    height: 140px;
+  }
+
   .flip-list-move {
     transition: transform 500ms !important;
   }
@@ -686,6 +887,45 @@
     margin-left: 5px;
   }
 
+  .total-card {
+    background: linear-gradient(to bottom right,#FDC830, #F37335) !important;
+    box-shadow: 0px 0px 60px -12px #f5af19 !important;
+  }
+  .card-chart {
+    /* background: transparent !important; */
+    box-shadow: none !important;
+  }
+  .trash-card {
+    background: linear-gradient(to bottom right,#FF416C, #FF4B2B) !important;
+    box-shadow: 0px 0px 60px -12px #f5af19 !important;
+  }
+  .total-card, .trash-card {
+    overflow: hidden;
+  }
+  .total-card *, .trash-card * {
+    color: #fff !important;
+    font-weight: bold !important;
+  }
+  .total-card p, .trash-card p {
+    color: #ffffffb5 !important;
+  }
+  .total-card i, .trash-card i {
+    font-size: 120px;
+    position: absolute;
+    top: -18px;
+    left: -20px;
+    color: #ffffff52 !important;
+  }
+  .trash-card i {
+    transform: rotate(40deg);
+  }
+
+  .badge-default {
+    color: #344675 !important;
+    background: transparent !important;
+    border: 1px solid #344675 !important;
+  }
+
   h1 {
     margin-bottom: 0px !important;
   }
@@ -728,6 +968,10 @@
     .card.responsive {
       margin-bottom: 30px !important;
     }
+  }
+
+  .chart-card .card-body {
+    height: 270px;
   }
 
   .data-grid-item .card-body {
@@ -797,9 +1041,9 @@
     position: relative;
     border-radius: 10px 10px 10px 60px;
     transform: scale(1);
-    transition: transform 200ms, margin-top 500ms, box-shadow 250ms;
+    transition: transform 200ms, box-shadow 250ms;
   }
-  .data-table-row::before {
+  /* .data-table-row::before {
     z-index: -1;
     content: '';
     position: absolute;
@@ -820,7 +1064,7 @@
     height: 400px;
     background: linear-gradient(to left, #f56c6c59, transparent);
     border-radius: 50%;
-  }
+  } */
   .data-table-row ul::before {
     z-index: -1;
     content: '';
@@ -853,86 +1097,8 @@
     box-shadow: 0px 10px 50px -15px rgb(238, 88, 218);
   }
 
-  .data-table-row ul li {
+  .data-table-row ul li:first-of-type {
     text-shadow: 0px 10px 37px #440139;
-  }
-
-  .animation-circle.type1 {
-    animation: moveCircle1 30s infinite;
-  }
-
-  .animation-circle.type2 {
-    animation: moveCircle2 20s infinite;
-  }
-  .animation-circle.type3 {
-    animation: moveCircle3 25s infinite;
-  }
-
-  @keyframes moveCircle1 {
-    0% {
-      top: 0px;
-      left: 50px;
-    }
-    30% {
-      top: 10px;
-      left: 300px;
-    }
-    60% {
-      top: 60px;
-      left: 30px;
-    }
-    80% {
-      top: 40px;
-      left: 200px;
-    }
-    100% {
-      top: 0px;
-      left: 50px;
-    }
-  }
-  @keyframes moveCircle2 {
-    0% {
-      top: 40px;
-      left: 30px;
-    }
-    30% {
-      top: 20px;
-      left: 200px;
-    }
-    60% {
-      top: 50px;
-      left: 100px;
-    }
-    80% {
-      top: 60px;
-      left: 500px;
-    }
-    100% {
-      top: 40px;
-      left: 30px;
-    }
-  }
-  @keyframes moveCircle3 {
-    0% {
-      top: 70px;
-      left: 400px;
-    }
-    30% {
-      top: 20px;
-      left: 200px;
-    }
-    60% {
-      top: 10px;
-      left: 250px;
-    }
-    80% {
-      top: 60px;
-      left: 300px;
-    }
-    100% {
-      top: 70px;
-      left: 400px;
-    }
   }
   
   .data-table-row:hover {
@@ -983,11 +1149,8 @@
     max-height: 90%;
   }
   .md-dialog-content {
-    max-height: 70%;
+    max-height: 78%;
     overflow: auto;
-  }
-  .md-overlay.md-fixed.md-dialog-overlay {
-    background-color: #fdfdfdd9;
   }
 
   .md-dialog.md-dialog-fullscreen {
@@ -1004,8 +1167,8 @@
   }
 
   .md-dialog-title {
-    background: url('/images/modal-header.png') center bottom;
-    height: 130px;
+    /* background: url('/images/modal-header.png') center bottom; */
+    /* height: 130px; */
     background-size: cover;
     display: block !important;
     text-align: center;
@@ -1014,11 +1177,32 @@
   .md-dialog-title::after {
     content: '';
     width: 100%;
-    height: 115%;
+    height: 70px;
     position: absolute;
     top: 0px;
     left: 0px;
-    background: linear-gradient(#fd5d93d4, #650a3900);
+    background: url('/images/modal_footer.svg') no-repeat;
+    background-size: cover;
+    transform: rotate(180deg) scaleY(1.5);
+  }
+  .md-dialog-actions {
+    width: 100%;
+    position: absolute;
+    bottom: 0px;
+    left: 0px;
+  }
+  .md-dialog-actions::after {
+    content: '';
+    position: absolute;
+    background: url('/images/modal_footer.svg') no-repeat;
+    background-size: cover;
+    bottom: 0px;
+    left: 0px;
+    width: 100%;
+    height: 70px;
+    z-index: -1;
+    transform: translateX(40%) scale(0.8, 0.7);
+    transform-origin: 100% 100%;
   }
 
   .md-dialog-title h2 {
@@ -1027,7 +1211,7 @@
     color: #fff !important;
     text-shadow: 0px 0px 10px #000;
     font-size: 35px;
-    margin-top: 10px;
+    margin-top: -5px;
     font-weight: bold;
   }
   .md-dialog-title p {

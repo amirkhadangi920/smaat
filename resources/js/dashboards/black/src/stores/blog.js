@@ -55,6 +55,11 @@ export default {
             comment: 1,
         },
 
+        chart_object: {
+            article: null,
+            comment: null,
+        },
+
         counts: {
             article: {
                 total: 0,

@@ -34,8 +34,8 @@ export default {
             has_error: false,
 
             form: {
-                email: '',
-                password: ''
+                email: 'admin@site.com',
+                password: '123456'
             }
         }
     },

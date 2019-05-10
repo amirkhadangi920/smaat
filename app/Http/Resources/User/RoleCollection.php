@@ -3,6 +3,7 @@
 namespace App\Http\Resources\User;
 
 use Illuminate\Http\Resources\Json\ResourceCollection;
+use App\Role;
 
 class RoleCollection extends ResourceCollection
 {
@@ -14,6 +15,13 @@ class RoleCollection extends ResourceCollection
      */
     public function toArray($request)
     {
-        return parent::toArray($request);
+        return [
+            'data' => $this->collection,
+            'meta' => [
+                'total' => Role::count(),
+                'trash' => Role::onlyTrashed()->count()
+            ],
+            'chart' => Role::create_timeline()
+        ];
     }
 }

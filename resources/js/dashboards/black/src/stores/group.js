@@ -23,6 +23,11 @@ export default {
             subject: false,
         },
 
+        chart_object: {
+            category: null,
+            subject: null,
+        },
+
         counts: {
             category: {
                 total: 0,

@@ -59,6 +59,7 @@ class CreateProductsTables extends Migration
                 'inventory'             => 'nullable|smallInteger|comment:Null = infinite , 0 = unavailble & number = inventory', 
                 'sending_time'          => 'tinyInteger|default:1|commnt:Sending time of this product variation in day, e.g 2days',
                 'status'                => 'boolean|default:1|comment:Enable/Disable showing the variation',
+                'jalali_created_at'     => 'datetime|nullable'
             ], [
                 'tenants',
                 'products',

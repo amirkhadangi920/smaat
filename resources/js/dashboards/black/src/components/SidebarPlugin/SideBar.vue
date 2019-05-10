@@ -1,5 +1,6 @@
 <template>
-  <div class="sidebar"
+  <div class="sidebar animated bounceInRight"
+      :style="{ borderRadius: `${$parent.is_collapsed ? 10 : 90}px 10px 10px 10px`, animationDelay: '3300ms' }"
        :data="backgroundColor">
     <!--
             Tip 1: you can change the color of the sidebar's background using: data-background-color="white | black | darkblue"
@@ -7,10 +8,11 @@
         -->
     <!-- -->
     <div class="sidebar-wrapper" id="style-3">
-      <div class="logo">
-        <a href="http://www.smaat.ir"
-           aria-label="sidebar mini logo"
-           class="simple-text logo-mini">
+      <div class="logo" @click="toggleSidebar">
+        <a
+          :style="{ marginRight: $parent.is_collapsed ? '5px' : '20px' }"
+          aria-label="sidebar mini logo"
+          class="simple-text logo-mini">
           <div class="logo-img"
                :class="{'logo-img-rtl': $rtl.isRTL}">
             <img
@@ -19,7 +21,7 @@
               alt="">
           </div>
         </a>
-        <a href="http://www.creative-tim.com" class="simple-text logo-normal">
+        <a class="simple-text logo-normal">
           {{title}}
         </a>
       </div>
@@ -127,12 +129,19 @@
         if (index > -1) {
           this.links.splice(index, 1);
         }
+      },
+      toggleSidebar() {
+        this.$parent.is_collapsed = !this.$parent.is_collapsed 
       }
     },
     mounted() {
       this.$watch("$route", this.findActiveLink, {
         immediate: true
       });
+
+      setTimeout(() => {
+        $('.sidebar').removeClass(['animated', 'bounceInRight'])
+      }, 4200);
     }
   };
 </script>

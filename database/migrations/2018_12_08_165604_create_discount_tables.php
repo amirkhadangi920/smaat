@@ -30,7 +30,7 @@ class CreateDiscountTables extends Migration
             ], [
                 'tenants',
                 'users',
-            ], 'int', ['start_at', 'expired_at']);
+            ], 'int', ['started_at', 'expired_at']);
         });
 
         $schema->create('category_discount', function (Blueprint $table) {

@@ -17,19 +17,33 @@ class Role extends JsonResource
         // return parent::toArray($request);
 
         return [
-            'link'              => "/api/v1/role_and_permission/{$this->id}",
+            'id'                => $this->id,
+            'link'              => "/api/v1/role/{$this->id}",
             'name'              => $this->display_name,
             'description'       => $this->description,
-            'permissions'       => $this->whenLoaded('permissions', function () {
+            'permissions_count' => $this->permissions_count,
+            'create_time'       => $this->getOriginal('created_at'),
+            'last_update_time'  => $this->getOriginal('updated_at'),
+            'permissions'       => $this->whenLoaded('permissions', function () use($request) {
 
-                return $this->permissions->map( function ( $permission ) {
-
-                    return [
-                        'id'            => $permission->id,
-                        'name'          => $permission->display_name,
-                        'description'   => $permission->description,
-                    ];
-                });
+                if ( $request->route('role') )
+                {
+                    return $this->permissions->map( function ( $permission ) {
+    
+                        return [
+                            'id'            => $permission->id,
+                            'name'          => $permission->display_name,
+                            'description'   => $permission->description,
+                        ];
+                    });
+                }
+                else
+                {
+                    return $this->permissions->map( function ( $permission ) {
+    
+                        return $permission->id;
+                    });
+                }
             })
         ];
     }

@@ -79,84 +79,13 @@ export default {
     setTimeout( () => $('.tilt-fixed').tilt() ,300)
   },
   methods: {
-    closePanel() {
-      this.$refs.datatable.closePanel();
-    },
     create() {
+      this.setAttr('is_creating', true)
       this.$router.push('/panel/product/create')
     },
     edit(index, row) {
-      let data = {};
-    
-      this.fields.forEach(field => {
-        if ( ['logo', 'categories'].includes(field.field) ) return
-
-        data[field.field] = row[field.field]
-      });
-      data.link = row.link
-      data.index = index
-      data.categories = row.categories.map( category => category.id )
-      data.imageFile = null
-      data.imageUrl = row.logo ? row.logo.small : ''
-
-      this.$refs.categories.setCheckedKeys([]);
-
-      this.setAttr('selected', data)
-
-      this.setAttr('is_open', true)
       this.setAttr('is_creating', false)
-    },
-    getData() {
-      let data = new FormData();
-
-      this.fields.forEach(field => {
-        if ( ['logo', 'categories'].includes(field.field) ) return
-
-        let value = selected( field.field )
-
-        data.append(field.field, value ? value : '')
-      });
-
-      this.$refs.categories.getCheckedKeys().forEach(category => {
-        data.append('categories[]', category);
-      });
-
-      if ( selected('imageFile') )
-        data.append('logo', selected('imageFile'))
-
-      return data
-    },
-    
-    changeSelectedCategories() {
-      this.setAttr('selected', {
-        categories: this.$refs.categories.getCheckedKeys(),
-      })
-    },
-    filterLogo(command) {
-      this.setAttr('filters', { hasLogo: command })
-
-      this.changeTableData();
-    },
-    filterCategory(command) {
-      this.setAttr('filters', {
-        hasCategories: command,
-        categories: this.$refs.filter_categories.getCheckedKeys()
-      })
-
-      if ( typeof this.filter('categories') == 'object' && this.filter('categories').length == 0 ) {
-        this.setAttr('filters', {categories: []})
-      }
-
-      this.setAttr('filters', {
-        categories_string: this.$refs.filter_categories.getCheckedNodes()
-          .map( (category => category.title ))
-          .join(' ، ')
-      })
-
-      this.changeTableData();
-    },
-    filterSearch() {
-      this.changeTableData();
+      this.$router.push(`/panel/product/${row.id}/edit`)
     },
   },
   computed: {
@@ -189,13 +118,6 @@ export default {
         }
       ]
     },
-    
-    // hasFilter() {
-    //   return this.filter('query') != null 
-    //       || this.filter('hasLogo') != null
-    //       || this.filter('hasCategories') != null
-    //       || this.filter('categories').length != 0
-    // },
   },
   beforeRouteLeave (to, from, next) {
     this.$refs.datatable.closePanel()

@@ -13,7 +13,9 @@
     "lint-fix": "vue-cli-service lint --fix"
   },
   "dependencies": {
+    "@mvpleung/flipclock": "0.0.6",
     "chart.js": "^2.7.3",
+    "chartjs": "^0.3.24",
     "element-ui": "^2.7.0",
     "element-ui-new": "^1.1.1",
     "element-ui-rtl": "^2.2.2-rc-1",
@@ -21,9 +23,12 @@
     "vue": "^2.6.6",
     "vue-chartjs": "^3.4.0",
     "vue-i18n": "^8.8.1",
+    "vue-nice-scrollbar": "^2.0.1",
+    "vue-persian-datetime-picker": "^2.0.0",
     "vue-router": "^3.0.2",
     "vue-router-prefetch": "^1.4.0",
     "vue2-transitions": "^0.2.3",
+    "vuedraggable": "^2.20.0",
     "vuex": "^3.1.0"
   },
   "devDependencies": {

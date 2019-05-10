@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div :style="{ position: 'relative', zIndex: 1000 }">
     <div v-for="(header, index) of headers" :key="header.id" class="row mb-3">
       <div class="col-12">
         <div class="text-right pull-right">
@@ -12,13 +12,13 @@
 
         <div class="animated bounceInLeft delay-secound operation-cell">
           <el-tooltip content="ویرایش">
-            <base-button @click="edit_header(index, header)" type="success" size="sm" icon>
+            <base-button @click="edit_header(index, header)" type="success" size="sm" simple icon>
               <i class="tim-icons icon-pencil"></i>
             </base-button>
           </el-tooltip>
 
           <el-tooltip content="حذف">
-            <base-button type="danger" size="sm" icon>
+            <base-button type="danger" size="sm" simple icon>
               <i class="tim-icons icon-simple-remove"></i>
             </base-button>
           </el-tooltip>
@@ -42,12 +42,6 @@
               }"
             />
           </transition>
-          </li>
-          <li class="data-table-cell p-2 d-flex align-items-center justify-content-center" :style="{width: '40px'}">
-            <checkbox>
-              <input type="checkbox" />
-              <!-- <input type="checkbox" v-model="all_items_selected" @change="handleSelectAll" /> -->
-            </checkbox>
           </li>
           <li class="data-table-cell p-2 d-flex align-items-center justify-content-center text-muted hvr-icon-up">
             عنوان
@@ -93,18 +87,6 @@
               <li class="data-table-cell p-2 d-flex align-items-center justify-content-center" :style="{width: '40px'}">
                 {{ index + 1 }}
               </li>
-              <li :style="{width: '40px'}" class="data-table-cell d-flex align-items-center justify-content-center">
-                <checkbox>
-                  <input type="checkbox" :value="index" />
-                  <!-- <input type="checkbox" :value="index" v-model="selected_items" @change="handleSelectedChange(index)" /> -->
-                </checkbox>
-              </li>
-              <!-- <li class="data-table-cell p-2 d-flex align-items-center justify-content-center" >
-                {{ row.title }}
-              </li>
-              <li class="data-table-cell p-2 d-flex align-items-center justify-content-center" >
-                {{ row.description }}
-              </li> -->
               <li class="data-table-cell p-2 d-flex align-items-center justify-content-center" >
                 {{ row.title }}
               </li>
@@ -145,138 +127,145 @@
               </li>
               <li class="data-table-cell operation-cell p-2 d-flex align-items-center justify-content-center">
                 <el-tooltip :content="'ویرایش'">
-                  <base-button @click="edit_row(index, row)" type="success" size="sm" icon>
+                  <base-button @click="edit_row(index, row)" type="success" size="sm" simple round icon>
                     <i class="tim-icons icon-pencil"></i>
                   </base-button>
                 </el-tooltip>
 
                 <el-tooltip :content="'حذف'">
-                  <base-button type="danger" size="sm" icon>
+                  <base-button type="danger" size="sm" simple round icon>
                     <i class="tim-icons icon-simple-remove"></i>
                   </base-button>
                 </el-tooltip>
-
-                <base-button v-if="row.description != null" type="default" size="sm" icon>
-                  <i class="tim-icons icon-alert-circle-exc"></i>
-                </base-button>
               </li>
             </ul>
           </li>
         </transition-group>
       </div>
 
-      <modal :show.sync="is_open_header" class="text-right" dir="rtl">
-        <template slot="header">
+      <md-dialog :show.sync="is_open_header" class="text-right" dir="rtl">
+        <md-dialog-title>
           <h2 class="modal-title">
             {{ is_creating_header ? 'ثبت عنوان جدول' : 'ویرایش عنوان جدول' }}
           </h2>
           <p>از طریق فرم زیر میتوانید عنوان جدول {{ is_creating_header ? 'جدید ثبت کنید' : 'مورد نظر خود را ویرایش کنید' }}</p>
-        </template>
-        <div>
-          <form @submit.prevent>
-            <md-field :class="getValidationClass('name')">
-              <label>عنوان</label>
-              <md-input v-model="selected.header.title" :maxlength="$v.title.$params.maxLength.max" />
-              <i class="md-icon tim-icons icon-tag"></i>
-              <span class="md-helper-text">برای مثال : مشخصات پردازنده</span>
-              <span class="md-error" v-show="!$v.title.required">لطفا عنوان را وارد کنید</span>
-            </md-field>
-            <br/>
-            <md-field :class="getValidationClass('description')">
-              <label>توضیحات</label>
-              <md-textarea v-model="selected.header.description" md-autogrow :maxlength="$v.description.$params.maxLength.max"></md-textarea>
-              <i class="md-icon tim-icons icon-paper"></i>
-              <span class="md-helper-text">توضیحی مختصر درباره این عنوان</span>
-            </md-field>
-          </form>
+        </md-dialog-title>
+
+        <div class="md-dialog-content">
+          <div class="p-2">
+            <form @submit.prevent>
+              <md-field :class="getValidationClass('name')">
+                <label>عنوان</label>
+                <md-input v-model="selected.header.title" :maxlength="$v.title.$params.maxLength.max" />
+                <i class="md-icon tim-icons icon-tag"></i>
+                <span class="md-helper-text">برای مثال : مشخصات پردازنده</span>
+                <span class="md-error" v-show="!$v.title.required">لطفا عنوان را وارد کنید</span>
+              </md-field>
+              <br/>
+              <md-field :class="getValidationClass('description')">
+                <label>توضیحات</label>
+                <md-textarea v-model="selected.header.description" md-autogrow :maxlength="$v.description.$params.maxLength.max"></md-textarea>
+                <i class="md-icon tim-icons icon-paper"></i>
+                <span class="md-helper-text">توضیحی مختصر درباره این عنوان</span>
+              </md-field>
+            </form>
+          </div>
         </div>
-        <template slot="footer">
+
+        <md-dialog-actions>
           <base-button
+            simple
             type="secondary"
             @click="is_open_header = false">
             لغو
           </base-button>
           
           <base-button 
+            simple
             :type="is_creating_header ? 'primary' : 'danger'"
-            @click="is_creating_header ? methods.store() : methods.update()">
+            @click="is_creating_header ? edit_header() : edit_header()">
             {{ is_creating_header ? 'ذخیره' : 'بروز رسانی' }} عنوان جدول مشخصات
           </base-button>
-        </template>
-      </modal>
+        </md-dialog-actions>
+      </md-dialog>
 
-      <modal :show.sync="is_open_row" class="text-right" dir="rtl">
-        <template slot="header">
+
+      <md-dialog :show.sync="is_open_row" class="text-right" dir="rtl">
+        <md-dialog-title>
           <h2 class="modal-title">
             {{ is_creating_row ? 'ثبت ردیف جدول' : 'ویرایش ردیف جدول' }}
           </h2>
           <p>از طریق فرم زیر میتوانید ردیف جدول {{ is_creating_row ? 'جدید ثبت کنید' : 'مورد نظر خود را ویرایش کنید' }}</p>
-        </template>
-        <div>
-          <form @submit.prevent>
-            <div class="row">
-              <div class="col-8">
-                <md-field :class="getValidationClass('title')">
-                  <label>عنوان</label>
-                  <md-input v-model="selected.row.title" :maxlength="$v.title.$params.maxLength.max" />
-                  <i class="md-icon tim-icons icon-tag"></i>
-                  <span class="md-helper-text">برای مثال : نوع پردازنده</span>
-                  <span class="md-error" v-show="!$v.title.required">لطفا عنوان ردیف را وارد کنید</span>
-                </md-field>
+        </md-dialog-title>
+
+        <div class="md-dialog-content">
+          <div class="p-2">
+            <form @submit.prevent>
+              <div class="row">
+                <div class="col-8">
+                  <md-field :class="getValidationClass('title')">
+                    <label>عنوان</label>
+                    <md-input v-model="selected.row.title" :maxlength="$v.title.$params.maxLength.max" />
+                    <i class="md-icon tim-icons icon-tag"></i>
+                    <span class="md-helper-text">برای مثال : نوع پردازنده</span>
+                    <span class="md-error" v-show="!$v.title.required">لطفا عنوان ردیف را وارد کنید</span>
+                  </md-field>
+                </div>
+                <div class="col-4">
+                  <md-field :class="getValidationClass('label')">
+                    <label>لیبل</label>
+                    <md-input v-model="selected.row.label" :maxlength="$v.title.$params.maxLength.max" />
+                    <i class="md-icon tim-icons icon-puzzle-10"></i>
+                    <span class="md-helper-text">برای مثال : گیگابایت</span>
+                    <span class="md-error" v-show="!$v.title.required">لیبل مورد نظر در انتهای تمامی مقادیر این سطر قرار خواهد گرفت</span>
+                  </md-field>
+                </div>
               </div>
-              <div class="col-4">
-                <md-field :class="getValidationClass('label')">
-                  <label>لیبل</label>
-                  <md-input v-model="selected.row.label" :maxlength="$v.title.$params.maxLength.max" />
-                  <i class="md-icon tim-icons icon-puzzle-10"></i>
-                  <span class="md-helper-text">برای مثال : گیگابایت</span>
-                  <span class="md-error" v-show="!$v.title.required">لیبل مورد نظر در انتهای تمامی مقادیر این سطر قرار خواهد گرفت</span>
-                </md-field>
+              <br/>
+
+              <md-field :class="getValidationClass('description')">
+                <label>توضیحات</label>
+                <md-textarea v-model="selected.row.description" md-autogrow :maxlength="$v.description.$params.maxLength.max"></md-textarea>
+                <i class="md-icon tim-icons icon-paper"></i>
+                <span class="md-helper-text">توضیحی مختصر درباره این ردیف</span>
+              </md-field>
+              <br/>
+
+              <md-field :class="getValidationClass('description')">
+                <label>راهنما</label>
+                <md-textarea v-model="selected.row.help" md-autogrow :maxlength="$v.description.$params.maxLength.max"></md-textarea>
+                <i class="md-icon tim-icons icon-alert-circle-exc"></i>
+                <span class="md-helper-text">راهنمایی کوتاه جهت نمایش به کاربران درباره این ردیف</span>
+              </md-field>
+              <br/>
+
+              <md-chips v-model="selected.row.values" md-placeholder="افزودن مقدار ...">
+                <label>مقادیر</label>
+                <i class="md-icon tim-icons icon-tag"></i>
+                <span class="md-helper-text"></span>
+              </md-chips>
+              <br/>
+
+              <div class="row" dir="ltr">
+                <el-switch
+                  class="col-6 d-flex justify-content-center"
+                  v-model="selected.row.multiple"
+                  active-text="چند انتخابی"
+                  inactive-text="تک انتخابی">
+                </el-switch>
+                <el-switch
+                  class="col-6 d-flex justify-content-center"
+                  v-model="selected.row.required"
+                  active-text="اجباری"
+                  inactive-text="اختیاری">
+                </el-switch>
               </div>
-            </div>
-            <br/>
-
-            <md-field :class="getValidationClass('description')">
-              <label>توضیحات</label>
-              <md-textarea v-model="selected.row.description" md-autogrow :maxlength="$v.description.$params.maxLength.max"></md-textarea>
-              <i class="md-icon tim-icons icon-paper"></i>
-              <span class="md-helper-text">توضیحی مختصر درباره این ردیف</span>
-            </md-field>
-            <br/>
-
-            <md-field :class="getValidationClass('description')">
-              <label>راهنما</label>
-              <md-textarea v-model="selected.row.help" md-autogrow :maxlength="$v.description.$params.maxLength.max"></md-textarea>
-              <i class="md-icon tim-icons icon-alert-circle-exc"></i>
-              <span class="md-helper-text">راهنمایی کوتاه جهت نمایش به کاربران درباره این ردیف</span>
-            </md-field>
-            <br/>
-
-            <md-chips v-model="selected.row.values" md-placeholder="افزودن مقدار ...">
-              <label>مقادیر</label>
-              <i class="md-icon tim-icons icon-tag"></i>
-              <span class="md-helper-text"></span>
-            </md-chips>
-            <br/>
-
-            <div class="row" dir="ltr">
-              <el-switch
-                class="col-6 d-flex justify-content-center"
-                v-model="selected.row.multiple"
-                active-text="چند انتخابی"
-                inactive-text="تک انتخابی">
-              </el-switch>
-              <el-switch
-                class="col-6 d-flex justify-content-center"
-                v-model="selected.row.required"
-                active-text="اجباری"
-                inactive-text="اختیاری">
-              </el-switch>
-            </div>
-            <br/>
-          </form>
+              <br/>
+            </form>
+          </div>
         </div>
-        <template slot="footer">
+
+        <md-dialog-actions>
           <base-button
             type="secondary"
             @click="is_open_row = false">
@@ -285,11 +274,11 @@
           
           <base-button 
             :type="is_creating_header ? 'primary' : 'danger'"
-            @click="is_creating_header ? methods.store() : methods.update()">
+            @click="is_creating_header ? edit_header() : edit_header()">
             {{ is_creating_header ? 'ذخیره' : 'بروز رسانی' }} عنوان جدول مشخصات
           </base-button>
-        </template>
-      </modal>
+        </md-dialog-actions>
+      </md-dialog>
     </div>
   </div>
 </template>
@@ -297,7 +286,6 @@
 <script>
 import ICountUp from 'vue-countup-v2';
 import Checkbox from '../../components/Checkbox.vue'
-import {Modal} from '../../components'
 
 import { validationMixin } from 'vuelidate'
 import { required, maxLength } from 'vuelidate/lib/validators'
@@ -307,7 +295,6 @@ export default {
   components: {
     ICountUp,
     Checkbox,
-    Modal
   },
   data() {
     return {
@@ -347,6 +334,7 @@ export default {
   },
   methods: {
     edit_header(index, header) {
+      return console.log( 'fuck' );
       this.selected.header.index = index
       this.selected.header.title = header.title
       this.selected.header.description = header.description
@@ -355,13 +343,14 @@ export default {
       this.is_open_header = true;
     },
     edit_row(index, row) {
-      this.selected.row = row
-      this.selected.row.values = row.values ? row.values : []
-      this.selected.row.index = index
-      console.log(row)
+      
+      // this.selected.row = row
+      // this.selected.row.values = row.values ? row.values : []
+      // this.selected.row.index = index
 
-      this.is_creating_row = false;
+      // this.is_creating_row = false;
       this.is_open_row = true;
+      console.log( this.is_open_row )
     },
 
     getValidationClass (fieldName) {

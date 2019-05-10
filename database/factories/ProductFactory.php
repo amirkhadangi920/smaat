@@ -50,20 +50,20 @@ $factory->define(App\Models\Product\Product::class, function () use($faker, $pro
         'description'       => Faker::sentence(),
         'note'              => Faker::sentence(),
         'aparat_video'      => 'SEQ2V',
-        'status'            => rand(0,1),
+        // 'status'            => rand(0,1),
+        'status'            => 1,
         'review'            => Faker::paragraph(),
         'keywords'          => $faker->words( rand(1, 10) ),
         'advantages'        => $faker->sentences( rand(1, 10) ),
         'disadvantages'     => $faker->sentences( rand(1, 10) ),
         'label'             => $faker->numberBetween(0, 4),
         'views_count'       => $faker->numberBetween(0, 10000),
-        // 'photos'            => [ null, function () use ( $faker ) {
-        //     $photos = [];
-        //     for ($i = 0; $i < rand(0, 5); ++$i)
-        //         $photos[] = $faker->imageUrl(480, 320);
-        //     return $photos;
-        // }][ $faker->boolean() ], 
-        'photos'            => nullable( image ( $products[$selected]['logo'] )),
+        'photos'            => [ null, function () use($products, $selected) {
+            $photos = [];
+            for ($i = 0; $i < rand(0, 5); ++$i)
+                $photos[] = image ( $products[$selected]['logo'] );
+            return $photos;
+        }][ $faker->boolean() ],
         'jalali_created_at' => Jalalian::forge("now - {$faker->numberBetween(2, 360)} days")
     ];
 });

@@ -11,6 +11,7 @@ use App\ModelFilters\Financial\DiscountFilter;
 use App\Helpers\HasUser;
 use App\Models\Product\Variation;
 use App\Http\Requests\v1\Order\DiscountItemRequest;
+use App\Http\Resources\Financial\DiscountCollection;
 
 class DiscountController extends MainController
 {
@@ -23,7 +24,7 @@ class DiscountController extends MainController
     {
         $this->middleware('auth:api', [
             'only' => [
-                'store', 'update', 'destroy', 'add', 'remove'
+                'index', 'show', 'store', 'update', 'destroy', 'add', 'remove'
             ]
         ]);
     }
@@ -62,13 +63,13 @@ class DiscountController extends MainController
      * @var array
      */
     protected $relations = [
-        'categories:id,slug,title'
+        'categories:id,title'
     ];
     
     protected $more_relations = [
         'items',
         'items.variation:id,product_id,color_id,size_id,warranty_id,inventory,sending_time',
-        'items.variation.product:id,slug,name,code,note,photos,label',
+        'items.variation.product:id,name,code,note,photos,label',
         'items.variation.color:id,name,code',
         'items.variation.size:id,name',
         'items.variation.warranty:id,title,description,logo,expire',
@@ -80,6 +81,13 @@ class DiscountController extends MainController
      * @var [type]
      */
     protected $resource = DiscountResource::class;
+
+    /**
+     * Resource Collection of this controller respnoses
+     *
+     * @var [type]
+     */
+    protected $collection = DiscountCollection::class;
     
     /**
      * Filter class of this eloquent model
@@ -97,7 +105,7 @@ class DiscountController extends MainController
      */
     public function store(DiscountRequest $request)
     {
-        return $this->storeWithRequest($request);
+        return $this->storeWithRequest( $this->changeReuqestDatetimes( $request ) );
     }
 
     /**
@@ -109,7 +117,15 @@ class DiscountController extends MainController
      */
     public function update(DiscountRequest $request, Discount $discount)
     {
-        return $this->updateWithRequest($request, $discount);
+        return $this->updateWithRequest( $this->changeReuqestDatetimes( $request ), $discount );
+    }
+
+    public function changeReuqestDatetimes($request)
+    {
+        return $request->merge([
+            'started_at' => (String) \Morilog\Jalali\CalendarUtils::createCarbonFromFormat('Y-m-d H:i:s', $request->started_at ),
+            'expired_at' => (String) \Morilog\Jalali\CalendarUtils::createCarbonFromFormat('Y-m-d H:i:s', $request->expired_at )
+        ]);
     }
 
     /**
@@ -135,6 +151,37 @@ class DiscountController extends MainController
     {
         $discount->categories()->sync( $request->categories );
     }
+    
+    /**
+     * Get all data of the model,
+     * used by index method controller
+     *
+     * @return Collection
+     */
+    public function getAllData()
+    {
+        $this->checkPermission('read-discount');
+
+        return $this->model::filter( request()->all(), $this->filter )
+            ->with( $this->relations )
+            ->paginate( $this->getPerPage() );
+    }
+
+    /**
+     * Find an get a data from Database,
+     * or abort 404 not found exception if can't find
+     *
+     * @param ID $feature
+     * @return Model
+     */
+    public function getSingleData($data)
+    {
+        $this->checkPermission('read-discount');
+
+        $this->relations = array_merge( $this->relations, $this->more_relations );
+
+        return $this->model::with( $this->relations )->findOrFail($data);
+    }
 
     /**
      * Add a variation to discount
@@ -146,7 +193,7 @@ class DiscountController extends MainController
      */
     public function add(DiscountItemRequest $request, Discount $discount, Variation $variation)
     {
-        // $this->checkPermission("manage-discount-item");
+        $this->checkPermission("add-item-discount");
         
         $discount->items()->updateOrCreate([
             'variation_id' => $variation->id,
@@ -172,7 +219,7 @@ class DiscountController extends MainController
      */
     public function remove(Discount $discount, Variation $variation)
     {
-        // $this->checkPermission("manage-discount-item");
+        $this->checkPermission("remove-item-discount");
 
         if ( $variation->discount_item()->where('discount_id', $discount->id)->delete() )
         {

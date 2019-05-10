@@ -16,11 +16,12 @@ class Permission extends JsonResource
     {
         // return parent::toArray($request);
 
-        return $this->name;
+        // return $this->name;
 
         return [
             'id'            => $this->id,
             'name'          => $this->name,
+            'display_name'  => $this->display_name,
             'description'   => $this->description,
         ];
     }

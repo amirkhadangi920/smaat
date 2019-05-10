@@ -14,8 +14,6 @@ class Product extends JsonResource
      */
     public function toArray($request)
     {
-        // return parent::toArray($request);
-
         return [
             'id'                => $this->id,
             'link'              => "/api/v1/product/{$this->slug}",
@@ -40,7 +38,7 @@ class Product extends JsonResource
             ]),
             'label'             => $this->label,
             'views_count'       => $this->views_count,
-            'tags'          => $this->whenLoaded('tags', function () {
+            'tags'              => $this->whenLoaded('tags', function () {
                 return $this->tags->map( function ($tag) {
                     return [
                         'link' => "/api/v1/tag/{$tag->slug}",

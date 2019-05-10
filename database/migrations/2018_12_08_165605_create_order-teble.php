@@ -24,7 +24,7 @@ class CreateOrderTeble extends Migration
                 'info',
                 'color' => 'nullable|max:12',
                 'jalali_created_at' => 'datetime|nullable'
-            ]);
+            ], ['tenants']);
         });
 
         $schema->create('orders', function (Blueprint $table) {

@@ -137,6 +137,9 @@
     "question_and_answer": "پرسش و پاسخ",
     "shipping_method": "روش ارسال",
     "order_status": "وضعیت سفارش",
-    "order": "سفارش"
+    "order": "سفارش",
+    "discount": "تخفیف",
+    "user": "کاربر",
+    "role": "نقش"
   }
 }

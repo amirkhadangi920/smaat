@@ -6,6 +6,7 @@ import group from './group'
 import blog from './blog'
 import product from './product'
 import shop from './shop'
+import user from './user'
 
 Vue.use(Vuex)
 
@@ -15,10 +16,12 @@ export default new Vuex.Store({
         group,
         blog,
         product,
-        shop
+        shop,
+        user
     },
     state: {
-        permissions: []
+        permissions: [],
+        permissions_list: [],
     },
     mutations: {
         setData(state, data)
@@ -31,7 +34,11 @@ export default new Vuex.Store({
         },
         setPermissions(state, permissions)
         {
-            return state.permissions = permissions
+            return state.permissions = permissions.map(value => value.name)
+        },
+        setPermissionsList(state, permissions)
+        {
+            return state.permissions_list = permissions
         }
     },
     actions: {
@@ -40,7 +47,13 @@ export default new Vuex.Store({
             if( state[inputs.group][inputs.type].length > 0 )
                 return state[inputs.group][inputs.type]
 
-            axios.get(`/api/v1/${inputs.type}`).then(({data}) => {
+            axios({
+                method: 'get',
+                headers: {
+                    'Authorization': `Bearer ${localStorage.getItem('JWT')}`
+                },
+                url: `/api/v1/${inputs.type}`
+            }).then(({data}) => {
                 commit('setData', {
                     group: inputs.group,
                     type: inputs.type,
@@ -61,6 +74,7 @@ export default new Vuex.Store({
                 url: '/api/v1/user/permissions'
             }).then(({data}) => {
                 commit('setPermissions', data.data)
+                commit('setPermissionsList', data.data)
             }).catch(error => {
                 localStorage.removeItem('JWT')
                 window.location = "/login"

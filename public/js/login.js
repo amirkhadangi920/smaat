@@ -1797,8 +1797,8 @@ __webpack_require__.r(__webpack_exports__);
     return {
       has_error: false,
       form: {
-        email: '',
-        password: ''
+        email: 'admin@site.com',
+        password: '123456'
       }
     };
   },

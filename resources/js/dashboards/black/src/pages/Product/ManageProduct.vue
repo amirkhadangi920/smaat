@@ -387,6 +387,15 @@ export default {
       return !this.form.variations[ this.form.variations.length - 1 ].price
     }
   },
+  mounted() {
+    if ( !this.attr('is_creating') )
+    {
+      axios(`/api/v1/product/${this.$route.params.id}`).then(({data}) => {
+        console.log( data )
+        this.form = data.data;
+      }).catch( error => console.log(error.response) )
+    }
+  },
   methods: {
     handleRemove(file, fileList) {
       console.log(file, fileList);

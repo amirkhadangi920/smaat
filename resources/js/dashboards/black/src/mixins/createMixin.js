@@ -36,7 +36,6 @@ export default {
           this.setAttr('is_creating', false)
         }
       })
-  
     },
     update() {
       this.storeInServer({

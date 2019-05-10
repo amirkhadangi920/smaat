@@ -89,140 +89,32 @@
         </el-menu>
       </template>
     </side-bar>
-    <div class="main-panel">
-      <vue-particles color="#f1f1f1" :moveSpeed="1" shapeType="triangle" :particlesNumber="120"></vue-particles>
-      <top-navbar></top-navbar>
-      <dashboard-content @click.native="toggleSidebar">
+    
+    <vue-nice-scrollbar class="my-scrollbar" :speed="100" theme="light">
+      <div class="main-panel">
+        <div class="test"></div>
+        
 
-      </dashboard-content>
+        <!-- <vue-particles color="#f1f1f1" :moveSpeed="1" shapeType="triangle" :particlesNumber="120"></vue-particles>
+        <top-navbar></top-navbar>
+        <dashboard-content @click.native="toggleSidebar">
 
-      <content-footer></content-footer>
-    </div>
+        </dashboard-content>
+
+        <content-footer></content-footer> -->
+
+      </div>
+    </vue-nice-scrollbar>
   </div>
 </template>
 
-<style>
-
-#particles-js {
-  position: fixed;
-  width: 100%;
-  height: 100%;
-  opacity: 0;
-  transition: opacity 400ms;
-}
-
-.show {
-  opacity: 1 !important;
-}
-
-.el-menu {
-  background: transparent !important;
-  padding: 0px !important;
-  text-align: right;
-}
-.el-menu-item {
-  padding-right: 0px !important;
-}
-.el-submenu__icon-arrow {
-  float: left !important;
-  margin-top: -15px !important;
-}
-
-.el-submenu__title i {
-  margin: 0px;
-  margin-top: 10px;
-}
-
-.el-submenu__title:hover, .el-menu-item:focus, .el-menu-item:hover {
-  background: transparent;
-}
-.el-menu-item, .el-submenu__title {
-  color: #fff !important;
-}
-
-#granim-canvas {
-  position: absolute;
-  top: 0px;
-  left: 0px;
-  height: 100%;
-  width: 100%;
-  border-radius: 4px;
-}
-
-.alert.open.top.left {
-  text-align: right;
-}
-
-*::-webkit-scrollbar-track
-{
-	background-color: transparent;
-	border-radius: 5px;
-}
-
-*::-webkit-scrollbar
-{
-	width: 5px;
-	background-color: transparent;
-}
-
-*::-webkit-scrollbar-thumb
-{
-	border-radius: 3px;
-	background-color: #FFF;
-	background-image: -webkit-gradient(linear,
-									   40% 0%,
-									   75% 84%,
-									   from(#ef5690),
-									   to(#c717a1),
-									   color-stop(.6,#eb4584))
-}
-</style>
-
 <script>
-import TopNavbar from "./TopNavbar.vue";
-import ContentFooter from "./ContentFooter.vue";
-import DashboardContent from "./Content.vue";
-import MobileMenu from "./MobileMenu";
-
-import Granim from 'granim'
 
 export default {
-  components: {
-    TopNavbar,
-    ContentFooter,
-    DashboardContent,
-    MobileMenu
-  },
   data() {
     return {
       opened_index: this.$route.meta.index
     }
-  },
-  mounted() {
-    this.$store.dispatch('getPermissions')
-  },
-  created() {    
-    setTimeout( () => {
-      var granimInstance = new Granim({
-        element: '#granim-canvas',
-        name: 'granim',
-        opacity: [1, 1],
-        direction: 'diagonal',
-        stateTransitionSpeed: 20000,
-        states : {
-            "default-state": {
-                gradients: [
-                    ['#8b387d', '#33002a'],
-                    ['#fd5d93', '#910e7d'],
-                    ['#574ee1', '#a804f2'],
-                    ['#68002c', '#310129']
-                ]
-            }
-        }
-      });
-
-      $('#particles-js').addClass('show')
-    }, 100)
   },
   methods: {
     toggleSidebar() {

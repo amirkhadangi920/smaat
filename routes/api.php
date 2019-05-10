@@ -16,6 +16,7 @@ use Illuminate\Http\Request;
 Route::group([
     'namespace' => 'API\v1',
     'prefix' => 'v1',
+    'middleware' => 'CORS'
 ], function () {
     
     $this->post('login', 'UserController@login');

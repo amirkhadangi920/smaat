@@ -70,6 +70,12 @@ export default {
             question_and_answer: 1,
         },
 
+        chart_object: {
+            product: null,
+            review: null,
+            question_and_answer: null,
+        },
+
         counts: {
             product: {
                 total: 0,

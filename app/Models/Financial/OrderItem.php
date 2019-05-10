@@ -13,7 +13,7 @@ use App\Helpers\JalaliCreatedAt;
 
 class OrderItem extends Model implements AuditableContract
 {
-    use SoftDeletes, Auditable, GenerateRandomID, JalaliCreatedAt;
+    use SoftDeletes, Auditable, GenerateRandomID;
 
     /****************************************
      **             Attributes
