@@ -406,30 +406,25 @@ export default {
     
     accept(index, status, parent = false) {
       var id = parent ? this.data()[ this.showing_info.index ].answers[index].id : this.data()[index].id;
-      axios({
-        method: 'PUT',
-        headers: {
-          'Authorization': `Bearer ${localStorage.getItem('JWT')}`
-        },
-        url: `/api/v1/${this.type}/accept/${id}`,
-        data: { accept: status }
-      }).then(({data}) => {
-        if ( parent ) {
-          this.data()[index].answers[index].is_accept = status
-        } else {
-          this.data()[index].is_accept = status
-        }
-        this.setData( this.data() )
-        
-        this.$notify({
-          title: status ? 'تایید شد' : 'رد شد',
-          message: `${this.label} مورد نظر با موفقیت ${ status ? 'تایید شد' : 'رد شد' } :)`,
-          timeout: 1500,
-          type: status ? 'success' : 'danger',
-          verticalAlign: 'top',
-          horizontalAlign: 'left',
-        })
-      }).catch( error => console.log(error) );
+
+      axios.put(`/api/v1/${this.type}/accept/${id}`, { accept: status })
+        .then(({data}) => {
+          if ( parent ) {
+            this.data()[index].answers[index].is_accept = status
+          } else {
+            this.data()[index].is_accept = status
+          }
+          this.setData( this.data() )
+          
+          this.$notify({
+            title: status ? 'تایید شد' : 'رد شد',
+            message: `${this.label} مورد نظر با موفقیت ${ status ? 'تایید شد' : 'رد شد' } :)`,
+            timeout: 1500,
+            type: status ? 'success' : 'danger',
+            verticalAlign: 'top',
+            horizontalAlign: 'left',
+          })
+        }).catch( error => console.log(error) );
     },
     deleteAnswer(index, row) {
       this.$swal.fire({
@@ -446,9 +441,6 @@ export default {
         if (result.value) {
           axios({
             method: 'delete',
-            headers: {
-              'Authorization': `Bearer ${localStorage.getItem('JWT')}`
-            },
             url: row.link
           }).then(response => {
             this.data()[this.showing_info.index].answers.splice(index, 1)
@@ -485,9 +477,6 @@ export default {
 
           axios({
             method: 'put',
-            headers: {
-              'Authorization': `Bearer ${localStorage.getItem('JWT')}`
-            },
             url: `/api/v1/${this.type}/accept/${ids.join(',')}`,
             data: { accept: this.acceptType }
           }).then(response => {

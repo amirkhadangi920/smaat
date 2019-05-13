@@ -29,6 +29,8 @@ import './registerServiceWorker'
 
 import axios from 'axios'
 import VueAxios from 'vue-axios'
+axios.defaults.headers.common['Accept'] = 'application/json';
+axios.defaults.headers.common['Authorization'] = `Bearer ${localStorage.getItem('JWT')}`;
 window.axios = axios;
 
 import jQuery from 'jquery'

@@ -265,10 +265,6 @@ export default {
 
       axios({
         method: 'GET',
-        headers: {
-          'Accept': 'application/json',
-          'Authorization': `Bearer ${localStorage.getItem('JWT')}`
-        },
         url: row.link
       }).then(({data}) => {
         this.setAttr('selected', {

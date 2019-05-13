@@ -159,7 +159,8 @@ export default {
                 expired_at: '',
                 categories: [],
                 logoFile: null,
-                imageUrl: ''
+                imageUrl: '',
+                items: [],
             },
         },
     },

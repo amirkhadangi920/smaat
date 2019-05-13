@@ -11,20 +11,24 @@
     },
   ]">
 
-    <md-field :class="getValidationClass('name')">
-      <label>نام برند</label>
-      <md-input v-model="name" :maxlength="$v.name.$params.maxLength.max" />
-      <i class="md-icon tim-icons icon-tag"></i>
-      <span class="md-helper-text">برای مثال : سامسونگ</span>
-      <span class="md-error" v-show="!$v.name.required">لطفا نام برند را وارد کنید</span>
-    </md-field>
-    <br/>
-    <md-field :class="getValidationClass('description')">
-      <label>توضیحات برند</label>
-      <md-textarea v-model="description" md-autogrow :maxlength="$v.description.$params.maxLength.max"></md-textarea>
-      <i class="md-icon tim-icons icon-paper"></i>
-      <span class="md-helper-text">توضیحی مختصر درباره برند</span>
-    </md-field>
+    <base-form :validation="$v">
+      <smart-input
+        v-model="name"
+        label="نام برند"
+        icon="icon-tag"
+        description="برای مثال : سامسونگ"
+        :validation="$v.name"
+      />
+
+      <smart-input
+        v-model="description"
+        type="textarea"
+        label="توضیحات برند"
+        icon="icon-paper"
+        description="توضیحی مختصر درباره برند"
+        :validation="$v.description"
+      />
+    </base-form>
 
   </base-feature>
 </template>
@@ -32,21 +36,25 @@
 <script>
 import BaseFeature from './Base.vue'
 import Binding, { bind } from '../../mixins/binding'
-
 import { validationMixin } from 'vuelidate'
 import { required, maxLength } from 'vuelidate/lib/validators'
+import SmartInput from '../../components/BaseInput'
+import BaseForm from '../../components/BaseForm'
 
 export default {
   mixins: [validationMixin, Binding],
   components: {
-    BaseFeature
+    SmartInput,
+    BaseFeature,
+    BaseForm
   },
   data() {
     return {
       group: 'feature',
-      type: 'brand',
+      type: 'brand'
     }
   },
+
   validations: {
     name: {
       required,
@@ -56,16 +64,8 @@ export default {
       maxLength: maxLength(255)
     },
   },
-  methods: {
-    getValidationClass (fieldName) {
-      const field = this.$v[fieldName]
 
-      if (field) {
-        return {
-          'md-invalid': field.$invalid && field.$dirty
-        }
-      }
-    },
+  methods: {
     validate() {
       this.$v.$touch()
 

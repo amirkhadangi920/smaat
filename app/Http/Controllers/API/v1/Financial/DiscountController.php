@@ -69,7 +69,8 @@ class DiscountController extends MainController
     protected $more_relations = [
         'items',
         'items.variation:id,product_id,color_id,size_id,warranty_id,inventory,sending_time',
-        'items.variation.product:id,name,code,note,photos,label',
+        'items.variation.product:id,unit_id,name,code,note,photos,label',
+        'items.variation.product.unit:id,title',
         'items.variation.color:id,name,code',
         'items.variation.size:id,name',
         'items.variation.warranty:id,title,description,logo,expire',

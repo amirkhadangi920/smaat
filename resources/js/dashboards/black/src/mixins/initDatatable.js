@@ -3,20 +3,11 @@ import anime from 'animejs'
 import Chart from 'chart.js'
 
 export default {
-  mounted() {
+  mounted() {    
     if (this.data().length === 0) {
-      axios({
-        method: 'GET',
-        headers: {
-          'Accept': 'application/json',
-          'Authorization': `Bearer ${localStorage.getItem('JWT')}`
-        },
-        url: `/api/v1/${this.type}`,
-        data: {
-          params: this.filters
-        }
+      axios.get(`/api/v1/${this.type}`, {
+        params: this.filters
       }).then(({data}) => {
-        console.log( data.data )
         this.setData(data.data)
 
         this.setAttr('counts', {
@@ -35,9 +26,8 @@ export default {
         setTimeout(() => {
           this.load(true)
 
-          $('.tilt').tilt({
-            scale: 1.1
-          })
+          $('.tilt').tilt({ scale: 1.1 })
+
           anime({
             targets: '.card i',
             rotate: '1turn',
@@ -52,7 +42,20 @@ export default {
         }, 500)
       }).catch(error => console.log(error))
     } else {
-      setTimeout(() => this.load(true), 500)
+      let data = this.data()
+      this.setData([])
+      this.load(false)
+
+      setTimeout(() => {
+
+        this.setData(data)
+        this.load(true)
+        
+        setTimeout(() => {
+          this.createChart()
+        }, 200);
+        
+      }, 300)
     }
   },
   methods: {

@@ -38,6 +38,8 @@ export default {
       })
     },
     update() {
+      if( !this.validate() ) return;
+      
       this.storeInServer({
         data: this.getData(),
         type: this.type,
@@ -67,56 +69,48 @@ export default {
       if( !groupData.is_creating[this.type] )
         options.data.append('_method', 'PUT');
 
-      axios({
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/x-www-form-urlencoded',
-          'Accept': 'application/json',
-          'Authorization': `Bearer ${localStorage.getItem('JWT')}`
-        },
-        url: options.url !== undefined ? options.url : `/api/v1/${options.type}`,
-        data: options.data
-      }).then(response => {
-        var msg = groupData.is_creating[this.type] ? 'ثبت شد' : 'بروزرسانی شد'
-        
-        if ( groupData.is_creating[this.type] ) {
-          this.setAttr('counts', {
-            total: this.attr('counts').total + 1,
+      axios.post(options.url !== undefined ? options.url : `/api/v1/${options.type}`, options.data)
+        .then(response => {
+          var msg = groupData.is_creating[this.type] ? 'ثبت شد' : 'بروزرسانی شد'
+          
+          if ( groupData.is_creating[this.type] ) {
+            this.setAttr('counts', {
+              total: this.attr('counts').total + 1,
+            })
+          }
+
+          this.$swal.fire({
+            title: msg,
+            text: `${options.label} با موفقیت ${msg}:)`,
+            type: 'success',
+            showConfirmButton: false,
+            timer: 1000,
           })
-        }
 
-        this.$swal.fire({
-          title: msg,
-          text: `${options.label} با موفقیت ${msg}:)`,
-          type: 'success',
-          showConfirmButton: false,
-          timer: 1000,
-        })
+          options.callback(response.data.data)
+        }).catch(error => {
+          if (error.response) {
+            console.log( error.response )
 
-        options.callback(response.data.data)
-      }).catch(error => {
-        if (error.response) {
-          console.log( error.response )
+            if (error.response.status === 422) {
 
-          if (error.response.status === 422) {
+              for (let key in error.response.data.errors) {
+                if (!error.response.data.errors.hasOwnProperty(key)) continue;
 
-            for (let key in error.response.data.errors) {
-              if (!error.response.data.errors.hasOwnProperty(key)) continue;
-
-              error.response.data.errors[key].forEach(error => {
-                this.$notify({
-                  title: 'خطا',
-                  message: error,
-                  timeout: 10000,
-                  type: 'danger',
-                  verticalAlign: 'top',
-                  horizontalAlign: 'left',
-                })
-              });
+                error.response.data.errors[key].forEach(error => {
+                  this.$notify({
+                    title: 'خطا',
+                    message: error,
+                    timeout: 10000,
+                    type: 'danger',
+                    verticalAlign: 'top',
+                    horizontalAlign: 'left',
+                  })
+                });
+              }
             }
           }
-        }
-      });
+        });
     },
   }
 }

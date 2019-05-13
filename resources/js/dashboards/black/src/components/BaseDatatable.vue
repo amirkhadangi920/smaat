@@ -146,215 +146,77 @@
         </transition>
       </div>
 
-      <transition name="fade">
-        <div class="row">
-          <div class="col-12 data-table animated bounceInUp delay-last" dir="rtl" v-show="!attr('is_grid_view')">
-            <ul class="data-table-header p-2 d-flex justify-content-center">
-              <li 
-                class="data-table-cell p-2 d-flex align-items-center justify-content-center text-muted"
-                :style="{width: '40px'}"
-              >
-              <transition name="fade" mode="out-in">
-                <span v-if="attr('selected_items').length === 0">#</span>
-                <ICountUp
-                  v-if="attr('selected_items').length !== 0"
-                  :endVal="attr('selected_items').length"
-                  :options="{
-                    useEasing: true,
-                    useGrouping: true,
-                  }"
-                />
-              </transition>
-              </li>
-              <li class="data-table-cell p-2 d-flex align-items-center justify-content-center" :style="{width: '40px'}">
-                <checkbox>
-                  <input type="checkbox" v-model="all_items_selected" @change="handleSelectAll" />
-                </checkbox>
-              </li>
-              <li v-for="(field, index) in fields" :key="index" class="data-table-cell p-2 d-flex align-items-center justify-content-center text-muted hvr-icon-up">
-                <slot :name="field.field + '-header'">
-                  <i v-if="field.icon !== undefined" :class="['tim-icons', field.icon,  'hvr-icon']"></i>
-                  {{ field.label }}
-                </slot>
-              </li>
-              <li class="data-table-cell p-2 d-flex align-items-center justify-content-center text-muted hvr-icon-up">
-                <i class="tim-icons icon-time-alarm hvr-icon"></i>
-                ثبت / ویرایش
-              </li>
-              <li class="data-table-cell p-2 d-flex align-items-center justify-content-center text-muted hvr-icon-spin">
-                <i class="tim-icons icon-settings hvr-icon"></i>
-                عملیات ها
-              </li>
-            </ul>
+      <base-table
+        :tableData="data()"
+        :type="type"
+        :group="group"
+        :label="label"
+        :fields="fields"
+        :methods="methods"
+        :canDelete="canDelete"
+        :canEdit="canEdit"
+        :has_times="true"
+        :has_operation="true"
+      >
 
-            <transition name="fade">
-              <transition-group
-                name="flip-list"
-                v-show="data().length !== 0"
-                @enter="enter"
-                @leave="leave"
-                @after-enter="afterEnter"
-                tag="ul"
-              >
-                <!-- enter-active-class="animated zoomIn"
-                leave-active-class="animated zoomOut"  -->
-                <li
-                  v-for="(item, index) in $store.state[group][type]"
-                  :key="item.id"
-                  class="data-table-row"
-                  :style="{ transform: 'scale(0)', animationDelay: is_finished ? '0ms' : `${1000 + index * 50}ms`}"
-                >
-                  <ul class="p-2 d-flex justify-content-center">
-                    <li class="data-table-cell p-2 d-flex align-items-center justify-content-center" :style="{width: '40px'}">
-                      {{ index + 1 }}
-                    </li>
-                    <li :style="{width: '40px'}" class="data-table-cell d-flex align-items-center justify-content-center">
-                      <checkbox>
-                        <input type="checkbox" :value="index" v-model="selected_items" @change="handleSelectedChange(index)" />
-                      </checkbox>
-                    </li>
-                    <li v-for="(field, childIndex) in fields" :key="childIndex" class="data-table-cell p-2 d-flex align-items-center justify-content-center" >
-                      <slot :name="field.field + '-body'" :row="item" :index="index">
-                        {{ item[ field.field ] }}
-                      </slot>
-                    </li>
-                    <li class="data-table-cell p-2 d-flex align-items-center justify-content-center">
-                      <div :style="{ fontSize: '12px' }">
-                        <el-tooltip :content="item.create_time | created" placement="left">
-                          <p class="text-muted hvr-icon-bob"><i class="tim-icons icon-check-2 text-info hvr-icon"></i> {{ item.create_time | ago }}</p>
-                        </el-tooltip>
+        <template 
+          v-for="(item, index) in fields"
+          :slot="`${item.field}-header`"
+          slot-scope="slotData"
+        >
+          <slot
+            :name="`${item.field}-header`"
+            v-bind="slotData"
+          />
+        </template>
+      
+        <template 
+          v-for="(item, index) in fields"
+          :slot="`${item.field}-body`"
+          slot-scope="slotData"
+        >
+          <slot
+            :name="`${item.field}-body`"
+            v-bind="slotData"
+          />
+        </template>
+      </base-table>
 
-                        <el-tooltip
-                          :content="item.last_update_time | edited" placement="left"
-                          v-if="item.last_update_time !== item.create_time">
-                          <p class="text-muted hvr-icon-hang"><i class="tim-icons icon-pencil text-warning hvr-icon"></i> {{ item.last_update_time | ago }}</p>
-                        </el-tooltip>
-                      </div>
-                    </li>
-                    <li class="data-table-cell operation-cell p-2 d-flex align-items-center justify-content-center">
-                      <el-tooltip :content="'ویرایش ' + label">
-                        <base-button v-if="canEdit" @click="methods.edit(index, item)" link class="hvr-icon-spin ml-2" :disabled="can(`update-${type}`)" :type="can(`create-${type}`) ? 'success' : 'default'" size="sm" icon>
-                          <i class="tim-icons icon-pencil hvr-icon" :style="{ fontSize: '18px !important' }"></i>
-                        </base-button>
-                      </el-tooltip>
+      <md-dialog :md-active.sync="$store.state[group].is_open[type]" class="text-right" dir="rtl">
+        <md-dialog-title>
+          <h2 class="modal-title">
+            {{ attr('is_creating') ? 'ثبت ' + label : 'ویرایش ' + label }}
+          </h2>
+          <p>از طریق فرم زیر میتوانید {{ label }} {{ attr('is_creating') ? 'جدید ثبت کنید' : 'مورد نظر خود را ویرایش کنید' }}</p>
+        </md-dialog-title>
 
-                      <el-tooltip :content="'حذف ' + label">
-                        <base-button v-if="canDelete" @click="handleDelete(index, item)" link class="ml-2" :disabled="can(`delete-${type}`)" :type="can(`create-${type}`) ? 'danger' : 'default'" size="lg" icon>
-                          <i class="tim-icons icon-trash-simple" :style="{ fontSize: '18px !important' }"></i>
-                        </base-button>
-                      </el-tooltip>
-                    </li>
-
-                    <!-- <span class="animation-circle" :class="`type${(index % 3) + 1}`"></span>
-                    <span class="animation-circle small" v-if="index % 3 !== 1" :class="`type${3 - (index % 3)}`"></span> -->
-                  </ul>
-                  <span class="data-table-hidden-cell" @click="lessInfo">
-                    {{ item.description }}
-                  </span>
-                </li>
-              </transition-group>
-            </transition>
-              
-            <transition name="fade">
-              <md-empty-state
-                v-show="data().length === 0"
-                md-icon="search"
-                md-label="متاسفانه هیچ داده ای یافت نشد :("
-                md-description="اگر در حالت جستجو نیستید و هیچ فیلتری نیز اعمال نکرده اید ، میتوانید با کلیک بر روی دکمه زیر یک داده جدید ثبت کنید">
-                <base-button @click="methods.create" :disabled="can(`create-${type}`)" size="sm" :type="can(`create-${type}`) ? 'default' : 'info'" class="pull-left">
-                  <i class="tim-icons icon-pencil"></i>
-                  افزودن {{ label }} جدید
-                </base-button>
-              </md-empty-state>
-            </transition>
+        <div class="md-dialog-content">
+          <div class="p-2">
+            <form @submit.prevent>
+              <slot name="modal"></slot>
+            </form>
           </div>
-
-          <transition-group 
-            class="col-12 data-grid"
-            tag="div"
-            v-show="attr('is_grid_view')"
-            v-if="false"
-          >
-            <div
-              class="col-md-4 pull-right"
-              v-for="(item, index) in data()"
-              :key="item.id"
-            >
-              <card
-                class="col-md-12 data-grid-item animated bounceInUp"
-                :class="!item.description ? 'card-empty' : ''"
-                :showFooterLine="true"
-                :title="item.name"
-                :subTitle="item.description ? item.description : `متاسفانه توضیحی برای این ${label} ثبت نشده است :(`"
-              >
-                <img  slot="image"
-                      class="card-img-top tilt"
-                      :src="item.logo ? item.logo.tiny : '/images/placeholder.png'"
-                      alt="Card image cap" />
-                
-                <div class="operation-cell">
-                  <slot name="edit-button" :row="item" :index="index"></slot>
-                
-                  <el-tooltip :content="'حذف ' + label">
-                    <base-button v-if="canDelete" @click="handleDelete(index, item)" type="danger" size="sm" icon>
-                      <i class="tim-icons icon-simple-remove"></i>
-                    </base-button>
-                  </el-tooltip>
-                </div>
-
-                <span
-                  v-if="item.categories.length === 0"
-                  class="badge badge-danger hvr-grow-shadow hvr-icon-grow">
-                  <i class="tim-icons icon-bullet-list-67 hvr-icon"></i>
-                  بدون دسته بندی !
-                </span>
-                <slot name="categories-body" :row="item"></slot>
-                
-                <template slot="footer">
-                  <hr/>
-                  <slot name="time-body" :row="item"></slot>
-                </template>
-              </card>
-            </div>
-          </transition-group>
-
-          <md-dialog :md-active.sync="$store.state[group].is_open[type]" class="text-right" dir="rtl">
-            <md-dialog-title>
-              <h2 class="modal-title">
-                {{ attr('is_creating') ? 'ثبت ' + label : 'ویرایش ' + label }}
-              </h2>
-              <p>از طریق فرم زیر میتوانید {{ label }} {{ attr('is_creating') ? 'جدید ثبت کنید' : 'مورد نظر خود را ویرایش کنید' }}</p>
-            </md-dialog-title>
-
-            <div class="md-dialog-content">
-              <div class="p-2">
-                <form @submit.prevent>
-                  <slot name="modal"></slot>
-                </form>
-              </div>
-            </div>
-
-            <md-dialog-actions>
-              <base-button
-                class="ml-2"
-                type="secondary"
-                simple
-                size="sm"
-                @click="setAttr('is_open', false)">
-                لغو
-              </base-button>
-              
-              <base-button
-                simple
-                size="sm" 
-                :type="attr('is_creating') ? 'danger' : 'warning'"
-                @click="attr('is_creating') ? methods.store() : methods.update()">
-                {{ attr('is_creating') ? 'ذخیره' : 'بروز رسانی' }} {{ label }}
-              </base-button>
-            </md-dialog-actions>
-          </md-dialog>
         </div>
-      </transition>
+
+        <md-dialog-actions>
+          <base-button
+            class="ml-2"
+            type="secondary"
+            simple
+            size="sm"
+            @click="setAttr('is_open', false)">
+            لغو
+          </base-button>
+          
+          <base-button
+            simple
+            size="sm" 
+            :type="attr('is_creating') ? 'danger' : 'warning'"
+            @click="attr('is_creating') ? methods.store() : methods.update()">
+            {{ attr('is_creating') ? 'ذخیره' : 'بروز رسانی' }} {{ label }}
+          </base-button>
+        </md-dialog-actions>
+      </md-dialog>
     </div>
   </transition>
 </template>
@@ -363,6 +225,7 @@
   import deleteMixin from '../mixins/deleteMixin'
   import createMixin from '../mixins/createMixin'
   import FiltersHelper from '../mixins/filtersHelper'
+  import BaseTable from './BaseTable.vue'
 
   import {Tooltip} from 'element-ui'
   import {Modal} from '../components'
@@ -422,6 +285,8 @@
       getdata: Array
     },
     components: {
+      BaseTable,
+
       LineChart,
       Modal,
       Tooltip,
@@ -591,16 +456,8 @@
 
       changeTableData()
       {
-        axios({
-          method: 'GET',
-          headers: {
-            'Accept': 'application/json',
-            'Authorization': `Bearer ${localStorage.getItem('JWT')}`
-          },
-          url: `/api/v1/${this.type}`,
-          data: {
-            params: this.attr('filters')
-          }
+        axios.get(`/api/v1/${this.type}`, {
+          params: this.attr('filters')
         }).then(({data}) => {
           setTimeout( () => {
             this.setData( data.data )

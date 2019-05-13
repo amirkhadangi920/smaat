@@ -112,21 +112,247 @@
     </card>
     
 
-    <card class="animated bounceInUp delay-last text-right mt-3" dir="rtl">
-
-      <div class="row">
-        <el-select v-model="value" placeholder="Select">
-          <el-option
-            v-for="item in cities"
-            :key="item.value"
-            :label="item.label"
-            :value="item.value">
-            <span style="float: left">{{ item.label }}</span>
-            <span style="float: right; color: #8492a6; font-size: 13px">{{ item.value }}</span>
-          </el-option>
-        </el-select>
+    <div class="col-12">
+      <div class="text-right pull-right">
+        <h2 class="animated bounceInRight delay-first mb-0">
+          مدیریت محصولات
+          <i class="tim-icons icon-bullet-list-67" :style="{fontSize: '20px'}"></i>
+        </h2>
+        <h6 class="text-muted animated bounceInRight delay-secound">در این قسمت میتوانید محصولاتی که شامل تخفیف میباشند را مشخص کنید</h6>
       </div>
-    </card>
+
+      <div class="animated bounceInLeft delay-secound operation-cell">
+        <el-tooltip content="افزودن تنوع">
+          <base-button @click="is_open = true" type="default" size="sm" simple icon>
+            <i class="tim-icons icon-simple-add"></i>
+          </base-button>
+        </el-tooltip>
+      </div>
+    </div>
+
+    <div class="col-12" dir="rtl">
+      <ul class="data-table-header p-2 d-flex justify-content-center">
+        <li 
+          class="data-table-cell p-2 d-flex align-items-center justify-content-center text-muted"
+          :style="{width: '40px'}"
+        >#</li>
+        <li class="data-table-cell p-2 d-flex align-items-center justify-content-center text-muted hvr-icon-up">
+          محصول
+        </li>
+        <li class="data-table-cell p-2 d-flex align-items-center justify-content-center text-muted hvr-icon-up">
+          ویژگی ها
+        </li>
+        <li class="data-table-cell p-2 d-flex align-items-center justify-content-center text-muted hvr-icon-up">
+          موجودی
+        </li>
+        <li class="data-table-cell p-2 d-flex align-items-center justify-content-center text-muted hvr-icon-up">
+          تخفیف
+        </li>
+        <li class="data-table-cell p-2 d-flex align-items-center justify-content-center text-muted hvr-icon-up">
+          تعداد
+        </li>
+        <li class="data-table-cell p-2 d-flex align-items-center justify-content-center text-muted hvr-icon-spin">
+          <i class="tim-icons icon-settings hvr-icon"></i>
+          عملیات ها
+        </li>
+      </ul>
+      <transition-group
+        enter-active-class="animated zoomIn"
+        leave-active-class="animated zoomOut" 
+        tag="ul"
+      >
+        <li
+          v-for="(row, index) in selected('items')"
+          :key="row.id"
+          class="data-table-row"
+        >
+          <ul class="p-2 d-flex justify-content-center">
+            <li class="data-table-cell p-2 d-flex align-items-center justify-content-center" :style="{width: '40px'}">
+              {{ index + 1 }}
+            </li>
+            <li class="data-table-cell p-2 d-flex align-items-center justify-content-center" >
+              <img class="tilt" :src="row.photos ? row.photos.tiny : '/images/placeholder.png'" />
+              {{ row.name }}
+            </li>
+            <li class="data-table-cell p-2 text-center" >
+              <div>
+                <span class="badge badge-info feature-data" :style="{ background: row.color.code }" v-if="row.color">
+                  <i class="tim-icons icon-bank"></i>
+                  رنگ {{ row.color.name }}
+                </span>
+              </div>
+              <div>
+                <span class="badge badge-info feature-data" v-if="row.size">
+                  <i class="tim-icons icon-bank"></i>
+                  سایز {{ row.size.name }}
+                </span>
+              </div>
+              <div>
+                <span class="badge badge-warning feature-data" v-if="row.warranty">
+                  <i class="tim-icons icon-bank"></i>
+                  گارانتی {{ row.warranty.title }}
+                </span>
+              </div>
+            </li>
+            <li class="data-table-cell p-2 d-flex align-items-center justify-content-center" >
+              <span v-if="row.inventory">
+                {{ row.inventory }} {{ row.unit }}
+              </span>
+            </li>
+            <li class="data-table-cell p-2 d-flex align-items-center justify-content-center" >
+              {{ row.offer }} %
+            </li>
+            <li class="data-table-cell p-2 d-flex align-items-center justify-content-center" >
+              <span v-if="row.quantity">
+                {{ row.quantity }} {{ row.unit }}
+              </span>
+            </li>
+            <li class="data-table-cell operation-cell p-2 d-flex align-items-center justify-content-center">
+              <el-tooltip :content="'ویرایش'">
+                <base-button @click="edit(index, row)" type="success" size="sm" simple round icon>
+                  <i class="tim-icons icon-pencil"></i>
+                </base-button>
+              </el-tooltip>
+
+              <el-tooltip content="حذف">
+                <base-button @click="remove(index, row)" type="danger" size="sm" simple round icon>
+                  <i class="tim-icons icon-simple-remove"></i>
+                </base-button>
+              </el-tooltip>
+            </li>
+          </ul>
+        </li>
+      </transition-group>
+    </div>
+
+    <md-dialog :md-active.sync="is_open" class="text-right" dir="rtl">
+      <md-dialog-title>
+        <h2 class="modal-title">
+          {{ is_creating ? 'افزودن ' : 'ویرایش ' }}
+        </h2>
+        <p>از طریق فرم زیر میتوانید {{ is_creating ? 'جدید ثبت کنید' : 'مورد نظر خود را ویرایش کنید' }}</p>
+      </md-dialog-title>
+
+      <div class="md-dialog-content">
+        <div class="p-2">
+          <form @submit.prevent>
+            <div class="row">
+              <base-input class="col-12" label="محصول" v-if="is_creating">
+                
+                <el-select
+                  class="col-12"
+                  v-model="value"
+                  filterable
+                  remote
+                  reserve-keyword
+                  placeholder="بخشی از نام محصول را وارد کنید ...."
+                  :remote-method="remoteMethod"
+                  :loading="loading"
+                  @change="getProductVariations"
+                >
+                  <el-option
+                    v-for="item in options"
+                    :key="item.id"
+                    :label="item.name"
+                    :value="item.id">
+                    <span class="pull-right d-inline-block" :style="{ width: '40px' }">
+                      <img class="tilt" :src="item.photos ? item.photos[0] ? item.photos[0].tiny : '/images/placeholder.png' : '/images/placeholder.png'" />
+                    </span>
+                    <span class="pull-right">{{ item.name }}</span>
+                  </el-option>
+                </el-select>
+
+                <small slot="helperText" id="emailHelp" class="form-text text-muted">نام محصول خود را در فیلد بالا جستجو کرده و انتخاب کنید</small>
+              </base-input>
+
+              <base-input label="انتخاب تنوع" v-if="is_creating">
+                
+                <div class="row">
+                  <transition-group>
+                    <div class="col-3" v-for="item in variations" :key="item.id" @click="form.variation = item.id">
+                      <div class="text-center" >
+                        <div>
+                          <span class="badge badge-info feature-data" :style="{ background: 'pink' }">
+                            <i class="tim-icons icon-bank"></i>
+                            {{ item.price }} تومان
+                          </span>
+                          <span class="badge badge-info feature-data" :style="{ background: 'pink' }">
+                            <i class="tim-icons icon-bank"></i>
+                            {{ item.inventory }} عدد
+                          </span>
+                        </div>
+
+                        <div>
+                          <span class="badge badge-info feature-data" :style="{ background: item.color.code }" v-if="item.color">
+                            <i class="tim-icons icon-bank"></i>
+                            رنگ {{ item.color.name }}
+                          </span>
+                        </div>
+                        <div>
+                          <span class="badge badge-info feature-data" v-if="item.size">
+                            <i class="tim-icons icon-bank"></i>
+                            سایز {{ item.size.name }}
+                          </span>
+                        </div>
+                        <div>
+                          <span class="badge badge-warning feature-data" v-if="item.warranty">
+                            <i class="tim-icons icon-bank"></i>
+                            گارانتی {{ item.warranty.title }}
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+                  </transition-group>
+                </div>
+
+                <small slot="helperText" id="emailHelp" class="form-text text-muted">تنوع مورد نظر خود جهت اعمال تخفیف را از لیست بالا انتخاب کنید</small>
+              </base-input>
+
+              <div class="row col-12 mb-3">
+                <div class="col-6">
+                  <md-field :class="getValidationClass('offer')">
+                    <label>تخفیف</label>
+                    <md-input v-model="form.offer" />
+                    <i class="md-icon tim-icons icon-watch-time"></i>
+                    <span class="md-helper-text">مبلغ محصول پس از اعمال تخفیف</span>
+                    <span class="md-error" v-show="!$v.offer.required">لطفا میزان تخفیف را وارد کنید</span>
+                  </md-field>
+                </div>
+
+                <div class="col-6">
+                  <md-field :class="getValidationClass('quantity')">
+                    <label>تعداد</label>
+                    <md-input v-model="form.quantity" />
+                    <i class="md-icon tim-icons icon-button-pause"></i>
+                    <span class="md-helper-text">تعداد محصول مورد نظر جهت فروش در تنوع</span>
+                    <span class="md-error" v-show="!$v.quantity.required">لطفا تعداد موجودی را وارد کنید</span>
+                  </md-field>
+                </div>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+
+      <md-dialog-actions>
+        <base-button
+          class="ml-2"
+          type="secondary"
+          simple
+          size="sm"
+          @click="is_open = false">
+          لغو
+        </base-button>
+        
+        <base-button
+          simple
+          size="sm" 
+          :type="is_creating ? 'danger' : 'warning'"
+          @click="add">
+          {{ is_creating ? 'افزودن به تخفیف' : 'بروز رسانی اطلاعات' }}
+        </base-button>
+      </md-dialog-actions>
+    </md-dialog>
   </div>
 </template>
 
@@ -139,7 +365,6 @@ import { required, maxLength } from 'vuelidate/lib/validators'
 import VuePersianDatetimePicker from 'vue-persian-datetime-picker'
 import moment from 'moment-jalaali'
 import createMixin from '../../mixins/createMixin';
-
 
 export default {
   components: {
@@ -156,26 +381,19 @@ export default {
       type: 'discount',
       group: 'shop',
 
-      cities: [{
-        value: 'Beijing',
-        label: 'Beijing'
-      }, {
-        value: 'Shanghai',
-        label: 'Shanghai'
-      }, {
-        value: 'Nanjing',
-        label: 'Nanjing'
-      }, {
-        value: 'Chengdu',
-        label: 'Chengdu'
-      }, {
-        value: 'Shenzhen',
-        label: 'Shenzhen'
-      }, {
-        value: 'Guangzhou',
-        label: 'Guangzhou'
-      }],
+      options: [],
+      variations: [],
       value: '',
+
+      loading: false,
+      is_open: false,
+      is_creating: false,
+
+      form: {
+        variation: null,
+        offer: null,
+        quantity: null,
+      },
       
       defaultProps: {
         children: 'childs',
@@ -196,7 +414,10 @@ export default {
     },
     expired_at: {
       required
-    }
+    },
+    
+    offer: { required },
+    quantity: { required },
   },
   computed: {
     title: bind('title'),
@@ -218,52 +439,88 @@ export default {
     {
       axios({
         method: 'GET',
-        headers: {
-          'Authorization': `Bearer ${localStorage.getItem('JWT')}`
-        },
         url: `/api/v1/discount/${this.$route.params.id}`,
       }).then(({data}) => {
         this.setAttr('is_creating', false)
 
         this.setAttr('selected', {
-          link: `/api/v1/discount/${this.$route.params.id}`, 
+          id: this.$route.params.id,
+          link: `/api/v1/discount/${this.$route.params.id}`,
           title: data.data.title,
           description: data.data.description,
           started_at: moment( data.data.started_at ).format('jYYYY-jMM-jDD HH:mm:ss'),
           expired_at: moment( data.data.expired_at ).format('jYYYY-jMM-jDD HH:mm:ss'),
           categories: data.data.categories.map(c => c.id),
           imageFile: null,
-          imageUrl: data.data.logo ? data.data.logo.small : ''
+          imageUrl: data.data.logo ? data.data.logo.small : '',
+          items: data.data.items
         })
       }).catch( error => console.log(error.response) )
     }
   },
   methods: {
+    remoteMethod(query) {
+
+      if (query !== '' && query.length >= 3) {
+        
+        this.loading = true;
+
+        axios({
+          method: 'GET',
+          url: '/api/v1/product',
+          params: {
+            query: query
+          }
+        }).then(({data}) => {
+          this.loading = false;
+          this.options = data.data
+        })
+      } else {
+        this.options = [];
+      }
+    },
     addImage(file) {
       this.setAttr('selected', {
         imageFile: file.raw,
         imageUrl: URL.createObjectURL(file.raw)
       })
     },
-    store() {
-      //
+    getProductVariations(id) {
+      axios({
+          method: 'GET',
+          url: `/api/v1/product/${id}`,
+        }).then(({data}) => {
+          this.variations = data.data.variations
+        })
     },
-    update() {
-      this.storeInServer({
-        data: this.getData(),
-        type: this.type,
-        label: this.label,
-        url: this.selected('link'), 
-        callback: response => {
-          return console.log( response )
-          let index = this.selected('index');
-          this.data()[index] = response;
-
-          this.setData( this.data() )
-
-          this.setAttr('is_open', false)
+    add() {
+      axios({
+        method: 'POST',
+        url: `/api/v1/discount/${this.selected('id')}/add/${this.form.variation}`,
+        params: {
+          offer: this.form.offer * 1,
+          quantity: this.form.quantity * 1
         }
-      })
+      }).then(({data}) => {
+        this.is_open = false
+
+        this.$swal.fire({
+          title: this.is_creating ? 'اضافه شد' : 'بروزرسانی شد',
+          text: `تنوع با موفقیت به تخفیف ${this.selected('name')} اضافه شد :)`,
+          type: 'success',
+          showConfirmButton: false,
+          timer: 1000,
+        })
+      }).catch(error => console.log(error));
+    },
+    edit(index, row) {
+      console.log( row )
+      this.form.variation = row.id
+      this.form.offer = row.offer
+      this.form.quantity = row.quantity
+
+      this.is_open = true
+      this.is_creating = false
     },
     getData() {
       let data = new FormData();
@@ -286,6 +543,38 @@ export default {
     changeSelectedCategories() {
       this.setAttr('selected', {
         categories: this.$refs.categories.getCheckedKeys(),
+      })
+    },
+    remove(index, row) {
+      this.$swal.fire({
+        title: `برای حذف محصول ${row.name} از تخفیف ${this.selected('title')} مطمئن هستید ؟`,
+        text: "در صورت حذف کردن امکان بازگشت اطلاعات نیست !",
+        type: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: 'linear-gradient(to bottom left, #00f2c3, #0098f0)',
+        confirmButtonColor: '#0098f0',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'بله ، مطمئنم !',
+        cancelButtonText: 'نه ، اشتباه شده'
+      }).then((result) => {
+        if (result.value) {
+
+          axios({
+            method: 'delete',
+            url: row.link
+          }).then(response => {
+            this.selected('items').splice(index, 1)
+            
+            this.$swal.fire({
+              title: 'حذف شد',
+              text: `محصول ${row.name} با موفقیت حذف شد :)`,
+              type: 'success',
+              showConfirmButton: false,
+              timer: 1000,
+            })
+
+          }).catch(error => console.log(error));
+        }
       })
     },
   },

@@ -37,9 +37,10 @@ class Discount extends JsonResource
             'items'             => $this->whenLoaded('items', function () {
                 return $this->items->map( function ( $item ) {
                     return [
-                        'id'            => $item->id,
-                        'link'          => "/api/v1/product/{$item->variation->product->id}",
+                        'id'            => $item->variation->id,
+                        'link'          => "/api/v1/discount/{$this->id}/remove/{$item->variation->id}",
                         'name'          => $item->variation->product->name ?? null,
+                        'unit'          => $item->variation->product->unit->title ?? null,
                         'code'          => $item->variation->product->code ?? null,
                         'photos'        => $item->variation->product->photos ?? null,
                         'label'         => $item->variation->product->label ?? null,

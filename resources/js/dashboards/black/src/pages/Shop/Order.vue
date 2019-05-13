@@ -143,9 +143,6 @@ export default {
 
       axios({
         method: 'PUT',
-        headers: {
-          'Authorization': `Bearer ${localStorage.getItem('JWT')}`
-        },
         url: `/api/v1/order/status/${this.data()[index].id}/${selected_status.id}`,
       }).then(({data}) => {
         this.data()[index].status = selected_status;

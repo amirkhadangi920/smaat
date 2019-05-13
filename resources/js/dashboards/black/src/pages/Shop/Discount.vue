@@ -60,7 +60,6 @@
     <template #custom-operations="slotProps"></template>
 
     <template slot="filter-labels"></template>
-    <template slot="modal"></template>
   </datatable>
 </template>
 

@@ -405,9 +405,6 @@ export default {
     changeStatus(status) {
       axios({
         method: 'PUT',
-        headers: {
-          'Authorization': `Bearer ${localStorage.getItem('JWT')}`
-        },
         url: `/api/v1/order/status/${this.info.id}/${status}`,
       }).then(({data}) => {
         this.info.status = this.getStatus(status)

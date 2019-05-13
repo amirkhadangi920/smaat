@@ -44,30 +44,25 @@ export default {
       }).then((result) => {
         if (result.value) {
 
-          axios({
-            method: 'delete',
-            headers: {
-              'Authorization': `Bearer ${localStorage.getItem('JWT')}`
-            },
-            url: row.link
-          }).then(response => {
-            this.data().splice(index, 1)
-            this.setData( this.data() )
-            
-            this.setAttr('counts', {
-              total: this.attr('counts').total - 1,
-              trash: this.attr('counts').trash + 1,
-            })
+          axios.delete(row.link)
+            .then(response => {
+              this.data().splice(index, 1)
+              this.setData( this.data() )
+              
+              this.setAttr('counts', {
+                total: this.attr('counts').total - 1,
+                trash: this.attr('counts').trash + 1,
+              })
 
-            this.$swal.fire({
-              title: 'حذف شد',
-              text: `برند ${row.name} با موفقیت حذف شد :)`,
-              type: 'success',
-              showConfirmButton: false,
-              timer: 1000,
-            })
+              this.$swal.fire({
+                title: 'حذف شد',
+                text: `برند ${row.name} با موفقیت حذف شد :)`,
+                type: 'success',
+                showConfirmButton: false,
+                timer: 1000,
+              })
 
-          }).catch(error => console.log(error));
+            }).catch(error => console.log(error));
         }
       })
     },
@@ -101,47 +96,42 @@ export default {
             ids = [...ids, this.data()[item].id]
           })
 
-          axios({
-            method: 'delete',
-            headers: {
-              'Authorization': `Bearer ${localStorage.getItem('JWT')}`
-            },
-            url: `/api/v1/${this.type}/${ids.join(',')}`
-          }).then(response => {
-            this.attr('selected_items').forEach(item => {
-              this.$store.state[this.group][this.type].splice(item, 1)
-            });
+          axios.delete(`/api/v1/${this.type}/${ids.join(',')}`)
+            .then(response => {
+              this.attr('selected_items').forEach(item => {
+                this.$store.state[this.group][this.type].splice(item, 1)
+              });
 
-            this.setAttr('counts', {
-              total: this.attr('counts').total - this.attr('selected_items').length,
-              trash: this.attr('counts').trash + this.attr('selected_items').length,
-            })
-
-            this.setAttr('selected_items', [], true)
-            this.selected_items = [];
-
-            this.$swal.fire({
-              title: 'حذف شدند',
-              text: `${this.label} هایی که انتخاب کردید با موفقیت حذف شدند :)`,
-              type: 'success',
-              timer: 1000,
-              showConfirmButton: false,
-            })
-
-          }).catch(error => {
-            if (error.response) {
-              this.$swal.fire({
-                title: 'خطایی رخ داد !',
-                text: error.response.data.message,
-                type: 'error',
-                timer: 5000,
-                confirmButtonText: 'بسیار خب :('
-                // showConfirmButton: false,
+              this.setAttr('counts', {
+                total: this.attr('counts').total - this.attr('selected_items').length,
+                trash: this.attr('counts').trash + this.attr('selected_items').length,
               })
-            } else {
-              console.log(error)
-            }
-          });
+
+              this.setAttr('selected_items', [], true)
+              this.selected_items = [];
+
+              this.$swal.fire({
+                title: 'حذف شدند',
+                text: `${this.label} هایی که انتخاب کردید با موفقیت حذف شدند :)`,
+                type: 'success',
+                timer: 1000,
+                showConfirmButton: false,
+              })
+
+            }).catch(error => {
+              if (error.response) {
+                this.$swal.fire({
+                  title: 'خطایی رخ داد !',
+                  text: error.response.data.message,
+                  type: 'error',
+                  timer: 5000,
+                  confirmButtonText: 'بسیار خب :('
+                  // showConfirmButton: false,
+                })
+              } else {
+                console.log(error)
+              }
+            });
         }
       })
     },
