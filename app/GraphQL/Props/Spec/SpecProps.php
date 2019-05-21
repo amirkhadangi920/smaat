@@ -57,5 +57,5 @@ trait SpecProps
      *
      * @var ModelFilter
      */
-    protected $filter = SpecFilter::class;
+    protected $filter = SpecificationRequest::class;
 }

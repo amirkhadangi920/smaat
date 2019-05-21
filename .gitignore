@@ -6,6 +6,7 @@
 /public/images
 .env
 .phpunit.result.cache
+laravel-echo-server.json
 Homestead.json
 Homestead.yaml
 npm-debug.log

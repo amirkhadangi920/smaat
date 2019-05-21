@@ -44,6 +44,15 @@ class Comment extends Model implements AuditableContract , LikeableContract
     ];
     
     /**
+     * The attributes that should be cast to native types.
+     *
+     * @var array
+     */
+    protected $casts = [
+        'is_active' => 'boolean',
+    ];
+    
+    /**
      * The attributes that should be mutated to dates.
      *
      * @var array
@@ -54,15 +63,7 @@ class Comment extends Model implements AuditableContract , LikeableContract
     /****************************************
      **             Relations
      ***************************************/
-
-     /**
-     * The attributes that should be cast to native types.
-     *
-     * @var array
-     */
-    protected $casts = [
-        'is_accept'      => 'boolean',
-    ];
+    
     /**
      * Get the article that the comment has belongs to that
      */

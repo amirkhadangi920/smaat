@@ -8,7 +8,7 @@ use Rebing\GraphQL\Support\SelectFields;
 trait CreateMutation
 {
     public function type()
-    {   
+    {
         return \GraphQL::type( $this->type );
     }
 
@@ -19,7 +19,7 @@ trait CreateMutation
      */
     public function authorize(array $args)
     {
-        return $this->checkPermission("create-{$this->name}");
+        return $this->checkPermission("create-{$this->type}");
     }
 
     /**

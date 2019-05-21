@@ -25,6 +25,14 @@ class Account extends Model
     public $incrementing = false;
     
     /**
+     * The attributes defines use uuid when creating
+     * or auto increment integer
+     *
+     * @var boolean
+     */
+    protected static $create_uuid = true;
+    
+    /**
      * The attributes that are mass assignable.
      *
      * @var array

@@ -1,0 +1,42 @@
+<?php
+
+namespace App\GraphQL\Mutation\Group\Category;
+
+use GraphQL\Type\Definition\Type;
+use App\GraphQL\Mutation\MainMutation;
+use Rebing\GraphQL\Support\UploadType;
+use App\GraphQL\Props\Group\CategoryProps;
+
+class BaseCategoryMutation extends MainMutation
+{
+    use CategoryProps;
+    
+    protected $attributes = [
+        'name' => 'CategoryMutation',
+        'description' => 'A mutation'
+    ];
+
+    public function getArgs()
+    {
+        return [
+            'parent_id' => [
+                'type' => Type::int()
+            ],
+            'title' => [
+                'type' => Type::string()
+            ],
+            'description' => [
+                'type' => Type::string()
+            ],
+            'logo' => [
+                'type' => UploadType::getInstance()
+            ],
+            // 'scoring_feilds' => [
+            //     'type' => Type::int()
+            // ],
+            'is_active' => [
+                'type' => Type::boolean()
+            ]
+        ];
+    }
+}

@@ -22,13 +22,13 @@ use App\Models\{
     Discount\Discount
 };
 use EloquentFilter\Filterable;
-use App\Helpers\HasTenantWthRandomID;
 use App\Helpers\CreateTimeline;
+use App\Helpers\HasTenant;
 
 class User extends Authenticatable implements AuditableContract
 {
     use LaratrustUserTrait, HasApiTokens, Filterable, CreateTimeline;
-    use Notifiable, SoftDeletes, HasTenantWthRandomID, Auditable;
+    use Notifiable, SoftDeletes, HasTenant, Auditable;
 
     /****************************************
      **             Attributes
@@ -40,6 +40,14 @@ class User extends Authenticatable implements AuditableContract
      * @var boolean
      */
     public $incrementing = false;
+
+    /**
+     * The attributes defines use uuid when creating
+     * or auto increment integer
+     *
+     * @var boolean
+     */
+    protected static $create_uuid = true;
     
     /**
      * The attributes that are mass assignable.
@@ -47,6 +55,25 @@ class User extends Authenticatable implements AuditableContract
      * @var array
      */
     protected $fillable = [
+        'city_id',
+        'first_name',
+        'last_name',
+        'phones',
+        'social_links',
+        'email',
+        'password',
+        'avatar',
+        'address',
+        'postal_code',
+        'national_code',
+    ];
+    
+    /**
+     * Attributes to include in the Audit.
+     *
+     * @var array
+     */
+    protected $auditInclude = [
         'city_id',
         'first_name',
         'last_name',

@@ -66,4 +66,11 @@ trait OrderProps
      * @var ModelFilter
      */
     protected $filter = OrderFilter::class;
+
+    /**
+     * The request class of model for validation and authorization
+     *
+     * @var Request
+     */
+    protected $request = OrderRequest::class;
 }

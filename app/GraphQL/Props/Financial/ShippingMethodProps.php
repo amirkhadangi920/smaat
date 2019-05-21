@@ -44,4 +44,11 @@ trait ShippingMethodProps
      * @var ModelFilter
      */
     protected $filter = ShippingMethodFilter::class;
+    
+    /**
+     * The request class of model for validation and authorization
+     *
+     * @var Request
+     */
+    protected $request = ShippingMethodRequest::class;
 }

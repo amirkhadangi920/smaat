@@ -54,10 +54,10 @@ class Review extends Model implements AuditableContract, LikeableContract
      * @var array
      */
     protected $casts = [
-        'ranks'         => 'array',
-        'advantages'    => 'array',
-        'disadvantages' => 'array',
-        'is_accept'      => 'boolean',
+        'ranks'             => 'array',
+        'advantages'        => 'array',
+        'disadvantages'     => 'array',
+        'is_accept'         => 'boolean',
     ];
 
     /**

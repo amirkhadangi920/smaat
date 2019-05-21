@@ -65,4 +65,11 @@ trait ArticleProps
      * @var string
      */
     protected $image_field = 'image';
+
+    /**
+     * The request class of model for validation and authorization
+     *
+     * @var Request
+     */
+    protected $request = ArticleRequest::class;
 }

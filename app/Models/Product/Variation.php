@@ -16,12 +16,12 @@ use App\Models\Feature\{
 use App\Models\Financial\{ OrderItem, OrderPoint };
 use App\Models\Discount\DiscountItem;
 use App\Models\Promocode\Promocode;
-use App\Helpers\HasTenantWthRandomID;
 use App\Helpers\CreatorRelationship;
+use App\Helpers\HasTenant;
 
 class Variation extends Model implements AuditableContract
 {
-    use SoftDeletes, HasTenantWthRandomID, Auditable, CreatorRelationship;
+    use SoftDeletes, HasTenant, Auditable, CreatorRelationship;
 
     /****************************************
      **             Attributes
@@ -33,6 +33,14 @@ class Variation extends Model implements AuditableContract
      * @var boolean
      */
     public $incrementing = false;
+
+    /**
+     * The attributes defines use uuid when creating
+     * or auto increment integer
+     *
+     * @var boolean
+     */
+    protected static $create_uuid = true;
 
     /**
      * The attributes that are mass assignable.
@@ -74,7 +82,7 @@ class Variation extends Model implements AuditableContract
     protected $casts = [
         'old_purchase_prices'   => 'array',
         'old_sales_prices'      => 'array',
-        'status'                => 'boolean'
+        'is_active'             => 'boolean'
     ];
 
     /**

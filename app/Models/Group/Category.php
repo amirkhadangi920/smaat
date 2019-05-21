@@ -67,7 +67,8 @@ class Category extends Model implements AuditableContract
      */
     protected $casts = [
         'scoring_feilds'    => 'array',
-        'logo'              => 'array'
+        'logo'              => 'array',
+        'is_active'         => 'boolean'
     ];
 
     /**

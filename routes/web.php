@@ -4,6 +4,7 @@ use App\Permission;
 use App\Models\Feature\Brand;
 use App\Models\Product\Product;
 use App\Models\Article;
+use App\Events\Feature\BrandCreated;
 
 /*
 |--------------------------------------------------------------------------
@@ -17,6 +18,9 @@ use App\Models\Article;
 */
 
 Route::get('/test/amir', function() {
+
+    event( new BrandCreated() );
+    return 'Brand was created';
 
     return [
         'ua' => $_SERVER['HTTP_USER_AGENT']

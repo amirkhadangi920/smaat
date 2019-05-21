@@ -63,4 +63,11 @@ trait CommentProps
      * @var ModelFilter
      */
     protected $filter = CommentFilter::class;
+
+    /**
+     * The request class of model for validation and authorization
+     *
+     * @var Request
+     */
+    protected $request = CommentRequest::class;
 }

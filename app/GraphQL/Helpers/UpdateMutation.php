@@ -20,7 +20,7 @@ trait UpdateMutation
      */
     public function authorize(array $args)
     {
-        return $this->checkPermission("update-{$this->name}");
+        return $this->checkPermission("update-{$this->type}");
     }
 
     /**

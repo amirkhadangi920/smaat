@@ -44,4 +44,11 @@ trait UnitProps
      * @var ModelFilter
      */
     protected $filter = UnitFilter::class;
+
+    /**
+     * The request class of model for validation and authorization
+     *
+     * @var Request
+     */
+    protected $request = UnitRequest::class;
 }

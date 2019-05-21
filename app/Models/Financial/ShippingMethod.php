@@ -47,6 +47,7 @@ class ShippingMethod extends Model implements AuditableContract
         'minimum',
         'is_active'
     ];
+    
 
     /**
      * The attributes that should be cast to native types.
@@ -54,8 +55,8 @@ class ShippingMethod extends Model implements AuditableContract
      * @var array
      */
     protected $casts = [
+        'logo'      => 'array',
         'is_active' => 'boolean',
-        'logo'      => 'array'
     ];
 
 

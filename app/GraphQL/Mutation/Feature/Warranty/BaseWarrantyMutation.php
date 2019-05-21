@@ -3,14 +3,14 @@
 namespace App\GraphQL\Mutation\Feature\Warranty;
 
 use GraphQL\Type\Definition\Type;
-use App\GraphQL\Props\Feature\SizeProps;
+use App\GraphQL\Props\Feature\WarrantyProps;
 use Rebing\GraphQL\Support\UploadType;
 use App\GraphQL\Mutation\MainMutation;
 use App\GraphQL\Mutation\Feature\FeaturesCategoriesMutation;
 
 class BaseWarrantyMutation extends MainMutation
 {
-    use SizeProps, FeaturesCategoriesMutation;
+    use WarrantyProps, FeaturesCategoriesMutation;
 
     protected $attributes = [
         'name' => 'WarrantyMutation',
@@ -34,6 +34,9 @@ class BaseWarrantyMutation extends MainMutation
             ],
             'categories' => [
                 'type' => Type::listOf( Type::int() )
+            ],
+            'is_active' => [
+                'type' => Type::boolean()
             ]
         ];
     }

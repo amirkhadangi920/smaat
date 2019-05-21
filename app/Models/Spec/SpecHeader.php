@@ -40,6 +40,15 @@ class SpecHeader extends Model implements AuditableContract
     ];
 
     /**
+     * The attributes that should be cast to native types.
+     *
+     * @var array
+     */
+    protected $casts = [
+        'is_active' => 'boolean',
+    ];
+
+    /**
      * The attributes that should be hidden for arrays.
      *
      * @var array

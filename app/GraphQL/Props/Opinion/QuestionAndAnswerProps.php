@@ -63,4 +63,11 @@ trait QuestionAndAnswerProps
      * @var ModelFilter
      */
     protected $filter = QuestionAndAnswerFilter::class;
+
+    /**
+     * The request class of model for validation and authorization
+     *
+     * @var Request
+     */
+    protected $request = QuestionAndAnswerRequest::class;
 }

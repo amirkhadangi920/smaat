@@ -20,7 +20,7 @@ trait DeleteMutation
      */
     public function authorize(array $args)
     {
-        return $this->checkPermission("delete-{$this->name}");
+        return $this->checkPermission("delete-{$this->type}");
     }
 
     public function args()

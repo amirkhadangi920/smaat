@@ -27,6 +27,9 @@ class BaseColorMutation extends MainMutation
             ],
             'categories' => [
                 'type' => Type::listOf( Type::int() )
+            ],
+            'is_active' => [
+                'type' => Type::boolean()
             ]
         ];
     }

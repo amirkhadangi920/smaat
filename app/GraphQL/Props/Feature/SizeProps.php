@@ -44,4 +44,11 @@ trait SizeProps
      * @var ModelFilter
      */
     protected $filter = SizeFilter::class;
+    
+    /**
+     * The request class of model for validation and authorization
+     *
+     * @var Request
+     */
+    protected $request = SizeRequest::class;
 }

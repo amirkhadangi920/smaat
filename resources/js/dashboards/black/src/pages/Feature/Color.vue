@@ -52,6 +52,17 @@ export default {
       type: 'color'
     }
   },
+  mounted() {
+
+    Echo.private(`brand`).listen('.task-created', (e) => {
+
+      console.log(e);
+    });
+
+    // window.Echo.channel("newTask").listen(".task-created", e => {
+    //   console.log( e );
+    // });
+  },
   validations: {
     name: {
       required,

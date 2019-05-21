@@ -25,6 +25,6 @@ trait FeaturesCategoriesMutation
      */
     public function afterUpdate($request, $feature)
     {
-        $feature->categories()->sync( $request->categories );
+        $feature->categories()->sync( $request->get('categories') );
     }
 }

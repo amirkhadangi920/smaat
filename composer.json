@@ -18,6 +18,8 @@
         "laravel/tinker": "^1.0",
         "morilog/jalali": "3.*",
         "owen-it/laravel-auditing": "^8.0",
+        "predis/predis": "^1.1",
+        "pusher/pusher-php-server": "^3.4",
         "rebing/graphql-laravel": "^1.20",
         "santigarcor/laratrust": "5.2.*",
         "spatie/laravel-medialibrary": "^7.0.0",

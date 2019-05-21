@@ -45,13 +45,13 @@ trait BrandProps
      */
     protected $filter = BrandFilter::class;
 
+    
+    protected $image_field = 'logo';
+
     /**
-     * Request class of this Type of data
+     * The request class of model for validation and authorization
      *
      * @var Request
      */
     protected $request = BrandRequest::class;
-
-    
-    protected $image_field = 'logo';
 }

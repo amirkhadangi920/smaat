@@ -63,4 +63,11 @@ trait ProductProps
      * @var string
      */
     protected $rel_from_user = 'products';
+
+    /**
+     * The request class of model for validation and authorization
+     *
+     * @var Request
+     */
+    protected $request = ProductRequest::class;
 }

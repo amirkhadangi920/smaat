@@ -19,7 +19,7 @@ class BaseSizeMutation extends MainMutation
     public function getArgs()
     {
         return [
-            'title' => [
+            'name' => [
                 'type' => Type::string()
             ],
             'description' => [
@@ -27,6 +27,9 @@ class BaseSizeMutation extends MainMutation
             ],
             'categories' => [
                 'type' => Type::listOf( Type::int() )
+            ],
+            'is_active' => [
+                'type' => Type::boolean()
             ]
         ];
     }

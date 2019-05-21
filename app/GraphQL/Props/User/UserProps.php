@@ -64,4 +64,11 @@ trait UserProps
      * @var string
      */
     protected $image_field = 'avatar';
+    
+    /**
+     * The request class of model for validation and authorization
+     *
+     * @var Request
+     */
+    protected $request = UserRequest::class;
 }

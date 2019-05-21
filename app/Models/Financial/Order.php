@@ -13,11 +13,11 @@ use App\Models\Promocode\Promocode;
 use App\Models\Places\City;
 use EloquentFilter\Filterable;
 use App\Helpers\CreateTimeline;
-use App\Helpers\HasTenantWthRandomID;
+use App\Helpers\HasTenant;
 
 class Order extends Model implements AuditableContract
 {
-    use SoftDeletes, HasTenantWthRandomID, Auditable, Filterable, CreateTimeline;
+    use SoftDeletes, HasTenant, Auditable, Filterable, CreateTimeline;
 
     /****************************************
      **             Attributes
@@ -37,6 +37,14 @@ class Order extends Model implements AuditableContract
      * @var boolean
      */
     public $incrementing = false;
+
+    /**
+     * The attributes defines use uuid when creating
+     * or auto increment integer
+     *
+     * @var boolean
+     */
+    protected static $create_uuid = true;
     
     /**
      * The attributes that are mass assignable.

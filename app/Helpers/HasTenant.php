@@ -31,6 +31,12 @@ trait HasTenant
     
                 $model->tenant_id = $id;
             }
+
+            if ( self::$create_uuid ?? false )
+                $model->id = substr(md5( time() . rand() ), 0, 12);
+
+                
+            $model->user_id = auth()->user()->id ?? null;
             $model->jalali_created_at = jdate();
         });
     }

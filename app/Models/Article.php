@@ -7,20 +7,19 @@ use Cog\Likeable\Traits\Likeable;
 use Illuminate\Database\Eloquent\Model;
 use OwenIt\Auditing\Auditable;
 use OwenIt\Auditing\Contracts\Auditable as AuditableContract;
-use App\Traits\GenerateRandomID;
 use App\Models\Opinion\Comment;
 use Spatie\Tags\HasTags;
 use App\Models\Group\Subject;
 use EloquentFilter\Filterable;
 use App\Helpers\CreateTimeline;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use App\Helpers\HasTenantWthRandomID;
 use App\Helpers\CreatorRelationship;
+use App\Helpers\HasTenant;
 
 class Article extends Model implements AuditableContract , LikeableContract
 {
     use Auditable, SoftDeletes, HasTags, Likeable, Filterable;
-    use CreateTimeline, HasTenantWthRandomID, CreatorRelationship;
+    use CreateTimeline, HasTenant, CreatorRelationship;
 
     /****************************************
      **             Attributes
@@ -32,6 +31,14 @@ class Article extends Model implements AuditableContract , LikeableContract
      * @var boolean
      */
     public $incrementing = false;
+    
+    /**
+     * The attributes defines use uuid when creating
+     * or auto increment integer
+     *
+     * @var boolean
+     */
+    protected static $create_uuid = true;
 
     /**
      * The attributes that are mass assignable.
@@ -68,6 +75,7 @@ class Article extends Model implements AuditableContract , LikeableContract
      */
     protected $casts = [
         'image' => 'array',
+        'is_active' => 'boolean'
     ];
 
     /**

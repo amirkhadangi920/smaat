@@ -44,4 +44,11 @@ trait ColorProps
      * @var ModelFilter
      */
     protected $filter = ColorFilter::class;
+    
+    /**
+     * The request class of model for validation and authorization
+     *
+     * @var Request
+     */
+    protected $request = ColorRequest::class;
 }

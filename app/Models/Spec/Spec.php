@@ -44,6 +44,15 @@ class Spec extends Model implements AuditableContract
         'description',
         'is_active'
     ];
+    
+    /**
+     * The attributes that should be cast to native types.
+     *
+     * @var array
+     */
+    protected $casts = [
+        'is_active' => 'boolean',
+    ];
 
     /**
      * The attributes that should be mutated to dates.

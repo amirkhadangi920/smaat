@@ -15,12 +15,12 @@ use App\Models\Group\Category;
 use App\Models\Feature\{ Brand, Unit };
 use EloquentFilter\Filterable;
 use App\Helpers\CreateTimeline;
-use App\Helpers\HasTenantWthRandomID;
 use App\Helpers\CreatorRelationship;
+use App\Helpers\HasTenant;
 
 class Product extends Model implements AuditableContract, LikeableContract
 {
-    use SoftDeletes, Auditable, HasTenantWthRandomID, HasTags;
+    use SoftDeletes, Auditable, HasTenant, HasTags;
     use Filterable, Likeable, CreateTimeline, CreatorRelationship;
 
     /****************************************
@@ -33,6 +33,14 @@ class Product extends Model implements AuditableContract, LikeableContract
      * @var boolean
      */
     public $incrementing = false;
+
+    /**
+     * The attributes defines use uuid when creating
+     * or auto increment integer
+     *
+     * @var boolean
+     */
+    protected static $create_uuid = true;
 
     /**
      * The attributes that are mass assignable.
@@ -88,11 +96,10 @@ class Product extends Model implements AuditableContract, LikeableContract
      * @var array
      */
     protected $casts = [
-        'status'    => 'boolean',
-        'keywords' => 'array',
         'photos' => 'array',
         'advantages' => 'array',
         'disadvantages' => 'array',
+        'is_active' => 'boolean'
     ];
 
     /**

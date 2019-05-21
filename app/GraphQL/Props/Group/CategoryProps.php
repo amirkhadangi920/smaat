@@ -36,4 +36,11 @@ trait CategoryProps
      * @var [type]
      */
     protected $collection = CategoryCollection::class;
+
+    /**
+     * The request class of model for validation and authorization
+     *
+     * @var Request
+     */
+    protected $request = CategoryRequest::class;
 }

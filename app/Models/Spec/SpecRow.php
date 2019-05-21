@@ -57,7 +57,8 @@ class SpecRow extends Model implements AuditableContract
     protected $casts = [
         'values'    => 'array',
         'multiple'  => 'boolean',
-        'required'  => 'boolean'
+        'required'  => 'boolean',
+        'is_active' => 'boolean',
     ];
 
     /**

@@ -41,13 +41,6 @@ class QuestionAndAnswer extends Model implements AuditableContract
         'message',
         'is_accept'
     ];
-
-    /**
-     * The attributes that should be mutated to dates.
-     *
-     * @var array
-     */
-    protected $dates = [ 'deleted_at' ];
     
     /**
      * The attributes that should be cast to native types.
@@ -57,6 +50,13 @@ class QuestionAndAnswer extends Model implements AuditableContract
     protected $casts = [
         'is_accept'      => 'boolean',
     ];
+
+    /**
+     * The attributes that should be mutated to dates.
+     *
+     * @var array
+     */
+    protected $dates = [ 'deleted_at' ];
 
     /****************************************
      **             Relations

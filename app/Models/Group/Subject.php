@@ -54,7 +54,8 @@ class Subject extends Model implements AuditableContract
      * @var array
      */
     protected $casts = [
-        'logo'              => 'array'
+        'logo'      => 'array',
+        'is_active' => 'boolean'
     ];
 
 
