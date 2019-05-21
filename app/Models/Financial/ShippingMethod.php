@@ -9,10 +9,12 @@ use OwenIt\Auditing\Contracts\Auditable as AuditableContract;
 use EloquentFilter\Filterable;
 use App\Helpers\CreateTimeline;
 use App\Helpers\HasTenant;
+use App\Helpers\CreatorRelationship;
 
 class ShippingMethod extends Model implements AuditableContract
 {
-    use SoftDeletes, Auditable, Filterable, CreateTimeline, HasTenant;
+    use SoftDeletes, Auditable, Filterable;
+    use CreateTimeline, HasTenant, CreatorRelationship;
     
     /****************************************
      **             Attributes
@@ -33,13 +35,27 @@ class ShippingMethod extends Model implements AuditableContract
     ];
 
     /**
+     * Attributes to include in the Audit.
+     *
+     * @var array
+     */
+    protected $auditInclude = [
+        'name',
+        'description',
+        'logo',
+        'cost',
+        'minimum',
+        'is_active'
+    ];
+
+    /**
      * The attributes that should be cast to native types.
      *
      * @var array
      */
     protected $casts = [
         'is_active' => 'boolean',
-        'logo'              => 'array'
+        'logo'      => 'array'
     ];
 
 

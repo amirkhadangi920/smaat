@@ -11,10 +11,12 @@ use App\Models\Product\Variation;
 use EloquentFilter\Filterable;
 use App\Helpers\CreateTimeline;
 use App\Helpers\HasTenant;
+use App\Helpers\CreatorRelationship;
 
 class Color extends Model implements AuditableContract
 {
-    use SoftDeletes, Auditable, Filterable, CreateTimeline, HasTenant;
+    use SoftDeletes, Auditable, Filterable;
+    use CreateTimeline, HasTenant, CreatorRelationship;
 
     /****************************************
      **             Attributes
@@ -27,7 +29,19 @@ class Color extends Model implements AuditableContract
      */
     protected $fillable = [
         'name',
-        'code'
+        'code',
+        'is_active'
+    ];
+
+    /**
+     * Attributes to include in the Audit.
+     *
+     * @var array
+     */
+    protected $auditInclude = [
+        'name',
+        'code',
+        'is_active'
     ];
 
     /**

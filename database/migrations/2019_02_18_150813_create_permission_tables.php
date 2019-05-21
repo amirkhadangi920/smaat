@@ -30,6 +30,7 @@ class CreatePermissionTables extends Migration
             $table->string('name');
             $table->string('guard_name');
             $table->softDeletes();
+            $table->boolean('is_active')->default(true);
             $table->timestamps();
         });
 

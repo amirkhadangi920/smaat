@@ -29,7 +29,18 @@ class Comment extends Model implements AuditableContract , LikeableContract
     protected $fillable = [
         'article_id',
         'parent_id',
-        'message'
+        'message',
+        'is_accept'
+    ];
+
+    /**
+     * Attributes to include in the Audit.
+     *
+     * @var array
+     */
+    protected $auditInclude = [
+        'message',
+        'is_accept'
     ];
     
     /**
@@ -76,5 +87,13 @@ class Comment extends Model implements AuditableContract , LikeableContract
     public function answers() {
   
         return $this->hasMany(self::class, 'parent_id');
+    }
+
+    /**
+     * This function for answer's comments
+     */
+    public function question() {
+  
+        return $this->belongsTo(self::class, 'parent_id');
     }
 }

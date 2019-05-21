@@ -17,10 +17,11 @@ use App\Models\Financial\{ OrderItem, OrderPoint };
 use App\Models\Discount\DiscountItem;
 use App\Models\Promocode\Promocode;
 use App\Helpers\HasTenantWthRandomID;
+use App\Helpers\CreatorRelationship;
 
 class Variation extends Model implements AuditableContract
 {
-    use SoftDeletes, HasTenantWthRandomID, Auditable;
+    use SoftDeletes, HasTenantWthRandomID, Auditable, CreatorRelationship;
 
     /****************************************
      **             Attributes
@@ -44,11 +45,25 @@ class Variation extends Model implements AuditableContract
         'size_id',
         'sales_price',
         'purchase_price',
-        'unit',
         'inventory',
         'sending_time',
-        'status',
-        'old_prices',
+        'is_active'
+    ];
+
+    /**
+     * Attributes to include in the Audit.
+     *
+     * @var array
+     */
+    protected $auditInclude = [
+        'color_id', 
+        'warranty_id',
+        'size_id',
+        'sales_price',
+        'purchase_price',
+        'unit',
+        'sending_time',
+        'is_active'
     ];
     
     /**

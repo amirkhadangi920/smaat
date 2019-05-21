@@ -21,10 +21,12 @@ use App\Models\Financial\OrderPoint;
 use App\Traits\MultiLevel;
 use App\Helpers\CreateTimeline;
 use App\Helpers\HasTenant;
+use App\Helpers\CreatorRelationship;
 
 class Category extends Model implements AuditableContract
 {
-    use SoftDeletes, Auditable, HasTags, MultiLevel, CreateTimeline, HasTenant;
+    use SoftDeletes, Auditable, HasTags, MultiLevel;
+    use CreateTimeline, HasTenant, CreatorRelationship;
 
     /****************************************
      **             Attributes
@@ -40,7 +42,22 @@ class Category extends Model implements AuditableContract
         'title',
         'description',
         'logo',
-        'scoring_feilds'
+        'scoring_feilds',
+        'is_active'
+    ];
+
+    /**
+     * Attributes to include in the Audit.
+     *
+     * @var array
+     */
+    protected $auditInclude = [
+        'parent_id',
+        'title',
+        'description',
+        'logo',
+        'scoring_feilds',
+        'is_active'
     ];
 
     /**
@@ -82,7 +99,7 @@ class Category extends Model implements AuditableContract
     /**
      * Get all the products that owned by the category
      */
-    public function products ()
+    public function products()
     {
         return $this->hasMany(Product::class);
     }
@@ -92,7 +109,7 @@ class Category extends Model implements AuditableContract
      */
     public function colors()
     {
-        return $this->morphedByMany(Color::class, 'featurable');
+        return $this->morphedByMany(Color::class, 'featureable');
     }
 
     /**
@@ -100,7 +117,7 @@ class Category extends Model implements AuditableContract
      */
     public function sizes()
     {
-        return $this->morphedByMany(Size::class, 'featurable');
+        return $this->morphedByMany(Size::class, 'featureable');
     }
 
     /**
@@ -108,7 +125,7 @@ class Category extends Model implements AuditableContract
      */
     public function brands()
     {
-        return $this->morphedByMany(Brand::class, 'featurable');
+        return $this->morphedByMany(Brand::class, 'featureable');
     }
 
     /**
@@ -116,7 +133,7 @@ class Category extends Model implements AuditableContract
      */
     public function units()
     {
-        return $this->morphedByMany(Unit::class, 'featurable');
+        return $this->morphedByMany(Unit::class, 'featureable');
     }
 
     /**
@@ -133,7 +150,7 @@ class Category extends Model implements AuditableContract
      * @return OrderPoint Model
      */
     
-    public function order_points ()
+    public function order_points()
     {
         return $this->morphMany(OrderPoint::class, 'orderable');
     }
@@ -141,7 +158,7 @@ class Category extends Model implements AuditableContract
     /**
      * Get all the specification table that owned by the category
      */
-    public function spec ()
+    public function spec()
     {
         return $this->hasOne(Spec::class);
     }
@@ -149,7 +166,7 @@ class Category extends Model implements AuditableContract
     /**
      * Get all the child categories that owned by the category
      */
-    public function childs ()
+    public function childs()
     {
         return $this->hasMany(Category::class, 'parent_id');
     }
@@ -157,7 +174,7 @@ class Category extends Model implements AuditableContract
     /**
      * return parent category that can have many childs
      */
-    public function parent ()
+    public function parent()
     {
         return $this->belongsTo(self::class, 'parent_id');
     }
@@ -165,7 +182,7 @@ class Category extends Model implements AuditableContract
     /**
      * Get all the promocodes that owned the category & adverb
      */
-    public function promocodes ()
+    public function promocodes()
     {
         return $this->belongsToMany(Promocode::class);
     }
@@ -174,7 +191,7 @@ class Category extends Model implements AuditableContract
     /**
      * Get all the discounts that owned the category & adverb
      */
-    public function discounts ()
+    public function discounts()
     {
         return $this->belongsToMany(Discount::class);
     }

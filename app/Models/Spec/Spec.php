@@ -11,10 +11,11 @@ use App\Models\Product\Product;
 use EloquentFilter\Filterable;
 use App\Helpers\CreateTimeline;
 use App\Helpers\HasTenant;
+use App\Helpers\CreatorRelationship;
 
 class Spec extends Model implements AuditableContract
 {
-    use SoftDeletes, Auditable, Filterable, CreateTimeline, HasTenant;
+    use SoftDeletes, Auditable, Filterable, CreateTimeline, HasTenant, CreatorRelationship;
 
     /****************************************
      **             Attributes
@@ -28,7 +29,20 @@ class Spec extends Model implements AuditableContract
     protected $fillable = [
         'category_id',
         'title',
-        'description'
+        'description',
+        'is_active'
+    ];
+
+    /**
+     * Attributes to include in the Audit.
+     *
+     * @var array
+     */
+    protected $auditInclude = [
+        'category_id',
+        'title',
+        'description',
+        'is_active'
     ];
 
     /**

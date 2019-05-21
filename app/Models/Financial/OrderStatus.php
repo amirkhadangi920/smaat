@@ -9,10 +9,12 @@ use OwenIt\Auditing\Contracts\Auditable as AuditableContract;
 use EloquentFilter\Filterable;
 use App\Helpers\CreateTimeline;
 use App\Helpers\HasTenant;
+use App\Helpers\CreatorRelationship;
 
 class OrderStatus extends Model implements AuditableContract
 {
-    use SoftDeletes, Auditable, Filterable, CreateTimeline, HasTenant;
+    use SoftDeletes, Auditable, Filterable;
+    use CreateTimeline, HasTenant, CreatorRelationship;
 
     /****************************************
      **             Attributes
@@ -26,7 +28,20 @@ class OrderStatus extends Model implements AuditableContract
     protected $fillable = [
         'title',
         'description',
-        'color'
+        'color',
+        'is_active'
+    ];
+
+    /**
+     * Attributes to include in the Audit.
+     *
+     * @var array
+     */
+    protected $auditInclude = [
+        'title',
+        'description',
+        'color',
+        'is_active'
     ];
 
     /**

@@ -11,10 +11,12 @@ use App\Models\Group\Category;
 use EloquentFilter\Filterable;
 use App\Helpers\CreateTimeline;
 use App\Helpers\HasTenant;
+use App\Helpers\CreatorRelationship;
 
 class Warranty extends Model implements AuditableContract
 {
-    use SoftDeletes, Auditable, Filterable, CreateTimeline, HasTenant;
+    use SoftDeletes, Auditable, Filterable;
+    use CreateTimeline, HasTenant, CreatorRelationship;
 
     /****************************************
      **             Attributes
@@ -28,7 +30,22 @@ class Warranty extends Model implements AuditableContract
     protected $fillable = [
         'title',
         'description',
-        'expire'
+        'expire',
+        'logo',
+        'is_active'
+    ];
+
+    /**
+     * Attributes to include in the Audit.
+     *
+     * @var array
+     */
+    protected $auditInclude = [
+        'title',
+        'description',
+        'expire',
+        'logo',
+        'is_active'
     ];
 
     /**

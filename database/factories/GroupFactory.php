@@ -9,6 +9,7 @@ $factory->define(App\Models\Group\Category::class, function () use($faker, $bran
     
     $selected = rand(0, count($brands) - 1);
     return [
+        'user_id'           => App\User::all()->random()->id,
         'title'             => Faker::fullName(),
         'description'       => nullable( Faker::sentence() ),
         'logo'              => nullable( image ( $brands[$selected]['logo'] )),
@@ -18,7 +19,8 @@ $factory->define(App\Models\Group\Category::class, function () use($faker, $bran
                 $feilds[] = Faker::sentence();
             return $feilds;
         }),
-        'jalali_created_at' => Jalalian::forge("now - {$faker->numberBetween(2, 360)} days")
+        'jalali_created_at' => Jalalian::forge("now - {$faker->numberBetween(2, 360)} days"),
+        'is_active'         => $faker->boolean(80)
     ];
 });
 
@@ -26,10 +28,12 @@ $factory->define(App\Models\Group\Subject::class, function () use($faker, $brand
 
     $selected = rand(0, count($brands) - 1);
     return [
+        'user_id'           => App\User::all()->random()->id,
         'title'             => Faker::fullName(),
         'description'       => nullable( Faker::sentence() ),
         'logo'              => nullable( image ( $brands[$selected]['logo'] )),
-        'jalali_created_at' => Jalalian::forge("now - {$faker->numberBetween(2, 360)} days")
+        'jalali_created_at' => Jalalian::forge("now - {$faker->numberBetween(2, 360)} days"),
+        'is_active'         => $faker->boolean(80)
         
     ];
 });

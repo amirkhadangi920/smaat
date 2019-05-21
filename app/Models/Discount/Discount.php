@@ -11,10 +11,13 @@ use EloquentFilter\Filterable;
 use App\Helpers\HasTenant;
 use App\Helpers\CreateTimeline;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use App\Helpers\CreatorRelationship;
 
 class Discount extends Model implements AuditableContract 
 {
-    use Auditable, Filterable, HasTenant, CreateTimeline, SoftDeletes;
+    use Auditable, Filterable, HasTenant;
+    use CreateTimeline, SoftDeletes, CreatorRelationship;
+    
     /****************************************
      **             Attributes
      ***************************************/
@@ -31,7 +34,22 @@ class Discount extends Model implements AuditableContract
         'type',
         'status',
         'started_at',
-        'expired_at'
+        'expired_at',
+        'is_active'
+    ];
+
+    /**
+     * Attributes to include in the Audit.
+     *
+     * @var array
+     */
+    protected $auditInclude = [
+        'title',
+        'description',
+        'logo',
+        'started_at',
+        'expired_at',
+        'is_active'
     ];
 
     /**
@@ -40,7 +58,7 @@ class Discount extends Model implements AuditableContract
      * @var array
      */
     protected $casts = [
-        'logo'              => 'array'
+        'logo' => 'array'
     ];
 
     /**

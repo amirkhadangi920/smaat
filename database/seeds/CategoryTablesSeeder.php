@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Database\Seeder;
+use App\Models\Group\Category;
 
 class CategoryTablesSeeder extends Seeder
 {
@@ -11,20 +12,34 @@ class CategoryTablesSeeder extends Seeder
      */
     public function run()
     {
-        $categories = factory(\App\Models\Group\Category::class, rand(1, 5) )->create();
-        $categories->each( function ( $category ) use ( &$categories ) {
+        Category::where('id', '>', 0)->delete();
+        $this->command->info('All The categories was deleted');
 
-            $categories = $categories->merge( $category->childs()->saveMany(
-                factory(\App\Models\Group\Category::class, rand(1, 5) )->make()
-            ));
-        });
-        
-        $categories->each( function( $category ) {
-            $category->order_points()->saveMany( 
-                factory( App\Models\Financial\OrderPoint::class, rand(1, 5) )->make()
-                );
-            });
+        return factory( \App\Models\Group\Category::class, 15)->create()->each( function($category) {
+            
+            $category->childs()->saveMany(
+                factory( \App\Models\Group\Category::class, rand(0, 6))->make()
+            )->each( function($category) {
     
-        return $categories;
+                $category->childs()->saveMany(
+                    factory( \App\Models\Group\Category::class, rand(0, 4))->make()
+                )->each( function($category) {
+    
+                    $category->childs()->saveMany(
+                        factory( \App\Models\Group\Category::class, rand(0, 3))->make()
+                    )->each( function($category) {
+    
+                        $category->childs()->saveMany(
+                            factory( \App\Models\Group\Category::class, rand(0, 2))->make()
+                        )->each( function($category) {
+    
+                            $category->childs()->saveMany(
+                                factory( \App\Models\Group\Category::class, rand(0, 2))->make()
+                            );
+                        });
+                    });
+                });
+            });
+        });
     }
 }

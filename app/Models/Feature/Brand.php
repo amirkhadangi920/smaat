@@ -11,10 +11,13 @@ use App\Models\Group\Category;
 use App\Models\Product\Product;
 use App\Helpers\CreateTimeline;
 use App\Helpers\HasTenant;
+use App\User;
+use App\Helpers\CreatorRelationship;
 
 class Brand extends Model implements AuditableContract
 {
-    use SoftDeletes, Auditable, Filterable, CreateTimeline, HasTenant;
+    use SoftDeletes, Auditable, Filterable;
+    use CreateTimeline, HasTenant, CreatorRelationship;
 
     /****************************************
      **             Attributes
@@ -29,6 +32,19 @@ class Brand extends Model implements AuditableContract
         'logo',
         'name',
         'description',
+        'is_active'
+    ];
+
+    /**
+     * Attributes to include in the Audit.
+     *
+     * @var array
+     */
+    protected $auditInclude = [
+        'logo',
+        'name',
+        'description',
+        'is_active'
     ];
 
     /**
@@ -73,4 +89,15 @@ class Brand extends Model implements AuditableContract
     /****************************************
      **              Methods
      ***************************************/
+
+    /**
+     * {@inheritdoc}
+     */
+    public function generateTags(): array
+    {
+        return [
+            $this->name,
+            'roles' => auth()->user()->roles->pluck('name'),
+        ];
+    }
 }

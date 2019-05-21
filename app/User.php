@@ -110,7 +110,7 @@ class User extends Authenticatable implements AuditableContract
     /**
      * Get all the articles that the user wrote them
      */
-    public function articles ()
+    public function articles()
     {
         return $this->hasMany(Article::class);
     }
@@ -118,7 +118,7 @@ class User extends Authenticatable implements AuditableContract
     /**
      * Get all the products that the user regirster them
      */
-    public function products ()
+    public function products()
     {
         return $this->hasMany(Product::class);
     }
@@ -126,7 +126,7 @@ class User extends Authenticatable implements AuditableContract
     /**
      * Get all the promocodes that owned the promocode & adverb
      */
-    public function promocodes ()
+    public function promocodes()
     {
         return $this->belongsToMany(Promocode::class);
     }
@@ -134,7 +134,7 @@ class User extends Authenticatable implements AuditableContract
     /**
      * Get all the discounts that the user
      */
-    public function discounts ()
+    public function discounts()
     {
         return $this->hasMany(Discount::class);
     }
@@ -142,7 +142,7 @@ class User extends Authenticatable implements AuditableContract
     /**
      * Get all of the favorites products
      */
-    public function favorites ()
+    public function favorites()
     {
         return $this->belongsToMany(Product::class, 'favorites');
     }
@@ -150,7 +150,7 @@ class User extends Authenticatable implements AuditableContract
     /**
      * Get all the audits that the user wrote them
      */
-    public function comments ()
+    public function comments()
     {
         return $this->hasMany(Comment::class);
     }
@@ -164,9 +164,9 @@ class User extends Authenticatable implements AuditableContract
     }
 
     /**
-     * Get all the questionAndAnsers of the users.
+     * Get all the question_and_answers of the users.
      */
-    public function questionAndAnswers ()
+    public function question_and_answers()
     {
         return $this->hasMany(QuestionAndAnswer::class);
     }
@@ -174,7 +174,7 @@ class User extends Authenticatable implements AuditableContract
     /**
      * Get all the orders of the users.
      */
-    public function orders ()
+    public function orders()
     {
         return $this->hasMany(Order::class);
     }
@@ -182,7 +182,7 @@ class User extends Authenticatable implements AuditableContract
     /**
      * Get all the orders items of the users.
      */
-    public function orderItems ()
+    public function orderItems()
     {
         return $this->hasMany(OrderItem::class);
     }
@@ -190,7 +190,7 @@ class User extends Authenticatable implements AuditableContract
     /**
      * Get all the orders of the users.
      */
-    public function reviews ()
+    public function reviews()
     {
         return $this->hasMany(Review::class);
     }

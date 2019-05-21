@@ -24,9 +24,10 @@ class CreateArticlesTable extends Migration
             $table->table([
                 'info',
                 'body',
-                'image' => 'array',
-                'reading_time' => 'nullable|mediumInteger|comment:How much time need for reading the article in minute',
-                'jalali_created_at' => 'datetime|nullable'
+                'image'             => 'array',
+                'reading_time'      => 'nullable|mediumInteger|comment:How much time need for reading the article in minute',
+                'jalali_created_at' => 'datetime|nullable',
+                'is_active'         => 'boolean|default:1'
             ], [
                 'tenants',
                 'users',

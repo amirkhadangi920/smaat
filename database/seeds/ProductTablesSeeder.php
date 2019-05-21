@@ -40,7 +40,8 @@ class ProductTablesSeeder extends CustomSeeder
         $this->createQuestionAndAnswers( $this->products->random() );
         $this->products->each(function ($product) use($spec) {
 
-            $variations = $this->createVariations($product);
+            for($i = 0; $i < rand(2, 5); ++$i)
+                $variations = $this->createVariations($product);
 
             $variations->each( function( $variation ) {
                 $variation->promocodes()->sync( Promocode::all()->random() );

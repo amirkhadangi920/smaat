@@ -16,11 +16,12 @@ use App\Models\Feature\{ Brand, Unit };
 use EloquentFilter\Filterable;
 use App\Helpers\CreateTimeline;
 use App\Helpers\HasTenantWthRandomID;
+use App\Helpers\CreatorRelationship;
 
 class Product extends Model implements AuditableContract, LikeableContract
 {
     use SoftDeletes, Auditable, HasTenantWthRandomID, HasTags;
-    use Filterable, Likeable, CreateTimeline;
+    use Filterable, Likeable, CreateTimeline, CreatorRelationship;
 
     /****************************************
      **             Attributes
@@ -41,6 +42,7 @@ class Product extends Model implements AuditableContract, LikeableContract
     protected $fillable = [
         'brand_id',
         'category_id',
+        'unit_id',
         'spec_id',
         'name',
         'second_name',
@@ -48,13 +50,36 @@ class Product extends Model implements AuditableContract, LikeableContract
         'description',
         'note',
         'aparat_video',
-        'status',
         'review',
         'advantages',
         'disadvantages',
         'label',
-        'views_count',
         'photos',
+        'is_active'
+    ];
+
+    /**
+     * Attributes to include in the Audit.
+     *
+     * @var array
+     */
+    protected $auditInclude = [
+        'brand_id',
+        'category_id',
+        'unit_id',
+        'spec_id',
+        'name',
+        'second_name',
+        'code',
+        'description',
+        'note',
+        'aparat_video',
+        'review',
+        'advantages',
+        'disadvantages',
+        'label',
+        'photos',
+        'is_active'
     ];
 
     /**
@@ -85,14 +110,6 @@ class Product extends Model implements AuditableContract, LikeableContract
     /**
      * Get all the variations of the product.
      */
-    public function user()
-    {
-        return $this->belongsTo(\App\User::class);
-    }
-
-    /**
-     * Get all the variations of the product.
-     */
     public function variations ()
     {
         return $this->hasMany(Variation::class);
@@ -101,7 +118,7 @@ class Product extends Model implements AuditableContract, LikeableContract
     /**
      * Get all of the users like some products
      */
-    public function favorites ()
+    public function favorites()
     {
         return $this->belongsToMany(\App\User::class, 'favorites');
     }
@@ -109,7 +126,7 @@ class Product extends Model implements AuditableContract, LikeableContract
     /**
      * Get all the reviews of the product.
      */
-    public function reviews ()
+    public function reviews()
     {
         return $this->hasMany(Review::class);
     }
@@ -117,9 +134,9 @@ class Product extends Model implements AuditableContract, LikeableContract
     /**
      * Get all the questionAndAnsers of the product.
      */
-    public function questions ()
+    public function questions()
     {
-        return $this->hasMany(QuestionAndAnswer::class)->whereIsNull('question_id');
+        return $this->hasMany(QuestionAndAnswer::class)->whereNull('question_id');
     }
     
     /**
@@ -135,7 +152,7 @@ class Product extends Model implements AuditableContract, LikeableContract
      */
     public function accessories()
     {
-        return $this->belongsToMany(Product::class, 'accessories', 'accessory_id');
+        return $this->belongsToMany(Product::class, 'accessories', 'product_id', 'accessory_id');
     }
 
     /**
@@ -157,7 +174,7 @@ class Product extends Model implements AuditableContract, LikeableContract
     /**
      * Get the variation that owned product.
      */
-    public function variation ()
+    public function variation()
     {
         return $this->hasOne(Variation::class);
     }
@@ -165,7 +182,7 @@ class Product extends Model implements AuditableContract, LikeableContract
     /**
      * Get all the brand that owned product.
      */
-    public function brand ()
+    public function brand()
     {
         return $this->belongsTo(Brand::class);
     }
@@ -173,7 +190,7 @@ class Product extends Model implements AuditableContract, LikeableContract
     /**
      * Get all the spec that owned product.
      */
-    public function spec ()
+    public function spec()
     {
         return $this->belongsTo(Spec::class);
     }

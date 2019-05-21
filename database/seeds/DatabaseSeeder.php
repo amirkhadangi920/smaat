@@ -10,14 +10,9 @@ class DatabaseSeeder extends CustomSeeder
      */
     public function run()
     {
-        // for ( $i = 0; $i < 300; ++$i ) {
-        //     $this->call(ProductTablesSeeder::class);
-        // }
-        // return;
-
-        // $this->call(AdminTableSeeder::class);
-
         $this->call(LocationTablesSeeder::class);
+
+        $this->call(LaratrustSeeder::class);
 
         // $this->call(OptionTableSeeder::class);
 

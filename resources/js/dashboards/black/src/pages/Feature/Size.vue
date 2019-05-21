@@ -75,7 +75,38 @@ export default {
     name: bind('name'),
     description: bind('description')
   },
+  mounted() {
 
+    const data = {
+      query: `
+        mutation {
+          createBrand(name: "برند تصادفی") {
+            id
+            name
+            description
+            categories {
+              title
+            }
+          }
+        }
+      `,
+      variables: {
+        id: 12
+      }
+    }
+
+    axios({
+      method: 'GET',
+      url: '/graphql/auth',
+      params: {
+        query: data.query
+      }
+    }).then(response => {
+      return console.log( response.data );
+      console.log( response.data.data )
+    }).catch(error => console.log( error ))
+
+  },
   beforeRouteLeave (to, from, next) {
     this.$refs.base.closePanel()
 

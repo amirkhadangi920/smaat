@@ -2,28 +2,82 @@
 
 return [
     'role_structure' => [
-        'owner' => [
-            'brand' => 'c,u,d',
-            'color' => 'c,u,d',
-            'unit' => 'c,u,d',
-            'size' => 'c,u,d',
-            'warranty' => 'c,u,d',
-            
-            'article' => 'c,u,d',
-            'product' => 'c,u,d',
-
-            'shipping_method' => 'c,u,d',
-            'order_status' => 'c,u,d',
-
-            'comment' => 'c,a,d',
-            'review' => 'c,a,d',
-            'question_and_answer' => 'c,a,d',
-
-            'order' => 'r,c,u,d',
+        'writer' => [
+            'subject' => 'r,c,u,d',
+            'comment' => 'r,c,a,d',
+            'article' => 'r,c,u,d',
+        ],
+        'seller' => [
+            'product' => 'r',
+            'brand' => 'r',
+            'color' => 'r',
+            'unit' => 'r',
+            'size' => 'r',
+            'warranty' => 'r',
+            'specification' => 'r',
+            'category' => 'r',
+            'review' => 'r',
+            'question_and_answer' => 'r',
+            'order' => 'r,d,s,sa,sph,si',
+            'order_item' => 's',
             'discount' => 'r,c,u,d,ad,rm',
+        ],
+        'storekeeper' => [
+            'brand' => 'r,c,u,d',
+            'color' => 'r,c,u,d',
+            'unit' => 'r,c,u,d',
+            'size' => 'r,c,u,d',
+            'warranty' => 'r,c,u,d',
+            'specification' => 'r,c,u,d',
+            'category' => 'r,c,u,d',
+            'product' => 'r,c,u,d',
+        ],
+        'accountant' => [
+            'order' => 'r,d,s,sa,sph,si',
+            'order_item' => 's',
+            'product' => 'r',
+            'category' => 'r',
+            'brand' => 'r',
+            'color' => 'r',
+            'unit' => 'r',
+            'size' => 'r',
+            'warranty' => 'r',
+        ],
+        'operator' => [
+            'user' => 'r,u,s,sa,sph',
+            'review' => 'r',
+            'question_and_answer' => 'r',
+            'product' => 'r',
+            'order' => 'r,s,sa,sph,si',
+            'order_item' => 's',
+        ],
+        'owner' => [
+            'brand' => 'r,c,u,d,sl,sc',
+            'color' => 'r,c,u,d,sl,sc',
+            'unit' => 'r,c,u,d,sl,sc',
+            'size' => 'r,c,u,d,sl,sc',
+            'warranty' => 'r,c,u,d,sl,sc',
+            'specification' => 'r,c,u,d,sl,sc',
 
-            'user' => 'r,u,d',
-            'role' => 'r,c,u,d',
+            'category' => 'r,c,u,d,sl,sc',
+            'subject' => 'r,c,u,d,sl,sc',
+            
+            'article' => 'r,c,u,d,sl,sc',
+            'product' => 'r,c,u,d,sl,sc',
+
+            'shipping_method' => 'r,c,u,d,sl,sc',
+            'order_status' => 'r,c,u,d,sl,sc',
+
+            'comment' => 'r,c,a,d,sl',
+            'review' => 'r,c,a,d,sl',
+            'question_and_answer' => 'r,c,a,d,sl',
+
+            'order' => 'r,d,s,sa,sph,si,sl',
+            'order_item' => 's,sc',
+            'discount' => 'r,c,u,d,ad,rm,sl,sc',
+
+            'user' => 'r,u,d,s,sa,sph,sl',
+            'role' => 'r,c,u,d,sl,sc',
         ],
     ],
     // 'permission_structure' => [
@@ -39,16 +93,30 @@ return [
         'a'     => 'accept',
         'ad'    => 'add-item',
         'rm'    => 'remove-item',
+        's'     => 'see-details',
+        'sl'    => 'see-log',
+        'sc'    => 'see-creator',
+        'sa'    => 'see-address',
+        'sph'   => 'see-phone-number',
+        'si'    => 'see-items',
+        // 'sinv'  => 'see-inventory'
     ],
 
     'actions_label' => [
-        'create'        => 'ثبت',
-        'read'          => 'مشاهده',
-        'update'        => 'ویرایش',
-        'delete'        => 'حذف',
-        'accept'        => 'تایید',
-        'add-item'      => 'افزودن به',
-        'remove-item'   => 'حذف از',
+        'create'            => 'ثبت',
+        'read'              => 'مشاهده',
+        'update'            => 'ویرایش',
+        'delete'            => 'حذف',
+        'accept'            => 'تایید',
+        'add-item'          => 'افزودن به',
+        'remove-item'       => 'حذف از',
+        'see-details'       => 'مشاهده جزییات',
+        'see-log'           => 'مشاهده لاگ تغییرات',
+        'see-creator'       => 'مشاهده ثبت کننده',
+        'see-address'       => 'مشاهده آدرس',
+        'see-phone-number'  => 'مشاهده شماره تلفن',
+        'see-items'         => 'مشاهده اقلام',
+        // 'see-inventory'     => 'مشاهده موجودی',
     ],
 
     'permissions_label' => [
@@ -57,6 +125,10 @@ return [
         'unit' => 'واحد',
         'size' => 'سایز',
         'warranty' => 'گارانتی',
+        'specification' => 'جدول مشخصات فنی',
+
+        'category' => 'گروه',
+        'subject' => 'دسته بندی',
         
         'article' => 'مقاله',
         'product' => 'محصول',
@@ -69,6 +141,7 @@ return [
         'question_and_answer' => 'پرسش و پاسخ',
 
         'order' => 'سفارش',
+        'order_item' => 'آیتم سفارش',
         'discount' => 'تخفیف',
 
         'user' => 'کاربر',
@@ -79,6 +152,26 @@ return [
         'owner' => [
             'name' => 'مدیر',
             'description' => 'مالک فروشگاه اینترنتی'
-        ]
+        ],
+        'writer' => [
+            'name' => 'نویسنده',
+            'description' => 'نویسنده وبلاگ فروشگاه اینترنتی'
+        ],
+        'seller' => [
+            'name' => 'فروشنده',
+            'description' => 'فروشنده محصولات'
+        ],
+        'storekeeper' => [
+            'name' => 'انبار دار',
+            'description' => 'مسیول انبار و ثبت محصولات'
+        ],
+        'accountant' => [
+            'name' => 'حساب دار',
+            'description' => 'حساب دار و مسیول امور مالی'
+        ],
+        'operator' => [
+            'name' => 'اپراتور',
+            'description' => 'اپراتور پشتیبانی فروشگاه اینترنتی'
+        ],
     ]
 ];

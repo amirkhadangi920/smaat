@@ -12,10 +12,12 @@ class LaratrustSeeder extends CustomSeeder
      */
     public function run()
     {
+        $default_usernames = ['amirkhadangi920', 'grcg2000', 'imisia99', 'm.hadi.z.1997'];
+
         $usernames = collect();
         while(true)
         {
-            $usernames->push( $this->command->ask('Please enter an Email address ', "admin". ( $usernames->count() + 1 ) ."@site.com") );
+            $usernames->push( $this->command->ask('Please enter an Username ', $default_usernames[$usernames->count()] ?? "admin". ( $usernames->count() - 4 )) );
 
             if ( $usernames->last() === 'end' )
             {
@@ -74,13 +76,15 @@ class LaratrustSeeder extends CustomSeeder
             // Attach all permissions to the role
             $role->permissions()->sync($permissions);
 
-            $usernames->each( function($username) use($password, $role) {
+            $usernames->each( function($username) use($password, $role, $key) {
 
                 $this->command->info("Creating '{$username}' user");
     
+                $email = "{$username}@{$key}.com";
                 // Create default user for each role
+                \App\User::whereEmail($email)->forceDelete();
                 $user = factory(\App\User::class)->create([
-                    'email' => $username,
+                    'email' => $email,
                     'password' => bcrypt( $password )    
                 ]);
                 $user->attachRole($role);
@@ -133,7 +137,7 @@ class LaratrustSeeder extends CustomSeeder
         DB::table('permission_role')->truncate();
         DB::table('permission_user')->truncate();
         DB::table('role_user')->truncate();
-        \App\User::truncate();
+        // \App\User::truncate();
         \App\Role::truncate();
         \App\Permission::truncate();
         Schema::enableForeignKeyConstraints();

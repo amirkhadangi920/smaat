@@ -23,18 +23,20 @@ class CreateGroupingTables extends Migration
         $schema->create('categories', function (Blueprint $table) {
             $table->table([
                 'info',
-                'logo'           => 'nullable|array',
-                'scoring_feilds' => 'mediumText|nullable',
-                'jalali_created_at' => 'datetime|nullable'
-            ], ['self', 'tenants']);
+                'logo'              => 'nullable|array',
+                'scoring_feilds'    => 'mediumText|nullable',
+                'jalali_created_at' => 'datetime|nullable',
+                'is_active'         => 'boolean|default:1'
+            ], ['self', 'users', 'tenants']);
         });
 
         $schema->create('subjects', function (Blueprint $table) {
             $table->table([
                 'info',
-                'logo'           => 'nullable|array',
-                'jalali_created_at' => 'datetime|nullable'
-            ], ['self', 'tenants']);
+                'logo'              => 'nullable|array',
+                'jalali_created_at' => 'datetime|nullable',
+                'is_active'         => 'boolean|default:1'
+            ], ['self', 'users', 'tenants']);
         });
 
         // $schema->create('groupings', function (Blueprint $table) {

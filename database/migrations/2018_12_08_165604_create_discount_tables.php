@@ -26,7 +26,8 @@ class CreateDiscountTables extends Migration
                 'logo'              => 'nullable|array',
                 'type'              => 'tinyInteger|nullable',
                 'status'            => 'tinyInteger|default:0',
-                'jalali_created_at' => 'datetime|nullable'
+                'jalali_created_at' => 'datetime|nullable',
+                'is_active'         => 'boolean|default:1'
             ], [
                 'tenants',
                 'users',
@@ -56,7 +57,8 @@ class CreateDiscountTables extends Migration
                 'max'               => 'integer|nullable',
                 'quantity'          => 'integer|nullable',
                 'reward_type'       => '20|default:buy|comment:e.g buy, birthday, gift etc...',
-                'jalali_created_at' => 'datetime|nullable'
+                'jalali_created_at' => 'datetime|nullable',
+                'is_active'         => 'boolean|default:1'
             ], ['tenants'], 'int', ['expired_at']);
         });
 

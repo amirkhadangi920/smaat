@@ -6,10 +6,11 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use OwenIt\Auditing\Auditable;
 use OwenIt\Auditing\Contracts\Auditable as AuditableContract;
+use App\Helpers\CreatorRelationship;
 
 class SpecHeader extends Model implements AuditableContract
 {
-    use SoftDeletes, Auditable;
+    use SoftDeletes, Auditable, CreatorRelationship;
 
     /****************************************
      **             Attributes
@@ -23,7 +24,19 @@ class SpecHeader extends Model implements AuditableContract
     protected $fillable = [
         'spec_id',
         'title',
-        'description'
+        'description',
+        'is_active'
+    ];
+
+    /**
+     * Attributes to include in the Audit.
+     *
+     * @var array
+     */
+    protected $auditInclude = [
+        'title',
+        'description',
+        'is_active'
     ];
 
     /**

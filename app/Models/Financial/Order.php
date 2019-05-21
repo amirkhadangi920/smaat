@@ -49,6 +49,7 @@ class Order extends Model implements AuditableContract
         'city_id',
         'descriptions',
         'destination',
+        'phone_number',
         'postal_code',
         'offer',
         'total',
@@ -57,9 +58,26 @@ class Order extends Model implements AuditableContract
         'docs',
         // 'payment_jalali',
         'datetimes',
-        'status',
         'paid_at',
         'jalali_paid_at',
+    ];
+
+    /**
+     * Attributes to include in the Audit.
+     *
+     * @var array
+     */
+    protected $auditInclude = [
+        'shipping_method_id',
+        'order_status_id',
+        'city_id',
+        'destination',
+        'phone_number',
+        'postal_code',
+        'offer',
+        'total',
+        'shipping_cost',
+        'paid_at',
     ];
     
     /**

@@ -16,6 +16,7 @@ $factory->define(App\Models\Financial\Order::class, function () use($faker) {
     $auth_code = [ null, str_random(50) ][ $faker->boolean() ];
 
     return [
+        'user_id'           => App\User::all()->random()->id,
         'descriptions'      => nullable( $descriptions ),
         'type'              => $faker->numberBetween(0, 127),
         'destination'       => nullable( Faker::address() ),
@@ -41,20 +42,22 @@ $factory->define(App\Models\Financial\Order::class, function () use($faker) {
 
 $factory->define(App\Models\Financial\OrderItem::class, function () use($faker) {
     return [
-       'count'          => $faker->numberBetween(1, 5), 
-       'price'          => $faker->numberBetween(0, 500000),
-       'offer'          => $faker->numberBetween(0, 2000),
-       'tax'            => $faker->numberBetween(0, 5000),
-       'description'    => nullable( Faker::sentence())
+        'count'          => $faker->numberBetween(1, 5), 
+        'price'          => $faker->numberBetween(0, 500000),
+        'offer'          => $faker->numberBetween(0, 2000),
+        'tax'            => $faker->numberBetween(0, 5000),
+        'description'    => nullable( Faker::sentence())
     ];
 });
 
 $factory->define(App\Models\Financial\OrderStatus::class, function () use($faker) {
     return [
+        'user_id'           => App\User::all()->random()->id,
         'title'             => [ 'در حال بررسی', 'بسته بندی ', 'چک کردن موجودی', 'تحویل بحش ارسال', 'در حال ارسال', ][rand( 0,  4)],
         'description'       => nullable( Faker::sentence() ),
         'color'             => $faker->hexcolor,
-        'jalali_created_at' => Jalalian::forge("now - {$faker->numberBetween(2, 360)} days")
+        'jalali_created_at' => Jalalian::forge("now - {$faker->numberBetween(2, 360)} days"),
+        'is_active'         => $faker->boolean(80)
     ];
 });
 

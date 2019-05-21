@@ -29,6 +29,17 @@ class QuestionAndAnswer extends Model implements AuditableContract
         'product_id',
         'question_id',
         'message',
+        'is_accept'
+    ];
+
+    /**
+     * Attributes to include in the Audit.
+     *
+     * @var array
+     */
+    protected $auditInclude = [
+        'message',
+        'is_accept'
     ];
 
     /**

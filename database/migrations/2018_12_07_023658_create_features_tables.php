@@ -22,42 +22,47 @@ class CreateFeaturesTables extends Migration
 
         $schema->create('brands', function ($table) {
             $table->table([
-                'info' => 'param:name',
-                'logo' => 'nullable|array',
-                'jalali_created_at' => 'datetime|nullable'
-            ], ['tenants']);
+                'info'              => 'param:name',
+                'logo'              => 'nullable|array',
+                'jalali_created_at' => 'datetime|nullable',
+                'is_active'         => 'boolean|default:1'
+            ], ['users', 'tenants']);
         });
 
         $schema->create('colors', function ($table) {
             $table->table([
-                'name' => 30,
-                'code' => '9|comment:Hexadecimal code of the color, e.g #43df12',
-                'jalali_created_at' => 'datetime|nullable'
-            ], ['tenants']);
+                'name'              => 30,
+                'code'              => '9|comment:Hexadecimal code of the color, e.g #43df12',
+                'jalali_created_at' => 'datetime|nullable',
+                'is_active'         => 'boolean|default:1'
+            ], ['users', 'tenants']);
         });
 
         $schema->create('sizes', function ($table) {
             $table->table([
-                'name' => 50,
-                'description'   => 'nullable|string',
-                'jalali_created_at' => 'datetime|nullable'
-            ], ['tenants']);
+                'name'              => 50,
+                'description'       => 'nullable|string',
+                'jalali_created_at' => 'datetime|nullable',
+                'is_active'         => 'boolean|default:1'
+            ], ['users', 'tenants']);
         });
 
         $schema->create('warranties', function ($table) {
             $table->table([
                 'info',
-                'logo' => 'nullable|array',
-                'expire' => 20,
-                'jalali_created_at' => 'datetime|nullable'
-            ], ['tenants']);
+                'logo'              => 'nullable|array',
+                'expire'            => 20,
+                'jalali_created_at' => 'datetime|nullable',
+                'is_active'         => 'boolean|default:1'
+            ], ['users', 'tenants']);
         });
 
         $schema->create('units', function ($table) {
             $table->table([
                 'info',
-                'jalali_created_at' => 'datetime|nullable'
-            ], ['tenants']);
+                'jalali_created_at' => 'datetime|nullable',
+                'is_active'         => 'boolean|default:1'
+            ], ['users', 'tenants']);
         });
 
         $schema->create('featureables', function ($table) {

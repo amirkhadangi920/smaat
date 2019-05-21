@@ -4,9 +4,13 @@ namespace App\Models\Discount;
 
 use Illuminate\Database\Eloquent\Model;
 use App\Models\Product\Variation;
+use OwenIt\Auditing\Auditable;
+use OwenIt\Auditing\Contracts\Auditable as AuditableContract;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
-class DiscountItem extends Model
+class DiscountItem extends Model implements AuditableContract 
 {
+    use Auditable, SoftDeletes;   
     /****************************************
      **             Attributes
      ***************************************/
@@ -23,12 +27,13 @@ class DiscountItem extends Model
     ];
 
     /**
-     * The attributes that should be cast to native types.
+     * Attributes to include in the Audit.
      *
      * @var array
      */
-    protected $casts = [
-        'logo'              => 'array'
+    protected $auditInclude = [
+        'offer',
+        'quantity',
     ];
 
     /**

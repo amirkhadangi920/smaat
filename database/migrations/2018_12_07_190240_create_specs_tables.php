@@ -23,16 +23,20 @@ class CreateSpecsTables extends Migration
         $schema->create('specs', function (Blueprint $table) {
             $table->id();
             $table->reltoCategories();
+            $table->reltoUsers();
             $table->reltoTenants();
             $table->info();
             $table->full_timestamps();
             $table->dateTime('jalali_created_at')->nullable();
+            $table->boolean('is_active')->default(1);
         });
 
         $schema->create('spec_headers', function (Blueprint $table) {
             $table->id();
             $table->reltoSpecs();
+            $table->reltoUsers();
             $table->info();
+            $table->boolean('is_active')->default(1);
             $table->full_timestamps();
         });
 
@@ -44,7 +48,8 @@ class CreateSpecsTables extends Migration
                 'help'      => '255|nullable',
                 'multiple'  => 'default:0',
                 'required'  => 'default:1',
-            ], ['spec_headers']);
+                'is_active' => 'boolean|default:1'
+            ], ['spec_headers', 'users']);
         });
     }
 

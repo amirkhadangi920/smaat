@@ -20,11 +20,13 @@ class LaratrustSetupTables extends Migration
         // Create table for storing roles
         $schema->create('roles', function (Blueprint $table) {
             $table->increments('id');
+            $table->relToUsers();
             $table->add_foreign('tenants', false, 'uuid');
             $table->string('name');
             $table->string('display_name')->nullable();
             $table->string('description')->nullable();
             $table->dateTime('jalali_created_at')->nullable();
+            $table->boolean('is_active')->default(true);
             $table->timestamps();
 
             $table->unique(['name', 'tenant_id']);

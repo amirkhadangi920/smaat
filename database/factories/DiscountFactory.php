@@ -59,13 +59,15 @@ $factory->define(App\Models\Discount\Discount::class, function () use ($faker, $
 
     $selected = rand(0, count($brands) - 1);
     return [
+        'user_id'       => App\User::all()->random()->id,
         'title'         => $faker->name(),
         'description'   => nullable( Faker::sentence(250) ),
         'logo'          => nullable( image ( $brands[$selected]['logo'] )),
         'type'          => nullable( $faker->numberBetween(0 , 100)),
         'status'        => $faker->numberBetween(0 , 100),
         'started_at'    => $faker->dateTime(),
-        'expired_at'    => $faker->dateTime()
+        'expired_at'    => $faker->dateTime(),
+        'is_active'     => $faker->boolean(80)
     ];
 });
 

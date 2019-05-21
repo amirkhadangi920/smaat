@@ -35,7 +35,20 @@ class OrderItem extends Model implements AuditableContract
         'variation_id',
         'count',
         'price',
-        'offer'
+        'offer',
+        'description'
+    ];
+
+    /**
+     * Attributes to include in the Audit.
+     *
+     * @var array
+     */
+    protected $auditInclude = [
+        'count',
+        'price',
+        'offer',
+        'description'
     ];
 
     /**

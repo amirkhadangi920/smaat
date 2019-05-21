@@ -6,10 +6,11 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use OwenIt\Auditing\Auditable;
 use OwenIt\Auditing\Contracts\Auditable as AuditableContract;
+use App\Helpers\CreatorRelationship;
 
 class SpecRow extends Model implements AuditableContract
 {
-    use SoftDeletes, Auditable;
+    use SoftDeletes, Auditable, CreatorRelationship;
 
     /****************************************
      **             Attributes
@@ -29,6 +30,23 @@ class SpecRow extends Model implements AuditableContract
         'help',
         'multiple',
         'required',
+        'is_active'
+    ];
+
+    /**
+     * Attributes to include in the Audit.
+     *
+     * @var array
+     */
+    protected $auditInclude = [
+        'title',
+        'description',
+        'label',
+        'values',
+        'help',
+        'multiple',
+        'required',
+        'is_active'
     ];
 
     /**

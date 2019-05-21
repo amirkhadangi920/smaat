@@ -15,11 +15,12 @@ use EloquentFilter\Filterable;
 use App\Helpers\CreateTimeline;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use App\Helpers\HasTenantWthRandomID;
+use App\Helpers\CreatorRelationship;
 
 class Article extends Model implements AuditableContract , LikeableContract
 {
-    use Auditable, SoftDeletes, HasTags;
-    use Likeable, Filterable, CreateTimeline, HasTenantWthRandomID;
+    use Auditable, SoftDeletes, HasTags, Likeable, Filterable;
+    use CreateTimeline, HasTenantWthRandomID, CreatorRelationship;
 
     /****************************************
      **             Attributes
@@ -42,7 +43,22 @@ class Article extends Model implements AuditableContract , LikeableContract
         'description',
         'body',
         'reading_time',
-        'image'
+        'image',
+        'is_active'
+    ];
+
+    /**
+     * Attributes to include in the Audit.
+     *
+     * @var array
+     */
+    protected $auditInclude = [
+        'title',
+        'description',
+        'body',
+        'reading_time',
+        'image',
+        'is_active'
     ];
 
     /**
@@ -55,11 +71,23 @@ class Article extends Model implements AuditableContract , LikeableContract
     ];
 
     /**
+     * The attributes that should be hidden for arrays.
+     *
+     * @var array
+     */
+    protected $hidden = [
+        'tenant_id',
+    ];
+
+    /**
      * The attributes that should be mutated to dates.
      *
      * @var array
      */
-    protected $dates = ['deleted_at'];
+    protected $dates = [
+        'jalali_created_at',
+        'deleted_at'
+    ];
 
     /****************************************
      **             Relations

@@ -22,23 +22,22 @@ class CreateProductsTables extends Migration
         
         $schema->create('products', function (Blueprint $table) {
             $table->table([
-                'name'          => 50,
-                'second_name'   => '50|nullable',
-                'code'          => '20|nullable',
-                'description'   => '255|nullable',
-                'note'          => '300|nullable',
-                'aparat_video'  => '10|nullable',
-                'status'        => 'nullable|default:1|boolean',
-                'review'        => 'nullable|text',
-                'keywords'      => 'array',
-                'photos'        => 'array',
-                'advantages'    => 'array',
-                'disadvantages' => 'array',
-                'label'         => 'nullable|unsignedTinyInteger',
-                'views_count'   => 'unsignedInteger|default:0',
-                'avg_vote'      => 'unsignedInteger|default:0',
-                'votes_count'   => 'unsignedInteger|default:0',
-                'jalali_created_at' => 'datetime|nullable'
+                'name'              => 50,
+                'second_name'       => '50|nullable',
+                'code'              => '20|nullable',
+                'description'       => '255|nullable',
+                'note'              => '300|nullable',
+                'aparat_video'      => '10|nullable',
+                'review'            => 'nullable|text',
+                'photos'            => 'array',
+                'advantages'        => 'array',
+                'disadvantages'     => 'array',
+                'label'             => 'nullable|unsignedTinyInteger',
+                'views_count'       => 'unsignedInteger|default:0',
+                'avg_vote'          => 'unsignedInteger|default:0',
+                'votes_count'       => 'unsignedInteger|default:0',
+                'jalali_created_at' => 'datetime|nullable',
+                'is_active'         => 'boolean|default:1'
             ], [
                 'tenants',
                 'users',
@@ -58,11 +57,12 @@ class CreateProductsTables extends Migration
                 'old_sales_prices'      => 'array|comment:Array of the all prices and it\'s changing time',
                 'inventory'             => 'nullable|smallInteger|comment:Null = infinite , 0 = unavailble & number = inventory', 
                 'sending_time'          => 'tinyInteger|default:1|commnt:Sending time of this product variation in day, e.g 2days',
-                'status'                => 'boolean|default:1|comment:Enable/Disable showing the variation',
-                'jalali_created_at'     => 'datetime|nullable'
+                'jalali_created_at'     => 'datetime|nullable',
+                'is_active'             => 'boolean|default:1'
             ], [
                 'tenants',
                 'products',
+                'users',
                 'warranties' => true,
                 'colors' => true,
                 'sizes' => true

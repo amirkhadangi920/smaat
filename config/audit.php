@@ -131,5 +131,6 @@ return [
     |
     */
 
-    'console' => false,
+    // TODO => set the console option to false
+    'console' => true,
 ];

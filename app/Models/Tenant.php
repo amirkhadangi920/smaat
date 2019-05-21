@@ -34,6 +34,16 @@ class Tenant extends Model implements AuditableContract
     ];
 
     /**
+     * Attributes to include in the Audit.
+     *
+     * @var array
+     */
+    protected $auditInclude = [
+        'title',
+        'description',
+    ];
+
+    /**
      * The attributes that should be mutated to dates.
      *
      * @var array

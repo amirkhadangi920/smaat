@@ -11,7 +11,7 @@ class BrandRequest extends FormRequest
      *
      * @return bool
      */
-    public function authorize()
+    public function authorize($args)
     {
         return true;
     }

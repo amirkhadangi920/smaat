@@ -11,10 +11,12 @@ use App\Models\Article;
 use App\Traits\MultiLevel;
 use App\Helpers\CreateTimeline;
 use App\Helpers\HasTenant;
+use App\Helpers\CreatorRelationship;
 
 class Subject extends Model implements AuditableContract
 {
-    use SoftDeletes, Auditable, HasTags, MultiLevel, CreateTimeline, HasTenant;
+    use SoftDeletes, Auditable, HasTags, MultiLevel;
+    use CreateTimeline, HasTenant, CreatorRelationship;
 
     /****************************************
      **             Attributes
@@ -29,7 +31,21 @@ class Subject extends Model implements AuditableContract
         'parent_id',
         'title',
         'description',
-        'logo'
+        'logo',
+        'is_active'
+    ];
+
+    /**
+     * Attributes to include in the Audit.
+     *
+     * @var array
+     */
+    protected $auditInclude = [
+        'parent_id',
+        'title',
+        'description',
+        'logo',
+        'is_active'
     ];
 
     /**

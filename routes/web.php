@@ -1,6 +1,9 @@
 <?php
 use App\Role;
 use App\Permission;
+use App\Models\Feature\Brand;
+use App\Models\Product\Product;
+use App\Models\Article;
 
 /*
 |--------------------------------------------------------------------------
@@ -14,6 +17,45 @@ use App\Permission;
 */
 
 Route::get('/test/amir', function() {
+
+    return [
+        'ua' => $_SERVER['HTTP_USER_AGENT']
+    ];
+
+    return Brand::find(4)->creator;
+
+    auth()->loginUsingId( \App\User::first()->id );
+
+    // return auth()->user();
+
+    // return Product::first()->update(['brand_id' => 4]);
+
+    // return Product::first()->audits;
+
+    return Brand::find(4)->update([
+        'name' => 'another name',
+        'description' => 'test the tags'
+    ]);
+
+    return Article::find('11d113a4407f')->audits->last()->load('user');
+
+    return \App\Models\Product\Product::find('14d28843aeeb')->accessories;
+
+    return \App\Models\Group\Category::with([
+        'spec:id,category_id',
+        'spec.headers:id,spec_id',
+        'spec.headers.rows' => function ($query) {
+            $query->whereNotNull('values');
+        }
+    ])->first();
+
+    return \App\Models\Article::find('3c86114b957e')->attachTags([
+        'test',
+        'test2',
+        'amir',
+    ]);
+
+    // return \App\Models\Group\Category::count();
 
     \App\Models\Discount\Discount::first()->items()->updateOrCreate([
         'variation_id' => \App\Models\Product\Variation::all()->random()->id,

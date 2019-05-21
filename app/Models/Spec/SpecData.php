@@ -34,6 +34,15 @@ class SpecData extends Model implements AuditableContract
         'data'
     ];
 
+    /**
+     * Attributes to include in the Audit.
+     *
+     * @var array
+     */
+    protected $auditInclude = [
+        'data'
+    ];
+
     /****************************************
      **             Relations
      ***************************************/

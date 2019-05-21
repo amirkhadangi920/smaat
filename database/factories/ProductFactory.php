@@ -2,6 +2,11 @@
 
 use Faker\Factory;
 use Morilog\Jalali\Jalalian;
+use App\Models\Feature\Brand;
+use App\Models\Feature\Unit;
+use App\Models\Feature\Color;
+use App\Models\Feature\Size;
+use App\Models\Feature\Warranty;
 
 $faker = Factory::create('fa_IR');
 
@@ -44,16 +49,16 @@ $factory->define(App\Models\Product\Product::class, function () use($faker, $pro
     
     $selected = rand(0, count($products) - 1);
     return [
+        'user_id'           => App\User::all()->random()->id,
+        'brand_id'          => Brand::all()->random()->id,
+        'unit_id'           => Unit::all()->random()->id,
         'name'              => $faker->company,
         'second_name'       => $faker->company,
         'code'              => $faker->ean8,
         'description'       => Faker::sentence(),
         'note'              => Faker::sentence(),
         'aparat_video'      => 'SEQ2V',
-        // 'status'            => rand(0,1),
-        'status'            => 1,
         'review'            => Faker::paragraph(),
-        'keywords'          => $faker->words( rand(1, 10) ),
         'advantages'        => $faker->sentences( rand(1, 10) ),
         'disadvantages'     => $faker->sentences( rand(1, 10) ),
         'label'             => $faker->numberBetween(0, 4),
@@ -61,10 +66,11 @@ $factory->define(App\Models\Product\Product::class, function () use($faker, $pro
         'photos'            => [ null, function () use($products, $selected) {
             $photos = [];
             for ($i = 0; $i < rand(0, 5); ++$i)
-                $photos[] = image ( $products[$selected]['logo'] );
+                $photos[] = image( $products[$selected]['logo'] );
             return $photos;
         }][ $faker->boolean() ],
-        'jalali_created_at' => Jalalian::forge("now - {$faker->numberBetween(2, 360)} days")
+        'jalali_created_at' => Jalalian::forge("now - {$faker->numberBetween(2, 360)} days"),
+        'is_active'         => $faker->boolean(80)
     ];
 });
 
@@ -72,11 +78,14 @@ $factory->define(App\Models\Product\Variation::class, function () use($faker) {
     
     $price = $faker->numberBetween(1000, 20000000);
     return [
+        'user_id'               => App\User::all()->random()->id,
+        'color_id'              => Color::all()->random()->id,
+        'size_id'               => Size::all()->random()->id,
+        'warranty_id'           => Warranty::all()->random()->id,
         'purchase_price'        => $price,
         'sales_price'           => $faker->numberBetween(1000, $price),
         'inventory'             => [ null, $faker->numberBetween(0, 100) ][ $faker->boolean() ],
         'sending_time'          => $faker->numberBetween(1, 10),
-        'status'                => $faker->boolean(),
         'old_purchase_prices'   => [ null, function () use ( $faker ) {
             $prices = [];
             for ($i = 0; $i < rand(0, 5); ++$i)
@@ -89,5 +98,6 @@ $factory->define(App\Models\Product\Variation::class, function () use($faker) {
                 $prices[] = [ 'price' => $faker->imageUrl(480, 320), 'datetime' => $faker->dateTimeBetween('-2 years', 'now') ];
             return $prices;
         }][ $faker->boolean() ],
+        'is_active'             => $faker->boolean(80)
     ];
 });

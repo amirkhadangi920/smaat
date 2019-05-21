@@ -27,6 +27,15 @@ class Hostname extends Model implements AuditableContract
     ];
 
     /**
+     * Attributes to include in the Audit.
+     *
+     * @var array
+     */
+    protected $auditInclude = [
+        'domain',
+    ];
+
+    /**
      * The attributes that should be mutated to dates.
      *
      * @var array
