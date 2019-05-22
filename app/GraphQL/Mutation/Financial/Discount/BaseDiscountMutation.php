@@ -42,4 +42,28 @@ class BaseDiscountMutation extends MainMutation
             ],
         ];
     }
+
+    /**
+     * The function that get the model and run after the model was created
+     *
+     * @param Request $request
+     * @param Model $discount
+     * @return void
+     */
+    public function afterCreate($request, $discount)
+    {
+        $discount->categories()->attach( $request->categories );
+    }
+
+    /**
+     * The function that get the model and run after the model was updated
+     *
+     * @param Request $request
+     * @param Model $discount
+     * @return void
+     */
+    public function afterUpdate($request, $discount)
+    {
+        $discount->categories()->sync( $request->categories );
+    }
 }

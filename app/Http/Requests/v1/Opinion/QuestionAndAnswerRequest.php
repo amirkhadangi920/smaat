@@ -3,6 +3,7 @@
 namespace App\Http\Requests\v1\Opinion;
 
 use Illuminate\Foundation\Http\FormRequest;
+use App\Rules\ExistsTenant;
 
 class QuestionAndAnswerRequest extends FormRequest
 {
@@ -27,8 +28,8 @@ class QuestionAndAnswerRequest extends FormRequest
             'message'           => 'required|string',
 
             /* relateion */
-            'question_id'       => 'nullable|integer|exists:question_and_answers,id',
-            'product_id'        => 'required|string|exists:products,id',
+            'parent_id'         => ['nullable', 'integer', new ExistsTenant('question_and_answers')],
+            'product_id'        => ['required', 'string', new ExistsTenant('products')],
         ];
     }
 }

@@ -3,6 +3,8 @@
 namespace App\Http\Requests\v1\Feature;
 
 use Illuminate\Foundation\Http\FormRequest;
+use App\Rules\ExistsTenant;
+use App\Rules\UniqueTenant;
 
 class WarrantyRequest extends FormRequest
 {
@@ -24,14 +26,15 @@ class WarrantyRequest extends FormRequest
     public function rules()
     {
         return [
-            'title'             => 'required|string|max:50',
+            'title'             => ['required', 'string', 'max:50', new UniqueTenant('warranties')],
             'description'       => 'nullable|string|max:255',
             'expire'            => 'required|string|max:20',
             'logo'              => 'nullable|image|mimes:jpeg,jpg,png,gif|max:1024',
+            'is_active'         => 'nullable|boolean',
 
             /* relateion */
-            'categories'        => 'nullable|array',
-            'categories.*'      => 'required|integer|exists:categories,id'
+            'categories'        => ['nullable', 'array', new ExistsTenant],
+            'categories.*'      => 'required|integer'
         ];
     }
 }

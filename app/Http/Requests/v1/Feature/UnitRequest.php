@@ -3,6 +3,8 @@
 namespace App\Http\Requests\v1\Feature;
 
 use Illuminate\Foundation\Http\FormRequest;
+use App\Rules\ExistsTenant;
+use App\Rules\UniqueTenant;
 
 class UnitRequest extends FormRequest
 {
@@ -24,12 +26,13 @@ class UnitRequest extends FormRequest
     public function rules()
     {
         return [
-            'title'             => 'required|string|max:50',
+            'title'             => ['required', 'string', 'max:50', new UniqueTenant('units')],
             'description'       => 'nullable|string|max:255',
+            'is_active'         => 'nullable|boolean',
 
             /* relateion */
-            'categories'        => 'nullable|array',
-            'categories.*'      => 'required|integer|exists:categories,id'
+            'categories'        => ['nullable', 'array', new ExistsTenant],
+            'categories.*'      => 'required|integer'
         ];
     }
 }

@@ -4,12 +4,14 @@ namespace App\GraphQL\Mutation\Spec\SpecHeader;
 
 use GraphQL\Type\Definition\Type;
 use App\GraphQL\Mutation\MainMutation;
-use App\GraphQL\Props\Spec\SpecProps;
+use App\GraphQL\Props\Spec\SpecHeaderProps;
 
 class BaseSpecHeaderMutation extends MainMutation
 {
-    use SpecProps;
+    use SpecHeaderProps;
     
+    protected $permission_label = 'specification';
+
     protected $attributes = [
         'name' => 'SpecHeaderMutation',
         'description' => 'A mutation'

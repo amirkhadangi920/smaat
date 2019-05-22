@@ -3,6 +3,8 @@
 namespace App\Http\Requests\v1\Feature;
 
 use Illuminate\Foundation\Http\FormRequest;
+use App\Rules\ExistsTenant;
+use App\Rules\UniqueTenant;
 
 class BrandRequest extends FormRequest
 {
@@ -24,13 +26,14 @@ class BrandRequest extends FormRequest
     public function rules()
     {
         return [
-            'name'              => 'required|string|max:50',
+            'name'              => ['required', 'string', 'max:50', new UniqueTenant('brands')],
             'description'       => 'nullable|string|max:255',
             'logo'              => 'nullable|image|mimes:jpeg,jpg,png,gif|max:1024',
+            'is_active'         => 'nullable|boolean',
 
             /* relateion */
-            'categories'        => 'nullable|array',
-            'categories.*'      => 'required|integer|exists:categories,id'
+            'categories'        => ['nullable', 'array', new ExistsTenant],
+            'categories.*'      => 'required|integer'
         ];
     }
 }

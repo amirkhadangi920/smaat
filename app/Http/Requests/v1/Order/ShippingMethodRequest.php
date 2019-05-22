@@ -3,6 +3,7 @@
 namespace App\Http\Requests\v1\Order;
 
 use Illuminate\Foundation\Http\FormRequest;
+use App\Rules\UniqueTenant;
 
 class ShippingMethodRequest extends FormRequest
 {
@@ -24,11 +25,12 @@ class ShippingMethodRequest extends FormRequest
     public function rules()
     {
         return [
-            'name'              => 'required|string|max:50',
+            'name'              => ['required', 'string', 'max:50', new UniqueTenant('shipping_methods')],
             'description'       => 'nullable|string|max:255',
             'logo'              => 'nullable|image|mimes:jpeg,jpg,png,gif|max:1024',
             'cost'              => 'required|digits_between:0,10|min:0',
             'minimum'           => 'nullable|digits_between:0,10|min:0',
+            'is_active'         => 'nullable|boolean',
         ];
     }
     

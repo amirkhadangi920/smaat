@@ -11,6 +11,8 @@ class BaseUserMutation extends MainMutation
 {
     use UserProps;
     
+    protected $incrementing = false;
+    
     protected $attributes = [
         'name' => 'UserMutation',
         'description' => 'A mutation'
@@ -59,5 +61,39 @@ class BaseUserMutation extends MainMutation
                 'type' => Type::boolean()
             ]
         ];
+    }
+    
+    /**
+     * The function that get the model and run after the model was updated
+     *
+     * @param Request $request
+     * @param Model $product
+     * @return void
+     */
+    public function afterUpdate($request, $user)
+    {
+        $user->syncPermissions( $request->get('permissions') ?? [] );
+        $user->syncRoles( $request->get('roles') ?? [] );
+    }
+    
+    /**
+     * Get the portion of request class
+     *
+     * @param Request $request
+     * @return Array $request
+     */
+    public function getRequest( $request)
+    {
+        return $request->only(
+            'city_id',
+            'first_name',
+            'last_name',
+            'phones',
+            'social_links',
+            'email',
+            'avatar',
+            'address',
+            'postal_code'
+        )->all();
     }
 }

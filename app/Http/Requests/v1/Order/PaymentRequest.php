@@ -31,8 +31,8 @@ class PaymentRequest extends FormRequest
             'national_code'         => ['required', 'regex:/^\d{10}$/'],
             
             /* Order information */
-            'city_id'               => 'required|integer|exists:cities,id',
-            'shipping_method_id'    => 'required|integer|exists:shipping_methods,id',
+            'city_id'               => ['required', 'integer', new ExistsTenant('cities')],
+            'shippin_method_id'     => ['required', 'integer', new ExistsTenant('shippin_methods')],
             'description'           => 'nullable|string|max:255',
             'destination'           => 'required|string|max:255',
             'postal_code'           => ['required', 'regex:/^\d{10}$/'],

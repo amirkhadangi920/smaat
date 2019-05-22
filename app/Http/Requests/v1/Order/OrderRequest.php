@@ -3,6 +3,7 @@
 namespace App\Http\Requests\v1\Order;
 
 use Illuminate\Foundation\Http\FormRequest;
+use App\Rules\ExistsTenant;
 
 class OrderRequest extends FormRequest
 {
@@ -35,10 +36,12 @@ class OrderRequest extends FormRequest
             'type'              => 'required|integer|max:5',
 
             /* relateion */
-            'users_id'          => 'required|string|exists:users,id',
-            'order_status_id'   => 'required|integer|exists:order_statuses,id',
-            'shippin_method_id' => 'nullable|integer|exists:shippin_methods,id',
-            'city_id'           => 'nullable|integer|exists:city,id',
+            'categories'        => ['nullable', 'array', new ExistsTenant],
+            
+            'users_id'          => ['required', 'string', new ExistsTenant('users')],
+            'order_status_id'   => ['required', 'integer', new ExistsTenant('order_statuses')],
+            'shippin_method_id' => ['nullable', 'integer', new ExistsTenant('shippin_methods')],
+            'city_id'           => ['nullable', 'integer', new ExistsTenant('cities')],
         ];
     }
 }

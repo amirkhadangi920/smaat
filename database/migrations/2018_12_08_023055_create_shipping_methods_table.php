@@ -29,6 +29,8 @@ class CreateShippingMethodsTable extends Migration
                 'is_active' => 'boolean|default:0',
                 'jalali_created_at' => 'datetime|nullable'
             ], ['users', 'tenants']);
+            
+            $table->unique(['name', 'tenant_id']);
         });
     }
 

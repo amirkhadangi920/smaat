@@ -3,6 +3,7 @@
 namespace App\Http\Requests\v1\Opinion;
 
 use Illuminate\Foundation\Http\FormRequest;
+use App\Rules\ExistsTenant;
 
 class CommentRequest extends FormRequest
 {
@@ -27,8 +28,8 @@ class CommentRequest extends FormRequest
             'message'       => 'required|string',
 
             /* relateion */
-            'parent_id'     => 'nullable|integer|exists:comments,id',
-            'article_id'    => 'required|string|exists:articles,id',
+            'parent_id'     => ['nullable', 'integer', new ExistsTenant('comments')],
+            'article_id'    => ['required', 'string', new ExistsTenant('articles')],
         ];
     }
 }

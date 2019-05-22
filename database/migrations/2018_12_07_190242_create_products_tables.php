@@ -46,6 +46,8 @@ class CreateProductsTables extends Migration
                 'units' => true,
                 'specs' => true
             ], 'uuid');
+
+            $table->unique(['name', 'tenant_id']);
         });
 
         $schema->create('variations', function (Blueprint $table) {

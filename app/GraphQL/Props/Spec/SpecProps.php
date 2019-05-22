@@ -58,4 +58,11 @@ trait SpecProps
      * @var ModelFilter
      */
     protected $filter = SpecificationRequest::class;
+
+    /**
+     * The request class of model for validation and authorization
+     *
+     * @var Request
+     */
+    protected $request = SpecificationRequest::class;
 }

@@ -4,11 +4,13 @@ namespace App\GraphQL\Mutation\Spec\SpecRow;
 
 use GraphQL\Type\Definition\Type;
 use App\GraphQL\Mutation\MainMutation;
-use App\GraphQL\Props\Spec\SpecProps;
+use App\GraphQL\Props\Spec\SpecRowProps;
 
 class BaseSpecRowMutation extends MainMutation
 {
-    use SpecProps;
+    use SpecRowProps;
+    
+    protected $permission_label = 'specification';
     
     protected $attributes = [
         'name' => 'SpecRowMutation',

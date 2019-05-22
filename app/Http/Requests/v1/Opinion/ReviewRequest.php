@@ -3,6 +3,7 @@
 namespace App\Http\Requests\v1\Opinion;
 
 use Illuminate\Foundation\Http\FormRequest;
+use App\Rules\ExistsTenant;
 
 class ReviewRequest extends FormRequest
 {
@@ -33,8 +34,7 @@ class ReviewRequest extends FormRequest
             'message'           => 'required|string',
 
             /* relateion */
-            'articles.*'        => 'required|array|exists:articles,id',
-            'product_id'        => 'required|string|exists:products,id',
+            'product_id'        => ['required', 'string', new ExistsTenant('products')],
         ];
     }
 }

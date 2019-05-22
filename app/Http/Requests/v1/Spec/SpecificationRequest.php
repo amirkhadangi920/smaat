@@ -3,6 +3,8 @@
 namespace App\Http\Requests\v1\Spec;
 
 use Illuminate\Foundation\Http\FormRequest;
+use App\Rules\UniqueTenant;
+use App\Rules\ExistsTenant;
 
 class SpecificationRequest extends FormRequest
 {
@@ -24,13 +26,15 @@ class SpecificationRequest extends FormRequest
     public function rules()
     {
         return [
-            'title'             => 'required|string|max:50',
+            'title'             => ['required', 'string', 'max:50', new UniqueTenant('specs')],
             'description'       => 'nullable|string|max:255',
+            'is_active'         => 'nullable|boolean',
             
             /**
              * relateion 
              */
-            'categories.*'      => 'required|integer|exists:categories,id'
+            'categories'        => ['required', 'array', new ExistsTenant],
+            'categories.*'      => 'required|integer'
         ];
     }
 }

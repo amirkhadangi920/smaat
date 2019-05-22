@@ -54,6 +54,50 @@ use App\GraphQL\Mutation\Feature\{
     Warranty\CreateWarrantyMutation, Warranty\UpdateWarrantyMutation, Warranty\DeleteWarrantyMutation
 };
 
+// Group Mutations
+use App\GraphQL\Mutation\Group\{
+    Category\CreateCategoryMutation, Category\UpdateCategoryMutation, Category\DeleteCategoryMutation,
+    Subject\CreateSubjectMutation, Subject\UpdateSubjectMutation, Subject\DeleteSubjectMutation
+};
+
+// Financial Mutations
+use App\GraphQL\Mutation\Financial\{
+    Discount\CreateDiscountMutation, Discount\UpdateDiscountMutation, Discount\DeleteDiscountMutation,
+    Order\UpdateOrderMutation, Order\DeleteOrderMutation,
+    OrderStatus\CreateOrderStatusMutation, OrderStatus\UpdateOrderStatusMutation, OrderStatus\DeleteOrderStatusMutation,
+    ShippingMethod\CreateShippingMethodMutation, ShippingMethod\UpdateShippingMethodMutation, ShippingMethod\DeleteShippingMethodMutation
+};
+
+// Product Mutations
+use App\GraphQL\Mutation\Opinion\{
+    Comment\CreateCommentMutation, Comment\UpdateCommentMutation, Comment\DeleteCommentMutation,
+    Review\CreateReviewMutation, Review\UpdateReviewMutation, Review\DeleteReviewMutation,
+    QuestionAndAnswer\CreateQuestionAndAnswerMutation, QuestionAndAnswer\UpdateQuestionAndAnswerMutation, QuestionAndAnswer\DeleteQuestionAndAnswerMutation
+};
+
+// Product Mutations
+use App\GraphQL\Mutation\Product\{
+    Product\CreateProductMutation, Product\UpdateProductMutation, Product\DeleteProductMutation
+};
+
+// Blog Mutations
+use App\GraphQL\Mutation\Blog\{
+    Article\ActiveArticleMutation, Article\CreateArticleMutation, Article\UpdateArticleMutation, Article\DeleteArticleMutation
+};
+
+// User Mutations
+use App\GraphQL\Mutation\User\{
+    User\CreateUserMutation, User\UpdateUserMutation, User\DeleteUserMutation,
+    Role\CreateRoleMutation, Role\UpdateRoleMutation, Role\DeleteRoleMutation
+};
+
+// Spec Mutations
+use App\GraphQL\Mutation\Spec\{
+    Spec\CreateSpecMutation, Spec\UpdateSpecMutation, Spec\DeleteSpecMutation,
+    SpecHeader\CreateSpecHeaderMutation, SpecHeader\UpdateSpecHeaderMutation, SpecHeader\DeleteSpecHeaderMutation,
+    SpecRow\CreateSpecRowMutation, SpecRow\UpdateSpecRowMutation, SpecRow\DeleteSpecRowMutation
+};
+
 // Feature Types
 use App\GraphQL\Type\Feature\BrandType;
 use App\GraphQL\Type\Feature\SizeType;
@@ -277,6 +321,13 @@ return [
                 'roles' => RolesQuery::class,
             ],
             'mutation' => [
+                // Blog
+                'activeArticle' => ActiveArticleMutation::class,
+                'createArticle' => CreateArticleMutation::class,
+                'updateArticle' => UpdateArticleMutation::class,
+                'deleteArticle' => DeleteArticleMutation::class,
+
+
                 // Feature
                 'createBrand' => CreateBrandMutation::class,
                 'updateBrand' => UpdateBrandMutation::class,
@@ -298,6 +349,75 @@ return [
                 'updateWarranty' => UpdateWarrantyMutation::class,
                 'deleteWarranty' => DeleteWarrantyMutation::class,
 
+                
+                // Financial
+                'createDiscount' => CreateDiscountMutation::class,
+                'updateDiscount' => UpdateDiscountMutation::class,
+                'deleteDiscount' => DeleteDiscountMutation::class,
+
+                'createOrderStatus' => CreateOrderStatusMutation::class,
+                'updateOrderStatus' => UpdateOrderStatusMutation::class,
+                'deleteOrderStatus' => DeleteOrderStatusMutation::class,
+
+                'createShippingMethod' => CreateShippingMethodMutation::class,
+                'updateShippingMethod' => UpdateShippingMethodMutation::class,
+                'deleteShippingMethod' => DeleteShippingMethodMutation::class,
+
+                'updateOrder' => UpdateOrderMutation::class,
+                'deleteOrder' => DeleteOrderMutation::class,
+
+                
+                // Group
+                'createCategory' => CreateCategoryMutation::class,
+                'updateCategory' => UpdateCategoryMutation::class,
+                'deleteCategory' => DeleteCategoryMutation::class,
+                
+                'createSubject' => CreateSubjectMutation::class,
+                'updateSubject' => UpdateSubjectMutation::class,
+                'deleteSubject' => DeleteSubjectMutation::class,
+
+
+                // Opinion
+                'createComment' => CreateCommentMutation::class,
+                'updateComment' => UpdateCommentMutation::class,
+                'deleteComment' => DeleteCommentMutation::class,
+
+                'createReview' => CreateReviewMutation::class,
+                'updateReview' => UpdateReviewMutation::class,
+                'deleteReview' => DeleteReviewMutation::class,
+
+                'createQuestionAndAnswer' => CreateQuestionAndAnswerMutation::class,
+                'updateQuestionAndAnswer' => UpdateQuestionAndAnswerMutation::class,
+                'deleteQuestionAndAnswer' => DeleteQuestionAndAnswerMutation::class,
+
+                
+                // Product
+                'createProduct' => CreateProductMutation::class,
+                'updateProduct' => UpdateProductMutation::class,
+                'deleteProduct' => DeleteProductMutation::class,
+
+                
+                // Spec
+                'createSpec' => CreateSpecMutation::class,
+                'updateSpec' => UpdateSpecMutation::class,
+                'deleteSpec' => DeleteSpecMutation::class,
+                
+                'createSpecHeader' => CreateSpecHeaderMutation::class,
+                'updateSpecHeader' => UpdateSpecHeaderMutation::class,
+                'deleteSpecHeader' => DeleteSpecHeaderMutation::class,
+                
+                'createSpecRow' => CreateSpecRowMutation::class,
+                'updateSpecRow' => UpdateSpecRowMutation::class,
+                'deleteSpecRow' => DeleteSpecRowMutation::class,
+
+                
+                // User
+                'updateUser' => UpdateUserMutation::class,
+                'deleteUser' => DeleteUserMutation::class,
+
+                'createRole' => CreateRoleMutation::class,
+                'updateRole' => UpdateRoleMutation::class,
+                'deleteRole' => DeleteRoleMutation::class,
             ],
             'middleware' => ['auth:api'],
             'method' => ['get', 'post', 'put', 'delete']

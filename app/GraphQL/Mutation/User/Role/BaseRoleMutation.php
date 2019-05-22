@@ -32,4 +32,28 @@ class BaseRoleMutation extends MainMutation
             ]
         ];
     }
+
+    /**
+     * The function that get the model and run after the model was created
+     *
+     * @param Request $request
+     * @param Model $product
+     * @return void
+     */
+    public function afterCreate($request, $role)
+    {
+        $role->attachPermissions( $request->permissions );        
+    }
+
+    /**
+     * The function that get the model and run after the model was updated
+     *
+     * @param Request $request
+     * @param Model $product
+     * @return void
+     */
+    public function afterUpdate($request, $role)
+    {
+        $role->syncPermissions( $request->permissions );
+    }
 }

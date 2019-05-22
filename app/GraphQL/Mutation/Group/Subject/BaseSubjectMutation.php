@@ -6,10 +6,11 @@ use GraphQL\Type\Definition\Type;
 use App\GraphQL\Mutation\MainMutation;
 use Rebing\GraphQL\Support\UploadType;
 use App\GraphQL\Props\Group\SubjectProps;
+use App\GraphQL\Mutation\Group\GroupTags;
 
 class BaseSubjectMutation extends MainMutation
 {
-    use SubjectProps;
+    use SubjectProps, GroupTags;
     
     protected $attributes = [
         'name' => 'SubjectMutation',

@@ -29,10 +29,11 @@ class DiscountRequest extends FormRequest
             'logo'                  => 'nullable|image|mimes:jpeg,jpg,png|max:1024',
             'started_at'            => 'required|date|date_format:Y-m-d H:i:s|after:' . jdate(),
             'expired_at'            => 'required|date|date_format:Y-m-d H:i:s|after:started_at',
+            'is_active'             => 'nullable|boolean',
 
             /* relateion */
-            'categories'            => 'nullable|array',
-            'categories.*'          => 'required|integer|exists:categories,id'
+            'categories'            => ['nullable', 'array', new ExistsTenant],
+            'categories.*'          => 'required|integer'
         ];
     }
 

@@ -6,10 +6,11 @@ use GraphQL\Type\Definition\Type;
 use App\GraphQL\Mutation\MainMutation;
 use Rebing\GraphQL\Support\UploadType;
 use App\GraphQL\Props\Group\CategoryProps;
+use App\GraphQL\Mutation\Group\GroupTags;
 
 class BaseCategoryMutation extends MainMutation
 {
-    use CategoryProps;
+    use CategoryProps, GroupTags;
     
     protected $attributes = [
         'name' => 'CategoryMutation',

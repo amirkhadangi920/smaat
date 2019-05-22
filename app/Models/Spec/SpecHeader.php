@@ -12,6 +12,20 @@ class SpecHeader extends Model implements AuditableContract
 {
     use SoftDeletes, Auditable, CreatorRelationship;
 
+    /**
+     * The "booting" method of the model.
+     *
+     * @return void
+     */
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::creating(function($model) {
+            $model->user_id = auth()->user()->id ?? null;
+        });
+    }
+
     /****************************************
      **             Attributes
      ***************************************/

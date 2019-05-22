@@ -61,7 +61,7 @@ class OptionTableSeeder extends Seeder
             ];
 
             foreach ( $data as $item )
-                \App\Models\Option::create(['name' => $item['name'], 'value' => $item['value']]);
+                \App\Models\Option::create( $item );
 
             echo "\e[31mWebsite options \e[39mwas \e[32mcreated\n";
         }

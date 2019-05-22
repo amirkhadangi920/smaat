@@ -4,6 +4,8 @@ namespace App\Http\Requests\User\v1;
 
 use Illuminate\Foundation\Http\FormRequest;
 use App\User;
+use App\Rules\ExistsTenant;
+use App\Rules\UniqueTenant;
 
 class UserRequest extends FormRequest
 {
@@ -25,24 +27,25 @@ class UserRequest extends FormRequest
     public function rules()
     {
         $rules = [
-            'city_id'           => 'nullable|integer|exists:cities,id',
             'first_name'        => 'nullable|string|max:20',
             'first_name'        => 'nullable|string|max:30',
             'phones'            => 'nullable|array',
             'phones.*'          => ['required', 'string', 'regex:/09(1[0-9]|3[1-9]|2[1-9])-?[0-9]{3}-?[0-9]{4}/'],
             'social_links'      => 'nullable|array',
             'social_links.*'    => 'required|string|max:100',
-            'email'             => 'required|unique:users,email',
+            'email'             => ['required', new UniqueTenant('users')],
             'avatar'            => 'nullable|image|mimes:jpg,jpeg,png|max:1024',
             'address'           => 'nullable|string|max:255',
             'postal_code'       => 'nullable|digits:10',
             
             // relations
-            'permissions'       => 'nullable|array',
-            'permissions.*'     => 'required|integer|exists:permissions,id',
+            'city_id'           => ['nullable', 'integer', new ExistsTenant('cities')],
+
+            'permissions'       => ['nullable', 'array', new ExistsTenant],
+            'permissions.*'     => 'required|integer',
             
-            'roles'             => 'nullable|array',
-            'roles.*'           => 'required|integer|exists:roles,id',
+            'roles'             => ['nullable', 'array', new ExistsTenant],
+            'roles.*'           => 'required|integer',
         ];
 
         if ( $this->method() === 'PUT' && $this->route('user')->email === $this->email )

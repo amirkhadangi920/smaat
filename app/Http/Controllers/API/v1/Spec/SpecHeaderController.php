@@ -82,7 +82,7 @@ class SpecHeaderController extends MainController
      * @param SpecHeader $spec_header
      * @return void
      */
-    public function copy (Request $request, SpecHeader $spec_header)
+    public function copy(Request $request, SpecHeader $spec_header)
     {
         $this->checkPermission("copy-{$this->type}");
 

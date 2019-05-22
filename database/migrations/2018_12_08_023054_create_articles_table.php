@@ -32,6 +32,8 @@ class CreateArticlesTable extends Migration
                 'tenants',
                 'users',
             ], 'uuid');
+
+            $table->unique(['title', 'tenant_id']);
         });
 
         $schema->create('article_subject', function (Blueprint $table) {
