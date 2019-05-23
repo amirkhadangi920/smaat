@@ -34,6 +34,9 @@ class User extends Authenticatable implements AuditableContract
      **             Attributes
      ***************************************/
 
+
+    protected static $has_user = false;
+
     /**
      * The attributes specifies that table has char type id
      *

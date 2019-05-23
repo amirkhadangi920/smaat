@@ -88,6 +88,8 @@ use App\GraphQL\Mutation\Blog\{
 // User Mutations
 use App\GraphQL\Mutation\User\{
     User\CreateUserMutation, User\UpdateUserMutation, User\DeleteUserMutation,
+    User\LoginUserMutation, User\RegisterUserMutation,
+
     Role\CreateRoleMutation, Role\UpdateRoleMutation, Role\DeleteRoleMutation
 };
 
@@ -260,7 +262,9 @@ return [
                 // 'spec' => SpecQuery::class,
             ],
             'mutation' => [
-                // 'example_mutation'  => ExampleMutation::class,
+                // User
+                'login'         => LoginUserMutation::class,
+                'register'      => RegisterUserMutation::class,
             ],
             'middleware' => [],
             'method' => ['get', 'post'],
@@ -412,12 +416,12 @@ return [
 
                 
                 // User
-                'updateUser' => UpdateUserMutation::class,
-                'deleteUser' => DeleteUserMutation::class,
+                'updateUser'    => UpdateUserMutation::class,
+                'deleteUser'    => DeleteUserMutation::class,
 
-                'createRole' => CreateRoleMutation::class,
-                'updateRole' => UpdateRoleMutation::class,
-                'deleteRole' => DeleteRoleMutation::class,
+                'createRole'    => CreateRoleMutation::class,
+                'updateRole'    => UpdateRoleMutation::class,
+                'deleteRole'    => DeleteRoleMutation::class,
             ],
             'middleware' => ['auth:api'],
             'method' => ['get', 'post', 'put', 'delete']

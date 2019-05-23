@@ -1,6 +1,6 @@
-import Vue from 'vue'
+import './loadModules'
 
-import 'loadMudules'
+import Vue from 'vue'
 
 import Echo from "laravel-echo"
 window.io = require('socket.io-client');

@@ -79,9 +79,6 @@ class ProductController extends MainController
             'unit:id,title',
             'accessories:id,brand_id,name,photos,label',
             'variations:id,product_id,warranty_id,color_id,size_id,purchase_price,sales_price,inventory,sending_time',
-            'variations' => function ( $query ) {
-                $query->whereStatus(1);
-            },
             'variations.color:id,name,code',
             'variations.size:id,name',
             'variations.warranty:id,title,logo,expire',
@@ -127,7 +124,6 @@ class ProductController extends MainController
         )
             ->filter( request()->all(), $this->filter )
             ->with( $this->relations )
-            ->whereStatus(true)
             ->latest()
             ->paginate( $this->getPerPage(20) );
     }

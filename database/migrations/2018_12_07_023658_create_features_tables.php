@@ -28,7 +28,7 @@ class CreateFeaturesTables extends Migration
                 'is_active'         => 'boolean|default:1'
             ], ['users', 'tenants']);
             
-            $table->unique(['name', 'tenant_id']);
+            // $table->unique(['name', 'tenant_id']);
         });
 
         $schema->create('colors', function ($table) {
@@ -39,7 +39,7 @@ class CreateFeaturesTables extends Migration
                 'is_active'         => 'boolean|default:1'
             ], ['users', 'tenants']);
 
-            $table->unique(['name', 'tenant_id']);
+            // $table->unique(['name', 'tenant_id']);
         });
 
         $schema->create('sizes', function ($table) {
@@ -50,7 +50,7 @@ class CreateFeaturesTables extends Migration
                 'is_active'         => 'boolean|default:1'
             ], ['users', 'tenants']);
 
-            $table->unique(['name', 'tenant_id']);
+            // $table->unique(['name', 'tenant_id']);
         });
 
         $schema->create('warranties', function ($table) {
@@ -62,7 +62,7 @@ class CreateFeaturesTables extends Migration
                 'is_active'         => 'boolean|default:1'
             ], ['users', 'tenants']);
 
-            $table->unique(['title', 'tenant_id']);
+            // $table->unique(['title', 'tenant_id']);
         });
 
         $schema->create('units', function ($table) {
@@ -72,7 +72,7 @@ class CreateFeaturesTables extends Migration
                 'is_active'         => 'boolean|default:1'
             ], ['users', 'tenants']);
 
-            $table->unique(['title', 'tenant_id']);
+            // $table->unique(['title', 'tenant_id']);
         });
 
         $schema->create('featureables', function ($table) {

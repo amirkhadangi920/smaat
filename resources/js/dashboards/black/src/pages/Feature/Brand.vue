@@ -64,7 +64,11 @@ export default {
       maxLength: maxLength(255)
     },
   },
-
+  mounted() {
+    setTimeout(() => {
+      console.log( this.$store.state.permissions )
+    }, 2000);
+  },
   methods: {
     validate() {
       this.$v.$touch()

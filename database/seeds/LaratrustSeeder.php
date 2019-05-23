@@ -82,48 +82,50 @@ class LaratrustSeeder extends CustomSeeder
     
                 $email = "{$username}@{$key}.com";
                 // Create default user for each role
-                \App\User::whereEmail($email)->forceDelete();
-                $user = factory(\App\User::class)->create([
-                    'email' => $email,
-                    'password' => bcrypt( $password )    
+
+                $user = \App\User::firstOrCreate([
+                    'email' => $email
+                ], [
+                    'password' => bcrypt( $password )
                 ]);
+                // echo $user->id . PHP_EOL . $role->id . PHP_EOL;
                 $user->attachRole($role);
             });
         }
 
         // Creating user with permissions
-        if (!empty($userPermission)) {
+        // if (!empty($userPermission)) {
 
-            foreach ($userPermission as $key => $modules) {
+        //     foreach ($userPermission as $key => $modules) {
 
-                foreach ($modules as $module => $value) {
+        //         foreach ($modules as $module => $value) {
 
-                    // Create default user for each permission set
-                    $user = factory(\App\User::class)->create([
-                        'email' => $username,
-                        'password' => bcrypt( $password ),
-                        'remember_token' => str_random(10),
-                    ]);
-                    $permissions = [];
+        //             // Create default user for each permission set
+        //             $user = factory(\App\User::class)->create([
+        //                 'email' => $username,
+        //                 'password' => bcrypt( $password ),
+        //                 'remember_token' => str_random(10),
+        //             ]);
+        //             $permissions = [];
 
-                    foreach (explode(',', $value) as $p => $perm) {
+        //             foreach (explode(',', $value) as $p => $perm) {
 
-                        $permissionValue = $mapPermission->get($perm);
+        //                 $permissionValue = $mapPermission->get($perm);
 
-                        $permissions[] = \App\Permission::firstOrCreate([
-                            'name' => $permissionValue . '-' . $module,
-                            'display_name' => ucfirst($permissionValue) . ' ' . ucfirst($module),
-                            'description' => ucfirst($permissionValue) . ' ' . ucfirst($module),
-                        ])->id;
+        //                 $permissions[] = \App\Permission::firstOrCreate([
+        //                     'name' => $permissionValue . '-' . $module,
+        //                     'display_name' => ucfirst($permissionValue) . ' ' . ucfirst($module),
+        //                     'description' => ucfirst($permissionValue) . ' ' . ucfirst($module),
+        //                 ])->id;
 
-                        $this->command->info('Creating Permission to '.$permissionValue.' for '. $module);
-                    }
-                }
+        //                 $this->command->info('Creating Permission to '.$permissionValue.' for '. $module);
+        //             }
+        //         }
 
-                // Attach all permissions to the user
-                $user->permissions()->sync($permissions);
-            }
-        }
+        //         // Attach all permissions to the user
+        //         $user->permissions()->sync($permissions);
+        //     }
+        // }
     }
 
     /**

@@ -4,6 +4,7 @@ namespace App\Helpers;
 
 use App\Scopes\TenantScope;
 use App\Models\Hostname;
+use App\User;
 
 trait HasTenant
 {
@@ -36,7 +37,15 @@ trait HasTenant
                 $model->id = substr(md5( time() . rand() ), 0, 12);
 
                 
-            $model->user_id = auth()->user()->id ?? null;
+            if ( self::$has_user ?? true )
+            {
+                if ( app()->runningInConsole() )
+                    $model->user_id = User::first()->id;
+                
+                else 
+                    $model->user_id = auth()->user()->id ?? null;
+            }
+
             $model->jalali_created_at = jdate();
         });
     }

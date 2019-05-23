@@ -33,7 +33,7 @@ class CreateArticlesTable extends Migration
                 'users',
             ], 'uuid');
 
-            $table->unique(['title', 'tenant_id']);
+            // $table->unique(['title', 'tenant_id']);
         });
 
         $schema->create('article_subject', function (Blueprint $table) {

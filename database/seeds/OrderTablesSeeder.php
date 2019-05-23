@@ -19,12 +19,16 @@ class OrderTablesSeeder extends CustomSeeder
      */
     public function run()
     {
+        ShippingMethod::where('id', '!=', null)->forceDelete();
+        OrderStatus::where('id', '!=', null)->forceDelete();
+
         $this->createShippingMethods();
 
         $this->createOrderStatuses();
 
         $orders = $this->createOrders();
-        
+    
+
         Variation::all()->take( rand(5, 10) )->each( function ( $variation ) use ( $orders ) {
             $orders->random()->items()->save(
                 factory(\App\Models\Financial\OrderItem::class)->make([

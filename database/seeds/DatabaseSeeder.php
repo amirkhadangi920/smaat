@@ -1,5 +1,6 @@
 <?php
 use App\Helpers\CustomSeeder;
+use App\User;
 
 class DatabaseSeeder extends CustomSeeder
 {
@@ -12,11 +13,11 @@ class DatabaseSeeder extends CustomSeeder
     {
         $this->call(LocationTablesSeeder::class);
 
+        $this->call(UserTableSeeder::class);
+
         $this->call(LaratrustSeeder::class);
 
-        // $this->call(OptionTableSeeder::class);
-
-        $this->call(UserTableSeeder::class);
+        $this->call(OptionTableSeeder::class);
     
         $this->call(BlogTablesSeeder::class);
 
@@ -26,7 +27,7 @@ class DatabaseSeeder extends CustomSeeder
         
         $this->call(SpecificationTablesSeeder::class);
         
-        $this->call(PromocodeTablesSeeder::class);
+        // $this->call(PromocodeTablesSeeder::class);
 
         $this->call(ProductTablesSeeder::class); 
 

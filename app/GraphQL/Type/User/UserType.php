@@ -45,6 +45,10 @@ class UserType extends BaseType
                     return $this->checkPermission("see-details-user");
                 },
             ],
+            'token' => [
+                'type' => Type::string(),
+                'selectable' => false
+            ],
             'phones' => [
                 'type' => Type::listOf( \GraphQL::type('data_array') ),
                 'privacy' => function() {

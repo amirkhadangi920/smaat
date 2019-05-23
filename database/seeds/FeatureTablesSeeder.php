@@ -10,6 +10,7 @@ use App\Models\Feature\{
     Unit
 };
 use Illuminate\Support\Str;
+use App\User;
 
 class FeatureTablesSeeder extends CustomSeeder
 {
@@ -22,6 +23,8 @@ class FeatureTablesSeeder extends CustomSeeder
      */
     public function run()
     {
+        auth()->loginUsingId( User::first()->id );
+
         $this->tenant_id = $this->getTenant();
         $this->categories = Category::all()->take(20);
 

@@ -29,7 +29,7 @@ class CreateGroupingTables extends Migration
                 'is_active'         => 'boolean|default:1'
             ], ['self', 'users', 'tenants']);
 
-            $table->unique(['title', 'tenant_id']);
+            // $table->unique(['title', 'tenant_id']);
         });
 
         $schema->create('subjects', function (Blueprint $table) {
@@ -40,7 +40,7 @@ class CreateGroupingTables extends Migration
                 'is_active'         => 'boolean|default:1'
             ], ['self', 'users', 'tenants']);
 
-            $table->unique(['title', 'tenant_id']);
+            // $table->unique(['title', 'tenant_id']);
         });
 
         // $schema->create('groupings', function (Blueprint $table) {

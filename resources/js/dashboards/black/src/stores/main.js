@@ -67,6 +67,7 @@ export default new Vuex.Store({
                 method: 'get',
                 url: '/api/v1/user/permissions'
             }).then(({data}) => {
+                console.log(data);
                 commit('setPermissions', data.data)
                 commit('setPermissionsList', data.data)
             }).catch(error => {

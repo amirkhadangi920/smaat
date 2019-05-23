@@ -29,7 +29,7 @@ class CreateSpecsTables extends Migration
             $table->full_timestamps();
             $table->dateTime('jalali_created_at')->nullable();
             $table->boolean('is_active')->default(1);
-            $table->unique(['title', 'tenant_id']);
+            // $table->unique(['title', 'tenant_id']);
         });
 
         $schema->create('spec_headers', function (Blueprint $table) {

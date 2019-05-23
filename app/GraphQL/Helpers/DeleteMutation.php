@@ -9,7 +9,7 @@ use Rebing\GraphQL\Support\SelectFields;
 trait DeleteMutation
 {
     public function type()
-    {   
+    {
         return \GraphQL::type('result');
     }
 

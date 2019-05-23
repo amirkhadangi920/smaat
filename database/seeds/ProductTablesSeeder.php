@@ -10,6 +10,7 @@ use App\Models\Feature\Warranty;
 use App\Models\Feature\Color;
 use App\Models\Feature\Size;
 use App\Models\Promocode\Promocode;
+use App\User;
 
 class ProductTablesSeeder extends CustomSeeder
 {
@@ -29,6 +30,8 @@ class ProductTablesSeeder extends CustomSeeder
      */
     public function run()
     {
+        auth()->loginUsingId( User::first()->id );
+
         $categories = Category::all();
         if ( $categories->count() === 0 )
             return $this->command->error('Your havn\'t any categories :(');
@@ -40,18 +43,17 @@ class ProductTablesSeeder extends CustomSeeder
         $this->createQuestionAndAnswers( $this->products->random() );
         $this->products->each(function ($product) use($spec) {
 
-            for($i = 0; $i < rand(2, 5); ++$i)
-                $variations = $this->createVariations($product);
+            $variations = $this->createVariations($product);
 
-            $variations->each( function( $variation ) {
-                $variation->promocodes()->sync( Promocode::all()->random() );
-            });
+            // $variations->each( function( $variation ) {
+            //     $variation->promocodes()->sync( Promocode::all()->random() );
+            // });
             
-            $variations->each( function( $variation ) {
-                $variation->order_points()->saveMany(
-                    factory(App\Models\Financial\OrderPoint::class, rand(1, 5) )->make() 
-                );
-            });
+            // $variations->each( function( $variation ) {
+            //     $variation->order_points()->saveMany(
+            //         factory(App\Models\Financial\OrderPoint::class, rand(1, 5) )->make() 
+            //     );
+            // });
 
             \App\User::all()->take( rand(5, 10) )->each( function($user) use ( $product ) {
                 $product->reviews()->save(
@@ -103,11 +105,7 @@ class ProductTablesSeeder extends CustomSeeder
         return $this->variations = $this->createTable(
             function() use($product) {
                 return $product->variations()->saveMany(
-                    factory(\App\Models\Product\Variation::class, 1)->make([
-                        'warranty_id'   => Warranty::all()->random()->id,
-                        'color_id'      => Color::all()->random()->id,
-                        'size_id'       => Size::all()->random()->id,
-                    ])
+                    factory(\App\Models\Product\Variation::class, rand(2, 8))->make()
                 );
             },
             [ 'id', 'inventory', 'sales_price', 'warranty_id', 'color_id', 'size_id', 'sending_time' ],
