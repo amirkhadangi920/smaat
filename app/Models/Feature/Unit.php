@@ -12,10 +12,11 @@ use OwenIt\Auditing\Contracts\Auditable as AuditableContract;
 use App\Helpers\CreateTimeline;
 use App\Helpers\HasTenant;
 use App\Helpers\CreatorRelationship;
+use Dimsav\Translatable\Translatable;
 
 class Unit extends Model implements AuditableContract
 {
-    use SoftDeletes, Auditable ,Filterable;
+    use SoftDeletes, Auditable ,Filterable, Translatable;
     use CreateTimeline, HasTenant, CreatorRelationship;
 
     /****************************************
@@ -28,9 +29,19 @@ class Unit extends Model implements AuditableContract
      * @var array
      */
     protected $fillable = [ 
-        'title',
-        'description',
+        // 'title',
+        // 'description',
         'is_active'
+    ];
+    
+    /**
+     * The attributes that are store in the transltion model.
+     *
+     * @var array
+     */
+    public $translatedAttributes = [
+        'title',
+        'description'
     ];
     
     /**
@@ -75,7 +86,7 @@ class Unit extends Model implements AuditableContract
     /**
      * Get all the products of the unit.
      */
-    public function products ()
+    public function products()
     {
         return $this->hasMany(Product::class);
     }

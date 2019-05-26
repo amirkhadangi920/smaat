@@ -16,9 +16,17 @@ class SpecType extends BaseType
 
     public function get_fields()
     {
-        return $this->infoField() + [
+        return [
             'is_mine' => $this->isMineField(),
             'creator' => $this->creator('specification'),
+            'title' => [
+                'type' => Type::string(),
+                'selectable' => false
+            ],
+            'description' => [
+                'type' => Type::string(),
+                'selectable' => false
+            ],
             'category' => $this->relationItemField('category'),
             'headers' => $this->relationListField('spec_header', 'is_active', 'read-specification'),
             'audits' => $this->audits('specification'),

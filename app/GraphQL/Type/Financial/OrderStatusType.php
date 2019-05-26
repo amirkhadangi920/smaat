@@ -16,9 +16,17 @@ class OrderStatusType extends BaseType
 
     public function get_fields()
     {
-        return $this->infoField() + [
+        return [
             'is_mine' => $this->isMineField(),
             'creator' => $this->creator('order_status'),
+            'title' => [
+                'type' => Type::string(),
+                'selectable' => false
+            ],
+            'description' => [
+                'type' => Type::string(),
+                'selectable' => false
+            ],
             'color' => [
                 'type' => Type::string()
             ],

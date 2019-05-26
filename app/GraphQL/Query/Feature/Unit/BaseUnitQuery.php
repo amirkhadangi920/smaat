@@ -8,4 +8,6 @@ use App\GraphQL\Props\Feature\UnitProps;
 class BaseUnitQuery extends MainQuery
 {
     use UnitProps;
+
+    protected $translatable = true;
 }

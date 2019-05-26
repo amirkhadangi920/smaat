@@ -1,5 +1,11 @@
 <template>
-  <base-feature type="size" ref="base" label="سایز" :validate="validate" :fields="[
+  <base-feature
+    type="size"
+    ref="base"
+    label="سایز"
+    :validate="validate"
+    plural="sizes"
+    :fields="[
     {
       field: 'name',
       label: 'عنوان سایز',

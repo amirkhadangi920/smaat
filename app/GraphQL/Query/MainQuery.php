@@ -13,6 +13,8 @@ class MainQuery extends Query
 
     protected $acceptable = true;
 
+    protected $translatable = false;
+
     protected $acceptable_field = 'is_active';
 
     protected $attributes = [
@@ -37,6 +39,12 @@ class MainQuery extends Query
             $data->whereIn('id', $args['ids']);
             
         $this->showOnlyAtiveData($data);
+
+        if ( method_exists($this, 'applyFilters') )
+            $this->afterCreate($args, $data);
+
+        if ( $this->translatable )
+            $data->whereHas('translations');
 
         $data->with( $fields->getRelations() )->select( $this->getSelectFields($fields) );
 

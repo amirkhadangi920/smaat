@@ -12,10 +12,11 @@ use EloquentFilter\Filterable;
 use App\Helpers\CreateTimeline;
 use App\Helpers\HasTenant;
 use App\Helpers\CreatorRelationship;
+use Dimsav\Translatable\Translatable;
 
 class Warranty extends Model implements AuditableContract
 {
-    use SoftDeletes, Auditable, Filterable;
+    use SoftDeletes, Auditable, Filterable, Translatable;
     use CreateTimeline, HasTenant, CreatorRelationship;
 
     /****************************************
@@ -28,11 +29,22 @@ class Warranty extends Model implements AuditableContract
      * @var array
      */
     protected $fillable = [
-        'title',
-        'description',
-        'expire',
+        // 'title',
+        // 'description',
+        // 'expire',
         'logo',
         'is_active'
+    ];
+    
+    /**
+     * The attributes that are store in the transltion model.
+     *
+     * @var array
+     */
+    public $translatedAttributes = [
+        'title',
+        'description',
+        'expire'
     ];
 
     /**
@@ -90,7 +102,7 @@ class Warranty extends Model implements AuditableContract
      *
      * @return Warranty Model
      */
-    public function variations ()
+    public function variations()
     {
         return $this->hasMany(Variation::class);
     }

@@ -2,7 +2,6 @@
 
 namespace App\GraphQL\Type\Feature;
 
-use GraphQL\Type\Definition\Type;
 use App\GraphQL\Type\BaseType as Base;
 
 class BaseType extends Base

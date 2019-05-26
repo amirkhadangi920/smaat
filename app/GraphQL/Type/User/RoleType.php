@@ -22,13 +22,16 @@ class RoleType extends BaseType
             'is_mine' => $this->isMineField(),
             'creator' => $this->creator('role'),
             'name' => [
-                'type' => Type::string()
+                'type' => Type::string(),
+                'selectable' => false
             ],
             'display_name' => [
-                'type' => Type::string()
+                'type' => Type::string(),
+                'selectable' => false
             ],
             'description' => [
-                'type' => Type::string()
+                'type' => Type::string(),
+                'selectable' => false
             ],
             'permissions' => [
                 'type' => Type::listOf( \GraphQL::type('permission') )

@@ -3,6 +3,17 @@
     :type="type"
     :label="label"
     ref="base"
+    plural="reviews"
+    queryFields="
+      product {
+        id
+        name
+        photos {
+          tiny
+          big
+        }
+      }
+    "
   ></base-opinion>
 </template>
 

@@ -65,6 +65,20 @@ class BaseType extends GraphQLType
         ];
     }
 
+    public function votes()
+    {
+        return [
+            'type' => \GraphQL::type('votes'),
+            'resolve' => function($data) {
+                return [
+                    'likes' => $data->dislikesCount,
+                    'dislikes' => $data->dislikesCount
+                ];
+            },
+            'selectable' => false
+        ];
+    }
+
     public function relationListField($type, $acceptable_field = 'is_active', $permission = null)
     {
         return [

@@ -449,6 +449,12 @@
         }
       }
     },
+    mounted() {
+      // Echo.private(`brand`).listen('.task-created', (e) => {
+      //   console.log( e.brand );
+      //   this.data().unshift( e.brand )
+      // });
+    },
     methods: {
       handleScroll() {
         console.log('dsf')

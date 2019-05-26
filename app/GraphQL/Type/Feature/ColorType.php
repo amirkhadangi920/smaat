@@ -19,7 +19,8 @@ class ColorType extends BaseType
             'is_mine' => $this->isMineField(),
             'creator' => $this->creator('color'),
             'name' => [
-                'type' => Type::string()
+                'type' => Type::string(),
+                'selectable' => false
             ],
             'code' => [
                 'type' => Type::string()

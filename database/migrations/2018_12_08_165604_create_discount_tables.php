@@ -22,7 +22,7 @@ class CreateDiscountTables extends Migration
         
         $schema->create('discounts', function (Blueprint $table) {
             $table->table([
-                'info',
+                // 'info',
                 'logo'              => 'nullable|array',
                 'type'              => 'tinyInteger|nullable',
                 'status'            => 'tinyInteger|default:0',
@@ -32,6 +32,18 @@ class CreateDiscountTables extends Migration
                 'tenants',
                 'users',
             ], 'int', ['started_at', 'expired_at']);
+        });
+        
+        $schema->create('discount_translations', function ($table) {
+            $table->increments('id');
+            $table->integer('discount_id')->unsigned();
+
+            $table->string('title', 50);
+            $table->string('description', 255)->nullable();
+
+            $table->string('locale')->index();
+            $table->unique(['discount_id','locale']);
+            $table->foreign('discount_id')->references('id')->on('discounts')->onDelete('cascade');
         });
 
         $schema->create('category_discount', function (Blueprint $table) {

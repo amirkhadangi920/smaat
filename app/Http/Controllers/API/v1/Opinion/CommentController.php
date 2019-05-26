@@ -34,7 +34,7 @@ class CommentController extends OpinionBaseController
      */
     protected $relations = [
         'article:id,title,image',
-        'user:id,first_name,last_name,avatar',
+        'writer:id,first_name,last_name,avatar',
         'answers:id,parent_id,user_id,message,is_accept,created_at,updated_at',
         'answers.user:id,first_name,last_name,avatar'
     ];

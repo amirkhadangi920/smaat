@@ -10,7 +10,8 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class DiscountItem extends Model implements AuditableContract 
 {
-    use Auditable, SoftDeletes;   
+    use Auditable, SoftDeletes;
+
     /****************************************
      **             Attributes
      ***************************************/
@@ -50,7 +51,7 @@ class DiscountItem extends Model implements AuditableContract
      /**
      * get the all discount that owned discount item
      */
-    public function discount ()
+    public function discount()
     {
         return $this->belongsTo(Discount::class);
     }
@@ -58,7 +59,7 @@ class DiscountItem extends Model implements AuditableContract
     /**
      * get the all variation that owned discount item
      */
-    public function variation ()
+    public function variation()
     {
         return $this->belongsTo(Variation::class);
     }

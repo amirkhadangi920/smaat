@@ -22,9 +22,10 @@ class QuestionAndAnswerType extends BaseType
             'message' => [
                 'type' => Type::string()
             ],
-            'user' => [
+            'writer' => [
                 'type' => \GraphQL::type('user'),
             ],
+            'votes' => $this->votes(),
             'product' => $this->relationItemField('product'),
             'question' => $this->relationItemField('question_and_answer', 'is_accept'),
             'answers' => $this->relationListField('question_and_answer', 'is_accept'),

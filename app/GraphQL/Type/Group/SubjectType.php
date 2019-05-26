@@ -4,6 +4,7 @@ namespace App\GraphQL\Type\Group;
 
 use App\GraphQL\Type\BaseType;
 use App\Models\Group\Subject;
+use GraphQL\Type\Definition\Type;
 
 class SubjectType extends BaseType
 {
@@ -15,10 +16,18 @@ class SubjectType extends BaseType
 
     public function get_fields()
     {
-        return $this->infoField() + [
+        return [
             'is_mine' => $this->isMineField(),
             'creator' => $this->creator('subject'),
-            'parent' => $this->relationItemField('category'),
+            'title' => [
+                'type' => Type::string(),
+                'selectable' => false
+            ],
+            'description' => [
+                'type' => Type::string(),
+                'selectable' => false
+            ],
+            'parent' => $this->relationItemField('subject'),
             'childs' => $this->relationListField('subject'),
             'logo' => $this->imageField(),
             'audits' => $this->audits('subject'),

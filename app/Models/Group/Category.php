@@ -22,16 +22,29 @@ use App\Traits\MultiLevel;
 use App\Helpers\CreateTimeline;
 use App\Helpers\HasTenant;
 use App\Helpers\CreatorRelationship;
+use Askedio\SoftCascade\Traits\SoftCascadeTrait;
+use Cviebrock\EloquentSluggable\Sluggable;
+use Dimsav\Translatable\Translatable;
 
 class Category extends Model implements AuditableContract
 {
-    use SoftDeletes, Auditable, HasTags, MultiLevel;
-    use CreateTimeline, HasTenant, CreatorRelationship;
+    use SoftDeletes, Auditable, HasTags, MultiLevel, Sluggable;
+    use CreateTimeline, HasTenant, CreatorRelationship, SoftCascadeTrait;
+    use Translatable;
 
     /****************************************
      **             Attributes
      ***************************************/
     
+    /**
+     * The relations that must have soft deleted with with model.
+     *
+     * @var array
+     */
+    protected $softCascade = [
+        'childs'
+    ];
+
     /**
      * The attributes that are mass assignable.
      *
@@ -39,11 +52,22 @@ class Category extends Model implements AuditableContract
      */
     protected $fillable = [
         'parent_id',
-        'title',
-        'description',
+        // 'title',
+        // 'description',
         'logo',
         'scoring_feilds',
         'is_active'
+    ];
+
+    /**
+     * The attributes that are store in the transltion model.
+     *
+     * @var array
+     */
+    public $translatedAttributes = [
+        'slug',
+        'title',
+        'description',
     ];
 
     /**
@@ -188,12 +212,30 @@ class Category extends Model implements AuditableContract
         return $this->belongsToMany(Promocode::class);
     }
     
-
     /**
      * Get all the discounts that owned the category & adverb
      */
     public function discounts()
     {
         return $this->belongsToMany(Discount::class);
+    }
+
+
+    /****************************************
+     **              Methods
+     ***************************************/
+
+    /**
+     * Return the sluggable configuration array for this model.
+     *
+     * @return array
+     */
+    public function sluggable()
+    {
+        return [
+            'slug' => [
+                'source' => 'title'
+            ]
+        ];
     }
 }

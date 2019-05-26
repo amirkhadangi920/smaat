@@ -8,4 +8,6 @@ use App\GraphQL\Props\Feature\WarrantyProps;
 class BaseWarrantyQuery extends MainQuery
 {
     use WarrantyProps;
+    
+    protected $translatable = true;
 }

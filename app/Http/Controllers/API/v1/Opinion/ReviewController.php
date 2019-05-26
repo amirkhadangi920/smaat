@@ -34,7 +34,7 @@ class ReviewController extends OpinionBaseController
      */
     protected $relations = [
         'product:id,name,photos,label',
-        'user:id,first_name,last_name,avatar',
+        'writer:id,first_name,last_name,avatar',
     ];
 
     /**

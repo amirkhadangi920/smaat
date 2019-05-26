@@ -12,15 +12,28 @@ use EloquentFilter\Filterable;
 use App\Helpers\CreateTimeline;
 use App\Helpers\HasTenant;
 use App\Helpers\CreatorRelationship;
+use Askedio\SoftCascade\Traits\SoftCascadeTrait;
+use Dimsav\Translatable\Translatable;
 
 class Spec extends Model implements AuditableContract
 {
-    use SoftDeletes, Auditable, Filterable, CreateTimeline, HasTenant, CreatorRelationship;
+    use SoftDeletes, Auditable, Filterable;
+    use CreateTimeline, HasTenant, CreatorRelationship;
+    use SoftCascadeTrait, Translatable;
 
     /****************************************
      **             Attributes
      ***************************************/
     
+    /**
+     * The relations that must have soft deleted with with model.
+     *
+     * @var array
+     */
+    protected $softCascade = [
+        'headers',
+    ];
+
     /**
      * The attributes that are mass assignable.
      *
@@ -28,9 +41,19 @@ class Spec extends Model implements AuditableContract
      */
     protected $fillable = [
         'category_id',
+        // 'title',
+        // 'description',
+        'is_active'
+    ];
+
+    /**
+     * The attributes that are store in the transltion model.
+     *
+     * @var array
+     */
+    public $translatedAttributes = [
         'title',
         'description',
-        'is_active'
     ];
 
     /**
@@ -68,7 +91,7 @@ class Spec extends Model implements AuditableContract
     /**
      * Get the category that owned spec.
      */
-    public function category ()
+    public function category()
     {
         return $this->belongsTo(Category::class);
     }
@@ -77,7 +100,7 @@ class Spec extends Model implements AuditableContract
      * Get all the spec header of the spec.
      */
 
-    public function headers ()
+    public function headers()
     {
         return $this->hasMany(SpecHeader::class);
     }
@@ -85,12 +108,12 @@ class Spec extends Model implements AuditableContract
     /**
      * Get all the products of the spec.
      */
-    public function products ()
+    public function products()
     {
         return $this->hasMany(Product::class);
     }
 
-    public static function compare ()
+    public static function compare()
     {
         if ( !session('compare_table') || !session('compare') ) return null;
 

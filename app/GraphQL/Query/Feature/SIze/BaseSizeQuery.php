@@ -8,4 +8,6 @@ use App\GraphQL\Props\Feature\SizeProps;
 class BaseSizeQuery extends MainQuery
 {
     use SizeProps;
+    
+    protected $translatable = true;
 }

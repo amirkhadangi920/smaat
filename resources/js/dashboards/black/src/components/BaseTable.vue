@@ -82,14 +82,14 @@
                     </li>
                     <li class="data-table-cell p-2 d-flex align-items-center justify-content-center" v-if="has_times">
                       <div :style="{ fontSize: '12px' }">
-                        <el-tooltip :content="item.create_time | created" placement="left">
-                          <p class="text-muted hvr-icon-bob"><i class="tim-icons icon-check-2 text-info hvr-icon"></i> {{ item.create_time | ago }}</p>
+                        <el-tooltip :content="item.created_at | created" placement="left">
+                          <p class="text-muted hvr-icon-bob"><i class="tim-icons icon-check-2 text-info hvr-icon"></i> {{ item.created_at | ago }}</p>
                         </el-tooltip>
 
                         <el-tooltip
-                          :content="item.last_update_time | edited" placement="left"
-                          v-if="item.last_update_time !== item.create_time">
-                          <p class="text-muted hvr-icon-hang"><i class="tim-icons icon-pencil text-warning hvr-icon"></i> {{ item.last_update_time | ago }}</p>
+                          :content="item.updated_at | edited" placement="left"
+                          v-if="item.updated_at !== item.created_at">
+                          <p class="text-muted hvr-icon-hang"><i class="tim-icons icon-pencil text-warning hvr-icon"></i> {{ item.updated_at | ago }}</p>
                         </el-tooltip>
                       </div>
                     </li>

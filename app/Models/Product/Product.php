@@ -17,16 +17,32 @@ use EloquentFilter\Filterable;
 use App\Helpers\CreateTimeline;
 use App\Helpers\CreatorRelationship;
 use App\Helpers\HasTenant;
+use Askedio\SoftCascade\Traits\SoftCascadeTrait;
+use Cviebrock\EloquentSluggable\Sluggable;
+use Dimsav\Translatable\Translatable;
 
 class Product extends Model implements AuditableContract, LikeableContract
 {
-    use SoftDeletes, Auditable, HasTenant, HasTags;
+    use SoftDeletes, Auditable, HasTenant, HasTags, Sluggable;
     use Filterable, Likeable, CreateTimeline, CreatorRelationship;
+    use SoftCascadeTrait, Translatable;
 
     /****************************************
      **             Attributes
      ***************************************/
     
+    /**
+     * The relations that must have soft deleted with with model.
+     *
+     * @var array
+     */
+    protected $softCascade = [
+        'variations',
+        'reviews',
+        'questions',
+        'spec_data'
+    ];
+
     /**
      * The attributes specifies that table has char type id
      *
@@ -64,6 +80,21 @@ class Product extends Model implements AuditableContract, LikeableContract
         'label',
         'photos',
         'is_active'
+    ];
+
+    /**
+     * The attributes that are store in the transltion model.
+     *
+     * @var array
+     */
+    public $translatedAttributes = [
+        'slug',
+        'name',
+        'second_name',
+        'description',
+        'review',
+        'advantages',
+        'disadvantages',
     ];
 
     /**
@@ -117,7 +148,7 @@ class Product extends Model implements AuditableContract, LikeableContract
     /**
      * Get all the variations of the product.
      */
-    public function variations ()
+    public function variations()
     {
         return $this->hasMany(Variation::class);
     }
@@ -149,7 +180,7 @@ class Product extends Model implements AuditableContract, LikeableContract
     /**
      * Get all the specification table data of the product.
      */
-    public function spec_data ()
+    public function spec_data()
     {
         return $this->hasMany(SpecData::class);
     }
@@ -207,5 +238,24 @@ class Product extends Model implements AuditableContract, LikeableContract
         return Static::select('id', 'category_id', 'name', 'photo')
             ->with('variation:id,product_id,price,unit,offer,offer_deadline')
             ->where('category_id', $product->category_id)->take(4)->get();
+    }
+    
+
+    /****************************************
+     **              Methods
+     ***************************************/
+
+    /**
+     * Return the sluggable configuration array for this model.
+     *
+     * @return array
+     */
+    public function sluggable()
+    {
+        return [
+            'slug' => [
+                'source' => 'name'
+            ]
+        ];
     }
 }

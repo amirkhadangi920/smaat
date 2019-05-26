@@ -9,6 +9,8 @@ class BaseRoleQuery extends MainQuery
 {
     use RoleProps;
 
+    protected $translatable = true;
+
     public function authorize(array $args)
     {
         return $this->checkPermission('read-role');

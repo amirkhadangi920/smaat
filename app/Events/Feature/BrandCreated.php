@@ -16,8 +16,6 @@ class BrandCreated implements ShouldBroadcast
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
-    public $message;
-
     public $brand;
 
     /**
@@ -27,8 +25,19 @@ class BrandCreated implements ShouldBroadcast
      */
     public function __construct()
     {
-        $this->message = request('message');
-        $this->brand = Brand::find( request('brand', 4) );
+        auth()->loginUsingId( \App\User::first()->id );
+        $brand = factory(Brand::class)->create();
+        
+        $this->brand = [
+            'id'                => $brand->id,
+            'link'              => "/api/v1/brand/{$brand->id}",
+            'logo'              => $brand->logo,
+            'name'              => $brand->name,
+            'description'       => $brand->description,
+            'create_time'       => $brand->getOriginal('created_at'),
+            'last_update_time'  => $brand->getOriginal('updated_at'),
+            'categories'        => []
+        ];
     }
 
     /**

@@ -8,4 +8,6 @@ use App\GraphQL\Props\Feature\BrandProps;
 class BaseBrandQuery extends MainQuery
 {
     use BrandProps;
+    
+    protected $translatable = true;
 }

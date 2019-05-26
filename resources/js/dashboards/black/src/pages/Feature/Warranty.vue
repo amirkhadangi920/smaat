@@ -1,5 +1,12 @@
 <template>
-  <base-feature type="warranty" ref="base" :has_logo="true" label="گارانتی" :validate="validate" :fields="[
+  <base-feature
+    type="warranty"
+    ref="base"
+    :has_logo="true"
+    label="گارانتی"
+    :validate="validate"
+    plural="warranties"
+    :fields="[
     {
       field: 'title',
       label: 'نام گارانتی',

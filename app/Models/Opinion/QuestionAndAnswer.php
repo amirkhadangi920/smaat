@@ -11,14 +11,25 @@ use App\Models\Product\Product;
 use EloquentFilter\Filterable;
 use App\Helpers\CreateTimeline;
 use App\Helpers\HasTenant;
+use Askedio\SoftCascade\Traits\SoftCascadeTrait;
 
 class QuestionAndAnswer extends Model implements AuditableContract
 {
-    use SoftDeletes, Auditable, Filterable, CreateTimeline, HasTenant;
+    use SoftDeletes, Auditable, Filterable;
+    use CreateTimeline, HasTenant, SoftCascadeTrait;
 
     /****************************************
      **             Attributes
      ***************************************/
+
+    /**
+     * The relations that must have soft deleted with with model.
+     *
+     * @var array
+     */
+    protected $softCascade = [
+        'answers'
+    ];
     
     /**
      * The attributes that are mass assignable.
@@ -66,7 +77,7 @@ class QuestionAndAnswer extends Model implements AuditableContract
      * Get the product that this question or answers
      * record for that
      */
-    public function product ()
+    public function product()
     {
         return $this->belongsTo(Product::class);
     }
@@ -76,9 +87,9 @@ class QuestionAndAnswer extends Model implements AuditableContract
      *
      * @return User Model
      */
-    public function user ()
+    public function writer()
     {
-        return $this->belongsTo(\App\User::class);
+        return $this->belongsTo(\App\User::class, 'user_id');
     }
 
     /**

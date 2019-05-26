@@ -7,10 +7,12 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use OwenIt\Auditing\Auditable;
 use OwenIt\Auditing\Contracts\Auditable as AuditableContract;
 use App\Helpers\CreatorRelationship;
+use Askedio\SoftCascade\Traits\SoftCascadeTrait;
+use Dimsav\Translatable\Translatable;
 
 class SpecRow extends Model implements AuditableContract
 {
-    use SoftDeletes, Auditable, CreatorRelationship;
+    use SoftDeletes, Auditable, CreatorRelationship, SoftCascadeTrait, Translatable;
 
     /**
      * The "booting" method of the model.
@@ -31,6 +33,15 @@ class SpecRow extends Model implements AuditableContract
      ***************************************/
     
     /**
+     * The relations that must have soft deleted with with model.
+     *
+     * @var array
+     */
+    protected $softCascade = [
+        'datas',
+    ];
+    
+    /**
      * The attributes that are mass assignable.
      *
      * @var array
@@ -45,6 +56,18 @@ class SpecRow extends Model implements AuditableContract
         'multiple',
         'required',
         'is_active'
+    ];
+
+    /**
+     * The attributes that are store in the transltion model.
+     *
+     * @var array
+     */
+    public $translatedAttributes = [
+        'title',
+        'description',
+        'label',
+        'help'
     ];
 
     /**
@@ -92,7 +115,7 @@ class SpecRow extends Model implements AuditableContract
      * Get the all of the spec row that owned spec header 
      *
      */
-    public function header ()
+    public function header()
     {
         return $this->belongsTo(SpecHeader::class, 'spec_header_id');
     }
@@ -101,7 +124,7 @@ class SpecRow extends Model implements AuditableContract
      * If i want to give one spec data i use it.
      *
      */
-    public function data ()
+    public function data()
     {
         return $this->hasOne(SpecData::class, 'spec_row_id');
     }
@@ -110,7 +133,7 @@ class SpecRow extends Model implements AuditableContract
      * Get the all of the spec data that owned spec row 
      *
      */
-    public function datas ()
+    public function datas()
     {
         return $this->hasMany(SpecData::class, 'spec_row_id');
     }

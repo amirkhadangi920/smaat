@@ -4,7 +4,7 @@
     :group="group"
     label="مقاله"
     :fields="getFields"
-    
+
     :methods="{
       create: create,
       edit: edit,
@@ -251,6 +251,7 @@ export default {
   data() {
     return {
         type: 'article',
+        plural: 'articles',
         group: 'blog',
 
         defaultProps: {
@@ -390,6 +391,21 @@ export default {
           icon: 'icon-time-alarm'
         }
       ]
+    },
+
+    allQuery() {
+      return `
+        title
+        description
+        image {
+          tiny
+          big
+        }
+        reading_time
+        subjects {
+          id
+          title
+        }`
     },
   },
   beforeRouteLeave (to, from, next) {

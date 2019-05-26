@@ -12,10 +12,11 @@ use EloquentFilter\Filterable;
 use App\Helpers\CreateTimeline;
 use App\Helpers\HasTenant;
 use App\Helpers\CreatorRelationship;
+use Dimsav\Translatable\Translatable;
 
 class Color extends Model implements AuditableContract
 {
-    use SoftDeletes, Auditable, Filterable;
+    use SoftDeletes, Auditable, Filterable, Translatable;
     use CreateTimeline, HasTenant, CreatorRelationship;
 
     /****************************************
@@ -28,9 +29,18 @@ class Color extends Model implements AuditableContract
      * @var array
      */
     protected $fillable = [
-        'name',
+        // 'name',
         'code',
         'is_active'
+    ];
+    
+    /**
+     * The attributes that are store in the transltion model.
+     *
+     * @var array
+     */
+    public $translatedAttributes = [
+        'name',
     ];
 
     /**
@@ -75,7 +85,7 @@ class Color extends Model implements AuditableContract
     /**
      * get the all variation that owned the color
      */
-    public function variations ()
+    public function variations()
     {
         return $this->hasMany(Variation::class);
     }

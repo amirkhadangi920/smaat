@@ -75,7 +75,7 @@ class Review extends Model implements AuditableContract, LikeableContract
     /**
      * Get the product that this review belongs to that
      */
-    public function product ()
+    public function product()
     {
         return $this->belongsTo(Product::class);
     }
@@ -85,9 +85,9 @@ class Review extends Model implements AuditableContract, LikeableContract
      *
      * @return User Model
      */
-    public function user ()
+    public function writer()
     {
-        return $this->belongsTo(\App\User::class);
+        return $this->belongsTo(\App\User::class, 'user_id');
     }
 
 }

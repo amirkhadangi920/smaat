@@ -8,4 +8,6 @@ use App\GraphQL\Props\Financial\OrderStatusProps;
 class BaseOrderStatusQuery extends MainQuery
 {
     use OrderStatusProps;
+
+    protected $translatable = true;
 }

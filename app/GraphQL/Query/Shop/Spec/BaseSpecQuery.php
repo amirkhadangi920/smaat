@@ -11,6 +11,8 @@ class BaseSpecQuery extends MainQuery
 
     protected $acceptable = false;
 
+    protected $translatable = true;
+
     public function authorize(array $args)
     {
         return $this->checkPermission('read-specification');

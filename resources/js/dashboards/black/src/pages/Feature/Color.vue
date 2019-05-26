@@ -1,5 +1,11 @@
 <template>
-  <base-feature type="color" ref="base" label="رنگ" :validate="validate" :fields="[
+  <base-feature
+    type="color"
+    ref="base"
+    label="رنگ"
+    :validate="validate"
+    plural="colors"
+    :fields="[
     {
       field: 'name',
       label: 'نام رنگ',
@@ -51,17 +57,6 @@ export default {
       group: 'feature',
       type: 'color'
     }
-  },
-  mounted() {
-
-    Echo.private(`brand`).listen('.task-created', (e) => {
-
-      console.log(e);
-    });
-
-    // window.Echo.channel("newTask").listen(".task-created", e => {
-    //   console.log( e );
-    // });
   },
   validations: {
     name: {

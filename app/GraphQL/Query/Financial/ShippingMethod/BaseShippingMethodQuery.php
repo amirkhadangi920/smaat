@@ -8,4 +8,6 @@ use App\GraphQL\Props\Financial\ShippingMethodProps;
 class BaseShippingMethodQuery extends MainQuery
 {
     use ShippingMethodProps;
+    
+    protected $translatable = true;
 }

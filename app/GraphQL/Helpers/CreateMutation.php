@@ -19,7 +19,7 @@ trait CreateMutation
      */
     public function authorize(array $args)
     {
-        return $this->checkPermission("create-". $this->permission_label ?? $this->type);
+        return $this->checkPermission("create-". ($this->permission_label ? $this->permission_label : $this->type));
     }
 
     /**

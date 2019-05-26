@@ -16,8 +16,16 @@ class DiscountType extends BaseType
 
     public function get_fields()
     {
-        return $this->infoField() + [
+        return [
             'is_mine' => $this->isMineField(),
+            'title' => [
+                'type' => Type::string(),
+                'selectable' => false
+            ],
+            'description' => [
+                'type' => Type::string(),
+                'selectable' => false
+            ],
             'creator' => $this->creator('discount'),
             'logo' => $this->imageField(),
             'started_at' => [

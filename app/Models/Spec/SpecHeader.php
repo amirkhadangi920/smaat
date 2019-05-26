@@ -7,10 +7,12 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use OwenIt\Auditing\Auditable;
 use OwenIt\Auditing\Contracts\Auditable as AuditableContract;
 use App\Helpers\CreatorRelationship;
+use Askedio\SoftCascade\Traits\SoftCascadeTrait;
+use Dimsav\Translatable\Translatable;
 
 class SpecHeader extends Model implements AuditableContract
 {
-    use SoftDeletes, Auditable, CreatorRelationship;
+    use SoftDeletes, Auditable, CreatorRelationship, SoftCascadeTrait, Translatable;
 
     /**
      * The "booting" method of the model.
@@ -31,15 +33,34 @@ class SpecHeader extends Model implements AuditableContract
      ***************************************/
     
     /**
+     * The relations that must have soft deleted with with model.
+     *
+     * @var array
+     */
+    protected $softCascade = [
+        'rows',
+    ];
+    
+    /**
      * The attributes that are mass assignable.
      *
      * @var array
      */
     protected $fillable = [
         'spec_id',
+        // 'title',
+        // 'description',
+        'is_active'
+    ];
+    
+    /**
+     * The attributes that are store in the transltion model.
+     *
+     * @var array
+     */
+    public $translatedAttributes = [
         'title',
         'description',
-        'is_active'
     ];
 
     /**

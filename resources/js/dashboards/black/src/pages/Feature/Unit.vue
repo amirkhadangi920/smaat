@@ -1,5 +1,11 @@
 <template>
-  <base-feature type="unit" ref="base" label="واحد" :validate="validate" :fields="[
+  <base-feature
+    type="unit"
+    ref="base"
+    label="واحد"
+    :validate="validate"
+    plural="units"
+    :fields="[
     {
       field: 'title',
       label: 'عنوان واحد',

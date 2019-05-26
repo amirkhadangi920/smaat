@@ -28,9 +28,10 @@ class ReviewType extends BaseType
             'message' => [
                 'type' => Type::string()
             ],
-            'user' => [
+            'writer' => [
                 'type' => \GraphQL::type('user'),
             ],
+            'votes' => $this->votes(),
             'product' => $this->relationItemField('product'),
             'audits' => $this->audits('review'),
             'is_accept' => $this->acceptableField('review'),

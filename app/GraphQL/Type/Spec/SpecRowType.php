@@ -16,17 +16,27 @@ class SpecRowType extends BaseType
 
     public function get_fields()
     {
-        return $this->infoField() + [
+        return [
             'is_mine' => $this->isMineField(),
             'creator' => $this->creator('specification'),
+            'title' => [
+                'type' => Type::string(),
+                'selectable' => false
+            ],
+            'description' => [
+                'type' => Type::string(),
+                'selectable' => false
+            ],
             'label' => [
-                'type' => Type::string()
+                'type' => Type::string(),
+                'selectable' => false
             ],
             'values' => [
                 'type' => Type::listOf( Type::string() )
             ],
             'help' => [
-                'type' => Type::string()
+                'type' => Type::string(),
+                'selectable' => false
             ],
             'multiple' => [
                 'type' => Type::boolean()

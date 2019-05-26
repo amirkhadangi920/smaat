@@ -15,9 +15,17 @@ class UnitType extends BaseType
 
     public function more_fields()
     {
-        return $this->infoField() + [
+        return [
             'is_mine' => $this->isMineField(),
             'creator' => $this->creator('unit'),
+            'title' => [
+                'type' => Type::string(),
+                'selectable' => false
+            ],
+            'description' => [
+                'type' => Type::string(),
+                'selectable' => false
+            ],
             'audits' => $this->audits('unit'),
             'is_active' => $this->acceptableField('unit'),
         ];

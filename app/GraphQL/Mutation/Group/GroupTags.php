@@ -13,7 +13,7 @@ trait GroupTags
      */
     public function afterCreate($request, $group)
     {
-        $group->attachTags($request->keywords);
+        $group->attachTags($request->get('keywords'));
     }
 
     /**
@@ -25,6 +25,6 @@ trait GroupTags
      */
     public function afterUpdate($request, $group)
     {
-        $group->syncTags($request->keywords);
+        $group->syncTags($request->get('keywords'));
     }
 }

@@ -12,30 +12,51 @@ use App\Helpers\HasTenant;
 use App\Helpers\CreateTimeline;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use App\Helpers\CreatorRelationship;
+use Askedio\SoftCascade\Traits\SoftCascadeTrait;
+use Dimsav\Translatable\Translatable;
 
 class Discount extends Model implements AuditableContract 
 {
-    use Auditable, Filterable, HasTenant;
-    use CreateTimeline, SoftDeletes, CreatorRelationship;
+    use Auditable, Filterable, HasTenant, Translatable;
+    use CreateTimeline, SoftDeletes, CreatorRelationship, SoftCascadeTrait;
     
     /****************************************
      **             Attributes
      ***************************************/
     
     /**
+     * The relations that must have soft deleted with with model.
+     *
+     * @var array
+     */
+    protected $softCascade = [
+        'items'
+    ];
+
+    /**
      * The attributes that are mass assignable.
      *
      * @var array
      */
     protected $fillable = [
-        'title',
-        'description',
+        // 'title',
+        // 'description',
         'logo',
         'type',
         'status',
         'started_at',
         'expired_at',
         'is_active'
+    ];
+
+    /**
+     * The attributes that are store in the transltion model.
+     *
+     * @var array
+     */
+    public $translatedAttributes = [
+        'title',
+        'description'
     ];
 
     /**
@@ -80,7 +101,7 @@ class Discount extends Model implements AuditableContract
     /**
     * Get all of the discount's user.
     */
-    public function user ()
+    public function user()
     {
         return $this->belongsTo(\App\User::class);
     }
@@ -96,7 +117,7 @@ class Discount extends Model implements AuditableContract
     /**
      * get the all Order that owned the discount
      */
-    public function orders ()
+    public function orders()
     {
         return $this->hasMany(Order::class);
     }
@@ -104,7 +125,7 @@ class Discount extends Model implements AuditableContract
     /**
      * Get all the categories that owned the category & adverb
      */
-    public function categories ()
+    public function categories()
     {
         return $this->belongsToMany(Category::class);
     }

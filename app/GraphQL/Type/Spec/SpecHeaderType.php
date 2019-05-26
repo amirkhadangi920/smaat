@@ -16,9 +16,17 @@ class SpecHeaderType extends BaseType
 
     public function get_fields()
     {
-        return $this->infoField() + [
+        return [
             'is_mine' => $this->isMineField(),
             'creator' => $this->creator('specification'),
+            'title' => [
+                'type' => Type::string(),
+                'selectable' => false
+            ],
+            'description' => [
+                'type' => Type::string(),
+                'selectable' => false
+            ],
             'rows' => $this->relationListField('spec_row', 'is_active', 'read-specification'),
             'audits' => $this->audits('specification'),
             'is_active' => $this->acceptableField('specification')

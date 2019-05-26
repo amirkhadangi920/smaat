@@ -4,6 +4,7 @@ namespace App\GraphQL\Type\Group;
 
 use App\Models\Group\Category;
 use App\GraphQL\Type\BaseType;
+use GraphQL\Type\Definition\Type;
 
 class CategoryType extends BaseType
 {
@@ -15,9 +16,17 @@ class CategoryType extends BaseType
 
     public function get_fields()
     {
-        return $this->infoField() + [
+        return [
             'is_mine' => $this->isMineField(),
             'creator' => $this->creator('category'),
+            'title' => [
+                'type' => Type::string(),
+                'selectable' => false
+            ],
+            'description' => [
+                'type' => Type::string(),
+                'selectable' => false
+            ],
             'parent' => $this->relationItemField('category'),
             'logo' => $this->imageField(),
             'childs' => $this->relationListField('category'),

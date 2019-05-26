@@ -3,24 +3,49 @@ import anime from 'animejs'
 import Chart from 'chart.js'
 
 export default {
-  mounted() {    
+  mounted() {
+    
     if (this.data().length === 0) {
-      axios.get(`/api/v1/${this.type}`, {
-        params: this.filters
-      }).then(({data}) => {
-        this.setData(data.data)
+
+      axios.get('/graphql/auth', {
+        params: {
+          query: `{
+            allData: ${this.plural} {
+              data {
+                id
+                ${this.allQuery}
+                created_at
+                updated_at
+              }
+              chart {
+                month
+                count
+              }
+              total
+              trash
+            }
+          }`
+        }
+      })
+      // axios.get(`/api/v1/${this.type}`, {
+      //   params: this.filters
+      // })
+      .then(({data}) => {
+        console.log(data)
+        this.setData(data.data.allData.data)
 
         this.setAttr('counts', {
-          total: data.meta.total,
-          trash: data.meta.trash,
+          total: data.data.allData.total,
+          trash: data.data.allData.trash,
         })
 
         this.setAttr('charts', {
-          labels: data.chart.map(period => period.month),
-          data: data.chart.map(period => period.count)
+          labels: data.data.allData.chart.map(period => period.month),
+          data: data.data.allData.chart.map(period => period.count)
         })
-        if (data.links && data.links.next === null)
-          this.setAttr('has_more', false)
+
+        // if (data.links && data.links.next === null)
+        //   this.setAttr('has_more', false)
 
       }).then(() => {
         setTimeout(() => {

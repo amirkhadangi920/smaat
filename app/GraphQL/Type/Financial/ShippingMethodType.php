@@ -16,9 +16,17 @@ class ShippingMethodType extends BaseType
 
     public function get_fields()
     {
-        return $this->infoField('name') + [
+        return [
             'is_mine' => $this->isMineField(),
             'creator' => $this->creator('shipping_method'),
+            'title' => [
+                'type' => Type::string(),
+                'selectable' => false
+            ],
+            'description' => [
+                'type' => Type::string(),
+                'selectable' => false
+            ],
             'logo' => $this->imageField(),
             'cost' => [
                 'type' => Type::int()

@@ -7,7 +7,9 @@ use App\GraphQL\Props\Blog\ArticleProps;
 
 class BaseArticleQuery extends MainQuery
 {
-    protected $incrementing = false;
-
     use ArticleProps;
+    
+    protected $incrementing = false;
+    
+    protected $translatable = true;
 }

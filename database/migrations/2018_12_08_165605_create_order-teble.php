@@ -21,11 +21,23 @@ class CreateOrderTeble extends Migration
         
         $schema->create('order_statuses', function (Blueprint $table) {
             $table->table([
-                'info',
+                // 'info',
                 'color'             => 'nullable|max:12',
                 'jalali_created_at' => 'datetime|nullable',
                 'is_active'         => 'boolean|default:1'
             ], ['users', 'tenants']);
+        });
+
+        $schema->create('order_status_translations', function ($table) {
+            $table->increments('id');
+            $table->integer('order_status_id')->unsigned();
+
+            $table->string('title', 50);
+            $table->string('description', 255)->nullable();
+
+            $table->string('locale')->index();
+            $table->unique(['order_status_id','locale']);
+            $table->foreign('order_status_id')->references('id')->on('order_statuses')->onDelete('cascade');
         });
 
         $schema->create('orders', function (Blueprint $table) {

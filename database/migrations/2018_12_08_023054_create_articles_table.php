@@ -22,8 +22,8 @@ class CreateArticlesTable extends Migration
 
         $schema->create('articles', function (Blueprint $table) {
             $table->table([
-                'info',
-                'body',
+                // 'sluggable_info',
+                // 'body',
                 'image'             => 'array',
                 'reading_time'      => 'nullable|mediumInteger|comment:How much time need for reading the article in minute',
                 'jalali_created_at' => 'datetime|nullable',
@@ -34,6 +34,20 @@ class CreateArticlesTable extends Migration
             ], 'uuid');
 
             // $table->unique(['title', 'tenant_id']);
+        });
+
+        $schema->create('article_translations', function ($table) {
+            $table->increments('id');
+            $table->uuid('article_id');
+
+            $table->string('slug', 100);
+            $table->string('title', 50);
+            $table->string('description', 255)->nullable();
+            $table->text('body');
+
+            $table->string('locale')->index();
+            $table->unique(['article_id','locale']);
+            $table->foreign('article_id')->references('id')->on('articles')->onDelete('cascade');
         });
 
         $schema->create('article_subject', function (Blueprint $table) {

@@ -12,16 +12,29 @@ use App\Traits\MultiLevel;
 use App\Helpers\CreateTimeline;
 use App\Helpers\HasTenant;
 use App\Helpers\CreatorRelationship;
+use Askedio\SoftCascade\Traits\SoftCascadeTrait;
+use Cviebrock\EloquentSluggable\Sluggable;
+use Dimsav\Translatable\Translatable;
 
 class Subject extends Model implements AuditableContract
 {
-    use SoftDeletes, Auditable, HasTags, MultiLevel;
-    use CreateTimeline, HasTenant, CreatorRelationship;
+    use SoftDeletes, Auditable, HasTags, MultiLevel, Sluggable;
+    use CreateTimeline, HasTenant, CreatorRelationship, SoftCascadeTrait;
+    use Translatable;
 
     /****************************************
      **             Attributes
      ***************************************/
     
+    /**
+     * The relations that must have soft deleted with with model.
+     *
+     * @var array
+     */
+    protected $softCascade = [
+        'childs'
+    ];
+
     /**
      * The attributes that are mass assignable.
      *
@@ -29,10 +42,21 @@ class Subject extends Model implements AuditableContract
      */
     protected $fillable = [
         'parent_id',
-        'title',
-        'description',
+        // 'title',
+        // 'description',
         'logo',
         'is_active'
+    ];
+
+    /**
+     * The attributes that are store in the transltion model.
+     *
+     * @var array
+     */
+    public $translatedAttributes = [
+        'slug',
+        'title',
+        'description',
     ];
 
     /**
@@ -93,5 +117,24 @@ class Subject extends Model implements AuditableContract
     public function articles ()
     {
         return $this->belongsToMany(Article::class);
+    }
+    
+
+    /****************************************
+     **              Methods
+     ***************************************/
+
+    /**
+     * Return the sluggable configuration array for this model.
+     *
+     * @return array
+     */
+    public function sluggable()
+    {
+        return [
+            'slug' => [
+                'source' => 'title'
+            ]
+        ];
     }
 }

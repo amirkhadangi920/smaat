@@ -14,22 +14,25 @@ use App\Models\Places\City;
 use EloquentFilter\Filterable;
 use App\Helpers\CreateTimeline;
 use App\Helpers\HasTenant;
+use Askedio\SoftCascade\Traits\SoftCascadeTrait;
 
 class Order extends Model implements AuditableContract
 {
-    use SoftDeletes, HasTenant, Auditable, Filterable, CreateTimeline;
+    use SoftDeletes, HasTenant, Auditable;
+    use Filterable, CreateTimeline, SoftCascadeTrait;
 
     /****************************************
      **             Attributes
      ***************************************/
-    
+        
     /**
-     * Different types of Factor constants
+     * The relations that must have soft deleted with with model.
+     *
+     * @var array
      */
-    const SELL = 1;
-    const BUY = 2;
-    const SELL_BACK = 3;
-    const BUY_BACK = 4;
+    protected $softCascade = [
+        'items'
+    ];
 
     /**
      * The attributes specifies that table has char type id
@@ -127,7 +130,7 @@ class Order extends Model implements AuditableContract
     /**
      * Get all the items of the product
      */
-    public function items ()
+    public function items()
     {
         return $this->hasMany(OrderItem::class);
     }
@@ -135,7 +138,7 @@ class Order extends Model implements AuditableContract
     /**
      * Get the discount that owned the order
      */
-    public function discount ()
+    public function discount()
     {
         return $this->belongsTo(Discount::class);
     }
@@ -143,7 +146,7 @@ class Order extends Model implements AuditableContract
     /**
      * Get the order status that owned the order
      */
-    public function order_status ()
+    public function order_status()
     {
         return $this->belongsTo(OrderStatus::class);
     }
@@ -151,7 +154,7 @@ class Order extends Model implements AuditableContract
     /**
      * Get the promocode that owned the order
      */
-    public function promocode ()
+    public function promocode()
     {
         return $this->belongsTo(Promocode::class);
     }
@@ -159,7 +162,7 @@ class Order extends Model implements AuditableContract
     /**
      * Get the shipping method that owned the order
      */
-    public function shipping_method ()
+    public function shipping_method()
     {
         return $this->belongsTo(ShippingMethod::class);
     }
@@ -167,7 +170,7 @@ class Order extends Model implements AuditableContract
     /**
      * Get the city that owned the order
      */
-    public function city ()
+    public function city()
     {
         return $this->belongsTo(City::class);
     }

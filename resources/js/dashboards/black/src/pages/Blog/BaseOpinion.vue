@@ -346,6 +346,14 @@ import filtersHelper from '../../mixins/filtersHelper';
 export default {
   props: {
     type: String,
+    plural: {
+      type: String,
+      required: true
+    },
+    queryFields: {
+      type: String,
+      required: true
+    },
     group: {
       type: String,
       default: 'product'
@@ -573,6 +581,28 @@ export default {
         }
 
       ]
+    },
+
+
+    allQuery() {
+      return `
+        is_accept
+        message
+        ${this.queryFields}
+        votes {
+          likes
+          dislikes
+        }
+        writer {
+          id
+          first_name
+          last_name
+          full_name
+          avatar {
+            tiny
+            big
+          }
+        }`
     },
   },
 }

@@ -17,7 +17,42 @@ use App\Events\Feature\BrandCreated;
 |
 */
 
+use Vinkla\Instagram\Instagram;
+use App\User;
+
 Route::get('/test/amir', function() {
+
+    // return app()->getLocale();
+
+    auth()->loginUsingId( User::first()->id );
+
+    Brand::create([
+        'fa' => [
+            'name' => 'نام جدید',
+            'description' => 'توضیحات'
+        ],
+        'en' => [
+            'name' => 'the name',
+            'description' => 'the description'
+        ]
+    ]);
+
+    return Brand::latest()->with('audits')->first();
+
+    app()->setLocale('en');
+
+    return Brand::whereHas('translations')->get();
+
+    return Brand::whereHas('translations', function ($query) {
+        $query->where('name', 'like', '%another%');
+    })->get();
+
+    // return Brand::find(6)->update(['name' => 'anothers name']);
+
+
+    $instagram = new Instagram('465864457.1677ed0.4672896c0971489ab5cabf1c7e327fb6');
+    // return $instagram->media();
+    return $instagram->comments('2004349022115828714_465864457');
 
     event( new BrandCreated() );
     return 'Brand was created';

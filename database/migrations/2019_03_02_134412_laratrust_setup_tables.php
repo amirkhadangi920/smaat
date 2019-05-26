@@ -22,23 +22,50 @@ class LaratrustSetupTables extends Migration
             $table->increments('id');
             $table->add_foreign('users', true, 'uuid', null, 'set null');
             $table->add_foreign('tenants', false, 'uuid');
+            // $table->string('name');
+            // $table->string('display_name')->nullable();
+            // $table->string('description')->nullable();
+            $table->dateTime('jalali_created_at')->nullable();
+            $table->boolean('is_active')->default(true);
+            $table->softDeletes();
+            $table->timestamps();
+
+            // $table->unique(['name', 'tenant_id']);
+        });
+
+        $schema->create('role_translations', function ($table) {
+            $table->increments('id');
+            $table->integer('role_id')->unsigned();
+
             $table->string('name');
             $table->string('display_name')->nullable();
             $table->string('description')->nullable();
-            $table->dateTime('jalali_created_at')->nullable();
-            $table->boolean('is_active')->default(true);
-            $table->timestamps();
 
-            $table->unique(['name', 'tenant_id']);
+            $table->string('locale')->index();
+            $table->unique(['role_id','locale']);
+            $table->foreign('role_id')->references('id')->on('roles')->onDelete('cascade');
         });
 
         // Create table for storing permissions
         $schema->create('permissions', function (Blueprint $table) {
             $table->increments('id');
+            // $table->string('name')->unique();
+            // $table->string('display_name')->nullable();
+            // $table->string('description')->nullable();
+            $table->timestamps();
+        });
+
+        $schema->create('permission_translations', function ($table) {
+            $table->increments('id');
+            $table->integer('permission_id')->unsigned();
+
             $table->string('name')->unique();
             $table->string('display_name')->nullable();
             $table->string('description')->nullable();
-            $table->timestamps();
+
+            $table->string('locale')->index();
+            $table->unique(['permission_id','locale']);
+            $table->foreign('permission_id')->references('id')->on('permissions')->onDelete('cascade');
         });
 
         // Create table for associating roles to users and teams (Many To Many Polymorphic)

@@ -1,5 +1,12 @@
 <template>
-  <base-feature ref="base" type="brand" :has_logo="true" label="برند" :validate="validate" :fields="[
+  <base-feature
+    ref="base"
+    type="brand"
+    :has_logo="true"
+    label="برند"
+    :validate="validate"
+    plural="brands"
+    :fields="[
     {
       field: 'name',
       label: 'نام برند',
@@ -65,9 +72,7 @@ export default {
     },
   },
   mounted() {
-    setTimeout(() => {
-      console.log( this.$store.state.permissions )
-    }, 2000);
+    
   },
   methods: {
     validate() {

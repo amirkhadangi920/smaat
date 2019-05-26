@@ -13,9 +13,9 @@ class UserTableSeeder extends Seeder
     public function run()
     {
         $users = factory(\App\User::class, 10)->create([
-            'city_id' => City::all()->random()->id
+            'city_id' => City::all()->isEmpty() ? null : City::all()->random()->id
         ]);
-
+            
         return $users;
     }
 }

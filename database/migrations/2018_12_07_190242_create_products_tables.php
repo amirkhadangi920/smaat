@@ -22,16 +22,17 @@ class CreateProductsTables extends Migration
         
         $schema->create('products', function (Blueprint $table) {
             $table->table([
-                'name'              => 50,
-                'second_name'       => '50|nullable',
+                // 'slug'              => 100,
+                // 'name'              => 50,
+                // 'second_name'       => '50|nullable',
                 'code'              => '20|nullable',
-                'description'       => '255|nullable',
+                // 'description'       => '255|nullable',
                 'note'              => '300|nullable',
                 'aparat_video'      => '10|nullable',
-                'review'            => 'nullable|text',
+                // 'review'            => 'nullable|text',
                 'photos'            => 'array',
-                'advantages'        => 'array',
-                'disadvantages'     => 'array',
+                // 'advantages'        => 'array',
+                // 'disadvantages'     => 'array',
                 'label'             => 'nullable|unsignedTinyInteger',
                 'views_count'       => 'unsignedInteger|default:0',
                 'avg_vote'          => 'unsignedInteger|default:0',
@@ -48,6 +49,24 @@ class CreateProductsTables extends Migration
             ], 'uuid');
 
             // $table->unique(['name', 'tenant_id']);
+        });
+        
+        $schema->create('product_translations', function ($table) {
+            $table->increments('id');
+            $table->uuid('product_id');
+            
+            $table->string('slug', 100);
+            $table->string('name', 50);
+            $table->string('second_name', 50)->nullable();
+            $table->string('description', 255)->nullable();
+            $table->text('review')->nullable();
+            $table->array('advantages');
+            $table->array('disadvantages');
+
+            $table->string('locale')->index();
+
+            $table->unique(['product_id','locale']);
+            $table->foreign('product_id')->references('id')->on('products')->onDelete('cascade');
         });
 
         $schema->create('variations', function (Blueprint $table) {
@@ -87,8 +106,20 @@ class CreateProductsTables extends Migration
             $table->id();
             $table->reltoSpec_rows();
             $table->reltoProducts();
-            $table->mediumText('data');
+            // $table->mediumText('data');
             $table->full_timestamps();
+        });
+
+        $schema->create('spec_data_translations', function ($table) {
+            $table->increments('id');
+            $table->integer('spec_data_id')->unsigned();
+            
+            $table->mediumText('data');
+            
+            $table->string('locale')->index();
+
+            $table->unique(['spec_data_id','locale']);
+            $table->foreign('spec_data_id')->references('id')->on('spec_data')->onDelete('cascade');
         });
 
         $schema->create('favorites', function (Blueprint $table) {

@@ -19,10 +19,19 @@ class ArticleType extends BaseType
 
     public function get_fields()
     {
-        return $this->infoField() + [
+        return [
             'is_mine' => $this->isMineField(),
+            'title' => [
+                'type' => Type::string(),
+                'selectable' => false
+            ],
+            'description' => [
+                'type' => Type::string(),
+                'selectable' => false
+            ],
             'body' => [
-                'type' => Type::string()
+                'type' => Type::string(),
+                'selectable' => false
             ],
             'reading_time' => [
                 'type' => Type::int()

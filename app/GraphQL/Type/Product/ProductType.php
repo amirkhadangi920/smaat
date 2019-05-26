@@ -22,28 +22,34 @@ class ProductType extends BaseType
             'is_mine' => $this->isMineField(),
             'creator' => $this->creator('product'),
             'name' => [
-                'type' => Type::string()
+                'type' => Type::string(),
+                'selectable' => false
             ],
             'second_name' => [
-                'type' => Type::string()
+                'type' => Type::string(),
+                'selectable' => false
             ],
             'code' => [
                 'type' => Type::string()
             ],
             'description' => [
-                'type' => Type::string()
+                'type' => Type::string(),
+                'selectable' => false
             ],
             'aparat_video' => [
                 'type' => Type::string()
             ],
             'review' => [
-                'type' => Type::string()
+                'type' => Type::string(),
+                'selectable' => false
             ],
             'advantages' => [
-                'type' => Type::listOf( Type::string() )
+                'type' => Type::listOf( Type::string() ),
+                'selectable' => false
             ],
             'disadvantages' => [
-                'type' => Type::listOf( Type::string() )
+                'type' => Type::listOf( Type::string() ),
+                'selectable' => false
             ],
             'photos' => [
                 'type' => Type::listOf( \GraphQL::type('image') ),
@@ -52,6 +58,7 @@ class ProductType extends BaseType
             'views_count' => [
                 'type' => Type::int()
             ],
+            'votes' => $this->votes(),
             'variations' => $this->relationListField('variation', 'is_active', 'read-product'),
             'variation' => $this->relationItemField('variation', 'is_active', 'read-product'),
             'spec' => $this->relationItemField('specification'),

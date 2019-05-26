@@ -31,9 +31,9 @@ class QuestionAndAnswerController extends OpinionBaseController
      */
     protected $relations = [
         'product:id,name,photos,label',
-        'user:id,first_name,last_name,avatar',
+        'writer:id,first_name,last_name,avatar',
         'answers:id,user_id,question_id,message,is_accept,created_at,updated_at',
-        'answers.user:id,first_name,last_name,avatar'
+        'answers.writer:id,first_name,last_name,avatar'
     ];
 
     /**

@@ -9,6 +9,8 @@ class BaseDiscountQuery extends MainQuery
 {
     use DiscountProps;
 
+    protected $translatable = true;
+
     public function authorize(array $args)
     {
         return $this->checkPermission('read-discount');

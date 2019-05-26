@@ -17,6 +17,16 @@ class CommentFilter extends MainFilter
     ];
 
     /**
+     * implementing this model filters
+     *
+     * @return void
+     */
+    public function setup()
+    {
+        return $this->whereNull('parent_id');
+    }
+
+    /**
      * Filter the comments that have answer or not
      *
      * @param boolean $status

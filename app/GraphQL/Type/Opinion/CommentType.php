@@ -22,9 +22,10 @@ class CommentType extends BaseType
             'message' => [
                 'type' => Type::string()
             ],
-            'user' => [
+            'writer' => [
                 'type' => \GraphQL::type('user'),
             ],
+            'votes' => $this->votes(),
             'article' => $this->relationItemField('article'),
             'question' => $this->relationItemField('comment', 'is_accept'),
             'answers' => $this->relationListField('comment', 'is_accept'),

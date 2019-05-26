@@ -20,7 +20,7 @@ trait UpdateMutation
      */
     public function authorize(array $args)
     {
-        return $this->checkPermission("update-". $this->permission_label ?? $this->type);
+        return $this->checkPermission("update-". ($this->permission_label ? $this->permission_label : $this->type));
     }
 
     /**

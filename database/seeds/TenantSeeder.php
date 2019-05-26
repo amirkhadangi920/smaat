@@ -23,6 +23,8 @@ class TenantSeeder extends CustomSeeder
                 'domain' => 'localhost'
             ], [
                 'domain' => '192.168.1.219'
+            ], [
+                'domain' => 'smaat.ir'
             ]
         ]);
             

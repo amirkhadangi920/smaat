@@ -21,6 +21,8 @@
 
 Broadcast::channel('brand', function ($user) {
 
+    return true;
+
     // return true;
 
     return $user->can('read-brands');

@@ -144,6 +144,9 @@ use App\GraphQL\Type\TagType;
 use App\GraphQL\Type\ArrayDataType;
 use App\GraphQL\Type\User\PermissionType;
 use App\GraphQL\Type\AuditType;
+use App\GraphQL\Helpers\MyCustomPaginationFields;
+use App\GraphQL\Type\ChartRecordType;
+use App\GraphQL\Type\VotesType;
 
 return [
 
@@ -239,34 +242,44 @@ return [
     'schemas' => [
         'default' => [
             'query' => [
+                // Feature
+                'brand' => BrandQuery::class,
+                'brands' => BrandsQuery::class,
+                'color' => ColorQuery::class,
+                'colors' => ColorsQuery::class,
+                'unit' => UnitQuery::class,
+                'units' => UnitsQuery::class,
+                'size' => SizeQuery::class,
+                'sizes' => SizesQuery::class,
+                'warranty' => WarrantyQuery::class,
+                'warranties' => WarrantiesQuery::class,
                 
-                
-                // // Financial
-                // 'discount' => DiscountQuery::class,
-                // 'order' => OrderQuery::class,
-                // 'order_status' => OrderStatusQuery::class,
-                // 'shipping_method' => ShippingMethodQuery::class,
+                // Financial
+                'order_status' => OrderStatusQuery::class,
+                'order_statuses' => OrderStatusesQuery::class,
+                'shipping_method' => ShippingMethodQuery::class,
+                'shipping_methods' => ShippingMethodsQuery::class,
 
-                // // Product
-                // 'product' => ProductQuery::class,
-
-                // // Group
-                // 'category' => CategoryQuery::class,
-                // 'subject' => SubjectQuery::class,
+                // Shop
+                'product' => ProductQuery::class,
+                'products' => ProductsQuery::class,
 
                 // Blog
                 'article' => ArticleQuery::class,
                 'articles' => ArticlesQuery::class,
 
-                // // Specification
-                // 'spec' => SpecQuery::class,
+                // Group
+                'category' => CategoryQuery::class,
+                'categories' => CategoriesQuery::class,
+                'subject' => SubjectQuery::class,
+                'subjects' => SubjectsQuery::class,
             ],
             'mutation' => [
                 // User
                 'login'         => LoginUserMutation::class,
                 'register'      => RegisterUserMutation::class,
             ],
-            'middleware' => [],
+            'middleware' => ['CORS'],
             'method' => ['get', 'post'],
         ],
 
@@ -423,7 +436,7 @@ return [
                 'updateRole'    => UpdateRoleMutation::class,
                 'deleteRole'    => DeleteRoleMutation::class,
             ],
-            'middleware' => ['auth:api'],
+            'middleware' => ['auth:api', 'CORS'],
             'method' => ['get', 'post', 'put', 'delete']
         ]
     ],
@@ -486,11 +499,13 @@ return [
 
 
         'audit'             => AuditType::class,
+        'votes'             => VotesType::class,
         'data_array'        => ArrayDataType::class,
         'image'             => ImageType::class,
         'tag'               => TagType::class,
         'result'            => ResultMessageType::class,
         'Character'         => CharacterInterface::class,
+        'chart_record'      => ChartRecordType::class,
     ],
 
     // This callable will be passed the Error object for each errors GraphQL catch.
@@ -529,7 +544,7 @@ return [
      * You can define your own pagination type.
      * Reference \Rebing\GraphQL\Support\PaginationType::class
      */
-    'pagination_type' => \Rebing\GraphQL\Support\PaginationType::class,
+    'pagination_type' => \App\GraphQL\Helpers\PaginationType::class,
 
     /*
      * Config for GraphiQL (see (https://github.com/graphql/graphiql).

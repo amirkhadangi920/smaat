@@ -22,7 +22,6 @@ class CreateGroupingTables extends Migration
 
         $schema->create('categories', function (Blueprint $table) {
             $table->table([
-                'info',
                 'logo'              => 'nullable|array',
                 'scoring_feilds'    => 'mediumText|nullable',
                 'jalali_created_at' => 'datetime|nullable',
@@ -31,16 +30,40 @@ class CreateGroupingTables extends Migration
 
             // $table->unique(['title', 'tenant_id']);
         });
+        
+        $schema->create('category_translations', function ($table) {
+            $table->increments('id');
+            $table->integer('category_id')->unsigned();
+            $table->string('slug', 100);
+            $table->string('title', 50);
+            $table->string('description', 255)->nullable();
+            $table->string('locale')->index();
+
+            $table->unique(['category_id','locale']);
+            $table->foreign('category_id')->references('id')->on('categories')->onDelete('cascade');
+        });
 
         $schema->create('subjects', function (Blueprint $table) {
             $table->table([
-                'info',
+                'sluggable_info',
                 'logo'              => 'nullable|array',
                 'jalali_created_at' => 'datetime|nullable',
                 'is_active'         => 'boolean|default:1'
             ], ['self', 'users', 'tenants']);
 
             // $table->unique(['title', 'tenant_id']);
+        });
+
+        $schema->create('subject_translations', function ($table) {
+            $table->increments('id');
+            $table->integer('subject_id')->unsigned();
+            $table->string('slug', 100);
+            $table->string('title', 50);
+            $table->string('description', 255)->nullable();
+            $table->string('locale')->index();
+
+            $table->unique(['subject_id','locale']);
+            $table->foreign('subject_id')->references('id')->on('subjects')->onDelete('cascade');
         });
 
         // $schema->create('groupings', function (Blueprint $table) {

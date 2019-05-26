@@ -13,11 +13,15 @@ use App\Helpers\CreateTimeline;
 use App\Helpers\HasTenant;
 use App\User;
 use App\Helpers\CreatorRelationship;
+// use Cviebrock\EloquentSluggable\Sluggable;
+use Dimsav\Translatable\Translatable;
+use App\Helpers\TranslatableHelper;
 
 class Brand extends Model implements AuditableContract
 {
     use SoftDeletes, Auditable, Filterable;
     use CreateTimeline, HasTenant, CreatorRelationship;
+    use Translatable, TranslatableHelper;
 
     /****************************************
      **             Attributes
@@ -30,9 +34,20 @@ class Brand extends Model implements AuditableContract
      */
     protected $fillable = [
         'logo',
-        'name',
-        'description',
+        // 'name',
+        // 'description',
         'is_active'
+    ];
+
+    /**
+     * The attributes that are store in the transltion model.
+     *
+     * @var array
+     */
+    public $translatedAttributes = [
+        'slug',
+        'name',
+        'description'
     ];
 
     /**
@@ -68,7 +83,6 @@ class Brand extends Model implements AuditableContract
     /****************************************
      **             Relations
      ***************************************/
-    
 
     /**
      * Get all of the tags for the post.
@@ -81,7 +95,7 @@ class Brand extends Model implements AuditableContract
     /**
      * Get all the products of the brand.
      */
-    public function products ()
+    public function products()
     {
         return $this->hasMany(Product::class);
     }

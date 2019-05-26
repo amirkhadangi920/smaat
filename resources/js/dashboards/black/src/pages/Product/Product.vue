@@ -17,7 +17,7 @@
     <template slot="filter-labels"></template>
     
     <template v-slot:photos-body="slotProps">
-      <img class="tilt" :src="slotProps.row.photos ? slotProps.row.photos.tiny : '/images/placeholder.png'" />
+      <img class="tilt" :src="slotProps.row.photos[0] ? slotProps.row.photos[0].tiny : '/images/placeholder.png'" />
     </template>
 
     <template v-slot:brand-body="slotProps">
@@ -66,6 +66,7 @@ export default {
   data() {
     return {
         type: 'product',
+        plural: 'products',
         group: 'product',
 
         defaultProps: {
@@ -117,6 +118,25 @@ export default {
           icon: 'icon-heart-2'
         }
       ]
+    },
+    
+    allQuery() {
+      return `
+        name
+        description
+        photos {
+          tiny
+        }
+        brand {
+          name
+        }
+        category {
+          title
+        }
+        votes {
+          likes
+          dislikes
+        }`
     },
   },
   beforeRouteLeave (to, from, next) {

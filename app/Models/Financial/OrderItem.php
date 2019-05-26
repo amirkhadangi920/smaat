@@ -75,7 +75,7 @@ class OrderItem extends Model implements AuditableContract
      * Relation to ProductVariation Model
      *
      */
-    public function variation ()
+    public function variation()
     {
         return $this->belongsTo(Variation::class);
     }
@@ -83,7 +83,7 @@ class OrderItem extends Model implements AuditableContract
     /**
      * Get all the items of the product
      */
-    public function order ()
+    public function order()
     {
         return $this->belongsTo(Order::class);
     }

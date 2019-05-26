@@ -12,15 +12,26 @@ use App\Models\Article;
 use EloquentFilter\Filterable;
 use App\Helpers\CreateTimeline;
 use App\Helpers\HasTenant;
+use Askedio\SoftCascade\Traits\SoftCascadeTrait;
 
 class Comment extends Model implements AuditableContract , LikeableContract
 {
-    use SoftDeletes, Auditable, Likeable, Filterable, CreateTimeline, HasTenant;
+    use SoftDeletes, Auditable, Likeable;
+    use Filterable, CreateTimeline, HasTenant, SoftCascadeTrait;
 
     /****************************************
      **             Attributes
      ***************************************/
     
+    /**
+     * The relations that must have soft deleted with with model.
+     *
+     * @var array
+     */
+    protected $softCascade = [
+        'answers'
+    ];
+
     /**
      * The attributes that are mass assignable.
      *
@@ -67,7 +78,7 @@ class Comment extends Model implements AuditableContract , LikeableContract
     /**
      * Get the article that the comment has belongs to that
      */
-    public function article ()
+    public function article()
     {
         return $this->belongsTo(Article::class);
     }
@@ -77,9 +88,9 @@ class Comment extends Model implements AuditableContract , LikeableContract
      *
      * @return User Model
      */
-    public function user()
+    public function writer()
     {
-        return $this->belongsTo(\App\User::class);
+        return $this->belongsTo(\App\User::class, 'user_id');
     }
 
     /**

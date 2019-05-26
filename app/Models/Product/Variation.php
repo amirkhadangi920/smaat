@@ -18,15 +18,26 @@ use App\Models\Discount\DiscountItem;
 use App\Models\Promocode\Promocode;
 use App\Helpers\CreatorRelationship;
 use App\Helpers\HasTenant;
+use Askedio\SoftCascade\Traits\SoftCascadeTrait;
 
 class Variation extends Model implements AuditableContract
 {
-    use SoftDeletes, HasTenant, Auditable, CreatorRelationship;
+    use SoftDeletes, HasTenant, Auditable, CreatorRelationship, SoftCascadeTrait;
 
     /****************************************
      **             Attributes
      ***************************************/
     
+    /**
+     * The relations that must have soft deleted with with model.
+     *
+     * @var array
+     */
+    protected $softCascade = [
+        'order_item',
+        'discount_items',
+    ];
+
     /**
      * The attributes specifies that table has char type id
      *
@@ -105,7 +116,7 @@ class Variation extends Model implements AuditableContract
      *
      * @return Product Model
      */
-    public function product ()
+    public function product()
     {
         return $this->belongsTo(Product::class);
     }
@@ -113,7 +124,7 @@ class Variation extends Model implements AuditableContract
     /**
      * Get all the promocodes that owned the variations & adverb
      */
-    public function promocodes ()
+    public function promocodes()
     {
         return $this->belongsToMany(Promocode::class);
     }
@@ -123,7 +134,7 @@ class Variation extends Model implements AuditableContract
      *
      * @return Color Model
      */
-    public function color ()
+    public function color()
     {
         return $this->belongsTo(Color::class);
     }
@@ -133,7 +144,7 @@ class Variation extends Model implements AuditableContract
      *
      * @return Warranty Model
      */
-    public function size ()
+    public function size()
     {
         return $this->belongsTo(Size::class);
     }
@@ -143,7 +154,7 @@ class Variation extends Model implements AuditableContract
      *
      * @return Warranty Model
      */
-    public function warranty ()
+    public function warranty()
     {
         return $this->belongsTo(Warranty::class);
     }
@@ -154,7 +165,7 @@ class Variation extends Model implements AuditableContract
      * @return OrderItem Model
      */
     
-    public function order_item ()
+    public function order_item()
     {
         return $this->hasMany(OrderItem::class, 'variation_id');
     }
@@ -185,7 +196,7 @@ class Variation extends Model implements AuditableContract
      * @return OrderPoint Model
      */
     
-    public function order_points ()
+    public function order_points()
     {
         return $this->morphMany(OrderPoint::class, 'orderable');
     }

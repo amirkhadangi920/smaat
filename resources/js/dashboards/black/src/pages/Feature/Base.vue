@@ -216,7 +216,8 @@ export default {
     'type',
     'label',
     'has_logo',
-    'validate'
+    'validate',
+    'plural'
   ],
   components: {
     Datatable,
@@ -357,6 +358,26 @@ export default {
       return this.fields;
     },
     
+    allQuery() {
+      let query = ''
+
+      if ( this.has_logo )
+        query += 'logo { tiny big }'
+
+      query += `
+        ${this.queryFields}
+        categories {
+          id
+          title
+        }`
+
+      return query
+    },
+
+    queryFields() {
+      return this.fields.filter( i => i.field !== 'logo' && i.field !== 'categories' ).map( i => i.field ).join(' ');
+    },
+
     hasFilter() {
       return this.filter('query') != null 
           || this.filter('hasLogo') != null

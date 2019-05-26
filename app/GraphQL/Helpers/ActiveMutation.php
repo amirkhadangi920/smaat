@@ -23,7 +23,7 @@ trait ActiveMutation
     {
         $active_type = Str::replaceFirst('is_', '', $this->acceptable_field);
 
-        return $this->checkPermission("{$active_type}-". $this->permission_label ?? $this->type);
+        return $this->checkPermission("{$active_type}-". ($this->permission_label ? $this->permission_label : $this->type));
     }
 
     public function args()

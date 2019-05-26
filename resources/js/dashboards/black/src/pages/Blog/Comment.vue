@@ -3,8 +3,19 @@
     :type="type"
     :group="group"
     rel="article"
+    plural="comments"
     :label="label"
     ref="base"
+    queryFields="
+      article {
+        id
+        title
+        image {
+          tiny
+          big
+        }
+      }
+    "
   ></base-opinion>
 </template>
 

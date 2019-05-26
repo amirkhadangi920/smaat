@@ -8,4 +8,6 @@ use App\GraphQL\Props\Group\SubjectProps;
 class BaseSubjectQuery extends MainQuery
 {
     use SubjectProps;
+    
+    protected $translatable = true;
 }

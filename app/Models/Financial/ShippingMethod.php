@@ -10,10 +10,11 @@ use EloquentFilter\Filterable;
 use App\Helpers\CreateTimeline;
 use App\Helpers\HasTenant;
 use App\Helpers\CreatorRelationship;
+use Dimsav\Translatable\Translatable;
 
 class ShippingMethod extends Model implements AuditableContract
 {
-    use SoftDeletes, Auditable, Filterable;
+    use SoftDeletes, Auditable, Filterable, Translatable;
     use CreateTimeline, HasTenant, CreatorRelationship;
     
     /****************************************
@@ -26,12 +27,22 @@ class ShippingMethod extends Model implements AuditableContract
      * @var array
      */
     protected $fillable = [
-        'name',
-        'description',
+        // 'name',
+        // 'description',
         'logo',
         'cost',
         'minimum',
         'is_active'
+    ];
+
+    /**
+     * The attributes that are store in the transltion model.
+     *
+     * @var array
+     */
+    public $translatedAttributes = [
+        'name',
+        'description'
     ];
 
     /**
@@ -68,7 +79,7 @@ class ShippingMethod extends Model implements AuditableContract
     /**
      * Get all the orders of the shipping method
      */
-    public function orders ()
+    public function orders()
     {
         return $this->hasMany(Order::class);
     }

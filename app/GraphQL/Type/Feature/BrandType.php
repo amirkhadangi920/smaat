@@ -17,7 +17,19 @@ class BrandType extends BaseType
 
     public function more_fields()
     {
-        return $this->infoField('name') + [
+        return [
+            'slug' => [
+                'type' => Type::string(),
+                'selectable' => false
+            ],
+            'name' => [
+                'type' => Type::string(),
+                'selectable' => false
+            ],
+            'description' => [
+                'type' => Type::string(),
+                'selectable' => false
+            ],
             'is_mine' => $this->isMineField(),
             'creator' => $this->creator('brand'),
             'logo' => $this->imageField(),

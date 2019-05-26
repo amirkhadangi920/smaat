@@ -17,6 +17,16 @@ class QuestionAndAnswerFilter extends MainFilter
     ];
 
     /**
+     * implementing this model filters
+     *
+     * @return void
+     */
+    public function setup()
+    {
+        return $this->whereNull('question_id');
+    }
+
+    /**
      * Filter the comments that have answer or not
      *
      * @param boolean $status

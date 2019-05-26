@@ -8,4 +8,6 @@ use App\GraphQL\Props\Feature\ColorProps;
 class BaseColorQuery extends MainQuery
 {
     use ColorProps;
+
+    protected $translatable = true;
 }
