@@ -13,10 +13,11 @@ use EloquentFilter\Filterable;
 use App\Helpers\CreateTimeline;
 use App\Helpers\HasTenant;
 use Askedio\SoftCascade\Traits\SoftCascadeTrait;
+use Nicolaslopezj\Searchable\SearchableTrait;
 
 class Comment extends Model implements AuditableContract , LikeableContract
 {
-    use SoftDeletes, Auditable, Likeable;
+    use SoftDeletes, Auditable, Likeable, SearchableTrait;
     use Filterable, CreateTimeline, HasTenant, SoftCascadeTrait;
 
     /****************************************
@@ -42,6 +43,28 @@ class Comment extends Model implements AuditableContract , LikeableContract
         'parent_id',
         'message',
         'is_accept'
+    ];
+    
+    /**
+     * Searchable rules.
+     * 
+     * Columns and their priority in search results.
+     * Columns with higher values are more important.
+     * Columns with equal values have equal importance.
+     *
+     * @var array
+     */
+    protected $searchable = [
+        'columns' => [
+            'message' => 10,
+            'article_translations.title' => 6,
+            'users.first_name' => 8,
+            'users.last_name' => 8,
+        ],
+        'joins' => [
+            'article_translations' => ['comments.article_id','article_translations.article_id'],
+            'users' => ['comments.user_id','users.id'],
+        ],
     ];
 
     /**

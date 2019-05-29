@@ -13,15 +13,16 @@ use App\Helpers\CreateTimeline;
 use App\Helpers\HasTenant;
 use App\User;
 use App\Helpers\CreatorRelationship;
-// use Cviebrock\EloquentSluggable\Sluggable;
 use Dimsav\Translatable\Translatable;
 use App\Helpers\TranslatableHelper;
+use Nicolaslopezj\Searchable\SearchableTrait;
 
 class Brand extends Model implements AuditableContract
 {
     use SoftDeletes, Auditable, Filterable;
     use CreateTimeline, HasTenant, CreatorRelationship;
     use Translatable, TranslatableHelper;
+    use SearchableTrait;
 
     /****************************************
      **             Attributes
@@ -48,6 +49,25 @@ class Brand extends Model implements AuditableContract
         'slug',
         'name',
         'description'
+    ];
+    
+    /**
+     * Searchable rules.
+     * 
+     * Columns and their priority in search results.
+     * Columns with higher values are more important.
+     * Columns with equal values have equal importance.
+     *
+     * @var array
+     */
+    protected $searchable = [
+        'columns' => [
+            'brand_translations.name' => 10,
+            'brand_translations.description' => 5,
+        ],
+        'joins' => [
+            'brand_translations' => ['brands.id','brand_translations.brand_id'],
+        ],
     ];
 
     /**

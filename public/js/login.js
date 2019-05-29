@@ -1792,6 +1792,9 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
@@ -1803,6 +1806,20 @@ __webpack_require__.r(__webpack_exports__);
     };
   },
   mounted: function mounted() {
+    axios.get('https://api.neshan.org/v1/search', {
+      params: {
+        term: "خیام",
+        lat: 36.2605,
+        lng: 59.6168
+      },
+      headers: {
+        "Api-Key": 'service.iNRXHTXo2sAB90bKwCU4rDllf5TpkJYCwPAeJxDL'
+      }
+    }).then(function (response) {
+      console.log(response.data.items);
+    }).catch(function (error) {
+      return console.log(error.response);
+    });
     if (localStorage.getItem('JWT') && localStorage.getItem('JWT') !== undefined) window.location.replace('/panel');
   },
   methods: {
@@ -2997,6 +3014,16 @@ var render = function() {
       staticClass: "container d-flex align-items-center justify-content-center"
     },
     [
+      _c("div", {
+        staticStyle: {
+          width: "600px",
+          height: "450px",
+          background: "#eee",
+          border: "2px solid #aaa"
+        },
+        attrs: { id: "map" }
+      }),
+      _vm._v(" "),
       _c("div", { staticClass: "row col-8", attrs: { dir: "rtl" } }, [
         _c("div", { staticClass: "col-12 login-form" }, [
           _c(

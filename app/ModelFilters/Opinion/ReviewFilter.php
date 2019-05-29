@@ -28,6 +28,17 @@ class ReviewFilter extends MainFilter
     {
         return $this->has_field_or_not('disadvantages', $status);
     }
+    
+    /**
+     * Filter the Data that have accept or not
+     *
+     * @param boolean $status
+     * @return Builder
+     */
+    public function isAccept($status)
+    {
+        return $this->where('is_accept', $status);
+    }
 
     /**
      * Filter the Reviews that wrote by specific user
@@ -37,7 +48,7 @@ class ReviewFilter extends MainFilter
      */
     public function writers($ids)
     {
-        return $this->filter_relation('user', $ids);
+        return $this->filter_relation('writer', $ids);
     }
 
     /**

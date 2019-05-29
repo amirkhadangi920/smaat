@@ -42,7 +42,8 @@ use App\GraphQL\Query\Blog\Article\{ ArticlesQuery, ArticleQuery };
 // User Queries
 use App\GraphQL\Query\User\{
     User\UserQuery, User\UsersQuery,
-    Role\RoleQuery, Role\RolesQuery
+    Role\RoleQuery, Role\RolesQuery,
+    Cart\CartQuery
 };
 
 // Feature Mutations
@@ -90,7 +91,9 @@ use App\GraphQL\Mutation\User\{
     User\CreateUserMutation, User\UpdateUserMutation, User\DeleteUserMutation,
     User\LoginUserMutation, User\RegisterUserMutation,
 
-    Role\CreateRoleMutation, Role\UpdateRoleMutation, Role\DeleteRoleMutation
+    Role\CreateRoleMutation, Role\UpdateRoleMutation, Role\DeleteRoleMutation,
+    
+    Cart\AddCartMutation, Cart\RemoveCartMutation
 };
 
 // Spec Mutations
@@ -147,6 +150,8 @@ use App\GraphQL\Type\AuditType;
 use App\GraphQL\Helpers\MyCustomPaginationFields;
 use App\GraphQL\Type\ChartRecordType;
 use App\GraphQL\Type\VotesType;
+use App\GraphQL\Type\Spec\SpecDefaultType;
+use App\GraphQL\Type\Spec\SpecDataType;
 
 return [
 
@@ -336,6 +341,7 @@ return [
                 'users' => UsersQuery::class,
                 'role' => RoleQuery::class,
                 'roles' => RolesQuery::class,
+                'cart' => CartQuery::class,
             ],
             'mutation' => [
                 // Blog
@@ -435,6 +441,11 @@ return [
                 'createRole'    => CreateRoleMutation::class,
                 'updateRole'    => UpdateRoleMutation::class,
                 'deleteRole'    => DeleteRoleMutation::class,
+                
+
+                // Cart
+                'addCart'       => AddCartMutation::class,
+                'removeCart'    => RemoveCartMutation::class,
             ],
             'middleware' => ['auth:api', 'CORS'],
             'method' => ['get', 'post', 'put', 'delete']
@@ -482,6 +493,8 @@ return [
         'specification'     => SpecType::class,
         'spec_header'       => SpecHeaderType::class,
         'spec_row'          => SpecRowType::class,
+        'spec_data'         => SpecDataType::class,
+        'spec_default'      => SpecDefaultType::class,
 
         // Group
         'category'          => CategoryType::class,

@@ -37,12 +37,13 @@ class ArticleType extends BaseType
                 'type' => Type::int()
             ],
             'image' => $this->imageField(),
-            'user' => [
+            'writer' => [
                 'type' => \GraphQl::type('user'),
             ],
             'tags' => [
                 'type' => Type::listOf( \GraphQl::type('tag') ),
             ],
+            'votes' => $this->votes(),
             'subjects' => $this->relationListField('subject'),
             'comments' => $this->relationListField('comment', 'is_accept'),
             'audits' => $this->audits('article'),

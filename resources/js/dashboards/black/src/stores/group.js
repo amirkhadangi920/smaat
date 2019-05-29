@@ -72,5 +72,38 @@ export default {
                 imageUrl: ''
             },
         },
+
+        query: {
+            category: `{
+                categories {
+                    id
+                    title
+                    childs {
+                        id
+                        title
+                        childs {
+                            id
+                            title
+                            childs {
+                                id
+                                title
+                                childs {
+                                    id
+                                    title
+                                    childs {
+                                        id
+                                        title
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }`
+        },
+
+        handleQuery: {
+            category: (res) => res.data.categories,
+        }
     },
 }

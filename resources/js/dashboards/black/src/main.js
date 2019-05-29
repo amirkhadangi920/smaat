@@ -33,6 +33,15 @@ window.axios = axios;
 import jQuery from 'jquery'
 window.jQuery = window.$ = jQuery
 
+import * as VueGoogleMaps from "vue2-google-maps";
+
+Vue.use(VueGoogleMaps, {
+  load: {
+    key: "AIzaSyBU1afr-11l358AtkO9EgCZXlOyYe3wLpo",
+    libraries: "places" // necessary for places input
+  }
+});
+
 import VueSweetalert2 from 'vue-sweetalert2';
 
 import store from './stores/main'

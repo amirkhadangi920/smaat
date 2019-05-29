@@ -302,6 +302,7 @@
     ],
     data() {
       return {
+
         layout: this.attr('is_grid_view'),
         selected_items: this.attr('selected_items'),
         

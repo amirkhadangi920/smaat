@@ -41,16 +41,16 @@ class ProductFilter extends MainFilter
     {
         return $this->whereLike('code', $code);
     }
-
+       
     /**
-     * Filter the Products base on it's label
+     * Filter the Data that have active or not
      *
-     * @param string $labels
+     * @param boolean $status
      * @return Builder
      */
-    public function label($labels)
+    public function isActive($status)
     {
-        return $this->whereIn('label', $labels);
+        return $this->where('is_active', $status);
     }
 
     /**

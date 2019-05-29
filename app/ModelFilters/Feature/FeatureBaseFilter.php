@@ -20,6 +20,17 @@ class FeatureBaseFilter extends MainFilter
         
         $this->has_field_or_not('logo', $status);
     }
+    
+    /**
+     * Filter the Data that have active or not
+     *
+     * @param boolean $status
+     * @return Builder
+     */
+    public function isActive($status)
+    {
+        return $this->where('is_active', $status);
+    }
 
     /**
      * Filter the Features that have specific categories or not
@@ -29,7 +40,6 @@ class FeatureBaseFilter extends MainFilter
      */
     public function hasCategories($status)
     {
-        
         $this->has_relation_or_not('categories', $status);
     }
 

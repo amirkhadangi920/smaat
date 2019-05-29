@@ -3,9 +3,12 @@
 namespace App\Models\Group;
 
 use Illuminate\Database\Eloquent\Model;
+use Cviebrock\EloquentSluggable\Sluggable;
 
 class SubjectTranslation extends Model
 {
+    use Sluggable;
+
     /****************************************
      **             Attributes
      ***************************************/

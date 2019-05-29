@@ -25,12 +25,13 @@ use App\Helpers\CreatorRelationship;
 use Askedio\SoftCascade\Traits\SoftCascadeTrait;
 use Cviebrock\EloquentSluggable\Sluggable;
 use Dimsav\Translatable\Translatable;
+use Nicolaslopezj\Searchable\SearchableTrait;
 
 class Category extends Model implements AuditableContract
 {
-    use SoftDeletes, Auditable, HasTags, MultiLevel, Sluggable;
+    use SoftDeletes, Auditable, HasTags, MultiLevel;
     use CreateTimeline, HasTenant, CreatorRelationship, SoftCascadeTrait;
-    use Translatable;
+    use Translatable, SearchableTrait;
 
     /****************************************
      **             Attributes
@@ -68,6 +69,25 @@ class Category extends Model implements AuditableContract
         'slug',
         'title',
         'description',
+    ];
+    
+    /**
+     * Searchable rules.
+     * 
+     * Columns and their priority in search results.
+     * Columns with higher values are more important.
+     * Columns with equal values have equal importance.
+     *
+     * @var array
+     */
+    protected $searchable = [
+        'columns' => [
+            'category_translations.title' => 10,
+            'category_translations.description' => 5,
+        ],
+        'joins' => [
+            'category_translations' => ['categories.id','category_translations.category_id'],
+        ],
     ];
 
     /**
@@ -224,18 +244,4 @@ class Category extends Model implements AuditableContract
     /****************************************
      **              Methods
      ***************************************/
-
-    /**
-     * Return the sluggable configuration array for this model.
-     *
-     * @return array
-     */
-    public function sluggable()
-    {
-        return [
-            'slug' => [
-                'source' => 'title'
-            ]
-        ];
-    }
 }

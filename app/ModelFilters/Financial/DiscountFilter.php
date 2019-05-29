@@ -35,11 +35,33 @@ class DiscountFilter extends MainFilter
      * @param boolean $logo
      * @return Builder
      */
-    public function hasItem ($status)
+    public function hasItem($status)
     {
         return $this->has_relation_or_not('items', $status);
     }
+        
+    /**
+     * Filter the Data that have active or not
+     *
+     * @param boolean $status
+     * @return Builder
+     */
+    public function isActive($status)
+    {
+        return $this->where('is_active', $status);
+    }
 
+    /**
+     * Filter the Features that have specific categories or not
+     *
+     * @param boolean $status
+     * @return Builder
+     */
+    public function hasCategories($status)
+    {
+        $this->has_relation_or_not('categories', $status);
+    }
+    
     /**
      * Filter the discounts that belongs to specific categories
      *

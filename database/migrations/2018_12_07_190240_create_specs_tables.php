@@ -65,27 +65,44 @@ class CreateSpecsTables extends Migration
 
         $schema->create('spec_rows', function (Blueprint $table) {
             $table->table([
-                // 'info',
-                // 'label'     => '50|nullable',
-                'values'    => 'array',
-                // 'help'      => '255|nullable',
-                'multiple'  => 'default:0',
-                'required'  => 'default:1',
-                'is_active' => 'boolean|default:1'
+                'is_detailable' => 'default:0',
+                'is_filterable' => 'default:0',
+                'is_multiple'   => 'default:0',
+                'is_required'   => 'default:1',
+                'is_active'     => 'boolean|default:1'
             ], ['spec_headers', 'users']);
         });
 
         $schema->create('spec_row_translations', function ($table) {
             $table->increments('id');
             $table->integer('spec_row_id')->unsigned();
+
             $table->string('title', 50);
             $table->string('description', 255)->nullable();
-            $table->string('label', 50);
+            $table->string('prefix', 50)->nullable();
+            $table->string('postfix', 50)->nullable();
             $table->string('help', 255)->nullable();
             $table->string('locale')->index();
 
             $table->unique(['spec_row_id','locale']);
             $table->foreign('spec_row_id')->references('id')->on('spec_rows')->onDelete('cascade');
+        });
+
+        $schema->create('spec_defaults', function (Blueprint $table) {
+            $table->table([
+                // 
+            ], ['spec_rows']);
+        });
+
+        $schema->create('spec_default_translations', function ($table) {
+            $table->increments('id');
+            $table->integer('spec_default_id')->unsigned();
+
+            $table->mediumText('value');
+            $table->string('locale')->index();
+
+            $table->unique(['spec_default_id','locale']);
+            $table->foreign('spec_default_id')->references('id')->on('spec_defaults')->onDelete('cascade');
         });
     }
 

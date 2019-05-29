@@ -22,7 +22,7 @@ class LaratrustSetupTables extends Migration
             $table->increments('id');
             $table->add_foreign('users', true, 'uuid', null, 'set null');
             $table->add_foreign('tenants', false, 'uuid');
-            // $table->string('name');
+            $table->string('name');
             // $table->string('display_name')->nullable();
             // $table->string('description')->nullable();
             $table->dateTime('jalali_created_at')->nullable();
@@ -37,7 +37,6 @@ class LaratrustSetupTables extends Migration
             $table->increments('id');
             $table->integer('role_id')->unsigned();
 
-            $table->string('name');
             $table->string('display_name')->nullable();
             $table->string('description')->nullable();
 
@@ -49,7 +48,7 @@ class LaratrustSetupTables extends Migration
         // Create table for storing permissions
         $schema->create('permissions', function (Blueprint $table) {
             $table->increments('id');
-            // $table->string('name')->unique();
+            $table->string('name')->unique();
             // $table->string('display_name')->nullable();
             // $table->string('description')->nullable();
             $table->timestamps();
@@ -59,7 +58,7 @@ class LaratrustSetupTables extends Migration
             $table->increments('id');
             $table->integer('permission_id')->unsigned();
 
-            $table->string('name')->unique();
+            // $table->string('name')->unique();
             $table->string('display_name')->nullable();
             $table->string('description')->nullable();
 

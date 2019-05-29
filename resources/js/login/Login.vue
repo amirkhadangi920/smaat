@@ -1,5 +1,8 @@
 <template>
     <div class="container d-flex align-items-center justify-content-center">
+
+        <div id="map" style="width: 600px; height: 450px; background: #eee; border: 2px solid #aaa;"></div>
+
         <div class="row col-8" dir="rtl">
             <div class="col-12 login-form">
                 <form @submit.prevent="login">
@@ -40,6 +43,19 @@ export default {
         }
     },
     mounted() {
+        axios.get('https://api.neshan.org/v1/search', {
+            params: {
+                term: "خیام",
+                lat: 36.2605,
+                lng: 59.6168
+            },
+            headers: {
+                "Api-Key": 'service.iNRXHTXo2sAB90bKwCU4rDllf5TpkJYCwPAeJxDL'
+            }
+        }).then( response => {
+            console.log( response.data.items )
+        }).catch( error => console.log( error.response ))
+
         if ( localStorage.getItem('JWT') && localStorage.getItem('JWT') !== undefined )
             window.location.replace('/panel')
     },

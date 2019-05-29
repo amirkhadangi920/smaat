@@ -38,6 +38,17 @@ class SpecFilter extends MainFilter
     {
         return $this->has_relation_or_not('headers', $status);
     }
+       
+    /**
+     * Filter the Data that have active or not
+     *
+     * @param boolean $status
+     * @return Builder
+     */
+    public function isActive($status)
+    {
+        return $this->where('is_active', $status);
+    }
     
     /**
      * Filter the the Spec table that have rows or not

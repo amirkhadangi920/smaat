@@ -4,9 +4,12 @@ namespace App\Models\Places;
 
 use Illuminate\Database\Eloquent\Model;
 use App\Models\Financial\Order;
+use Nicolaslopezj\Searchable\SearchableTrait;
 
 class City extends Model
 {
+    use SearchableTrait;
+
     /****************************************
      **             Attributes
      ***************************************/
@@ -21,7 +24,23 @@ class City extends Model
         'longitude‎',
         'latitude‎',
         'name',
-        'code'
+    ];
+
+    /**
+     * Searchable rules.
+     * 
+     * Columns and their priority in search results.
+     * Columns with higher values are more important.
+     * Columns with equal values have equal importance.
+     *
+     * @var array
+     */
+    protected $searchable = [
+        'columns' => [
+            'name' => 10,
+            'longitude‎' => 5,
+            'latitude‎' => 5,
+        ],
     ];
 
     /**
@@ -30,6 +49,7 @@ class City extends Model
      * @var bool
      */
     public $timestamps = false;
+
 
     /****************************************
      **            Relationships

@@ -24,7 +24,7 @@ class OrderFilter extends MainFilter
      * @param string $code
      * @return Builder
      */
-    public function id($id)
+    public function code($id)
     {
         return $this->whereLike('id', $id);
     }
@@ -123,7 +123,7 @@ class OrderFilter extends MainFilter
      * @param array $ids
      * @return Builder
      */
-    public function shipping_methods($ids)
+    public function shippingMethods($ids)
     {
         return $this->filter_relation('shipping_method', $ids);
     }

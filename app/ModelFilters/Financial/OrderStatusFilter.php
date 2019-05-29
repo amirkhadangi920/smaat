@@ -16,4 +16,15 @@ class OrderStatusFilter extends MainFilter
         'name',
         'description',
     ];
+       
+    /**
+     * Filter the Data that have active or not
+     *
+     * @param boolean $status
+     * @return Builder
+     */
+    public function isActive($status)
+    {
+        return $this->where('is_active', $status);
+    }
 }

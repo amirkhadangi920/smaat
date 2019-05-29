@@ -22,18 +22,10 @@ class CreateProductsTables extends Migration
         
         $schema->create('products', function (Blueprint $table) {
             $table->table([
-                // 'slug'              => 100,
-                // 'name'              => 50,
-                // 'second_name'       => '50|nullable',
                 'code'              => '20|nullable',
-                // 'description'       => '255|nullable',
                 'note'              => '300|nullable',
                 'aparat_video'      => '10|nullable',
-                // 'review'            => 'nullable|text',
                 'photos'            => 'array',
-                // 'advantages'        => 'array',
-                // 'disadvantages'     => 'array',
-                'label'             => 'nullable|unsignedTinyInteger',
                 'views_count'       => 'unsignedInteger|default:0',
                 'avg_vote'          => 'unsignedInteger|default:0',
                 'votes_count'       => 'unsignedInteger|default:0',
@@ -120,6 +112,13 @@ class CreateProductsTables extends Migration
 
             $table->unique(['spec_data_id','locale']);
             $table->foreign('spec_data_id')->references('id')->on('spec_data')->onDelete('cascade');
+        });
+
+        $schema->create('spec_data_values', function (Blueprint $table) {
+            $table->add_foreign('spec_data', false, 'unsignedInteger', 'spec_data_id');
+            $table->reltoSpec_defaults();
+
+            $table->primary([ 'spec_data_id', 'spec_default_id' ]);
         });
 
         $schema->create('favorites', function (Blueprint $table) {

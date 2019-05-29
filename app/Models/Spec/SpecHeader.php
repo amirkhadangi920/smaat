@@ -9,10 +9,12 @@ use OwenIt\Auditing\Contracts\Auditable as AuditableContract;
 use App\Helpers\CreatorRelationship;
 use Askedio\SoftCascade\Traits\SoftCascadeTrait;
 use Dimsav\Translatable\Translatable;
+use Nicolaslopezj\Searchable\SearchableTrait;
 
 class SpecHeader extends Model implements AuditableContract
 {
-    use SoftDeletes, Auditable, CreatorRelationship, SoftCascadeTrait, Translatable;
+    use SoftDeletes, Auditable, CreatorRelationship;
+    use SoftCascadeTrait, Translatable, SearchableTrait;
 
     /**
      * The "booting" method of the model.
@@ -61,6 +63,25 @@ class SpecHeader extends Model implements AuditableContract
     public $translatedAttributes = [
         'title',
         'description',
+    ];
+    
+    /**
+     * Searchable rules.
+     * 
+     * Columns and their priority in search results.
+     * Columns with higher values are more important.
+     * Columns with equal values have equal importance.
+     *
+     * @var array
+     */
+    protected $searchable = [
+        'columns' => [
+            'spec_header_translations.title' => 10,
+            'spec_header_translations.description' => 5,
+        ],
+        'joins' => [
+            'spec_header_translations' => ['spec_headers.id','spec_header_translations.spec_header_id'],
+        ],
     ];
 
     /**

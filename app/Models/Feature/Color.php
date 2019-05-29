@@ -13,11 +13,13 @@ use App\Helpers\CreateTimeline;
 use App\Helpers\HasTenant;
 use App\Helpers\CreatorRelationship;
 use Dimsav\Translatable\Translatable;
+use Nicolaslopezj\Searchable\SearchableTrait;
 
 class Color extends Model implements AuditableContract
 {
     use SoftDeletes, Auditable, Filterable, Translatable;
     use CreateTimeline, HasTenant, CreatorRelationship;
+    use SearchableTrait;
 
     /****************************************
      **             Attributes
@@ -41,6 +43,25 @@ class Color extends Model implements AuditableContract
      */
     public $translatedAttributes = [
         'name',
+    ];
+    
+    /**
+     * Searchable rules.
+     * 
+     * Columns and their priority in search results.
+     * Columns with higher values are more important.
+     * Columns with equal values have equal importance.
+     *
+     * @var array
+     */
+    protected $searchable = [
+        'columns' => [
+            'color_translations.name' => 10,
+            'code' => 8,
+        ],
+        'joins' => [
+            'color_translations' => ['colors.id','color_translations.color_id'],
+        ],
     ];
 
     /**

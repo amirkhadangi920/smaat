@@ -9,9 +9,10 @@ use App\Models\Hostname;
 
 class CustomSeeder extends Seeder
 {
-    public function createTable($class, $fields, $data = [], $title = null, $helper = null)
+    public function createTable($class, $fields, $data = [], $title = null, $helper = null, $count = null)
     {
-        $counts = rand(1, 5);
+        $counts = $count ? $count : rand(1, 5);
+        
         if ( is_null($title) )
             $title = str_replace('-', ' ', Str::kebab( class_basename($class) ));
 

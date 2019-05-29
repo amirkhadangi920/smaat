@@ -39,12 +39,12 @@ class SpecificationTablesSeeder extends Seeder
                 factory(\App\Models\Spec\SpecRow::class, rand(1, 5) )->create([
                     'spec_header_id' => $spec_header->id
                 ])
-            );
-        });
+            )->each( function($row) {
 
-        return [
-            'rows'          => $this->spec_rows,
-            'spec_table'    => $spec->id
-        ];
+                factory(\App\Models\Spec\SpecDefault::class, rand(1, 10) )->create([
+                    'spec_row_id' => $row->id
+                ]);
+            });
+        });
     }
 }

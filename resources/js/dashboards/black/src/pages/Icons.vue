@@ -808,10 +808,37 @@
 
       </div>
     </div>
+
+     <div id="mapid" :style="{ height: '200px'}"></div>
+
   </div>
 </template>
 <script>
-export default {};
+import L from 'leaflet'
+import 'leaflet/dist/leaflet.css'
+
+export default {
+
+  data() {
+    return {
+      center: { lat: 45.508, lng: -73.587 },
+    }
+  },
+  created() {
+    setTimeout(() => {
+      var mymap = L.map('mapid').setView([51.505, -0.09], 13);
+      return;
+      var myMap = new L.Map('mapid', {
+        key: 'iNRXHTXo2sAB90bKwCU4rDllf5TpkJYCwPAeJxDL',
+        maptype: 'dreamy',
+        poi: true,
+        traffic: false,
+        center: [35.699739, 51.338097],
+        zoom: 14
+      });
+    }, 2000);
+  }
+};
 </script>
 <style>
 </style>

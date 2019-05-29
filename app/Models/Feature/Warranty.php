@@ -13,11 +13,13 @@ use App\Helpers\CreateTimeline;
 use App\Helpers\HasTenant;
 use App\Helpers\CreatorRelationship;
 use Dimsav\Translatable\Translatable;
+use Nicolaslopezj\Searchable\SearchableTrait;
 
 class Warranty extends Model implements AuditableContract
 {
     use SoftDeletes, Auditable, Filterable, Translatable;
     use CreateTimeline, HasTenant, CreatorRelationship;
+    use SearchableTrait;
 
     /****************************************
      **             Attributes
@@ -45,6 +47,26 @@ class Warranty extends Model implements AuditableContract
         'title',
         'description',
         'expire'
+    ];
+
+    /**
+     * Searchable rules.
+     * 
+     * Columns and their priority in search results.
+     * Columns with higher values are more important.
+     * Columns with equal values have equal importance.
+     *
+     * @var array
+     */
+    protected $searchable = [
+        'columns' => [
+            'warranty_translations.title' => 10,
+            'warranty_translations.description' => 5,
+            'warranty_translations.expire' => 5,
+        ],
+        'joins' => [
+            'warranty_translations' => ['warranties.id','warranty_translations.warranty_id'],
+        ],
     ];
 
     /**

@@ -9,10 +9,12 @@ use EloquentFilter\Filterable;
 use App\Helpers\HasTenant;
 use App\Helpers\CreateTimeline;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Dimsav\Translatable\Translatable;
 
 class Role extends LaratrustRole implements AuditableContract
 {
     use SoftDeletes ,Auditable, Filterable, HasTenant, CreateTimeline;
+    use Translatable;
 
     /****************************************
      **             Attributes
@@ -25,9 +27,19 @@ class Role extends LaratrustRole implements AuditableContract
      */
     protected $fillable = [
         'name',
+        // 'display_name',
+        // 'description',
+        'is_active'
+    ];
+
+    /**
+     * The attributes that are store in the transltion model.
+     *
+     * @var array
+     */
+    public $translatedAttributes = [
         'display_name',
         'description',
-        'is_active'
     ];
 
     /**

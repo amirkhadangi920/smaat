@@ -3,9 +3,12 @@
 namespace App\Models\Places;
 
 use Illuminate\Database\Eloquent\Model;
+use Nicolaslopezj\Searchable\SearchableTrait;
 
 class Country extends Model
 {
+    use SearchableTrait;
+
     /****************************************
      **             Attributes
      ***************************************/
@@ -20,6 +23,24 @@ class Country extends Model
         'latitude‎',
         'name',
         'code'
+    ];
+    
+    /**
+     * Searchable rules.
+     * 
+     * Columns and their priority in search results.
+     * Columns with higher values are more important.
+     * Columns with equal values have equal importance.
+     *
+     * @var array
+     */
+    protected $searchable = [
+        'columns' => [
+            'name' => 10,
+            'code' => 8,
+            'longitude‎' => 5,
+            'latitude‎' => 5,
+        ],
     ];
 
     /**

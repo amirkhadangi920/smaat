@@ -19,12 +19,33 @@ use App\Events\Feature\BrandCreated;
 
 use Vinkla\Instagram\Instagram;
 use App\User;
+use App\Models\Group\Category;
+use App\Models\Feature\Size;
+use App\Models\Spec\SpecRow;
+use App\Models\Spec\SpecData;
 
 Route::get('/test/amir', function() {
 
+    // return Product::whereHas('spec_data.values', function($query) {
+    //     $query->where('spec_default_id', 103);
+    // })->get();
+
+
+    // return Product::find('94e37004cf02');
+
+    return Category::select('id')->find(87)->spec->filterRows;
+
+
+    return SpecRow::first()->defaults;
+
     // return app()->getLocale();
 
-    auth()->loginUsingId( User::first()->id );
+    // auth()->loginUsingId( User::first()->id );
+
+    return Product::search('یک')->get();
+    return Article::search('یک مقاله درباره چنگیز خان مغول')->get();
+
+    return Role::all();
 
     Brand::create([
         'fa' => [

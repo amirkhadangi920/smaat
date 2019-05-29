@@ -14,12 +14,13 @@ use App\Helpers\HasTenant;
 use App\Helpers\CreatorRelationship;
 use Askedio\SoftCascade\Traits\SoftCascadeTrait;
 use Dimsav\Translatable\Translatable;
+use Nicolaslopezj\Searchable\SearchableTrait;
 
 class Spec extends Model implements AuditableContract
 {
     use SoftDeletes, Auditable, Filterable;
     use CreateTimeline, HasTenant, CreatorRelationship;
-    use SoftCascadeTrait, Translatable;
+    use SoftCascadeTrait, Translatable, SearchableTrait;
 
     /****************************************
      **             Attributes
@@ -54,6 +55,27 @@ class Spec extends Model implements AuditableContract
     public $translatedAttributes = [
         'title',
         'description',
+    ];
+    
+    /**
+     * Searchable rules.
+     * 
+     * Columns and their priority in search results.
+     * Columns with higher values are more important.
+     * Columns with equal values have equal importance.
+     *
+     * @var array
+     */
+    protected $searchable = [
+        'columns' => [
+            'spec_translations.title' => 10,
+            'spec_translations.description' => 5,
+            'category_translations.title' => 7,
+        ],
+        'joins' => [
+            'spec_translations' => ['specs.id','spec_translations.spec_id'],
+            'category_translations' => ['specs.category_id', 'category_translations.category_id']
+        ],
     ];
 
     /**
@@ -99,10 +121,17 @@ class Spec extends Model implements AuditableContract
     /**
      * Get all the spec header of the spec.
      */
-
     public function headers()
     {
         return $this->hasMany(SpecHeader::class);
+    }
+
+    /**
+     * Get all the spec header of the spec.
+     */
+    public function filters()
+    {
+        return $this->hasManyThrough(SpecRow::class, SpecHeader::class);
     }
 
     /**

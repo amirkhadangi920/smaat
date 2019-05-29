@@ -24,6 +24,13 @@ class ArticleTranslation extends Model
         'body',
     ];
 
+    /**
+     * Indicates if the model should be timestamped.
+     *
+     * @var bool
+     */
+    public $timestamps = false;
+    
     
     /****************************************
      **              Methods

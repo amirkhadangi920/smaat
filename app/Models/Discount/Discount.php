@@ -14,11 +14,13 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use App\Helpers\CreatorRelationship;
 use Askedio\SoftCascade\Traits\SoftCascadeTrait;
 use Dimsav\Translatable\Translatable;
+use Nicolaslopezj\Searchable\SearchableTrait;
 
 class Discount extends Model implements AuditableContract 
 {
     use Auditable, Filterable, HasTenant, Translatable;
     use CreateTimeline, SoftDeletes, CreatorRelationship, SoftCascadeTrait;
+    use SearchableTrait;
     
     /****************************************
      **             Attributes
@@ -57,6 +59,25 @@ class Discount extends Model implements AuditableContract
     public $translatedAttributes = [
         'title',
         'description'
+    ];
+
+    /**
+     * Searchable rules.
+     * 
+     * Columns and their priority in search results.
+     * Columns with higher values are more important.
+     * Columns with equal values have equal importance.
+     *
+     * @var array
+     */
+    protected $searchable = [
+        'columns' => [
+            'discount_translations.title' => 10,
+            'discount_translations.description' => 5,
+        ],
+        'joins' => [
+            'discount_translations' => ['discounts.id','discount_translations.discount_id'],
+        ],
     ];
 
     /**

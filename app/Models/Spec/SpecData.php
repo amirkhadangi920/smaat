@@ -7,10 +7,11 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use OwenIt\Auditing\Auditable;
 use OwenIt\Auditing\Contracts\Auditable as AuditableContract;
 use App\Models\Product\Product;
+use Dimsav\Translatable\Translatable;
 
 class SpecData extends Model implements AuditableContract
 {
-    use SoftDeletes, Auditable;
+    use SoftDeletes, Auditable, Translatable;
 
     /****************************************
      **             Attributes
@@ -31,7 +32,15 @@ class SpecData extends Model implements AuditableContract
     protected $fillable = [
         'product_id',
         'spec_row_id',
-        'data'
+    ];
+    
+    /**
+     * The attributes that are store in the transltion model.
+     *
+     * @var array
+     */
+    public $translatedAttributes = [
+        'data',
     ];
 
     /**
@@ -47,12 +56,20 @@ class SpecData extends Model implements AuditableContract
      **             Relations
      ***************************************/
 
-     /**
+    /**
      * Get the spec row that relate spec data
      */
     public function specRow ()
     {
         return $this->belongsTo(SpecRow::class, 'spec_row_id');
+    }
+    
+    /**
+     * Get the spec row that relate spec data
+     */
+    public function values()
+    {
+        return $this->belongsToMany(SpecDefault::class, 'spec_data_values');
     }
 
     /**
@@ -62,5 +79,4 @@ class SpecData extends Model implements AuditableContract
     {
         return $this->belongsTo(Product::class, 'product_id');
     }
-
 }

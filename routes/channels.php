@@ -21,15 +21,7 @@
 
 Broadcast::channel('brand', function ($user) {
 
-    return true;
-
-    // return true;
-
     return $user->can('read-brands');
-
-    // return $brandId == 4;
-    // return true;
-    // // return $user->id === Order::findOrNew($orderId)->user_id;
 });
 
 

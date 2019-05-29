@@ -47,14 +47,16 @@ export default new Vuex.Store({
             if( state[inputs.group][inputs.type].length > 0 )
                 return state[inputs.group][inputs.type]
 
-            axios({
-                method: 'get',
-                url: `/api/v1/${inputs.type}`
+            axios.get('/graphql/auth', {
+                params: {
+                    query: state.group.query.category
+                }
             }).then(({data}) => {
+
                 commit('setData', {
                     group: inputs.group,
                     type: inputs.type,
-                    data: data.data
+                    data: state.group.handleQuery.category(data)
                 })
             })
         },

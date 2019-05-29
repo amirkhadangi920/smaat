@@ -25,6 +25,6 @@ class TenantScope implements Scope
         if ( !$tenant_id && env('APPLY_TENANT_FILTERS') ) abort(404);
 
         if( env('APPLY_TENANT_FILTERS') )
-            $builder->where('tenant_id', $tenant_id);
+            $builder->where( $model->getTable().'.tenant_id', $tenant_id);
     }
 }

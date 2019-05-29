@@ -11,6 +11,7 @@ use App\Models\Feature\Color;
 use App\Models\Feature\Size;
 use App\Models\Promocode\Promocode;
 use App\User;
+use App\Models\Product\Product;
 
 class ProductTablesSeeder extends CustomSeeder
 {
@@ -32,71 +33,64 @@ class ProductTablesSeeder extends CustomSeeder
     {
         auth()->loginUsingId( User::first()->id );
 
-        $categories = Category::all();
-        if ( $categories->count() === 0 )
-            return $this->command->error('Your havn\'t any categories :(');
-
         $spec = Spec::all()->random();
 
-        $this->createProducts( $categories->random(),  $spec->id);
+        $this->createProducts($spec->id);
 
-        $this->createQuestionAndAnswers( $this->products->random() );
-        $this->products->each(function ($product) use($spec) {
+        $product = Product::latest()->first();
 
-            $variations = $this->createVariations($product);
+        $this->createQuestionAndAnswers( $product );
 
-            // $variations->each( function( $variation ) {
-            //     $variation->promocodes()->sync( Promocode::all()->random() );
-            // });
+        $variations = $this->createVariations($product);
+
+        // $variations->each( function( $variation ) {
+        //     $variation->promocodes()->sync( Promocode::all()->random() );
+        // });
+        
+        // $variations->each( function( $variation ) {
+        //     $variation->order_points()->saveMany(
+        //         factory(App\Models\Financial\OrderPoint::class, rand(1, 5) )->make() 
+        //     );
+        // });
+
+        \App\User::all()->take( rand(5, 10) )->each( function($user) use ( $product ) {
+            $product->reviews()->save(
+                factory(\App\Models\Opinion\Review::class)->make([
+                    'user_id' => $user->id
+                ])
+            );
+        });
+        
+        $spec->headers->each( function($header) use($product) {
             
-            // $variations->each( function( $variation ) {
-            //     $variation->order_points()->saveMany(
-            //         factory(App\Models\Financial\OrderPoint::class, rand(1, 5) )->make() 
-            //     );
-            // });
+            $header->rows->each( function( $spec_row ) use($product) {
 
-            \App\User::all()->take( rand(5, 10) )->each( function($user) use ( $product ) {
-                $product->reviews()->save(
-                    factory(\App\Models\Opinion\Review::class)->make([
-                        'user_id' => $user->id
+                $values = $spec_row->defaults;
+
+                $data = $product->spec_data()->save(
+                    factory(\App\Models\Spec\SpecData::class)->make([
+                        'spec_row_id'   => $spec_row->id
                     ])
                 );
-            });
-            
-            $spec->headers->each( function($header) use($product) {
-                
-                $header->rows->each( function( $spec_row ) use($product) {
 
-                    $product->spec_data()->save(
-                        factory(\App\Models\Spec\SpecData::class)->make([
-                            'spec_row_id'   => $spec_row->id,
-                            'data'          => ($spec_row->values)
-                                    ? rand(0, count($spec_row->values, true) - 1)
-                                    : Faker::fullName()
-                        ])
-                    );
-                });
+                if ( $values->isNotEmpty() )
+                    $data->values()->saveMany( $values->take( rand(1, 5) ) );
             });
         });
     }
 
-    public function createProducts($category, $spec_id)
+    public function createProducts($spec_id)
     {
         return $this->products = $this->createTable(
-
-            function() use($category, $spec_id) {
-
-                return $category->products()->saveMany(
-                    factory(\App\Models\Product\Product::class, 1)->make([
-                        'user_id'   => App\User::all()->random()->id,
-                        'brand_id'  => Brand::all()->random()->id,
-                        'unit_id'   => Unit::all()->random()->id,
-                        'spec_id'   => $spec_id,  
-                    ])
-                );
-            },
+            \App\Models\Product\Product::class,
             [ 'id', 'name', 'code', 'user_id', 'status', 'brand_id', 'jalali_created_at' ],
-            [], 'product'
+            [
+                // 'category_id'   => Category::all()->random() ? Category::all()->random()->id : false,
+                'brand_id'      => Brand::all()->random()->id ?? false,
+                'unit_id'       => Unit::all()->random()->id ?? false,
+                'spec_id'       => $spec_id,  
+            ],
+            'product', null, 1
         );
     }
 

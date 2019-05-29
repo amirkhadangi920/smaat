@@ -27,25 +27,41 @@ class SpecRowType extends BaseType
                 'type' => Type::string(),
                 'selectable' => false
             ],
-            'label' => [
+            'prefix' => [
                 'type' => Type::string(),
                 'selectable' => false
             ],
-            'values' => [
-                'type' => Type::listOf( Type::string() )
+            'postfix' => [
+                'type' => Type::string(),
+                'selectable' => false
+            ],
+            'defaults' => [
+                'type' => Type::listOf( \GraphQL::type('spec_default') ),
+            ],
+            'data' => [
+                'type' => \GraphQL::type('spec_data'),
+                'query' => function($args, $query) {
+                    return $query->where('product_id', $args['id'] ?? false);
+                },
             ],
             'help' => [
                 'type' => Type::string(),
                 'selectable' => false
             ],
-            'multiple' => [
+            'is_detailable' => [
                 'type' => Type::boolean()
             ],
-            'required' => [
+            'is_filterable' => [
                 'type' => Type::boolean()
             ],
+            'is_multiple' => [
+                'type' => Type::boolean()
+            ],
+            'is_required' => [
+                'type' => Type::boolean()
+            ],
+            'is_active' => $this->acceptableField('specification'),
             'audits' => $this->audits('specification'),
-            'is_active' => $this->acceptableField('specification')
         ];
     }
 }

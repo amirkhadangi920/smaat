@@ -15,7 +15,7 @@ trait AllQuery
 
     public function args()
     {
-        return [
+        return array_merge( $this->has_more_args ?? false ? $this->get_args() : [], [
             'per_page' => [
                 'type' => Type::int()
             ],
@@ -25,13 +25,15 @@ trait AllQuery
             'query' => [
                 'type' => Type::string()
             ],
+            'ordering' => [
+                'type' => Type::string()
+            ],
             'ids' => [
                 'type' => Type::listOf( $this->incrementing ? Type::int() : Type::string() )
             ]
-        ];
+        ]);
     }
 
-    
     public function resolve($root, $args, SelectFields $fields, ResolveInfo $info)
     {
         return $this->getAllData($args, $fields);

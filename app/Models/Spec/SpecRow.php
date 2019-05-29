@@ -9,10 +9,12 @@ use OwenIt\Auditing\Contracts\Auditable as AuditableContract;
 use App\Helpers\CreatorRelationship;
 use Askedio\SoftCascade\Traits\SoftCascadeTrait;
 use Dimsav\Translatable\Translatable;
+use Nicolaslopezj\Searchable\SearchableTrait;
 
 class SpecRow extends Model implements AuditableContract
 {
-    use SoftDeletes, Auditable, CreatorRelationship, SoftCascadeTrait, Translatable;
+    use SoftDeletes, Auditable, CreatorRelationship;
+    use SoftCascadeTrait, Translatable, SearchableTrait;
 
     /**
      * The "booting" method of the model.
@@ -48,14 +50,11 @@ class SpecRow extends Model implements AuditableContract
      */
     protected $fillable = [
         'spec_header_id',
-        'title',
-        'description',
-        'label',
-        'values',
-        'help',
-        'multiple',
-        'required',
-        'is_active'
+        'is_detailable',
+        'is_filterable',
+        'is_multiple',
+        'is_required',
+        'is_active',
     ];
 
     /**
@@ -66,8 +65,30 @@ class SpecRow extends Model implements AuditableContract
     public $translatedAttributes = [
         'title',
         'description',
-        'label',
+        'prefix',
+        'postfix',
         'help'
+    ];
+
+    /**
+     * Searchable rules.
+     * 
+     * Columns and their priority in search results.
+     * Columns with higher values are more important.
+     * Columns with equal values have equal importance.
+     *
+     * @var array
+     */
+    protected $searchable = [
+        'columns' => [
+            'spec_row_translations.title' => 10,
+            'spec_row_translations.description' => 5,
+            'spec_row_translations.label' => 6,
+            'spec_row_translations.help' => 6,
+        ],
+        'joins' => [
+            'spec_row_translations' => ['spec_rows.id','spec_row_translations.spec_row_id'],
+        ],
     ];
 
     /**
@@ -92,10 +113,11 @@ class SpecRow extends Model implements AuditableContract
      * @var array
      */
     protected $casts = [
-        'values'    => 'array',
-        'multiple'  => 'boolean',
-        'required'  => 'boolean',
-        'is_active' => 'boolean',
+        'is_detailable' => 'boolean',
+        'is_filterable' => 'boolean',
+        'is_multiple'   => 'boolean',
+        'is_required'   => 'boolean',
+        'is_active'     => 'boolean',
     ];
 
     /**
@@ -111,13 +133,22 @@ class SpecRow extends Model implements AuditableContract
      **             Relations
      ***************************************/
 
-     /**
+    /**
      * Get the all of the spec row that owned spec header 
      *
      */
     public function header()
     {
         return $this->belongsTo(SpecHeader::class, 'spec_header_id');
+    }
+
+    /**
+     * Get the all default values of this row
+     *
+     */
+    public function defaults()
+    {
+        return $this->hasMany(SpecDefault::class);
     }
 
     /**

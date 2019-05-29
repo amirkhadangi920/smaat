@@ -13,14 +13,14 @@ use App\Helpers\CreateTimeline;
 use App\Helpers\HasTenant;
 use App\Helpers\CreatorRelationship;
 use Askedio\SoftCascade\Traits\SoftCascadeTrait;
-use Cviebrock\EloquentSluggable\Sluggable;
 use Dimsav\Translatable\Translatable;
+use Nicolaslopezj\Searchable\SearchableTrait;
 
 class Subject extends Model implements AuditableContract
 {
-    use SoftDeletes, Auditable, HasTags, MultiLevel, Sluggable;
+    use SoftDeletes, Auditable, HasTags, MultiLevel;
     use CreateTimeline, HasTenant, CreatorRelationship, SoftCascadeTrait;
-    use Translatable;
+    use Translatable, SearchableTrait;
 
     /****************************************
      **             Attributes
@@ -57,6 +57,25 @@ class Subject extends Model implements AuditableContract
         'slug',
         'title',
         'description',
+    ];
+    
+    /**
+     * Searchable rules.
+     * 
+     * Columns and their priority in search results.
+     * Columns with higher values are more important.
+     * Columns with equal values have equal importance.
+     *
+     * @var array
+     */
+    protected $searchable = [
+        'columns' => [
+            'subject_translations.title' => 10,
+            'subject_translations.description' => 5,
+        ],
+        'joins' => [
+            'subject_translations' => ['subjects.id','subject_translations.subject_id'],
+        ],
     ];
 
     /**
@@ -123,18 +142,4 @@ class Subject extends Model implements AuditableContract
     /****************************************
      **              Methods
      ***************************************/
-
-    /**
-     * Return the sluggable configuration array for this model.
-     *
-     * @return array
-     */
-    public function sluggable()
-    {
-        return [
-            'slug' => [
-                'source' => 'title'
-            ]
-        ];
-    }
 }

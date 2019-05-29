@@ -16,14 +16,15 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use App\Helpers\CreatorRelationship;
 use App\Helpers\HasTenant;
 use Askedio\SoftCascade\Traits\SoftCascadeTrait;
-use Cviebrock\EloquentSluggable\Sluggable;
 use Dimsav\Translatable\Translatable;
+use Nicolaslopezj\Searchable\SearchableTrait;
+
 
 class Article extends Model implements AuditableContract , LikeableContract
 {
     use Auditable, SoftDeletes, HasTags, Likeable, Filterable;
     use CreateTimeline, HasTenant, CreatorRelationship;
-    use SoftCascadeTrait, Translatable;
+    use SoftCascadeTrait, Translatable, SearchableTrait;
 
     /****************************************
      **             Attributes
@@ -78,6 +79,25 @@ class Article extends Model implements AuditableContract , LikeableContract
         'description',
         'body'
     ];
+    
+    /**
+     * Searchable rules.
+     * 
+     * Columns and their priority in search results.
+     * Columns with higher values are more important.
+     * Columns with equal values have equal importance.
+     *
+     * @var array
+     */
+    protected $searchable = [
+        'columns' => [
+            'article_translations.title' => 10,
+            'article_translations.description' => 5,
+        ],
+        'joins' => [
+            'article_translations' => ['articles.id','article_translations.article_id'],
+        ],
+    ];
 
     /**
      * Attributes to include in the Audit.
@@ -129,9 +149,9 @@ class Article extends Model implements AuditableContract , LikeableContract
     /**
     * Get all of the article's user.
     */
-    public function user()
+    public function writer()
     {
-        return $this->belongsTo(\App\User::class);
+        return $this->belongsTo(\App\User::class, 'user_id');
     }
 
     

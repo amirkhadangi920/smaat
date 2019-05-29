@@ -42,6 +42,31 @@ class ArticleFilter extends MainFilter
     }
 
     /**
+     * Filter the Data that have active or not
+     *
+     * @param boolean $status
+     * @return Builder
+     */
+    public function isActive($status)
+    {
+        return $this->where('is_active', $status);
+    }
+
+    /**
+     * Filter the Data that have reading time between two values
+     *
+     * @param boolean $status
+     * @return Builder
+     */
+    public function readingTime($values)
+    {
+        return $this->whereBetween('reading_time', [
+            $values[0] ?? null,
+            $values[1] ?? null
+        ]);
+    }
+
+    /**
      * Filter the Articles that wrote by specific wirter
      *
      * @param string $id
@@ -49,7 +74,7 @@ class ArticleFilter extends MainFilter
      */
     public function writers($ids)
     {
-        return $this->filter_relation('user', $ids);
+        return $this->filter_relation('writer', $ids);
     }
 
     /**

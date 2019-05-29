@@ -20,12 +20,13 @@ use App\Helpers\HasTenant;
 use Askedio\SoftCascade\Traits\SoftCascadeTrait;
 use Cviebrock\EloquentSluggable\Sluggable;
 use Dimsav\Translatable\Translatable;
+use Nicolaslopezj\Searchable\SearchableTrait;
 
 class Product extends Model implements AuditableContract, LikeableContract
 {
-    use SoftDeletes, Auditable, HasTenant, HasTags, Sluggable;
+    use SoftDeletes, Auditable, HasTenant, HasTags;
     use Filterable, Likeable, CreateTimeline, CreatorRelationship;
-    use SoftCascadeTrait, Translatable;
+    use SoftCascadeTrait, Translatable, SearchableTrait;
 
     /****************************************
      **             Attributes
@@ -68,16 +69,10 @@ class Product extends Model implements AuditableContract, LikeableContract
         'category_id',
         'unit_id',
         'spec_id',
-        'name',
-        'second_name',
         'code',
-        'description',
         'note',
         'aparat_video',
         'review',
-        'advantages',
-        'disadvantages',
-        'label',
         'photos',
         'is_active'
     ];
@@ -95,6 +90,32 @@ class Product extends Model implements AuditableContract, LikeableContract
         'review',
         'advantages',
         'disadvantages',
+    ];
+
+    /**
+     * Searchable rules.
+     * 
+     * Columns and their priority in search results.
+     * Columns with higher values are more important.
+     * Columns with equal values have equal importance.
+     *
+     * @var array
+     */
+    protected $searchable = [
+        'columns' => [
+            'product_translations.name' => 10,
+            'product_translations.second_name' => 8,
+            'product_translations.description' => 5,
+            'product_translations.advantages' => 6,
+            'product_translations.disadvantages' => 6,
+            'brand_translations.name' => 7,
+            'category_translations.title' => 7,
+        ],
+        'joins' => [
+            'brand_translations' => ['products.brand_id','brand_translations.brand_id'],
+            'category_translations' => ['products.category_id','category_translations.category_id'],
+            'product_translations' => ['products.id','product_translations.product_id'],
+        ],
     ];
 
     /**
@@ -128,8 +149,6 @@ class Product extends Model implements AuditableContract, LikeableContract
      */
     protected $casts = [
         'photos' => 'array',
-        'advantages' => 'array',
-        'disadvantages' => 'array',
         'is_active' => 'boolean'
     ];
 

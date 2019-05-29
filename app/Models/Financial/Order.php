@@ -15,11 +15,13 @@ use EloquentFilter\Filterable;
 use App\Helpers\CreateTimeline;
 use App\Helpers\HasTenant;
 use Askedio\SoftCascade\Traits\SoftCascadeTrait;
+use Nicolaslopezj\Searchable\SearchableTrait;
 
 class Order extends Model implements AuditableContract
 {
     use SoftDeletes, HasTenant, Auditable;
     use Filterable, CreateTimeline, SoftCascadeTrait;
+    use SearchableTrait;
 
     /****************************************
      **             Attributes
@@ -71,6 +73,30 @@ class Order extends Model implements AuditableContract
         'datetimes',
         'paid_at',
         'jalali_paid_at',
+    ];
+    
+    /**
+     * Searchable rules.
+     * 
+     * Columns and their priority in search results.
+     * Columns with higher values are more important.
+     * Columns with equal values have equal importance.
+     *
+     * @var array
+     */
+    protected $searchable = [
+        'columns' => [
+            'id' => 10,
+            'phone_number' => 8,
+            'postal_code' => 7,
+            'destination' => 9,
+            'order_status_translations.name' => 5,
+            'shipping_method_translations.name' => 5,
+        ],
+        'joins' => [
+            'order_status_translations' => ['orders.order_status_id','order_status_translations.order_status_id'],
+            'shipping_method_translations' => ['orders.shipping_method_id','shipping_method_translations.shipping_method_id'],
+        ],
     ];
 
     /**

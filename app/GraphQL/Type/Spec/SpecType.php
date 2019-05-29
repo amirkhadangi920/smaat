@@ -29,6 +29,19 @@ class SpecType extends BaseType
             ],
             'category' => $this->relationItemField('category'),
             'headers' => $this->relationListField('spec_header', 'is_active', 'read-specification'),
+            'filters' => [
+                'type'  => Type::listOf( \GraphQL::type('spec_row') ),
+                'query' => function(array $args, $query) {
+                
+                    if ( !$this->checkPermission('read-specification') )
+                        $query->where('spec_row.is_active', 1);
+            
+                    $query->whereHas('defaults');
+                    $query->where('is_filterable', true);
+
+                    return $query;
+                }
+            ],
             'audits' => $this->audits('specification'),
             'is_active' => $this->acceptableField('specification')
         ];

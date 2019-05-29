@@ -4,10 +4,13 @@ namespace App\Rules;
 
 use Illuminate\Contracts\Validation\Rule;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Str;
 
 class UniqueTenant implements Rule
 {
     private $table;
+
+    private $singular;
 
     private $field;
 
@@ -19,6 +22,7 @@ class UniqueTenant implements Rule
     public function __construct($table, $field = null)
     {
         $this->table = $table;
+        $this->singular = Str::singular( $table );
         $this->field = $field;
     }
 
@@ -30,8 +34,9 @@ class UniqueTenant implements Rule
      * @return bool
      */
     public function passes($attribute, $value)
-    {
+    {   
         $result = DB::table( $this->table )
+            ->join("{$this->singular}_translations", "{$this->table}.id", '=', "{$this->singular}_translations.{$this->singular}_id")
             ->where($this->field ?? $attribute, $value)
             ->where('tenant_id', $this->getTenant() )
             ->count();

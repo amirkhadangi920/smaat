@@ -19,24 +19,32 @@ $factory->define(App\Models\Spec\SpecHeader::class, function () use($faker) {
     return [
         'user_id'           => App\User::all()->random()->id,
         'title'         => $faker->name(),
-        'description'   => [ null, Faker::sentence() ][ $faker->boolean() ],
+        'description'   => nullable( Faker::sentence() ),
         'is_active'     => $faker->boolean(80)
     ];
 });
 
 $factory->define(App\Models\Spec\SpecRow::class, function () use($faker) {
-    $multiple = $faker->numberBetween(0, 1);
 
     return [
         'user_id'           => App\User::all()->random()->id,
-        'title'         => $faker->name(),
-        'description'   => [ null, Faker::sentence()  ][ $faker->boolean() ],
-        'label'         => [ null, $faker->name() ][ $faker->boolean() ],
-        'values'        => ($multiple) ? rand(0,1) ? $faker->words(rand(1, 10)) : null : null,
-        'help'          => [ null, Faker::sentence() ][ $faker->boolean() ],
-        'multiple'      => $multiple,
-        'required'      => $faker->boolean(),
-        'is_active'     => $faker->boolean(80)
+        'title'             => $faker->name(),
+        'description'       => nullable( Faker::sentence() ),
+        'prefix'            => nullable( $faker->name() ),
+        'postfix'           => nullable( $faker->name() ),
+        'help'              => nullable( Faker::sentence() ),
+        'is_detailable'     => $faker->boolean(10),
+        'is_filterable'     => $faker->boolean(30),
+        'is_multiple'       => $faker->boolean(),
+        'is_required'       => $faker->boolean(),
+        'is_active'         => $faker->boolean(80)
+    ];
+});
+
+$factory->define(App\Models\Spec\SpecDefault::class, function () use($faker) {
+
+    return [
+        'value'         => [ $faker->name(), Faker::sentence()][ $faker->boolean(60) ],
     ];
 });
 

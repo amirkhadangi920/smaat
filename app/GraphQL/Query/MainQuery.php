@@ -41,7 +41,7 @@ class MainQuery extends Query
         $this->showOnlyAtiveData($data);
 
         if ( method_exists($this, 'applyFilters') )
-            $this->afterCreate($args, $data);
+            $this->applyFilters($args, $data);
 
         if ( $this->translatable )
             $data->whereHas('translations');
@@ -111,7 +111,7 @@ class MainQuery extends Query
     {
         $select = $fields->getSelect();
 
-        if ( ($index = array_search("{$this->name}.is_mine", $select) ) !== false )
+        if ( ($index = array_search("{$this->type}.is_mine", $select) ) !== false )
             $select[$index] = "{$this->name}.user_id";
 
         return $select;

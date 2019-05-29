@@ -2,6 +2,7 @@
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Facades\DB;
 use App\Helpers\CustomSeeder;
+use App\Role;
 
 class LaratrustSeeder extends CustomSeeder
 {
@@ -12,6 +13,9 @@ class LaratrustSeeder extends CustomSeeder
      */
     public function run()
     {
+        // dd( Role::all() );
+
+
         $default_usernames = ['amirkhadangi920', 'grcg2000', 'imisia99', 'm.hadi.z.1997'];
 
         $usernames = collect();
@@ -46,11 +50,11 @@ class LaratrustSeeder extends CustomSeeder
         foreach ($config as $key => $modules) {
 
             // Create a new role
-            $role = \App\Role::firstOrcreate([
-                'name' => $key
-            ], [
+            $role = \App\Role::create([
+                'name' => $key,
                 'display_name' => $roleLabel[$key]['name'],
                 'description' => $roleLabel[$key]['description']
+            // ], [
             ]);
             $permissions = [];
 
@@ -63,7 +67,7 @@ class LaratrustSeeder extends CustomSeeder
 
                     $permissionValue = $mapPermission->get($perm);
 
-                    $permissions[] = \App\Permission::firstOrCreate([
+                    $permissions[] = \App\Permission::create([
                         'name' => $permissionValue . '-' . $module,
                         'display_name' => $actionsLabel[ $permissionValue ] . ' ' . $permissionsLabel[ $module ],
                         'description' => 'امکان ' . $actionsLabel[ $permissionValue ] . ' یک ' . $permissionsLabel[ $module ],
@@ -141,7 +145,9 @@ class LaratrustSeeder extends CustomSeeder
         DB::table('role_user')->truncate();
         // \App\User::truncate();
         \App\Role::truncate();
+        \App\RoleTranslation::truncate();
         \App\Permission::truncate();
+        \App\PermissionTranslation::truncate();
         Schema::enableForeignKeyConstraints();
     }
 }
