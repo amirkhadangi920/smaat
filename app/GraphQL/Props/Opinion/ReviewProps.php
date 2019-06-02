@@ -25,23 +25,6 @@ trait ReviewProps
     protected $model = Review::class;
 
     /**
-     * The relation of the controller to get when accesing data from DB
-     *
-     * @var array
-     */
-    protected $relations = [
-        'product:id,name,photos,label',
-        'user:id,first_name,last_name,avatar',
-    ];
-
-    /**
-     * Name of the relation method of the User model to this model
-     *
-     * @var string
-     */
-    protected $rel_from_user = 'reviews';
-
-    /**
      * Resource of this controller respnoses
      *
      * @var [type]

@@ -24,23 +24,36 @@ class CreateUsersTable extends Migration
             $table->table([
                 'first_name'        => '20|nullable',
                 'last_name'         => '30|nullable',
-                'phones'            => 'array|comment:Array of user phone numbers',
                 'social_links'      => 'array|comment:Array of user social links, e.g instagram, telegram etc...',
                 'email'             => '100',
                 'email_verified_at' => 'timestamp|nullable',
                 'password'          => 100,
                 'avatar'            => 'nullable|array',
-                
-                'address'           => '300|nullable',
-                'postal_code'       => '10|nullable',
                 'national_code'     => '10|nullable',
 
-                'type'              => 'tinyInteger|default:0',
                 'rememberToken',
                 'purchase_counts'   => 'unsignedInteger|default:0',
                 'total_payments'    => 'unsignedInteger|default:0',
                 'jalali_created_at' => 'datetime|nullable'
-            ], [ 'cities' => true ], 'uuid', [ 'last_purchase' ]);
+            ], [
+                'cities' => ['nullable', 'set null']
+            ], 'uuid', [ 'last_purchase' ]);
+        });
+
+        $schema->create('user_phones', function (Blueprint $table) {
+            $table->table([
+                'type'              => '50',
+                'phone_number'      => '255'
+            ], [ 'users' ]);
+        });
+
+        $schema->create('user_addresses', function (Blueprint $table) {
+            $table->table([
+                'type'          => '50',
+                'address'       => '255',
+                'postal_code'   => '10',
+                'coordinates'   => 'point',
+            ], [ 'cities', 'users' ]);
         });
     }
 

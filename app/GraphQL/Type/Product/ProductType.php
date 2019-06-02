@@ -39,7 +39,11 @@ class ProductType extends BaseType
             'aparat_video' => [
                 'type' => Type::string()
             ],
-            'review' => [
+            'short_review' => [
+                'type' => Type::string(),
+                'selectable' => false
+            ],
+            'expert_review' => [
                 'type' => Type::string(),
                 'selectable' => false
             ],
@@ -65,12 +69,9 @@ class ProductType extends BaseType
             'brand' => $this->relationItemField('brand'),
             'category' => $this->relationItemField('category'),
             'unit' => $this->relationItemField('unit'),
-            // TODO => need a improvment
-            'reviews' => $this->relationListField('review'),
-            // TODO => need a improvment
-            'questions' => $this->relationListField('question_and_answer'),
-            // TODO => need a improvment
-            'accessories' => $this->relationListField('product'),
+            'reviews' => $this->paginatedRelationListField('review'),
+            'questions' => $this->paginatedRelationListField('question_and_answer'),
+            'accessories' => $this->paginatedRelationListField('product'),
             'audits' => $this->audits('product'),
             'is_active' => $this->acceptableField('product')
         ];

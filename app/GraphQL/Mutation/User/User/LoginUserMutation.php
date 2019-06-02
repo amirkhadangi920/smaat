@@ -46,6 +46,8 @@ class LoginUserMutation extends BaseUserMutation
         {
             Auth::user()->tokens()->whereName('web')->delete();
 
+            $this->moveLocalCartToServer();
+
             return [
                 'id'    => Auth::user()->id,
                 'email' => Auth::user()->email,

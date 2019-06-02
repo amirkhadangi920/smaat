@@ -22,27 +22,24 @@ class CreateLocationTables extends Migration
 
         $schema->create('countries', function (Blueprint $table) {
             $table->table([
-                'longitude‎' => '12|nullable',
-                'latitude‎' => '12|nullable',
-                'name'      => 30,
-                'code'      => 4, 
+                'coordinates'   => 'point',
+                'name'          => 30,
+                'code'          => 4, 
             ], [], 'int', false);
         });
 
         $schema->create('provinces', function (Blueprint $table) {
             $table->table([
-                'longitude‎' => '12|nullable',
-                'latitude‎' => '12|nullable',
-                'name'      => 30,
+                'coordinates'   => 'point',
+                'name'          => 30,
             ], ['countries'], 'int', false);
         });
 
         $schema->create('cities', function (Blueprint $table) {
             $table->table([
-                'longitude‎' => '12|nullable',
-                'latitude‎' => '12|nullable',
-                'name'      => 30,
-                'users_count'  => 'unsignedInteger|default:0',
+                'coordinates'   => 'point',
+                'name'          => 30,
+                'users_count'   => 'unsignedInteger|default:0',
             ], ['provinces'], 'int', false);
         });
     }

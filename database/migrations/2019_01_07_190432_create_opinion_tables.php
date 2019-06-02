@@ -36,7 +36,7 @@ class CreateOpinionTables extends Migration
         
         $schema->create('reviews', function (Blueprint $table) {
             $table->table([
-                'ranks' => 'array',
+                // 'ranks' => 'array',
                 'advantages' => 'array',
                 'disadvantages' => 'array',
                 'message' => 'mediumText',
@@ -47,6 +47,11 @@ class CreateOpinionTables extends Migration
                 'users' => true,
                 'products' => true,
             ]);
+        });
+
+        $schema->create('review_ranks', function ($table) {
+            $table->interface('reviews', 'scoring_fields');
+            $table->tinyInteger('value');
         });
         
         $schema->create('question_and_answers', function (Blueprint $table) {

@@ -19,6 +19,9 @@ class CategoryType extends BaseType
         return [
             'is_mine' => $this->isMineField(),
             'creator' => $this->creator('category'),
+            'scoring_fields' => [
+                'type' => Type::listOf( \GraphQL::type('scoring_field') )
+            ],
             'title' => [
                 'type' => Type::string(),
                 'selectable' => false

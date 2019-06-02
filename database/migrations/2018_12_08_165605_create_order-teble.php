@@ -21,7 +21,6 @@ class CreateOrderTeble extends Migration
         
         $schema->create('order_statuses', function (Blueprint $table) {
             $table->table([
-                // 'info',
                 'color'             => 'nullable|max:12',
                 'jalali_created_at' => 'datetime|nullable',
                 'is_active'         => 'boolean|default:1'
@@ -42,22 +41,18 @@ class CreateOrderTeble extends Migration
 
         $schema->create('orders', function (Blueprint $table) {
             $table->table([
-                'descriptions'      => 'array',
+                'coordinates'       => 'point',
                 'destination'       => '255|nullable',
-                'phone_number'      => '15|nullable',
                 'postal_code'       => '10|nullable',
+                'phone_number'      => '15|nullable',
                 
                 'offer'             => 'bigInteger|default:0',
                 'total'             => 'bigInteger|default:0',
                 'shipping_cost'     => 'integer|default:0',
-                'tax'               => 'bigInteger|default:0',
 
-                'docs'              => 'array|comment:Array of documentation images',
                 'checkout'          => 'boolean|default:0',
                 'ref_id'            => '150|nullable',
                 'trans_id'          => '150|nullable',
-                // 'payment_jalali'    => 'timestamp',
-                'datetimes'         => 'mediumText|nullable',
                 'type'              => 'tinyInteger|default:0|comment:Type of factor, e.g sell, buy, sell_back etc...',
                 'is_accept'         => 'boolean|default:0',
                 'jalali_created_at' => 'datetime|nullable'
@@ -65,10 +60,20 @@ class CreateOrderTeble extends Migration
                 'tenants',
                 'users',
                 'order_statuses',
-                'promocodes' => true,
-                'shipping_methods' => true,
-                'cities' => true,
-            ], 'uuid', ['paid_at', 'jalali_paid_at']);            
+                'user_phones' => ['nullable', 'set null'],
+                'user_addresses' => ['nullable', 'set null'],
+                'promocodes' => ['nullable', 'set null'],
+                'shipping_methods' => ['nullable', 'set null'],
+                'cities' => ['nullable', 'set null'],
+            ], 'uuid', ['paid_at', 'jalali_paid_at', 'user_addresses', 'user_phones']);            
+        });
+
+        $schema->create('order_status_changes', function ($table) {
+            $table->reltoOrders();
+            $table->reltoOrder_statuses();
+
+            $table->index([ 'order_id', 'order_status_id' ]);
+            $table->timestamp('changed_at')->default(\DB::raw('CURRENT_TIMESTAMP'));
         });
 
         $schema->create('order_items', function (Blueprint $table) {
@@ -81,7 +86,7 @@ class CreateOrderTeble extends Migration
             ], [
                 // 'users',
                 'orders',
-                'variations' => true,
+                'variations' => ['nullable', 'set null'],
             ],  'uuid');
         });
     }

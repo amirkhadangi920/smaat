@@ -142,6 +142,7 @@ class Article extends Model implements AuditableContract , LikeableContract
         'deleted_at'
     ];
 
+    
     /****************************************
      **             Relations
      ***************************************/

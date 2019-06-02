@@ -24,8 +24,8 @@ class DiscountItemRequest extends FormRequest
     public function rules()
     {
         return [
-            'offer'         => 'required|integer|digits_between:1,10',
-            'quantity'      => 'nullable|integer|digits_between:1,10',
+            'offer'         => 'required|integer|max:100',
+            'quantity'      => 'nullable|integer|max:100000',
         ];
     }
 }

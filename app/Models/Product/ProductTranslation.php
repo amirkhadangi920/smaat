@@ -22,7 +22,8 @@ class ProductTranslation extends Model
         'name',
         'second_name',
         'description',
-        'review',
+        'short_review',
+        'expert_review',
         'advantages',
         'disadvantages',
     ];

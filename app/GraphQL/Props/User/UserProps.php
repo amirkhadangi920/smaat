@@ -25,19 +25,6 @@ trait UserProps
     protected $model = User::class;
 
     /**
-     * The relation of the controller to get when accesing data from DB
-     *
-     * @var array
-     */
-    protected $relations = [
-        'roles:id,name,display_name',
-    ];
-
-    protected $more_relations = [
-        'permissions'
-    ];
-
-    /**
      * Resource of this controller respnoses
      *
      * @var [type]

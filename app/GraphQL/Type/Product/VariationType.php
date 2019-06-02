@@ -24,6 +24,9 @@ class VariationType extends BaseType
             'sales_price' => [
                 'type' => Type::int()
             ],
+            'old_sale_prices' => [
+                'type' => Type::listOf( \GraphQL::type('price_change') )
+            ],
             'inventory' => [
                 'type' => Type::int(),
             ],

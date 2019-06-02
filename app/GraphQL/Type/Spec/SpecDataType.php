@@ -21,6 +21,9 @@ class SpecDataType extends BaseType
                 'type' => Type::string(),
                 'selectable' => false
             ],
+            'product_id' => [
+                'type' => Type::string(),
+            ],
             'values' => [
                 'type' => Type::listOf( \GraphQL::type('spec_default') ),
             ]

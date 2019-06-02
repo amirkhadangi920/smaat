@@ -23,8 +23,42 @@ use App\Models\Group\Category;
 use App\Models\Feature\Size;
 use App\Models\Spec\SpecRow;
 use App\Models\Spec\SpecData;
+use App\Models\Option\SiteSetting;
+use App\Models\Financial\OrderStatus;
+use App\Models\Financial\Order;
+use App\Models\Group\ScoringField;
+use App\Models\Opinion\Review;
+use App\Models\Product\Variation;
+use App\Models\Places\Country;
+use Grimzy\LaravelMysqlSpatial\Types\Point;
+use App\Models\Promocode\Promocode;
 
 Route::get('/test/amir', function() {
+
+    auth()->login( User::first() );
+    return factory(Promocode::class)->create();
+
+    return Country::create([
+        'name' => 'a country',
+        'coordinates' => new Point(48.7484404, -73.9878441)
+    ]);
+
+    return Country::select(['id', 'name', 'coordinates'])->first()->coordinates;
+
+    return Variation::first()->old_sale_prices;
+
+    return Category::find(1)->scoring_fields()->create([
+        'title' => 'فیلد امتیازی 2',
+        'description' => 'یک توضیح خیلی کوتاه',
+        'default' => 4
+    ]);
+
+    return Order::first()->status_changes->pluck('pivot.changed_at');
+
+    auth()->login( App\User::first() );
+    return factory(OrderStatus::class)->create([ 'id' => 1 ]);
+
+    return SiteSetting::all()->pluck('value', 'name');
 
     // return Product::whereHas('spec_data.values', function($query) {
     //     $query->where('spec_default_id', 103);

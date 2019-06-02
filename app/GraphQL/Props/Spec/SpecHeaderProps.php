@@ -23,15 +23,6 @@ trait SpecHeaderProps
     protected $model = SpecHeader::class;
 
     /**
-     * The relation of the controller to get when accesing data from DB
-     *
-     * @var array
-     */
-    protected $relations = [
-        'spec:id,title,description'
-    ];
-
-    /**
      * Resource of this controller respnoses
      *
      * @var [type]

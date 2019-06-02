@@ -19,7 +19,6 @@ class UserType extends BaseType
     public function get_fields()
     {
         return [
-            'creator' => $this->creator('user'),
             'first_name' => [
                 'type' => Type::string()
             ],
@@ -41,7 +40,7 @@ class UserType extends BaseType
             ],
             'email' => [
                 'type' => Type::string(),
-                'privacy' => function() {
+                'privacy' => function($data) {
                     return $this->checkPermission("see-details-user");
                 },
             ],
@@ -50,11 +49,16 @@ class UserType extends BaseType
                 'selectable' => false
             ],
             'phones' => [
-                'type' => Type::listOf( \GraphQL::type('data_array') ),
+                'type' => Type::listOf( \GraphQL::type('user_phone') ),
                 'privacy' => function() {
                     return $this->checkPermission("see-phone-number-user");
                 },
-                'is_relation' => false,
+            ],
+            'addresses' => [
+                'type' => Type::listOf( \GraphQL::type('user_address') ),
+                'privacy' => function() {
+                    return $this->checkPermission("see-address-user");
+                },
             ],
             'social_links' => [
                 'type' => Type::listOf( \GraphQL::type('data_array') ),
@@ -64,18 +68,6 @@ class UserType extends BaseType
                 'is_relation' => false
             ],
             'avatar' => $this->imageField(),
-            'address' => [
-                'type' => Type::string(),
-                'privacy' => function() {
-                    return $this->checkPermission("see-address-user");
-                },
-            ],
-            'postal_code' => [
-                'type' => Type::string(),
-                'privacy' => function() {
-                    return $this->checkPermission("see-address-user");
-                },
-            ],
             'national_code' => [
                 'type' => Type::string(),
                 'privacy' => function() {
@@ -83,49 +75,52 @@ class UserType extends BaseType
                 },
             ],
             'favorites' => $this->relationListField('product'),
-            // TODO => need a improvment
             'comments' => [
                 'type' => Type::listOf( \GraphQL::type("comment") ),
                 'privacy' => function() {
                     return $this->checkPermission("read-comment");
                 },
                 'query' => function($args, $query) {
-                    return $query->limit('10');
+                    return $query->offset( (($args['page'] ?? 1 ) - 1) * 10 )->take(10);
                 }
             ],
-            // TODO => need a improvment
             'question_and_answers' => [
                 'type' => Type::listOf( \GraphQL::type("question_and_answer") ),
                 'privacy' => function() {
                     return $this->checkPermission("read-question_and_answer");
                 },
                 'query' => function($args, $query) {
-                    return $query->limit('10');
+                    return $query->offset( (($args['page'] ?? 1 ) - 1) * 10 )->take(10);
                 }
             ],
-            // TODO => need a improvment
             'reviews' => [
                 'type' => Type::listOf( \GraphQL::type("review") ),
                 'privacy' => function() {
                     return $this->checkPermission("read-review");
                 },
                 'query' => function($args, $query) {
-                    return $query->limit('10');
+                    return $query->offset( (($args['page'] ?? 1 ) - 1) * 10 )->take(10);
                 }
             ],
-            // TODO => need a improvment
             'orders' => [
                 'type' => Type::listOf( \GraphQL::type('order') ),
                 'privacy' => function() {
                     return $this->checkPermission("read-order");
                 },
                 'query' => function($args, $query) {
-                    return $query->limit('10');
+                    return $query->offset( (($args['page'] ?? 1 ) - 1) * 10 )->take(10);
                 }
             ],
             'roles' => $this->relationListField('role'),
             'permissions' => [
                 'type' => Type::listOf( \GraphQL::type('permission') )
+            ],
+            'used_at' => [
+                'type' => Type::string(),
+                'selectable' => false,
+                'resolve' => function($data) {
+                    return $data->pivot->used_at ?? null;
+                }
             ],
             'audits' => $this->audits('user'),
         ];

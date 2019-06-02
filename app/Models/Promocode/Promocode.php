@@ -11,10 +11,14 @@ use App\Models\Product\Variation;
 use EloquentFilter\Filterable;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use App\Helpers\HasTenant;
+use App\Helpers\CreateTimeline;
+use App\Helpers\CreatorRelationship;
+use Nicolaslopezj\Searchable\SearchableTrait;
 
 class Promocode extends Model implements AuditableContract
 {
     use SoftDeletes, Auditable, Filterable, HasTenant;
+    use CreateTimeline, CreatorRelationship, SearchableTrait;
 
     /****************************************
      **             Attributes
@@ -32,7 +36,41 @@ class Promocode extends Model implements AuditableContract
         'max',
         'quantity',
         'reward_type',
-        'expired_at'
+        'expired_at',
+        'is_active'
+    ];
+    
+    /**
+     * Searchable rules.
+     * 
+     * Columns and their priority in search results.
+     * Columns with higher values are more important.
+     * Columns with equal values have equal importance.
+     *
+     * @var array
+     */
+    protected $searchable = [
+        'columns' => [
+            'code' => 10,
+            'value' => 7,
+            'expired_at' => 5,
+        ],
+    ];
+
+    /**
+     * Attributes to include in the Audit.
+     *
+     * @var array
+     */
+    protected $auditInclude = [
+        'code',
+        'value',
+        'min_total',
+        'max',
+        'quantity',
+        'reward_type',
+        'expired_at',
+        'is_active'
     ];
 
     /**
@@ -48,14 +86,6 @@ class Promocode extends Model implements AuditableContract
     /****************************************
      **             Relations
      ***************************************/
-
-    /**
-     * Get the all promocode user that owned promocode.
-     */
-    public function promocode_user()
-    {
-        return $this->hasMany(PromocodeUser::class);
-    }
 
     /**
      * Get the all orders that owned promocode.
@@ -78,7 +108,7 @@ class Promocode extends Model implements AuditableContract
      */
     public function users()
     {
-        return $this->belongsToMany(\App\User::class);
+        return $this->belongsToMany(\App\User::class)->withPivot('used_at');
     }
 
     /**
@@ -88,9 +118,4 @@ class Promocode extends Model implements AuditableContract
     {
         return $this->belongsToMany(Variation::class);
     }
-
-
-    /****************************************
-     **               Methods
-     ***************************************/
 }

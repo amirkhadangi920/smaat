@@ -181,6 +181,14 @@ class Variation extends Model implements AuditableContract
     }
 
     /**
+     * Get all the price changes of this variation
+     */
+    public function old_sale_prices()
+    {
+        return $this->hasMany(PriceChange::class, 'variation_id')->where('type', false);
+    }
+
+    /**
      * Relation to discount item model
      * 
      * @return discountItem Model

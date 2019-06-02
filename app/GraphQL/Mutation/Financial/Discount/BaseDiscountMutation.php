@@ -52,7 +52,7 @@ class BaseDiscountMutation extends MainMutation
      */
     public function afterCreate($request, $discount)
     {
-        $discount->categories()->attach( $request->categories );
+        $discount->categories()->attach( $request->get('categories') );
     }
 
     /**
@@ -64,6 +64,6 @@ class BaseDiscountMutation extends MainMutation
      */
     public function afterUpdate($request, $discount)
     {
-        $discount->categories()->sync( $request->categories );
+        $discount->categories()->sync( $request->get('categories') );
     }
 }

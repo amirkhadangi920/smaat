@@ -164,8 +164,9 @@ class SpecRow extends Model implements AuditableContract
      * Get the all of the spec data that owned spec row 
      *
      */
-    public function datas()
+    public function compareData()
     {
-        return $this->hasMany(SpecData::class, 'spec_row_id');
+        return $this->hasMany(SpecData::class, 'spec_row_id')
+            ->whereIn('product_id', json_decode( \Cookie::get('compare_products', '[]') ) );
     }
 }

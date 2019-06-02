@@ -1,15 +1,11 @@
 <?php
 
-namespace App\Models;
+namespace App\Models\Option;
 
 use Illuminate\Database\Eloquent\Model;
-use OwenIt\Auditing\Auditable;
-use OwenIt\Auditing\Contracts\Auditable as AuditableContract;
 
-class Option extends Model implements AuditableContract
+class UserSettingTranslation extends Model
 {
-    use Auditable;
-
     /****************************************
      **             Attributes
      ***************************************/
@@ -19,5 +15,14 @@ class Option extends Model implements AuditableContract
      *
      * @var array
      */
-    protected $fillable = [ 'value' ];
+    protected $fillable = [
+        'value'
+    ];
+
+    /**
+     * Indicates if the model should be timestamped.
+     *
+     * @var bool
+     */
+    public $timestamps = false;
 }

@@ -30,6 +30,13 @@ class OrderStatusType extends BaseType
             'color' => [
                 'type' => Type::string()
             ],
+            'changed_at' => [
+                'type' => Type::string(),
+                'resolve' => function($data) {
+                    return $data->pivot->changed_at ?? null;
+                },
+                'selectable' => false
+            ],
             'audits' => $this->audits('order_status'),
             'is_active' => $this->acceptableField('order_status')
         ];

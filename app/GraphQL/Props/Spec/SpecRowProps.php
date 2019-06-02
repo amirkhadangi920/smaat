@@ -23,15 +23,6 @@ trait SpecRowProps
     protected $model = SpecRow::class;
 
     /**
-     * The relation of the controller to get when accesing data from DB
-     *
-     * @var array
-     */
-    protected $relations = [
-        'header:id,title,description'
-    ];
-
-    /**
      * Resource of this controller respnoses
      *
      * @var [type]

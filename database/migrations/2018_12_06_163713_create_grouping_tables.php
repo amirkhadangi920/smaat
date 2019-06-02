@@ -23,7 +23,6 @@ class CreateGroupingTables extends Migration
         $schema->create('categories', function (Blueprint $table) {
             $table->table([
                 'logo'              => 'nullable|array',
-                'scoring_feilds'    => 'mediumText|nullable',
                 'jalali_created_at' => 'datetime|nullable',
                 'is_active'         => 'boolean|default:1'
             ], ['self', 'users', 'tenants']);
@@ -41,6 +40,25 @@ class CreateGroupingTables extends Migration
 
             $table->unique(['category_id','locale']);
             $table->foreign('category_id')->references('id')->on('categories')->onDelete('cascade');
+        });
+
+        $schema->create('scoring_fields', function ($table) {
+            $table->increments('id');
+            $table->add_foreign('categories');
+            $table->tinyInteger('default')->default(3);
+            $table->full_timestamps();
+        });
+
+        $schema->create('scoring_field_translations', function ($table) {
+            $table->increments('id');
+            $table->integer('scoring_field_id')->unsigned();
+            
+            $table->string('title', 50);
+            $table->string('description', 255)->nullable();
+
+            $table->string('locale')->index();
+            $table->unique(['scoring_field_id','locale']);
+            $table->foreign('scoring_field_id')->references('id')->on('scoring_fields')->onDelete('cascade');
         });
 
         $schema->create('subjects', function (Blueprint $table) {

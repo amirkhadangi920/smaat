@@ -17,11 +17,9 @@ class ProvinceType extends BaseType
     public function get_fields()
     {
         return [
-            'longitude‎' => [
-                'type' => Type::float()
-            ],
-            'latitude‎' => [
-                'type' => Type::float()
+            'coordinates' => [
+                'type' => \GraphQL::type('coordinate'),
+                'is_relation' => false
             ],
             'name' => [
                 'type' => Type::string()

@@ -25,25 +25,6 @@ trait QuestionAndAnswerProps
     protected $model = QuestionAndAnswer::class;
 
     /**
-     * The relation of the controller to get when accesing data from DB
-     *
-     * @var array
-     */
-    protected $relations = [
-        'product:id,name,photos,label',
-        'user:id,first_name,last_name,avatar',
-        'answers:id,user_id,question_id,message,is_accept,created_at,updated_at',
-        'answers.user:id,first_name,last_name,avatar'
-    ];
-
-    /**
-     * Name of the relation method of the User model to this model
-     *
-     * @var string
-     */
-    protected $rel_from_user = 'questionAndAnswers';
-
-    /**
      * Resource of this controller respnoses
      *
      * @var [type]

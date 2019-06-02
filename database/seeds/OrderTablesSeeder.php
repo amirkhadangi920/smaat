@@ -27,7 +27,6 @@ class OrderTablesSeeder extends CustomSeeder
         $this->createOrderStatuses();
 
         $orders = $this->createOrders();
-    
 
         Variation::all()->take( rand(5, 10) )->each( function ( $variation ) use ( $orders ) {
             $orders->random()->items()->save(
@@ -83,7 +82,7 @@ class OrderTablesSeeder extends CustomSeeder
                 'shipping_method_id'    => $this->shippings->random()->id,
                 'city_id'               => City::all()->random()->id,
                 'order_status_id'       => $this->order_statuses->random()->id,
-                'promocode_id'          => Promocode::all()->random()->id,
+                // 'promocode_id'          => Promocode::all()->random()->id,
             ]
         );
     }

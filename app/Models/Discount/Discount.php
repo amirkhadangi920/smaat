@@ -41,8 +41,6 @@ class Discount extends Model implements AuditableContract
      * @var array
      */
     protected $fillable = [
-        // 'title',
-        // 'description',
         'logo',
         'type',
         'status',
@@ -86,8 +84,6 @@ class Discount extends Model implements AuditableContract
      * @var array
      */
     protected $auditInclude = [
-        'title',
-        'description',
         'logo',
         'started_at',
         'expired_at',
@@ -150,8 +146,4 @@ class Discount extends Model implements AuditableContract
     {
         return $this->belongsToMany(Category::class);
     }
-
-    /****************************************
-     **              Methods
-     ***************************************/
 }

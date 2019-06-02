@@ -16,12 +16,13 @@ use App\Helpers\CreateTimeline;
 use App\Helpers\HasTenant;
 use Askedio\SoftCascade\Traits\SoftCascadeTrait;
 use Nicolaslopezj\Searchable\SearchableTrait;
+use Grimzy\LaravelMysqlSpatial\Eloquent\SpatialTrait;
 
 class Order extends Model implements AuditableContract
 {
     use SoftDeletes, HasTenant, Auditable;
     use Filterable, CreateTimeline, SoftCascadeTrait;
-    use SearchableTrait;
+    use SearchableTrait, SpatialTrait;
 
     /****************************************
      **             Attributes
@@ -60,19 +61,26 @@ class Order extends Model implements AuditableContract
         'shipping_method_id',
         'order_status_id',
         'city_id',
-        'descriptions',
+        'user_phone_id',
+        'user_address_id',
         'destination',
+        'coordinates',
         'phone_number',
         'postal_code',
         'offer',
         'total',
-        'tax',
         'shipping_cost',
-        'docs',
-        // 'payment_jalali',
-        'datetimes',
         'paid_at',
         'jalali_paid_at',
+    ];
+    
+    /**
+     * The attributes that store as spatial field in storage.
+     *
+     * @var array
+     */
+    protected $spatialFields = [
+        'coordinates',
     ];
     
     /**
@@ -123,10 +131,10 @@ class Order extends Model implements AuditableContract
      * @var array
      */
     protected $casts = [
-        'descriptions'  => 'array',
-        'shipping'      => 'array',
-        'datetimes'     => 'array',
-        'docs'          => 'array',
+        // 'descriptions'  => 'array',
+        // 'shipping'      => 'array',
+        // 'datetimes'     => 'array',
+        // 'docs'          => 'array',
     ];
 
     /**
@@ -175,6 +183,14 @@ class Order extends Model implements AuditableContract
     public function order_status()
     {
         return $this->belongsTo(OrderStatus::class);
+    }
+
+    /**
+     * Get the order status that owned the order
+     */
+    public function status_changes()
+    {
+        return $this->belongsToMany(OrderStatus::class, 'order_status_changes')->withPivot('changed_at')->orderBy('changed_at', 'desc');
     }
 
     /**

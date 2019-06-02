@@ -25,20 +25,6 @@ trait SpecProps
     protected $model = Spec::class;
 
     /**
-     * The relation of the controller to get when accesing data from DB
-     *
-     * @var array
-     */
-    protected $relations = [
-        'category:id,title'
-    ];
-
-    protected $more_relations = [
-        'headers:id,spec_id,title,description',
-        'headers.rows:id,spec_header_id,title,description,label,values,help,multiple,required'
-    ];
-
-    /**
      * Resource of this controller respnoses
      *
      * @var [type]

@@ -47,6 +47,10 @@ class RegisterUserMutation extends BaseUserMutation
             'password' => bcrypt( $args['password'] )
         ]);
 
+        auth()->login( $user );
+
+        $this->moveLocalCartToServer();
+
         return [
             'id'    => $user->id,
             'email' => $user->email,

@@ -4,7 +4,7 @@ use Illuminate\Database\Seeder;
 use App\Models\Places\Country;
 use App\Models\Places\City;
 use App\Models\Places\Province;
-
+use Grimzy\LaravelMysqlSpatial\Types\Point;
 class LocationTablesSeeder extends Seeder
 {
     /**
@@ -24,10 +24,9 @@ class LocationTablesSeeder extends Seeder
 
         Country::create([
             'id'           => 1,
-            'longitude‎'    => '53.6880',
-            'latitude‎'     => '32.4279',
             'name'         => 'ایران',
-            'code'         => 'IR'
+            'code'         => 'IR',
+            'coordinates'   => new Point(32.4279, 53.6880)
         ])->each( function ( $country ) {
             echo "\e[31mA country \e[39mwith name=\e[30m\e[101mIran\e[49m \e[39mwas \e[32mcreated\n";
             $provinces = [
@@ -68,9 +67,8 @@ class LocationTablesSeeder extends Seeder
             foreach ( $provinces as $item )
             {
                 $country->provinces()->create([
-                    'name'        => $item[0],
-                    'Latitude‎'    => $item[1],
-                    'longitude‎'   => $item[2]
+                    'name'          => $item[0],
+                    'coordinates'   => new Point($item[1], $item[2])
                 ]);
             }
             echo "\e[31mAll the provinces \e[39mfor country=\e[30m\e[101mIran\e[49m \e[39mwas \e[32mcreated\n";
@@ -302,8 +300,7 @@ class LocationTablesSeeder extends Seeder
             $this->response[] = City::create([
                 'province_id' => $item[0],
                 'name'        => $item[1],
-                'Latitude‎'    => $item[2],
-                'longitude‎'   => $item[3]
+                'coordinates' => new Point($item[2], $item[3])
             ]);
         }
         echo "\e[31mAll the Cities \e[39mfor country=\e[30m\e[101mIran provinces\e[49m \e[39mwas \e[32mcreated\n";

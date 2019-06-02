@@ -71,7 +71,10 @@ class CreateDiscountTables extends Migration
                 'reward_type'       => '20|default:buy|comment:e.g buy, birthday, gift etc...',
                 'jalali_created_at' => 'datetime|nullable',
                 'is_active'         => 'boolean|default:1'
-            ], ['tenants'], 'int', ['expired_at']);
+            ], [
+                'tenants',
+                'users'
+            ], 'int', ['expired_at']);
         });
 
         $schema->create('promocode_variation', function (Blueprint $table) {
@@ -84,7 +87,6 @@ class CreateDiscountTables extends Migration
 
         $schema->create('promocode_user', function (Blueprint $table) {
             $table->interface('promocodes', 'users');
-            $table->boolean('is_used')->default(0);
             $table->timestamp('used_at')->nullable();
         });
     }

@@ -25,7 +25,28 @@ class Blueprint extends BaseBlueprint
                 'users', 'products', 'variations', 'orders', 'banks', 'accounts', 'persons', 'articles', 'tenants'
             ])) $feild_type = 'uuid';
             
-            $this->add_foreign($table, $parameters[0] ?? false, $feild_type ?? 'unsignedInteger');
+
+            if ( is_bool($parameters[0] ?? false) )
+            {
+                $nullable = $parameters[0] ?? false;
+                $on_change = 'cascade';
+                $index = false;
+            }
+            else
+            {
+                $nullable = in_array('nullable', $parameters[0]) ? true : false;
+                $on_change = in_array('set null', $parameters[0]) ? 'set null' : 'cascade';
+                $index = in_array('index', $parameters[0]) ? true : false;
+            }
+
+            $this->add_foreign(
+                $table,
+                $nullable,
+                $feild_type ?? 'unsignedInteger',
+                null,
+                $on_change,
+                $index
+            );
         }
         else
         {
@@ -88,8 +109,14 @@ class Blueprint extends BaseBlueprint
      * @param string|cascade            $on_change e.g cascade, set null etc...
      * @return void
      */
-    public function add_foreign($table = null, $nullable = false, $feild_type = 'unsignedInteger', $column = null, $on_change = 'cascade')
-    {
+    public function add_foreign(
+        $table = null,
+        $nullable = false,
+        $feild_type = 'unsignedInteger',
+        $column = null,
+        $on_change = 'cascade',
+        $index = false
+    ) {
         if (!$table)
         {
             $table = $this->table;
@@ -106,8 +133,14 @@ class Blueprint extends BaseBlueprint
         else
             $this->$feild_type($column);
 
-        $this->foreign($column)->references('id')->on($table)
-            ->onDelete($on_change)->onUpdate($on_change);
+        $this->foreign($column)
+            ->references('id')
+            ->on($table)
+            ->onDelete($on_change)
+            ->onUpdate($on_change);
+
+        if ( $index )
+            $this->index($column);	
     }
 
     public function interface($first_table, $second_table)
@@ -274,7 +307,8 @@ class Blueprint extends BaseBlueprint
             'tinyInteger', 'smallInteger', 'integer', 'bigInteger',
             'unsignedInteger', 'unsignedBigInteger',
             'boolean', 'array', 'json',
-            'timestamp', 'datetime'
+            'timestamp', 'datetime',
+            'point'
         ];
     
         foreach ( $all_types as $type )

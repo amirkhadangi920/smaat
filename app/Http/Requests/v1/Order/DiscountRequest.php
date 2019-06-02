@@ -3,6 +3,7 @@
 namespace App\Http\Requests\v1\Order;
 
 use Illuminate\Foundation\Http\FormRequest;
+use App\Rules\ExistsTenant;
 
 class DiscountRequest extends FormRequest
 {

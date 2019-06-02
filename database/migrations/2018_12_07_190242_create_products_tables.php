@@ -34,10 +34,10 @@ class CreateProductsTables extends Migration
             ], [
                 'tenants',
                 'users',
-                'categories' => true,
-                'brands' => true,
-                'units' => true,
-                'specs' => true
+                'categories' => ['nullable', 'set null'],
+                'brands' => ['nullable', 'set null'],
+                'units' => ['nullable', 'set null'],
+                'specs' => ['nullable', 'set null']
             ], 'uuid');
 
             // $table->unique(['name', 'tenant_id']);
@@ -51,7 +51,8 @@ class CreateProductsTables extends Migration
             $table->string('name', 50);
             $table->string('second_name', 50)->nullable();
             $table->string('description', 255)->nullable();
-            $table->text('review')->nullable();
+            $table->text('short_review')->nullable();
+            $table->text('expert_review')->nullable();
             $table->array('advantages');
             $table->array('disadvantages');
 
@@ -66,8 +67,8 @@ class CreateProductsTables extends Migration
                 'barcode'               => 'nullable',
                 'purchase_price'        => 'integer',
                 'sales_price'           => 'integer',
-                'old_purchase_prices'   => 'array|comment:Array of the all prices and it\'s changing time',
-                'old_sales_prices'      => 'array|comment:Array of the all prices and it\'s changing time',
+                // 'old_purchase_prices'   => 'array|comment:Array of the all prices and it\'s changing time',
+                // 'old_sales_prices'      => 'array|comment:Array of the all prices and it\'s changing time',
                 'inventory'             => 'nullable|smallInteger|comment:Null = infinite , 0 = unavailble & number = inventory', 
                 'sending_time'          => 'tinyInteger|default:1|commnt:Sending time of this product variation in day, e.g 2days',
                 'jalali_created_at'     => 'datetime|nullable',
@@ -76,10 +77,18 @@ class CreateProductsTables extends Migration
                 'tenants',
                 'products',
                 'users',
-                'warranties' => true,
-                'colors' => true,
-                'sizes' => true
+                'warranties' => ['nullable', 'set null'],
+                'colors' => ['nullable', 'set null'],
+                'sizes' => ['nullable', 'set null']
             ], 'uuid');
+        });
+
+        $schema->create('price_changes', function ($table) {
+            $table->increments('id');
+            $table->add_foreign('variations', false, 'uuid');
+            $table->integer('old_price');
+            $table->boolean('type')->default(0);
+            $table->timestamp('changed_at')->default(\DB::raw('CURRENT_TIMESTAMP'));
         });
 
         $schema->create('order_points', function (Blueprint $table) {

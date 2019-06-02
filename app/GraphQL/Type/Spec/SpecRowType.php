@@ -44,6 +44,9 @@ class SpecRowType extends BaseType
                     return $query->where('product_id', $args['id'] ?? false);
                 },
             ],
+            'compareData' => [
+                'type' => Type::listOf( \GraphQL::type('spec_data') ),
+            ],
             'help' => [
                 'type' => Type::string(),
                 'selectable' => false

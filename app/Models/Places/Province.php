@@ -4,10 +4,11 @@ namespace App\Models\Places;
 
 use Illuminate\Database\Eloquent\Model;
 use Nicolaslopezj\Searchable\SearchableTrait;
+use Grimzy\LaravelMysqlSpatial\Eloquent\SpatialTrait;
 
 class Province extends Model
 {
-    use SearchableTrait;
+    use SearchableTrait, SpatialTrait;
 
     /****************************************
      **             Attributes
@@ -19,9 +20,18 @@ class Province extends Model
      * @var array
      */
     protected $fillable = [
-        'longitude‎',
-        'latitude‎',
-        'name'
+        'country_id',
+        'name',
+        'coordinates'
+    ];
+    
+    /**
+     * The attributes that store as spatial field in storage.
+     *
+     * @var array
+     */
+    protected $spatialFields = [
+        'coordinates',
     ];
     
     /**

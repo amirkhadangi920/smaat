@@ -8,12 +8,6 @@ $faker = Factory::create('fa_IR');
 $factory->define(App\Models\Opinion\Review::class, function () use($faker) {
     return [
         'user_id'               => App\User::all()->random()->id,
-        'ranks'                 => [ null, function () use ( $faker ) {
-            $ranks = [];
-            for ($i = 0; $i < rand(1, 8); ++$i)
-                $ranks[] = [ 'title' => $faker->word, 'value' => rand(0, 5) ];
-            return $ranks;
-        }][ $faker->boolean() ],
         'advantages'            => [ null, function () use ( $faker ) {
             $advantages = [];
             for ($i = 0; $i < rand(1, 5); ++$i)

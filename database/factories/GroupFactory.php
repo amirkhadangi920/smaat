@@ -13,14 +13,17 @@ $factory->define(App\Models\Group\Category::class, function () use($faker, $bran
         'title'             => Faker::fullName(),
         'description'       => nullable( Faker::sentence() ),
         'logo'              => nullable( image ( $brands[$selected]['logo'] )),
-        'scoring_feilds'    => nullable( function () use ( $faker ) {
-            $feilds = [];
-            for ($i = 0; $i < rand(1, 8); ++$i)
-                $feilds[] = Faker::sentence();
-            return $feilds;
-        }),
         'jalali_created_at' => Jalalian::forge("now - {$faker->numberBetween(2, 360)} days"),
         'is_active'         => $faker->boolean(80)
+    ];
+});
+
+$factory->define(App\Models\Group\ScoringField::class, function () use($faker, $brands) {
+    
+    return [
+        'title'             => Faker::fullName(),
+        'description'       => nullable( Faker::sentence() ),
+        'default'           => $faker->numberBetween(0, 5),
     ];
 });
 

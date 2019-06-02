@@ -54,7 +54,6 @@ return [
             'prefix_indexes' => true,
             'strict' => false,
             'engine' => null,
-            
         ],
 
         'pgsql' => [
@@ -126,7 +125,6 @@ return [
             'port' => env('REDIS_PORT', 6379),
             'database' => env('REDIS_CACHE_DB', 1),
         ],
-
     ],
 
 ];

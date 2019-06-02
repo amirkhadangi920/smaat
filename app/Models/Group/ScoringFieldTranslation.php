@@ -1,31 +1,29 @@
 <?php
 
-namespace App\Models\Promocode;
+namespace App\Models\Group;
 
 use Illuminate\Database\Eloquent\Model;
 
-class PromocodeUser extends Model
+class ScoringFieldTranslation extends Model
 {
     /****************************************
      **             Attributes
      ***************************************/
-
+    
     /**
      * The attributes that are mass assignable.
      *
      * @var array
      */
     protected $fillable = [
-
-        'is_used',
+        'title',
+        'description'
     ];
 
     /**
-     * The attributes that should be cast to native types.
+     * Indicates if the model should be timestamped.
      *
-     * @var array
+     * @var bool
      */
-    protected $casts = [
-        'is_used'  => 'boolean'
-    ];
+    public $timestamps = false;
 }

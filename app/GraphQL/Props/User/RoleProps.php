@@ -25,19 +25,6 @@ trait RoleProps
     protected $model = Role::class;
 
     /**
-     * The relation of the controller to get when accesing data from DB
-     *
-     * @var array
-     */
-    protected $relations = [
-        'permissions:id'
-    ];
-
-    protected $more_relations = [
-        'permissions'
-    ];
-
-    /**
      * Resource of this controller respnoses
      *
      * @var [type]

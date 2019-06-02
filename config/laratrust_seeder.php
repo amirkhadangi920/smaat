@@ -75,6 +75,7 @@ return [
             'order' => 'r,d,s,sa,sph,si,sl',
             'order_item' => 's,sc',
             'discount' => 'at,r,c,u,d,ad,rm,sl,sc',
+            'promocode' => 'at,r,c,u,d,sl,sc',
 
             'user' => 'r,u,d,s,sa,sph,sl',
             'role' => 'at,r,c,u,d,sl,sc',
@@ -145,6 +146,7 @@ return [
         'order' => 'سفارش',
         'order_item' => 'آیتم سفارش',
         'discount' => 'تخفیف',
+        'promocode' => 'کد تخفیف',
 
         'user' => 'کاربر',
         'role' => 'نقش',

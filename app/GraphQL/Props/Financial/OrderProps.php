@@ -25,28 +25,6 @@ trait OrderProps
     protected $model = Order::class;
 
     /**
-     * The relation of the controller to get when accesing data from DB
-     *
-     * @var array
-     */
-    protected $relations = [
-        'user',
-        'order_status:id,title,color,description',
-    ];
-    
-    protected $more_relations = [
-        'promocode:id,code,value,min_total,reward_type,expired_at',
-        'shipping_method:id,name,description,logo,cost,minimum',
-        'items',
-        'items.variation:id,product_id,color_id,size_id,warranty_id,inventory,sending_time',
-        'items.variation.product:id,unit_id,name,code,note,photos,label',
-        'items.variation.product.unit:id,   ',
-        'items.variation.color:id,name,code',
-        'items.variation.size:id,name',
-        'items.variation.warranty:id,title,description,logo,expire',
-    ];
-
-    /**
      * Resource of this controller respnoses
      *
      * @var [type]

@@ -5,10 +5,11 @@ namespace App\Models\Places;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\Financial\Order;
 use Nicolaslopezj\Searchable\SearchableTrait;
+use Grimzy\LaravelMysqlSpatial\Eloquent\SpatialTrait;
 
 class City extends Model
 {
-    use SearchableTrait;
+    use SearchableTrait, SpatialTrait;
 
     /****************************************
      **             Attributes
@@ -21,9 +22,17 @@ class City extends Model
      */
     protected $fillable = [
         'province_id', 
-        'longitude‎',
-        'latitude‎',
         'name',
+        'coordinates'
+    ];
+
+    /**
+     * The attributes that store as spatial field in storage.
+     *
+     * @var array
+     */
+    protected $spatialFields = [
+        'coordinates',
     ];
 
     /**

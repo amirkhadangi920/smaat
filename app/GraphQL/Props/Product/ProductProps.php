@@ -25,18 +25,6 @@ trait ProductProps
     protected $model = Product::class;
 
     /**
-     * The relation of the controller to get when accesing data from DB
-     *
-     * @var array
-     */
-    protected $relations = [
-        'category:id,title',
-        'brand:id,name'
-    ];
-
-    protected $more_relations;
-
-    /**
      * Resource of this controller respnoses
      *
      * @var [type]
@@ -56,13 +44,6 @@ trait ProductProps
      * @var ModelFilter
      */
     protected $filter = ProductFilter::class;
-
-    /**
-     * Name of the relation method of the User model to this model
-     *
-     * @var string
-     */
-    protected $rel_from_user = 'products';
 
     /**
      * The request class of model for validation and authorization

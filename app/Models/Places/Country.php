@@ -4,10 +4,11 @@ namespace App\Models\Places;
 
 use Illuminate\Database\Eloquent\Model;
 use Nicolaslopezj\Searchable\SearchableTrait;
+use Grimzy\LaravelMysqlSpatial\Eloquent\SpatialTrait;
 
 class Country extends Model
 {
-    use SearchableTrait;
+    use SearchableTrait, SpatialTrait;
 
     /****************************************
      **             Attributes
@@ -19,10 +20,18 @@ class Country extends Model
      * @var array
      */
     protected $fillable = [
-        'longitude‎',
-        'latitude‎',
         'name',
-        'code'
+        'code',
+        'coordinates'
+    ];
+
+    /**
+     * The attributes that store as spatial field in storage.
+     *
+     * @var array
+     */
+    protected $spatialFields = [
+        'coordinates',
     ];
     
     /**

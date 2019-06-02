@@ -18,6 +18,7 @@ use App\GraphQL\Query\Group\{
 // Financial Queries
 use App\GraphQL\Query\Financial\{
     Discount\DiscountQuery, Discount\DiscountsQuery,
+    Promocode\PromocodeQuery, Promocode\PromocodesQuery,
     Order\OrderQuery, Order\OrdersQuery,
     OrderStatus\OrderStatusQuery, OrderStatus\OrderStatusesQuery,
     ShippingMethod\ShippingMethodQuery, ShippingMethod\ShippingMethodsQuery
@@ -28,6 +29,12 @@ use App\GraphQL\Query\Opinion\{
     Comment\CommentQuery, Comment\CommentsQuery,
     Review\ReviewQuery, Review\ReviewsQuery,
     QuestionAndAnswer\QuestionAndAnswerQuery, QuestionAndAnswer\QuestionAndAnswersQuery
+};
+
+// Option Queries
+use App\GraphQL\Query\Option\{
+    SiteSetting\SiteSettingQuery,
+    UserSetting\UserSettingQuery
 };
 
 // Shop Queries
@@ -43,7 +50,10 @@ use App\GraphQL\Query\Blog\Article\{ ArticlesQuery, ArticleQuery };
 use App\GraphQL\Query\User\{
     User\UserQuery, User\UsersQuery,
     Role\RoleQuery, Role\RolesQuery,
-    Cart\CartQuery
+    Cart\CartQuery,
+    Compare\CompareQuery, Compare\CompareProductsQuery,
+    User\MeQuery,
+    Favorite\FavoriteQuery
 };
 
 // Feature Mutations
@@ -64,7 +74,9 @@ use App\GraphQL\Mutation\Group\{
 // Financial Mutations
 use App\GraphQL\Mutation\Financial\{
     Discount\CreateDiscountMutation, Discount\UpdateDiscountMutation, Discount\DeleteDiscountMutation,
-    Order\UpdateOrderMutation, Order\DeleteOrderMutation,
+    Discount\AddDiscountMutation, Discount\RemoveDiscountMutation,
+
+    Order\UpdateOrderMutation, Order\DeleteOrderMutation, Order\StatusOrderMutation,
     OrderStatus\CreateOrderStatusMutation, OrderStatus\UpdateOrderStatusMutation, OrderStatus\DeleteOrderStatusMutation,
     ShippingMethod\CreateShippingMethodMutation, ShippingMethod\UpdateShippingMethodMutation, ShippingMethod\DeleteShippingMethodMutation
 };
@@ -93,7 +105,9 @@ use App\GraphQL\Mutation\User\{
 
     Role\CreateRoleMutation, Role\UpdateRoleMutation, Role\DeleteRoleMutation,
     
-    Cart\AddCartMutation, Cart\RemoveCartMutation
+    Cart\AddCartMutation, Cart\RemoveCartMutation,
+    Compare\AddCompareMutation, Compare\RemoveCompareMutation,
+    Favorite\AddFavoriteMutation, Favorite\RemoveFavoriteMutation
 };
 
 // Spec Mutations
@@ -152,6 +166,17 @@ use App\GraphQL\Type\ChartRecordType;
 use App\GraphQL\Type\VotesType;
 use App\GraphQL\Type\Spec\SpecDefaultType;
 use App\GraphQL\Type\Spec\SpecDataType;
+use App\GraphQL\Type\User\MeType;
+use App\GraphQL\Type\Option\SiteSettingType;
+use App\GraphQL\Type\Option\UserSettingType;
+use App\GraphQL\Type\User\UserPhoneType;
+use App\GraphQL\Type\User\UserAddressType;
+use App\GraphQL\Type\Group\ScoringFieldType;
+use App\GraphQL\Type\Product\PriceChangeType;
+use App\GraphQL\Type\CoordinateType;
+use App\GraphQL\Type\Financial\MeOrderType;
+use App\GraphQL\Type\Financial\MeOrderItemType;
+use App\GraphQL\Type\Financial\PromocodeType;
 
 return [
 
@@ -265,6 +290,9 @@ return [
                 'shipping_method' => ShippingMethodQuery::class,
                 'shipping_methods' => ShippingMethodsQuery::class,
 
+                // Option
+                'siteSetting' => SiteSettingQuery::class,
+
                 // Shop
                 'product' => ProductQuery::class,
                 'products' => ProductsQuery::class,
@@ -278,11 +306,24 @@ return [
                 'categories' => CategoriesQuery::class,
                 'subject' => SubjectQuery::class,
                 'subjects' => SubjectsQuery::class,
+                
+                // User
+                'cart' => CartQuery::class,
+                'compare' => CompareQuery::class,
+                'compareProducts' => CompareProductsQuery::class,
             ],
             'mutation' => [
                 // User
                 'login'         => LoginUserMutation::class,
                 'register'      => RegisterUserMutation::class,
+
+                // Cart
+                'addCart'       => AddCartMutation::class,
+                'removeCart'    => RemoveCartMutation::class,
+
+                // Compare
+                'addCompare'    => AddCompareMutation::class,
+                'removeCompare' => RemoveCompareMutation::class,
             ],
             'middleware' => ['CORS'],
             'method' => ['get', 'post'],
@@ -305,6 +346,8 @@ return [
                 // Financial
                 'discount' => DiscountQuery::class,
                 'discounts' => DiscountsQuery::class,
+                'promocode' => PromocodeQuery::class,
+                'promocodes' => PromocodesQuery::class,
                 'order' => OrderQuery::class,
                 'orders' => OrdersQuery::class,
                 'order_status' => OrderStatusQuery::class,
@@ -319,6 +362,10 @@ return [
                 'reviews' => ReviewsQuery::class,
                 'question_and_answer' => QuestionAndAnswerQuery::class,
                 'question_and_answers' => QuestionAndAnswersQuery::class,
+
+                // Option
+                'siteSetting' => SiteSettingQuery::class,
+                'userSetting' => UserSettingQuery::class,
 
                 // Shop
                 'product' => ProductQuery::class,
@@ -338,10 +385,14 @@ return [
 
                 // User
                 'user' => UserQuery::class,
+                'me' => MeQuery::class,
                 'users' => UsersQuery::class,
                 'role' => RoleQuery::class,
                 'roles' => RolesQuery::class,
                 'cart' => CartQuery::class,
+                'compare' => CompareQuery::class,
+                'favorites' => FavoriteQuery::class,
+                'compareProducts' => CompareProductsQuery::class,
             ],
             'mutation' => [
                 // Blog
@@ -377,6 +428,8 @@ return [
                 'createDiscount' => CreateDiscountMutation::class,
                 'updateDiscount' => UpdateDiscountMutation::class,
                 'deleteDiscount' => DeleteDiscountMutation::class,
+                'addDiscount'    => AddDiscountMutation::class,
+                'removeDiscount' => RemoveDiscountMutation::class,
 
                 'createOrderStatus' => CreateOrderStatusMutation::class,
                 'updateOrderStatus' => UpdateOrderStatusMutation::class,
@@ -388,6 +441,7 @@ return [
 
                 'updateOrder' => UpdateOrderMutation::class,
                 'deleteOrder' => DeleteOrderMutation::class,
+                'changeOrderStatus' => StatusOrderMutation::class,
 
                 
                 // Group
@@ -446,6 +500,14 @@ return [
                 // Cart
                 'addCart'       => AddCartMutation::class,
                 'removeCart'    => RemoveCartMutation::class,
+                
+                // Compare
+                'addCompare'    => AddCompareMutation::class,
+                'removeCompare' => RemoveCompareMutation::class,
+
+                // Favorite
+                'addFavorite'   => AddFavoriteMutation::class,
+                'removeFavorite'=> RemoveFavoriteMutation::class,
             ],
             'middleware' => ['auth:api', 'CORS'],
             'method' => ['get', 'post', 'put', 'delete']
@@ -473,7 +535,10 @@ return [
         'discount'          => DiscountType::class,
         'discount_item'     => DiscountItemType::class,
         'order'             => OrderType::class,
+        'promocode'         => PromocodeType::class,
+        'me_order'          => MeOrderType::class,
         'order_item'        => OrderItemType::class,
+        'me_order_item'     => MeOrderItemType::class,
         'order_status'      => OrderStatusType::class,
         'shipping_method'   => ShippingMethodType::class,
 
@@ -482,9 +547,14 @@ return [
         'review'            => ReviewType::class,
         'question_and_answer'=> QuestionAndAnswerType::class,
 
+        // Option
+        'site_settings'     => SiteSettingType::class,
+        'user_settings'     => UserSettingType::class,
+
         // Product
         'product'           => ProductType::class,
         'variation'         => VariationType::class,
+        'price_change'      => PriceChangeType::class,
 
         // Blog
         'article'           => ArticleType::class,
@@ -498,11 +568,15 @@ return [
 
         // Group
         'category'          => CategoryType::class,
+        'scoring_field'     => ScoringFieldType::class,
         'subject'           => SubjectType::class,
 
         // User
         'user'              => UserType::class,
+        'user_phone'        => UserPhoneType::class,
+        'user_address'      => UserAddressType::class,
         'role'              => RoleType::class,
+        'me'                => MeType::class,
         'permission'        => PermissionType::class,
 
         // Place
@@ -511,6 +585,7 @@ return [
         'country'           => CountryType::class,
 
 
+        'coordinate'        => CoordinateType::class,
         'audit'             => AuditType::class,
         'votes'             => VotesType::class,
         'data_array'        => ArrayDataType::class,

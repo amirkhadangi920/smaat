@@ -42,32 +42,32 @@ $factory->define(App\User::class, function () use($faker , $avatars) {
         'email_verified_at' => now(),
         'password'          => '$2y$10$TKh8H1.PfQx37YgCzwiKb.KjNyWgaHb9cbcoQgdIVFlYg7B77UdFm', // secret
         'avatar'            => nullable( image($avatars[$select]['img']) ),
-        'address'           => nullable( $faker->address ),
-        'postal_code'       => nullable( $faker->postcode ),
+        // 'address'           => nullable( $faker->address ),
+        // 'postal_code'       => nullable( $faker->postcode ),
         'national_code'     => nullable( '0'.$faker->numberBetween(910000000, 959999999) ),
-        'type'              => 0,
+        // 'type'              => 0,
         'remember_token'    => str_random(10),
         'last_purchase'     => nullable( $faker->dateTimeBetween('-3 years', 'now') ),
         'purchase_counts'   => rand(0, 20),
         'total_payments'    => rand(0, 50000000),
-        'phones'            => nullable(
-            function () use ($faker) {
-                $phones = [];
-                $titles = [ 'home', 'mobile', 'work', 'special' ];
-                for ($i = 0; $i < rand(0, 5); ++$i)
-                    $phones[] = [ 'type' => $titles[ rand(0, 3) ], 'value' => $faker->phoneNumber ];
-                return $phones;
-            }
-        ),
-        'social_links'      => nullable(
-            function () use ( $faker ) {
-                $social_links = [];
-                $titles = [ 'telegram', 'facebook', 'instagram', 'twitter' ];
-                for ($i = 0; $i < rand(0, 5); ++$i)
-                    $social_links[] = [ 'type' => $titles[ rand(0, 3) ], 'value' => $faker->userName ];
-                return $social_links;
-            }
-        ),
+        // 'phones'            => nullable(
+        //     function () use ($faker) {
+        //         $phones = [];
+        //         $titles = [ 'home', 'mobile', 'work', 'special' ];
+        //         for ($i = 0; $i < rand(0, 5); ++$i)
+        //             $phones[] = [ 'type' => $titles[ rand(0, 3) ], 'value' => $faker->phoneNumber ];
+        //         return $phones;
+        //     }
+        // ),
+        // 'social_links'      => nullable(
+        //     function () use ( $faker ) {
+        //         $social_links = [];
+        //         $titles = [ 'telegram', 'facebook', 'instagram', 'twitter' ];
+        //         for ($i = 0; $i < rand(0, 5); ++$i)
+        //             $social_links[] = [ 'type' => $titles[ rand(0, 3) ], 'value' => $faker->userName ];
+        //         return $social_links;
+        //     }
+        // ),
         'jalali_created_at' => Jalalian::forge("now - {$faker->numberBetween(2, 360)} days")
     ];
 });

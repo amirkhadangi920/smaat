@@ -25,20 +25,6 @@ trait ArticleProps
     protected $model = Article::class;
 
     /**
-     * The relation of the controller to get when accesing data from DB
-     *
-     * @var array
-     */
-    protected $relations = [
-        'subjects',
-        'user:id:first_name,last_name'
-    ];
-
-    protected $more_relations = [
-        'tags:name,slug'
-    ];
-
-    /**
      * Resource of this controller respnoses
      *
      * @var [type]

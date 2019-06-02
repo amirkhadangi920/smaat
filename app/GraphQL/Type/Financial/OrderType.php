@@ -32,6 +32,13 @@ class OrderType extends BaseType
                     return $this->checkPermission("see-phone-number-order");
                 }
             ],
+            'coordinates' => [
+                'type' => \GraphQL::type('coordinate'),
+                'privacy' => function() {
+                    return $this->checkPermission("see-address-order");
+                },
+                'is_relation' => false
+            ],
             'postal_code' => [
                 'type' => Type::string(),
                 'privacy' => function() {
@@ -58,13 +65,15 @@ class OrderType extends BaseType
             ],
             'paid_at' => [
                 'type' => $this->checkPermission("see-details-order") ? Type::string() : Type::boolean(),
-
             ],
             'user' => [
                 'type' => \GraphQL::type('user')
             ],
             'order_status' => [
                 'type' => \GraphQL::type('order_status')
+            ],
+            'status_changes' => [
+                'type' => Type::listOf( \GraphQL::type('order_status') )
             ],
             'shipping_method' => [
                 'type' => \GraphQL::type('shipping_method')

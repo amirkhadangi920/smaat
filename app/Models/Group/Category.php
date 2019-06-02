@@ -23,7 +23,6 @@ use App\Helpers\CreateTimeline;
 use App\Helpers\HasTenant;
 use App\Helpers\CreatorRelationship;
 use Askedio\SoftCascade\Traits\SoftCascadeTrait;
-use Cviebrock\EloquentSluggable\Sluggable;
 use Dimsav\Translatable\Translatable;
 use Nicolaslopezj\Searchable\SearchableTrait;
 
@@ -56,7 +55,7 @@ class Category extends Model implements AuditableContract
         // 'title',
         // 'description',
         'logo',
-        'scoring_feilds',
+        // 'scoring_feilds',
         'is_active'
     ];
 
@@ -187,6 +186,14 @@ class Category extends Model implements AuditableContract
     public function warranties()
     {
         return $this->morphedByMany(Warranty::class, 'featureable');
+    }
+
+    /**
+     * Get all the scoring fields of this category
+     */
+    public function scoring_fields()
+    {
+        return $this->hasMany(ScoringField::class);
     }
 
     /**

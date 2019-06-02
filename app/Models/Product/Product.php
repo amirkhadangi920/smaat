@@ -18,7 +18,6 @@ use App\Helpers\CreateTimeline;
 use App\Helpers\CreatorRelationship;
 use App\Helpers\HasTenant;
 use Askedio\SoftCascade\Traits\SoftCascadeTrait;
-use Cviebrock\EloquentSluggable\Sluggable;
 use Dimsav\Translatable\Translatable;
 use Nicolaslopezj\Searchable\SearchableTrait;
 
@@ -87,7 +86,8 @@ class Product extends Model implements AuditableContract, LikeableContract
         'name',
         'second_name',
         'description',
-        'review',
+        'short_review',
+        'expert_review',
         'advantages',
         'disadvantages',
     ];

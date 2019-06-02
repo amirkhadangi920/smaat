@@ -14,16 +14,19 @@ class UniqueTenant implements Rule
 
     private $field;
 
+    private $has_translation;
+
     /**
      * Create a new rule instance.
      *
      * @return void
      */
-    public function __construct($table, $field = null)
+    public function __construct($table, $field = null, $has_translation = true)
     {
         $this->table = $table;
         $this->singular = Str::singular( $table );
         $this->field = $field;
+        $this->has_translation = $has_translation;
     }
 
     /**
@@ -35,13 +38,15 @@ class UniqueTenant implements Rule
      */
     public function passes($attribute, $value)
     {   
-        $result = DB::table( $this->table )
-            ->join("{$this->singular}_translations", "{$this->table}.id", '=', "{$this->singular}_translations.{$this->singular}_id")
-            ->where($this->field ?? $attribute, $value)
-            ->where('tenant_id', $this->getTenant() )
-            ->count();
+        $result = DB::table( $this->table );
 
-        return $result === 0;
+        if ( $this->has_translation )
+            $result->join("{$this->singular}_translations", "{$this->table}.id", '=', "{$this->singular}_translations.{$this->singular}_id");
+
+        $result->where($this->field ?? $attribute, $value)
+            ->where('tenant_id', $this->getTenant() );
+
+        return $result->count() === 0;
     }
 
     public function getTenant()

@@ -23,26 +23,7 @@ trait CommentProps
      * @var Model
      */
     protected $model = Comment::class;
-
-    /**
-     * The relation of the controller to get when accesing data from DB
-     *
-     * @var array
-     */
-    protected $relations = [
-        'article:id,title,image',
-        'user:id,first_name,last_name,avatar',
-        'answers:id,parent_id,user_id,message,is_accept,created_at,updated_at',
-        'answers.user:id,first_name,last_name,avatar'
-    ];
-
-    /**
-     * Name of the relation method of the User model to this model
-     *
-     * @var string
-     */
-    protected $rel_from_user = 'comments';
-
+    
     /**
      * Resource of this controller respnoses
      *

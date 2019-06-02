@@ -7,6 +7,8 @@ use App\GraphQL\Query\MainQuery;
 use Rebing\GraphQL\Support\SelectFields;
 use GraphQL\Type\Definition\ResolveInfo;
 use App\Models\Financial\OrderItem;
+use Cookie;
+use App\Models\Product\Variation;
 
 class CartQuery extends MainQuery
 {
@@ -18,11 +20,40 @@ class CartQuery extends MainQuery
     public function args()
     {
         return [
-
+            // 
         ];
     }
 
     public function resolve($root, $args, SelectFields $fields, ResolveInfo $info)
+    {
+        if ( auth()->check() )
+            return $this->authCart($fields);
+        
+        else
+            return $this->publicCart();
+    }
+
+    public function publicCart()
+    {
+        $result = [];
+        
+        $cart = json_decode(Cookie::get('cart', '[]'), true);
+
+        $items = Variation::find( array_keys( $cart ) );
+
+        foreach ( $items as $item )
+        {
+            $result[] = [
+                'id' => $item->id,
+                'count' => $cart[ $item->id ],
+                'variation' => $item
+            ];
+        }
+        
+        return $result;
+    }
+
+    public function authCart($fields)
     {
         return OrderItem::where('order_id', $this->getCart()->id)
             ->whereHas('variation', function($query) {

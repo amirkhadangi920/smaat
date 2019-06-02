@@ -61,13 +61,10 @@ class User extends Authenticatable implements AuditableContract
         'city_id',
         'first_name',
         'last_name',
-        'phones',
         'social_links',
         'email',
         'password',
         'avatar',
-        'address',
-        'postal_code',
         'national_code',
     ];
     
@@ -80,13 +77,10 @@ class User extends Authenticatable implements AuditableContract
         'city_id',
         'first_name',
         'last_name',
-        'phones',
         'social_links',
         'email',
         'password',
         'avatar',
-        'address',
-        'postal_code',
         'national_code',
     ];
     
@@ -167,6 +161,22 @@ class User extends Authenticatable implements AuditableContract
     public function discounts()
     {
         return $this->hasMany(Discount::class);
+    }
+
+    /**
+     * Get all the phones that owned by the user
+     */
+    public function phones()
+    {
+        return $this->hasMany(UserPhone::class);
+    }
+
+    /**
+     * Get all the phones that owned by the user
+     */
+    public function addresses()
+    {
+        return $this->hasMany(UserAddress::class);
     }
 
     /**

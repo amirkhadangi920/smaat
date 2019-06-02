@@ -9,32 +9,17 @@ $faker = Factory::create('fa_IR');
 
 
 $factory->define(App\Models\Financial\Order::class, function () use($faker) {
-    $descriptions = $datetimes = [];
-    if ( rand(0, 1) ) $descriptions['admin'] = Faker::sentence();
-    if ( rand(0, 1) ) $descriptions['buyer'] = Faker::sentence();
-
-    $auth_code = [ null, str_random(50) ][ $faker->boolean() ];
-
     return [
         'user_id'           => App\User::all()->random()->id,
-        'descriptions'      => nullable( $descriptions ),
-        'type'              => $faker->numberBetween(0, 127),
+        'type'              => $faker->numberBetween(0, 2),
         'destination'       => nullable( Faker::address() ),
         'postal_code'       => nullable( $faker->postcode ),
         'offer'             => $faker->numberBetween(0, 100000),
         'total'             => $faker->numberBetween(100000, 10000000),
         'created_at'        => $faker->dateTime(),
-        // 'payment_jalali'    => jdate( time() - ( rand(1, 1000) * rand(1, 1000) )),
         'ref_id'            => nullable( $faker->numberBetween(1000000000000, 10000000000000) ),
         'trans_id'          => nullable( str_random(100) ),
-        // 'datetimes'         => function() use($faker) {
-        //     return [
-        //         'status' => OrderStatus::all()->random()->id,
-        //         'time' => $faker->dateTimeBetween('-2 years', 'now')
-        //     ]
-        // },
         'shipping_method_id'=> nullable( factory(ShippingMethod::class)->create()->id ),
-        'docs'              => nullable( $faker->words( rand(1, 10) ) ),
         'checkout'          => $faker->boolean(),
         'jalali_created_at' => Jalalian::forge("now - {$faker->numberBetween(2, 360)} days")
     ];

@@ -87,6 +87,14 @@ class BaseType extends GraphQLType
         ];
     }
 
+    public function paginatedRelationListField($type, $acceptable_field = 'is_active', $permission = null)
+    {
+        return [
+            'type'  => Type::listOf( \GraphQL::type($type) ),
+            'query' => $this->getRelationQuery($type, $acceptable_field, $permission, true)
+        ];
+    }
+
     public function relationItemField($type, $acceptable_field = 'is_active', $permission = null)
     {
         return [
@@ -95,14 +103,17 @@ class BaseType extends GraphQLType
         ];
     }
 
-    public function getRelationQuery($type, $acceptable_field, $permission = null)
+    public function getRelationQuery($type, $acceptable_field, $permission = null, $paginated = false)
     {
         $permission = $permission ? $permission : "read-{$type}";
 
-        return function(array $args, $query) use($type, $acceptable_field, $permission) {
+        return function(array $args, $query) use($type, $acceptable_field, $permission, $paginated) {
                 
             if ( !$this->checkPermission($permission) )
-                return $query->where(Str::plural($type) . ".{$acceptable_field}", 1);
+                $query->where(Str::plural($type) . ".{$acceptable_field}", 1);
+                
+            if ( $paginated )
+                $query->offset( (($args['page'] ?? 1 ) - 1) * 10 )->take(10);
 
             return $query;
         };

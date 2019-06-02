@@ -58,10 +58,10 @@ $factory->define(App\Models\Product\Product::class, function () use($faker, $pro
         'description'       => Faker::sentence(),
         'note'              => Faker::sentence(),
         'aparat_video'      => 'SEQ2V',
-        'review'            => Faker::paragraph(),
+        'short_review'      => Faker::paragraph(),
+        'expert_review'     => Faker::paragraph(),
         'advantages'        => $faker->sentences( rand(1, 10) ),
         'disadvantages'     => $faker->sentences( rand(1, 10) ),
-        'label'             => $faker->numberBetween(0, 4),
         'views_count'       => $faker->numberBetween(0, 10000),
         'photos'            => [ null, function () use($products, $selected) {
             $photos = [];
@@ -86,18 +86,6 @@ $factory->define(App\Models\Product\Variation::class, function () use($faker) {
         'sales_price'           => $faker->numberBetween(1000, $price),
         'inventory'             => [ null, $faker->numberBetween(0, 100) ][ $faker->boolean() ],
         'sending_time'          => $faker->numberBetween(1, 10),
-        'old_purchase_prices'   => [ null, function () use ( $faker ) {
-            $prices = [];
-            for ($i = 0; $i < rand(0, 5); ++$i)
-                $prices[] = [ 'price' => $faker->imageUrl(480, 320), 'datetime' => $faker->dateTimeBetween('-2 years', 'now') ];
-            return $prices;
-        }][ $faker->boolean() ],
-        'old_sales_prices'      => [ null, function () use ( $faker ) {
-            $prices = [];
-            for ($i = 0; $i < rand(0, 5); ++$i)
-                $prices[] = [ 'price' => $faker->imageUrl(480, 320), 'datetime' => $faker->dateTimeBetween('-2 years', 'now') ];
-            return $prices;
-        }][ $faker->boolean() ],
         'is_active'             => $faker->boolean(80)
     ];
 });

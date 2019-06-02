@@ -13,6 +13,7 @@ use EloquentFilter\Filterable;
 use App\Helpers\CreateTimeline;
 use App\Helpers\HasTenant;
 use Nicolaslopezj\Searchable\SearchableTrait;
+use App\Models\Group\ScoringField;
 
 class Review extends Model implements AuditableContract, LikeableContract
 {
@@ -30,7 +31,7 @@ class Review extends Model implements AuditableContract, LikeableContract
      */
     protected $fillable = [
         'product_id',
-        'ranks',
+        // 'ranks',
         'advantages',
         'disadvantages',
         'message',
@@ -68,7 +69,7 @@ class Review extends Model implements AuditableContract, LikeableContract
      * @var array
      */
     protected $auditInclude = [
-        'ranks',
+        // 'ranks',
         'advantages',
         'disadvantages',
         'message',
@@ -117,4 +118,11 @@ class Review extends Model implements AuditableContract, LikeableContract
         return $this->belongsTo(\App\User::class, 'user_id');
     }
 
+    /**
+     * Get all the ranks of this review
+     */
+    public function ranks()
+    {
+        return $this->belongsToMany(ScoringField::class, 'review_ranks')->withPivot('value');
+    }
 }

@@ -19,6 +19,9 @@ class ReviewType extends BaseType
         return [
             'is_mine' => $this->isMineField(),
             'creator' => $this->creator('review'),
+            'ranks' => [
+                'type' => Type::listOf( \GraphQL::type('scoring_field') )
+            ],
             'advantages' => [
                 'type' => Type::listOf( Type::string() )
             ],

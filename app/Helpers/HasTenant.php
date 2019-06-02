@@ -46,7 +46,8 @@ trait HasTenant
                     $model->user_id = auth()->user()->id ?? null;
             }
 
-            $model->jalali_created_at = jdate();
+            if ( self::$jalali_time ?? true )
+                $model->jalali_created_at = jdate();
         });
     }
 }

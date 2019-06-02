@@ -139,7 +139,6 @@ class CategoryTablesSeeder extends Seeder
                 'title' => 'خوردنی و آشامیدنی',
             ]
         ]);
-
         
         $categories->each( function($category) {
 
