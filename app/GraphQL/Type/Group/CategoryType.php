@@ -37,7 +37,7 @@ class CategoryType extends BaseType
             'colors' => $this->relationListField('color'),
             'sizes' => $this->relationListField('size'),
             'warranties' => $this->relationListField('warranty'),
-            'spec' => $this->relationItemField('specification'),
+            'spec' => $this->relationItemField('spec'),
             'audits' => $this->audits('category'),
             'is_active' => $this->acceptableField('category')
         ];

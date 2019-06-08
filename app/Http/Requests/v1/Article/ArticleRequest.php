@@ -2,34 +2,24 @@
 
 namespace App\Http\Requests\v1\Article;
 
-use Illuminate\Foundation\Http\FormRequest;
+use App\Http\Requests\v1\MainRequest;
 use App\Rules\UniqueTenant;
 use App\Rules\ExistsTenant;
 
-class ArticleRequest extends FormRequest
+class ArticleRequest extends MainRequest
 {
-    /**
-     * Determine if the user is authorized to make this request.
-     *
-     * @return bool
-     */
-    public function authorize()
-    {
-        return true;
-    }
-
     /**
      * Get the validation rules that apply to the request.
      *
      * @return array
      */
-    public function rules()
+    public function rules($args, $method)
     {
         $rules = [
-            'title'         => ['required', 'string', 'max:50', new UniqueTenant('articles')],
+            'title'         => [$this->requiredOrFilled(), 'string', 'max:50', new UniqueTenant('articles')],
             'description'   => 'nullable|string|max:255',
-            'body'          => 'required|string',
-            'image'         => 'required|image|mimes:jpeg,jpg,png,gif|max:1024',
+            'body'          => [$this->requiredOrFilled(), 'string'],
+            'image'         => [$this->requiredOrFilled(), 'image', 'mimes:jpeg,jpg,png,gif', 'max:1024'],
             'reading_time'  => 'nullable|digits_between:1,2',
             'is_active'     => 'nullable|boolean',
             

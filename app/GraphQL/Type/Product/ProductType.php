@@ -65,7 +65,7 @@ class ProductType extends BaseType
             'votes' => $this->votes(),
             'variations' => $this->relationListField('variation', 'is_active', 'read-product'),
             'variation' => $this->relationItemField('variation', 'is_active', 'read-product'),
-            'spec' => $this->relationItemField('specification'),
+            'spec' => $this->relationItemField('spec'),
             'brand' => $this->relationItemField('brand'),
             'category' => $this->relationItemField('category'),
             'unit' => $this->relationItemField('unit'),

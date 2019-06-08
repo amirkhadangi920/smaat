@@ -14,7 +14,7 @@ class CompareQuery extends MainQuery
 {
     public function type()
     {
-        return \GraphQL::type('specification');
+        return \GraphQL::type('spec');
     }
 
     public function args()

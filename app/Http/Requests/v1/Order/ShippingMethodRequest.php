@@ -2,21 +2,11 @@
 
 namespace App\Http\Requests\v1\Order;
 
-use Illuminate\Foundation\Http\FormRequest;
+use App\Http\Requests\v1\MainRequest;
 use App\Rules\UniqueTenant;
 
-class ShippingMethodRequest extends FormRequest
+class ShippingMethodRequest extends MainRequest
 {
-    /**
-     * Determine if the user is authorized to make this request.
-     *
-     * @return bool
-     */
-    public function authorize()
-    {
-        return true;
-    }
-
     /**
      * Get the validation rules that apply to the request.
      *
@@ -25,10 +15,10 @@ class ShippingMethodRequest extends FormRequest
     public function rules()
     {
         return [
-            'name'              => ['required', 'string', 'max:50', new UniqueTenant('shipping_methods')],
+            'name'              => [$this->requiredOrFilled(), 'string', 'max:50', new UniqueTenant('shipping_methods')],
             'description'       => 'nullable|string|max:255',
             'logo'              => 'nullable|image|mimes:jpeg,jpg,png,gif|max:1024',
-            'cost'              => 'required|digits_between:0,10|min:0',
+            'cost'              => [$this->requiredOrFilled(), 'digits_between:0,10', 'min:0'],
             'minimum'           => 'nullable|digits_between:0,10|min:0',
             'is_active'         => 'nullable|boolean',
         ];

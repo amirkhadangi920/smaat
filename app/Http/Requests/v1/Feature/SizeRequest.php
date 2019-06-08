@@ -5,19 +5,10 @@ namespace App\Http\Requests\v1\Feature;
 use Illuminate\Foundation\Http\FormRequest;
 use App\Rules\ExistsTenant;
 use App\Rules\UniqueTenant;
+use App\Http\Requests\v1\MainRequest;
 
-class SizeRequest extends FormRequest
+class SizeRequest extends MainRequest
 {
-    /**
-     * Determine if the user is authorized to make this request.
-     *
-     * @return bool
-     */
-    public function authorize()
-    {
-        return true;
-    }
-
     /**
      * Get the validation rules that apply to the request.
      *
@@ -26,7 +17,7 @@ class SizeRequest extends FormRequest
     public function rules()
     {
         return [
-            'name'              => ['required', 'string', 'max:50', new UniqueTenant('sizes')],
+            'name'              => [$this->requiredOrFilled(), 'string', 'max:50', new UniqueTenant('sizes')],
             'description'       => 'nullable|string|max:255',
             'is_active'         => 'nullable|boolean',
 

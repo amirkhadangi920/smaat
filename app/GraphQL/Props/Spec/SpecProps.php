@@ -15,7 +15,7 @@ trait SpecProps
      *
      * @var string
      */
-    protected $type = 'specification';
+    protected $type = 'spec';
 
     /**
      * The model of this controller

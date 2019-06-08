@@ -2,22 +2,12 @@
 
 namespace App\Http\Requests\v1\Group;
 
-use Illuminate\Foundation\Http\FormRequest;
+use App\Http\Requests\v1\MainRequest;
 use App\Rules\UniqueTenant;
 use App\Rules\ExistsTenant;
 
-class SubjectRequest extends FormRequest
+class SubjectRequest extends MainRequest
 {
-    /**
-     * Determine if the user is authorized to make this request.
-     *
-     * @return bool
-     */
-    public function authorize()
-    {
-        return true;
-    }
-
     /**
      * Get the validation rules that apply to the request.
      *
@@ -26,7 +16,7 @@ class SubjectRequest extends FormRequest
     public function rules()
     {
         return [
-            'title'             => ['required', 'string', 'max:50', new UniqueTenant('subjects')],
+            'title'             => [$this->requiredOrFilled(), 'string', 'max:50', new UniqueTenant('subjects')],
             'description'       => 'nullable|string|min:255',
             'logo'              => 'nullable|image|mimes:jpeg,jpg,png,gif|max:1024',
             'is_active'         => 'nullable|boolean',

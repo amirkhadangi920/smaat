@@ -2,20 +2,12 @@
 
 namespace App\Http\Requests\v1\Order;
 
-use Illuminate\Foundation\Http\FormRequest;
+use App\Http\Requests\v1\MainRequest;
+use App\Rules\ExistsTenant;
+use App\Rules\UniqueTenant;
 
-class PromocodeRequest extends FormRequest
+class PromocodeRequest extends MainRequest
 {
-    /**
-     * Determine if the user is authorized to make this request.
-     *
-     * @return bool
-     */
-    public function authorize()
-    {
-        return true;
-    }
-
     /**
      * Get the validation rules that apply to the request.
      *
@@ -24,20 +16,20 @@ class PromocodeRequest extends FormRequest
     public function rules()
     {
         return [
-            'code'                  => 'required|string|max:50',
-            'value'                 => 'required|integer|min:1|max:99',
+            'code'                  => [$this->requiredOrFilled(), 'string', 'max:50', new UniqueTenant('promocodes', null, false)],
+            'value'                 => [$this->requiredOrFilled(), 'integer', 'min:1', 'max:99'],
             'min_total'             => 'nullable|integer|digits_between:1,10',
-            'expired_at'            => 'required|date|after:now',
+            'expired_at'            => [$this->requiredOrFilled(), 'date', 'after:now'],
 
             /* relations */
-            'categories'            => 'nullable|array',  
-            'categories.*'          => 'required|integer|exists:categories,id',
+            'categories'            => ['nullable', 'array', new ExistsTenant],
+            'categories.*'          => 'required|integer',
             
-            'variations'            => 'nullable|array',  
-            'variations.*'          => 'required|string|exists:variations,id',
+            'variations'            => ['nullable', 'array', new ExistsTenant],
+            'variations.*'          => 'required|string',
             
-            'users'                 => 'nullable|array',  
-            'users.*'               => 'required|string|exists:users,id',
+            'users'                 => ['nullable', 'array', new ExistsTenant],
+            'users.*'               => 'required|string',
         ];
     }
 }

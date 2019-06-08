@@ -10,7 +10,7 @@ class BaseSpecRowMutation extends MainMutation
 {
     use SpecRowProps;
     
-    protected $permission_label = 'specification';
+    protected $permission_label = 'spec';
     
     protected $attributes = [
         'name' => 'SpecRowMutation',

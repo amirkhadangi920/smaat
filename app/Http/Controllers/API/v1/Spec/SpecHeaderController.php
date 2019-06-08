@@ -25,7 +25,7 @@ class SpecHeaderController extends MainController
      *
      * @var string
      */
-    protected $type = 'specification_header';
+    protected $type = 'spec_header';
 
     /**
      * The model of this controller

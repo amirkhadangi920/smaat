@@ -78,7 +78,9 @@ use App\GraphQL\Mutation\Financial\{
 
     Order\UpdateOrderMutation, Order\DeleteOrderMutation, Order\StatusOrderMutation,
     OrderStatus\CreateOrderStatusMutation, OrderStatus\UpdateOrderStatusMutation, OrderStatus\DeleteOrderStatusMutation,
-    ShippingMethod\CreateShippingMethodMutation, ShippingMethod\UpdateShippingMethodMutation, ShippingMethod\DeleteShippingMethodMutation
+    ShippingMethod\CreateShippingMethodMutation, ShippingMethod\UpdateShippingMethodMutation, ShippingMethod\DeleteShippingMethodMutation,
+
+   Promocode\CreatePromocodeMutation, Promocode\UpdatePromocodeMutation, Promocode\DeletePromocodeMutation
 };
 
 // Product Mutations
@@ -370,8 +372,8 @@ return [
                 // Shop
                 'product' => ProductQuery::class,
                 'products' => ProductsQuery::class,
-                'specification' => SpecQuery::class,
-                'specifications' => SpecsQuery::class,
+                'spec' => SpecQuery::class,
+                'spec' => SpecsQuery::class,
 
                 // Blog
                 'article' => ArticleQuery::class,
@@ -434,6 +436,10 @@ return [
                 'createOrderStatus' => CreateOrderStatusMutation::class,
                 'updateOrderStatus' => UpdateOrderStatusMutation::class,
                 'deleteOrderStatus' => DeleteOrderStatusMutation::class,
+
+                'createPromocode' => CreatePromocodeMutation::class,
+                'updatePromocode' => UpdatePromocodeMutation::class,
+                'deletePromocode' => DeletePromocodeMutation::class,
 
                 'createShippingMethod' => CreateShippingMethodMutation::class,
                 'updateShippingMethod' => UpdateShippingMethodMutation::class,
@@ -560,7 +566,7 @@ return [
         'article'           => ArticleType::class,
 
         // Specification
-        'specification'     => SpecType::class,
+        'spec'              => SpecType::class,
         'spec_header'       => SpecHeaderType::class,
         'spec_row'          => SpecRowType::class,
         'spec_data'         => SpecDataType::class,

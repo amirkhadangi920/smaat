@@ -110,7 +110,7 @@ class Product extends JsonResource
                     ];
                 });
             }),
-            'specification'     => $this->when( $this->spec->headers ?? false, function () {
+            'spec'     => $this->when( $this->spec->headers ?? false, function () {
                 
                 return $this->spec->headers->map( function ( $header ) {
                     return [

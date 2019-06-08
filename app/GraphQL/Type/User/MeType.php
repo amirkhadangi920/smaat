@@ -83,7 +83,14 @@ class MeType extends BaseType
             ],
             'roles' => $this->relationListField('role'),
             'permissions' => [
-                'type' => Type::listOf( \GraphQL::type('permission') )
+                'type' => Type::listOf( \GraphQL::type('permission') ),
+            ],
+            'allPermissions' => [
+                'type' => Type::listOf( \GraphQL::type('permission') ),
+                'selectable' => false,
+                'resolve' => function($data) {
+                    return $data->allPermissions();
+                }
             ],
         ];
     }

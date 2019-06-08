@@ -2,21 +2,11 @@
 
 namespace App\Http\Requests\v1\Opinion;
 
-use Illuminate\Foundation\Http\FormRequest;
+use App\Http\Requests\v1\MainRequest;
 use App\Rules\ExistsTenant;
 
-class CommentRequest extends FormRequest
+class CommentRequest extends MainRequest
 {
-    /**
-     * Determine if the user is authorized to make this request.
-     *
-     * @return bool
-     */
-    public function authorize()
-    {
-        return true;
-    }
-
     /**
      * Get the validation rules that apply to the request.
      *

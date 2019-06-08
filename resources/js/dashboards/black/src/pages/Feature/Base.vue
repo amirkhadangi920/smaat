@@ -169,7 +169,11 @@
               :auto-upload="false"
               :show-file-list="false"
               :on-change="addImage">
-              <img v-if="$store.state[group].selected[type].imageUrl" :src="$store.state[group].selected[type].imageUrl" class="avatar">
+              <img
+                v-if="$store.state[group].form[type].logo.url"
+                :src="$store.state[group].form[type].logo.url"
+                class="avatar"
+              />
               <i v-else class="el-icon-plus avatar-uploader-icon"></i>
             </el-upload>
             <small slot="helperText" id="emailHelp" class="form-text text-muted">لوگوی مورد نظر خود را انتخاب کنید</small>
@@ -252,41 +256,13 @@ export default {
     closePanel() {
       this.$refs.datatable.closePanel();
     },
-    create() {
-      this.setAttr('selected', {
-        name: '',
-        description: '',
-        categories: [],
-        imageFile: null,
-        imageUrl: ''
-      })
-
+    afterCreate()
+    {
       setTimeout(() => this.$refs.categories.setCheckedKeys([]) , 100);
-
-      this.setAttr('is_open', true)
-      this.setAttr('is_creating', true)
     },
-    edit(index, row) {
-      let data = {};
-    
-      this.fields.forEach(field => {
-        if ( ['logo', 'categories'].includes(field.field) ) return
-
-        data[field.field] = row[field.field]
-      });
-      data.link = row.link
-      data.index = index
-      data.categories = row.categories.map( category => category.id )
-      data.imageFile = null
-      data.imageUrl = row.logo ? row.logo.small : ''
-
-      setTimeout(() => {
-        this.$refs.categories.setCheckedKeys([])
-        this.setAttr('selected', data)
-      }, 100);
-
-      this.setAttr('is_open', true)
-      this.setAttr('is_creating', false)
+    afterEdit()
+    {
+      setTimeout(() => this.$refs.categories.setCheckedKeys([]), 100);
     },
     getData() {
       let data = new FormData();
@@ -310,8 +286,11 @@ export default {
     },
 
     changeSelectedCategories() {
-      this.setAttr('selected', {
-        categories: this.$refs.categories.getCheckedKeys(),
+      this.$store.commit('setFormData', {
+        group: this.group,
+        type: this.type,
+        field: 'categories',
+        value: this.$refs.categories.getCheckedKeys()
       })
     },
     filterLogo(command) {

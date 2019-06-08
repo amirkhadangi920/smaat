@@ -88,6 +88,15 @@ export default {
             spec: false,
         },
 
+        image_field: {
+            brand: 'logo',
+            size: false,
+            warranty: 'logo',
+            color: false,
+            unit: false,
+            spec: false,
+        },
+
         is_grid_view: {
             brand: false,
             size: false,
@@ -187,13 +196,34 @@ export default {
             spec: [],
         },
 
+        form: {
+            brand: {
+                name: {
+                    type: 'String',
+                    value: 'نام برند'
+                },
+                description: {
+                    type: 'String',
+                    value: 'توضیحات کوتاه درباره برند'
+                },
+                categories: {
+                    type: '[Int]',
+                    value: [],
+                    resolve: categories => categories.map( category => category.id )
+                },
+                logo: {
+                    type: 'Upload',
+                    value: null,
+                    file: null,
+                    url: ''
+                },
+            },
+        },
+
         selected: {
             brand: {
-                name: '',
-                description: '',
-                categories: [],
-                imageFile: null,
-                imageUrl: ''
+                id: null,
+                index: null
             },
             size: {
                 name: '',

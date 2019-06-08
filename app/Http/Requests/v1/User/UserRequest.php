@@ -2,23 +2,12 @@
 
 namespace App\Http\Requests\User\v1;
 
-use Illuminate\Foundation\Http\FormRequest;
-use App\User;
+use App\Http\Requests\v1\MainRequest;
 use App\Rules\ExistsTenant;
 use App\Rules\UniqueTenant;
 
-class UserRequest extends FormRequest
+class UserRequest extends MainRequest
 {
-    /**
-     * Determine if the user is authorized to make this request.
-     *
-     * @return bool
-     */
-    public function authorize()
-    {
-        return true;
-    }
-
     /**
      * Get the validation rules that apply to the request.
      *

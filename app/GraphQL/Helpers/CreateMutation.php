@@ -29,7 +29,7 @@ trait CreateMutation
      */
     protected function rules(array $args = [])
     {
-        return ( new $this->request )->rules($args);
+        return ( new $this->request )->rules($args, 'CREATE');
     }
 
     public function args()

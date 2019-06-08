@@ -10,7 +10,7 @@ class BaseSpecHeaderMutation extends MainMutation
 {
     use SpecHeaderProps;
     
-    protected $permission_label = 'specification';
+    protected $permission_label = 'spec';
 
     protected $attributes = [
         'name' => 'SpecHeaderMutation',

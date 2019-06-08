@@ -2,22 +2,12 @@
 
 namespace App\Http\Requests\v1\Spec;
 
-use Illuminate\Foundation\Http\FormRequest;
+use App\Http\Requests\v1\MainRequest;
 use App\Rules\ExistsTenant;
 use Illuminate\Validation\Rule;
 
-class SpecificationRowRequest extends FormRequest
+class SpecificationRowRequest extends MainRequest
 {
-    /**
-     * Determine if the user is authorized to make this request.
-     *
-     * @return bool
-     */
-    public function authorize()
-    {
-        return true;
-    }
-
     /**
      * Get the validation rules that apply to the request.
      *

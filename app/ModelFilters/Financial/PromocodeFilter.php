@@ -47,6 +47,17 @@ class PromocodeFilter extends MainFilter
     }
 
     /**
+     * Filter the promocodes that has user not
+     *
+     * @param array $ids
+     * @return Builder
+     */
+    public function hasUser($status)
+    {
+        return $this->has_relation_or_not('users', $status);
+    }
+
+    /**
      * Filter the promocodes that belongs to specific users
      *
      * @param array $ids
@@ -58,6 +69,17 @@ class PromocodeFilter extends MainFilter
     }
 
     /**
+     * Filter the promocodes that has category not
+     *
+     * @param array $ids
+     * @return Builder
+     */
+    public function hasCategory($status)
+    {
+        return $this->has_relation_or_not('categories', $status);
+    }
+
+    /**
      * Filter the promocodes that belongs to specific categories
      *
      * @param array $ids
@@ -66,6 +88,17 @@ class PromocodeFilter extends MainFilter
     public function categories($ids)
     {
         return $this->filter_relation('categories', $ids);
+    }
+
+    /**
+     * Filter the promocodes that has variation not
+     *
+     * @param array $ids
+     * @return Builder
+     */
+    public function hasVariation($status)
+    {
+        return $this->has_relation_or_not('variations', $status);
     }
 
     /**

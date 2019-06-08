@@ -32,6 +32,88 @@ export default new Vuex.Store({
         {
             return state[data.group][data.attr][data.type] = data.data
         },
+        setFormData(state, data)
+        {
+            return state[data.group].form[data.type][data.field].value = data.value
+        },
+        setFormImage(state, data)
+        {
+            const field = state[data.group].image_field[data.type]
+
+            return state[data.group].form[data.type][field] = {
+                type: 'Upload',
+                value: null,
+                file: data.file,
+                url: URL.createObjectURL(data.file)
+            }
+        },
+        clearForm(state, data)
+        {
+            let form = state[data.group].form[data.type]
+
+            for (let field in form)
+            {
+                switch ( form[field].type )
+                {
+                    case 'String':
+                        form[field].value = ''
+                        break;
+
+                    case 'Int':
+                        form[field].value = null
+                        break;
+
+                    case '[Int]':
+                    case '[String]':
+                        form[field].value = []
+                        break;
+
+                    case 'Upload':
+                        form[field].value = null
+                        form[field].file = null
+                        form[field].url = ''
+                        break;
+                }
+            }
+
+            return state[data.group].form[data.type] = form
+        },
+        fillFormForEditing(state, data)
+        {
+            let form = state[data.group].form[data.type]
+
+            for (let field in form)
+            {
+                let value = data.row[field]
+                
+                if ( typeof form[field].resolve === "function" )
+                    value = form[field].resolve(value)
+
+                switch ( form[field].type )
+                {
+                    case 'String':
+                        form[field].value = value ? value : ''
+                        break;
+
+                    case 'Int':
+                        form[field].value = value ? value : null
+                        break;
+
+                    case '[Int]':
+                    case '[String]':
+                        form[field].value = value ? value : []
+                        break;
+
+                    case 'Upload':
+                        form[field].value = null
+                        form[field].file = null
+                        form[field].url = value ? value.tiny : ''
+                        break;
+                }
+            }
+            
+            return state[data.group].form[data.type] = form
+        },
         setPermissions(state, permissions)
         {
             return state.permissions = permissions.map(value => value.name)

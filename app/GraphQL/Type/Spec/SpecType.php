@@ -18,7 +18,7 @@ class SpecType extends BaseType
     {
         return [
             'is_mine' => $this->isMineField(),
-            'creator' => $this->creator('specification'),
+            'creator' => $this->creator('spec'),
             'title' => [
                 'type' => Type::string(),
                 'selectable' => false
@@ -28,13 +28,13 @@ class SpecType extends BaseType
                 'selectable' => false
             ],
             'category' => $this->relationItemField('category'),
-            'headers' => $this->relationListField('spec_header', 'is_active', 'read-specification'),
+            'headers' => $this->relationListField('spec_header', 'is_active', 'read-spec'),
             'filters' => [
                 'type'  => Type::listOf( \GraphQL::type('spec_row') ),
                 'query' => function(array $args, $query) {
                 
-                    if ( !$this->checkPermission('read-specification') )
-                        $query->where('spec_row.is_active', 1);
+                    if ( !$this->checkPermission('read-spec') )
+                        $query->where('spec_rows.is_active', 1);
             
                     $query->whereHas('defaults');
                     $query->where('is_filterable', true);
@@ -42,8 +42,8 @@ class SpecType extends BaseType
                     return $query;
                 }
             ],
-            'audits' => $this->audits('specification'),
-            'is_active' => $this->acceptableField('specification')
+            'audits' => $this->audits('spec'),
+            'is_active' => $this->acceptableField('spec')
         ];
     }
 }

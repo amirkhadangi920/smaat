@@ -5,8 +5,9 @@
       <side-bar
         title="SmaaT"
         logo="/images/logo.jpg"
-        :style="{background: 'linear-gradient(0deg, #570155, #E94057, #F27121)', width: is_collapsed ? '64px' : '230px' }"
+        :style="{background: 'linear-gradient(0deg, #f4ecff, #fff)', width: is_collapsed ? '64px' : '230px' }"
       >
+        <!-- :style="{background: 'linear-gradient(0deg, #7F7FD5, #86A8E7, #91EAE4)', width: is_collapsed ? '64px' : '230px' }" -->
         <template slot="links">
           <!-- <canvas id="granim-canvas"></canvas> -->
 
@@ -18,9 +19,9 @@
             unique-opened
             class="el-menu-vertical-demo"
             >
-            <el-submenu index="1" v-if="canSeeMenu(['brand', 'unit', 'size', 'warranty', 'color', 'specification'])">
+            <el-submenu index="1" v-if="canSeeMenu(['brand', 'unit', 'size', 'warranty', 'color', 'spec'])">
               <template slot="title">
-                <i class="tim-icons icon-badge"></i>
+                <i class="tim-icons icon-single-copy-04 feature-icon"></i>
                 <span>ویژگی ها</span>
               </template>
               <el-menu-item v-if="hasPermissions('brand')">
@@ -38,13 +39,13 @@
               <el-menu-item v-if="hasPermissions('color')">
                 <sidebar-link to="/panel/color" :name="$t('sidebar.list') + ' ' + $t('sidebar.color')" icon="tim-icons icon-palette"/>
               </el-menu-item>
-              <el-menu-item v-if="hasPermissions('specification')">
+              <el-menu-item v-if="hasPermissions('spec')">
                 <sidebar-link to="/panel/specification" :name="$t('sidebar.list') + ' ' + $t('sidebar.spec')" icon="tim-icons icon-palette"/>
               </el-menu-item>
             </el-submenu>
             <el-submenu index="2" v-if="canSeeMenu(['article', 'comment', 'subject'])">
               <template slot="title">
-                <i class="tim-icons icon-book-bookmark"></i>
+                <i class="tim-icons icon-book-bookmark blog-icon"></i>
                 <span>وبلاگ</span>
               </template>
               <el-menu-item v-if="hasPermissions('article')">
@@ -59,7 +60,7 @@
             </el-submenu>
             <el-submenu index="3" v-if="canSeeMenu(['product', 'category', 'review', 'question_and_answer'])">
               <template slot="title">
-                <i class="tim-icons icon-book-bookmark"></i>
+                <i class="tim-icons icon-bag-16 product-icon"></i>
                 <span>محصول</span>
               </template>
               <el-menu-item v-if="hasPermissions('product')">
@@ -77,7 +78,7 @@
             </el-submenu>
             <el-submenu index="4" v-if="canSeeMenu(['shipping_method', 'order_stauts']) || this.$store.state.permissions.includes('read-order')">
               <template slot="title">
-                <i class="tim-icons icon-book-bookmark"></i>
+                <i class="tim-icons icon-money-coins shop-icon"></i>
                 <span>فروشگاه</span>
               </template>
               <el-menu-item v-if="this.$store.state.permissions.includes('read-order')">
@@ -95,8 +96,20 @@
             </el-submenu>
             <el-submenu index="5" v-if="this.$store.state.permissions.includes('read-user') || this.$store.state.permissions.includes('read-role')">
               <template slot="title">
-                <i class="tim-icons icon-book-bookmark"></i>
+                <i class="tim-icons icon-single-02 user-icon"></i>
                 <span>کاربران</span>
+              </template>
+              <el-menu-item v-if="this.$store.state.permissions.includes('read-user')">
+                <sidebar-link to="/panel/user" :name="$t('sidebar.list') + ' ' + $t('sidebar.user')" icon="tim-icons icon-paper"/>      
+              </el-menu-item>
+              <el-menu-item v-if="this.$store.state.permissions.includes('read-role')">
+                <sidebar-link to="/panel/role" :name="$t('sidebar.list') + ' ' + $t('sidebar.role')" icon="tim-icons icon-notes"/>      
+              </el-menu-item>
+            </el-submenu>
+            <el-submenu index="6">
+              <template slot="title">
+                <i class="tim-icons icon-settings-gear-63 setting-icon"></i>
+                <span>تنظیمات</span>
               </template>
               <el-menu-item v-if="this.$store.state.permissions.includes('read-user')">
                 <sidebar-link to="/panel/user" :name="$t('sidebar.list') + ' ' + $t('sidebar.user')" icon="tim-icons icon-paper"/>      
@@ -109,11 +122,11 @@
         </template>
       </side-bar>
       <div class="main-panel">
-        <vue-particles color="#f0f0f0" :moveSpeed="1" shapeType="circle" :particlesNumber="180"></vue-particles>
+        <!-- <vue-particles color="#f0f0f0" :moveSpeed="1" shapeType="circle" :particlesNumber="180"></vue-particles> -->
         <top-navbar></top-navbar>
 
         <!-- <router-view :key="$route.fullPath"></router-view> -->
-        <dashboard-content @click.native="toggleSidebar" :style="{ padding: `80px ${is_collapsed ? 110 : 280}px 30px 30px` }">
+        <dashboard-content @click.native="toggleSidebar" :style="{ padding: `40px ${is_collapsed ? 110 : 280}px 30px 30px` }">
 
         </dashboard-content>
 
@@ -183,7 +196,7 @@ export default {
         zIndex:1,
         delay: 3000,
         top: [
-          { value: -190 },
+          { value: -260 },
           { value: 0, delay: 200 }
         ],
         scale: {
@@ -242,8 +255,9 @@ export default {
   transition: padding 300ms;
 }
 .sidebar {
-  margin-top: 20px !important;
-  height: calc(100vh - 40px) !important;
+  margin-top: 70px !important;
+  height: calc(100vh - 110px) !important;
+  box-shadow: 0px 15px 60px -30px !important;
   /* border-radius 300ms */
 }
 .main-panel {
@@ -287,7 +301,12 @@ export default {
   color: #fff !important;
 }
 .el-menu * {
+  color: #626262 !important;
   font-weight: bold;
+}
+
+.sidebar .nav li.active > a:not([data-toggle=collapse]):before, .off-canvas-sidebar .nav li.active > a:not([data-toggle=collapse]):before {
+  background: #212529 !important;
 }
 
 #granim-canvas {
@@ -297,6 +316,45 @@ export default {
   height: 100%;
   width: 100%;
   border-radius: 4px;
+}
+
+.sidebar {
+  border-radius: 10px !important;
+  background: #fbfbfb !important;
+  box-shadow: 0px 10px 60px -22px !important;
+}
+
+i.feature-icon, i.blog-icon, i.product-icon, i.shop-icon, i.user-icon, i.setting-icon {
+  font-size: 16px !important;
+  padding: 0px;
+  width: 30px !important;
+  height: 30px !important;
+  border-radius: 10px;
+  color: #fff !important;
+}
+.el-submenu__title i.feature-icon {
+  background: #ff3d3d;
+  box-shadow: 0px 4px 20px -3px #ff3d3d, 0px 4px 18px -8px #000;
+}
+.el-submenu__title i.blog-icon {
+  background: #fd7e14;
+  box-shadow: 0px 4px 20px -3px #fd7e14, 0px 4px 18px -8px #000;
+}
+.el-submenu__title i.product-icon {
+  background: #ffc107;
+  box-shadow: 0px 4px 20px -3px #ffc107, 0px 4px 18px -8px #000;
+}
+.el-submenu__title i.shop-icon {
+  background: #20c997;
+  box-shadow: 0px 4px 20px -3px #20c997, 0px 4px 18px -8px #000;
+}
+.el-submenu__title i.user-icon {
+  background: #007bff;
+  box-shadow: 0px 4px 20px -3px #007bff, 0px 4px 18px -8px #000;
+}
+.el-submenu__title i.setting-icon {
+  background: #6c757d;
+  box-shadow: 0px 4px 20px -3px #6c757d, 0px 4px 18px -8px #000;
 }
 
 .alert.open.top.left {
@@ -315,6 +373,11 @@ export default {
 	background-color: transparent;
 }
 
+#style-3 {
+  box-shadow: 0px 0px 45px -20px inset;
+  border-radius: 10px;
+}
+
 .sidebar *::-webkit-scrollbar
 {
 	width: 0px;
@@ -331,5 +394,35 @@ export default {
 									   from(#303030),
 									   to(#2b2b2b),
 									   color-stop(.6,#6b6b6b))
+}
+
+@media screen and (max-width: 992px) {
+  
+  .main-panel .content {
+     padding: 40px 30px 30px 30px !important;
+  }
+
+  .sidebar {
+    width: 260px !important;
+    margin: 0px !important;
+    height: 100% !important;
+    border-radius: 0px !important;
+  }
+
+  #style-3 {
+    padding: 57px 0px 50px !important;
+    border-radius: unset !important;
+  }
+
+  .logout-btn {
+    bottom: 15px !important;
+  }
+  
+  .user-profile .info {
+    top: 25px !important;
+  }
+  .user-profile .logo {
+    top: 10px !important;
+  }
 }
 </style>

@@ -31,7 +31,7 @@ export default {
       //   params: this.filters
       // })
       .then(({data}) => {
-        console.log(data)
+        // console.log(data)
         this.setData(data.data.allData.data)
 
         this.setAttr('counts', {
@@ -94,7 +94,7 @@ export default {
           let _stroke = ctx.stroke;
           ctx.stroke = function () {
             ctx.save();
-            ctx.shadowColor = '#ffb88c';
+            ctx.shadowColor = '#2F80ED';
             ctx.shadowBlur = 30;
             ctx.shadowOffsetX = 0;
             ctx.shadowOffsetY = 10;
@@ -112,9 +112,9 @@ export default {
           data: this.$store.state[this.group].charts[this.type].data,
           // data: [3, 2, 5, 2, 6, 12, 3, 18, 9, 40, 2, 18],
           label: `تعداد ${this.label} های ثبت شده `,
-          borderColor: '#ffb88c',
+          borderColor: '#56CCF2',
           pointBackgroundColor: "#fff",
-          pointBorderColor: "#ffb88c",
+          pointBorderColor: "#2F80ED",
           pointHoverBackgroundColor: "#ffb88c",
           pointHoverBorderColor: "#fff",
           pointRadius: 4,

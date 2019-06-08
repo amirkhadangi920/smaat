@@ -2,22 +2,12 @@
 
 namespace App\Http\Requests\v1\Group;
 
-use Illuminate\Foundation\Http\FormRequest;
+use App\Http\Requests\v1\MainRequest;
 use App\Rules\UniqueTenant;
 use App\Rules\ExistsTenant;
 
-class CategoryRequest extends FormRequest
+class CategoryRequest extends MainRequest
 {
-    /**
-     * Determine if the user is authorized to make this request.
-     *
-     * @return bool
-     */
-    public function authorize()
-    {
-        return true;
-    }
-
     /**
      * Get the validation rules that apply to the request.
      *
@@ -26,15 +16,16 @@ class CategoryRequest extends FormRequest
     public function rules()
     {
         return [
-            'title'             => ['required', 'string', 'max:50', new UniqueTenant('categories')],
+            'title'             => [$this->requiredOrFilled(), 'string', 'max:50', new UniqueTenant('categories')],
             'description'       => 'nullable|string|min:255',
             'logo'              => 'nullable|image|mimes:jpeg,jpg,png,gif|max:1024',
-            'scoring_feilds'    => 'nullable|string|array',
-            'scoring_feilds.*'  => 'required|string|max:100',
             'is_active'         => 'nullable|boolean',
-
+            
             /* relateion */
             'parent_id'         => ['nullable', 'integer', new ExistsTenant('categories')],
+
+            'scoring_fields'    => ['nullable', 'array', new ExistsTenant('scoring_fields')],
+            'scoring_fields.*'  => 'required|string|max:100',
             
             'keywords'          => 'nullable|array',
             'keywords.*'        => 'required|string|max:100',

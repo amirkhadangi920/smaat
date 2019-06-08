@@ -50,15 +50,15 @@ return [
     /*******************************
      *        Specification
      ******************************/
-    'specification' => [
+    'spec' => [
         'title' => 'جدول مشخصات فنی',
         'plural' => 'جداول مشخصات فنی'
     ],
-    'specification_header' => [
+    'spec_header' => [
         'title' => 'عنوان جدول مشخصات فنی',
         'plural' => 'عنواین جدول مشخصات فنی'
     ],
-    'specification_row' => [
+    'spec_row' => [
         'title' => 'سطر جدول مشخصات فنی',
         'plural' => 'سطور جدول مشخصات فنی'
     ],

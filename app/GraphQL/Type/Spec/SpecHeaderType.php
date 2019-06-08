@@ -18,7 +18,7 @@ class SpecHeaderType extends BaseType
     {
         return [
             'is_mine' => $this->isMineField(),
-            'creator' => $this->creator('specification'),
+            'creator' => $this->creator('spec'),
             'title' => [
                 'type' => Type::string(),
                 'selectable' => false
@@ -28,8 +28,8 @@ class SpecHeaderType extends BaseType
                 'selectable' => false
             ],
             'rows' => $this->relationListField('spec_row', 'is_active', 'read-specification'),
-            'audits' => $this->audits('specification'),
-            'is_active' => $this->acceptableField('specification')
+            'audits' => $this->audits('spec'),
+            'is_active' => $this->acceptableField('spec')
         ];
     }
 }

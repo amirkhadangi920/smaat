@@ -257,7 +257,7 @@ export default {
         })
         anime({
           targets: '.st1',
-          fill: '#92278F',
+          fill: '#F9631A',
           easing: 'easeInOutSine',
           delay: function(el, i) { return i * 10 },
         })
@@ -290,7 +290,7 @@ export default {
   stroke-width: 1px;
 }
 
-#logo-svg .st1{stroke:#92278F; stroke-width: 5px;}
+#logo-svg .st1{stroke:#F9631A; stroke-width: 5px;}
 #logo-svg .st2{fill:#fff !important;}
 
 .content .background {
@@ -300,7 +300,7 @@ export default {
   left: 0px;
   width: 100%;
   height: 100%;
-  background: #353535;
+  background: linear-gradient(60deg,#0c2646 0,#204065 60%,#2a5788);
   z-index: 3000;
   display: flex;
   align-items: center;
@@ -312,5 +312,9 @@ export default {
 }
 .fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */ {
   opacity: 0;
+}
+
+.white-content .main-panel {
+  background: #eff6ff !important;
 }
 </style>

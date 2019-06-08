@@ -17,7 +17,7 @@ class BaseCartMutation extends MainMutation
         return \GraphQL::type('result');
     }
 
-    public function getArgs()
+    public function args()
     {
         return [
             'variation' => [

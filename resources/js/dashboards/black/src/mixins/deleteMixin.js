@@ -1,5 +1,4 @@
-import {mapActions, mapMutations} from 'vuex'
-import { arrayExpression } from 'babel-types';
+import voca from 'voca'
 
 export default {
   methods: {
@@ -43,26 +42,46 @@ export default {
         cancelButtonText: 'نه ، اشتباه شده'
       }).then((result) => {
         if (result.value) {
+          const mutation = voca.camelCase(`delete ${this.type}`)
 
-          axios.delete(row.link)
-            .then(response => {
-              this.data().splice(index, 1)
-              this.setData( this.data() )
-              
-              this.setAttr('counts', {
-                total: this.attr('counts').total - 1,
-                trash: this.attr('counts').trash + 1,
-              })
-
-              this.$swal.fire({
-                title: 'حذف شد',
-                text: `برند ${row.name} با موفقیت حذف شد :)`,
-                type: 'success',
+          axios.post('/graphql/auth', {
+            query: `mutation {
+              ${mutation} (id: ${row.id}) {
+                status
+                message
+              }
+            }`
+          }).then(({data}) => {
+            const result = data.data[mutation]
+            
+            if ( result.status === 400 )
+            {
+              return this.$swal.fire({
+                title: 'حذف نشد',
+                text: `متاسفانه هیچ یک از ${this.label} ها حذف نشد :(`,
+                type: 'error',
                 showConfirmButton: false,
                 timer: 1000,
               })
+            }
 
-            }).catch(error => console.log(error));
+            this.data().splice(index, 1)
+            this.setData( this.data() )
+            
+            this.setAttr('counts', {
+              total: this.attr('counts').total - 1,
+              trash: this.attr('counts').trash + 1,
+            })
+
+            this.$swal.fire({
+              title: 'حذف شد',
+              text: `${this.label} "${row.name}" با موفقیت حذف شد :)`,
+              type: 'success',
+              showConfirmButton: false,
+              timer: 1000,
+            })
+
+          }).catch(error => console.log(error));
         }
       })
     },
@@ -74,10 +93,10 @@ export default {
         }
       })
     },
-    handleDeleteMultiple() {
-
+    handleDeleteMultiple()
+    {
       this.$swal.fire({
-        title: `برای پاک کردن برندهای انتخاب شده مطمئن هستید ؟`,
+        title: `برای پاک کردن ${this.label}های انتخاب شده مطمئن هستید ؟`,
         text: "در صورت پاک کردن امکان بازگشت اطلاعات نیست !",
         type: 'warning',
         showCancelButton: true,
@@ -92,46 +111,68 @@ export default {
           var ids = [];
 
           this.attr('selected_items').forEach( item => {
-
             ids = [...ids, this.data()[item].id]
           })
 
-          axios.delete(`/api/v1/${this.type}/${ids.join(',')}`)
-            .then(response => {
-              this.attr('selected_items').forEach(item => {
-                this.$store.state[this.group][this.type].splice(item, 1)
-              });
+          const mutation = voca.camelCase(`delete ${this.type}`)
 
-              this.setAttr('counts', {
-                total: this.attr('counts').total - this.attr('selected_items').length,
-                trash: this.attr('counts').trash + this.attr('selected_items').length,
-              })
-
-              this.setAttr('selected_items', [], true)
-              this.selected_items = [];
-
-              this.$swal.fire({
-                title: 'حذف شدند',
-                text: `${this.label} هایی که انتخاب کردید با موفقیت حذف شدند :)`,
-                type: 'success',
-                timer: 1000,
-                showConfirmButton: false,
-              })
-
-            }).catch(error => {
-              if (error.response) {
-                this.$swal.fire({
-                  title: 'خطایی رخ داد !',
-                  text: error.response.data.message,
-                  type: 'error',
-                  timer: 5000,
-                  confirmButtonText: 'بسیار خب :('
-                  // showConfirmButton: false,
-                })
-              } else {
-                console.log(error)
+          axios.post('/graphql/auth', {
+            query: `mutation {
+              ${mutation} (ids: [${ids.join(',')}]) {
+                status
+                message
               }
-            });
+            }`
+          }).then(({data}) => {
+            const result = data.data[mutation]
+            
+            if ( result.status === 400 )
+            {
+              return this.$swal.fire({
+                title: 'حذف نشد',
+                text: `متاسفانه هیچ یک از ${this.label} ها حذف نشد :(`,
+                type: 'error',
+                showConfirmButton: false,
+                timer: 1000,
+              })
+            }
+
+            let newDataArray = this.$store.state[this.group][this.type].filter((item, index) => {
+              return !this.attr('selected_items').includes(index)
+            })
+
+            this.setData(newDataArray);
+
+            this.setAttr('counts', {
+              total: this.attr('counts').total - this.attr('selected_items').length,
+              trash: this.attr('counts').trash + this.attr('selected_items').length,
+            })
+
+            this.setAttr('selected_items', [], true)
+            this.selected_items = [];
+
+            this.$swal.fire({
+              title: 'حذف شدند',
+              text: `${this.label} هایی که انتخاب کردید با موفقیت حذف شدند :)`,
+              type: 'success',
+              timer: 1000,
+              showConfirmButton: false,
+            })
+
+          }).catch(error => {
+            if (error.response) {
+              this.$swal.fire({
+                title: 'خطایی رخ داد !',
+                text: error.response.data.message,
+                type: 'error',
+                timer: 5000,
+                confirmButtonText: 'بسیار خب :('
+                // showConfirmButton: false,
+              })
+            } else {
+              console.log(error)
+            }
+          });
         }
       })
     },

@@ -59,5 +59,5 @@ return [
     'variation'             => Variation::class,
 
     // Specification models
-    'specification'         => Spec::class,
+    'spec'                  => Spec::class,
 ];

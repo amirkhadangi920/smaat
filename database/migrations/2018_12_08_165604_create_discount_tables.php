@@ -75,6 +75,8 @@ class CreateDiscountTables extends Migration
                 'tenants',
                 'users'
             ], 'int', ['expired_at']);
+
+            // $table->unique(['code', 'tenant_id']);
         });
 
         $schema->create('promocode_variation', function (Blueprint $table) {

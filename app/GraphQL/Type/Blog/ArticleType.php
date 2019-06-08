@@ -45,7 +45,7 @@ class ArticleType extends BaseType
             ],
             'votes' => $this->votes(),
             'subjects' => $this->relationListField('subject'),
-            'comments' => $this->relationListField('comment', 'is_accept'),
+            'comments' => $this->paginatedRelationListField('comment', 'is_accept'),
             'audits' => $this->audits('article'),
             'is_active' => $this->acceptableField('article'),
         ];

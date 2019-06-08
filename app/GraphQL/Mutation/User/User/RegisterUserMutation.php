@@ -22,7 +22,7 @@ class RegisterUserMutation extends BaseUserMutation
      */
     protected function rules(array $args = [])
     {
-        return ( new RegisterRequest )->rules($args);
+        return ( new RegisterRequest )->rules($args, 'REGISTER');
     }
 
     public function args()

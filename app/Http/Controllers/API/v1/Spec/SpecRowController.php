@@ -14,7 +14,7 @@ class SpecRowController extends MainController
      *
      * @var string
      */
-    protected $type = 'specification_row';
+    protected $type = 'spec_row';
 
     /**
      * The model of this controller

@@ -23,7 +23,6 @@ class RoleType extends BaseType
             'creator' => $this->creator('role'),
             'name' => [
                 'type' => Type::string(),
-                'selectable' => false
             ],
             'display_name' => [
                 'type' => Type::string(),
@@ -36,7 +35,7 @@ class RoleType extends BaseType
             'permissions' => [
                 'type' => Type::listOf( \GraphQL::type('permission') )
             ],
-            'audits' => $this->audits('specification'),
+            'audits' => $this->audits('spec'),
             'is_active' => $this->acceptableField('role')
         ];
     }

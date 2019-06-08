@@ -32,7 +32,7 @@
               </li>
               <li class="data-table-cell p-2 d-flex align-items-center justify-content-center" :style="{width: '40px'}">
                 <checkbox>
-                  <input type="checkbox" v-model="all_items_selected" @change="handleSelectAll" />
+                  <input type="checkbox" v-model="all_items_selected" @change="$parent.handleSelectAll" />
                 </checkbox>
               </li>
               <li v-for="(field, index) in fields" :key="index" class="data-table-cell p-2 d-flex align-items-center justify-content-center text-muted hvr-icon-up">
@@ -41,14 +41,14 @@
                   {{ field.label }}
                 </slot>
               </li>
-              <li class="data-table-cell p-2 d-flex align-items-center justify-content-center text-muted hvr-icon-up" v-if="has_times">
+              <!-- <li class="data-table-cell p-2 d-flex align-items-center justify-content-center text-muted hvr-icon-up" v-if="has_times">
                 <i class="tim-icons icon-time-alarm hvr-icon"></i>
                 ثبت / ویرایش
-              </li>
-              <li class="data-table-cell p-2 d-flex align-items-center justify-content-center text-muted hvr-icon-spin" v-if="has_operation">
+              </li> -->
+              <!-- <li class="data-table-cell p-2 d-flex align-items-center justify-content-center text-muted hvr-icon-spin" v-if="has_operation">
                 <i class="tim-icons icon-settings hvr-icon"></i>
                 عملیات ها
-              </li>
+              </li> -->
             </ul>
 
             <transition name="fade">
@@ -67,12 +67,13 @@
                   :style="{ transform: 'scale(0)', animationDelay: is_finished ? '0ms' : `${1000 + index * 50}ms`}"
                 >
                   <ul class="p-2 d-flex justify-content-center">
+                    <span class="cavity-effect"></span>
                     <li class="data-table-cell p-2 d-flex align-items-center justify-content-center" :style="{width: '40px'}">
                       {{ index + 1 }}
                     </li>
                     <li :style="{width: '40px'}" class="data-table-cell d-flex align-items-center justify-content-center">
                       <checkbox>
-                        <input type="checkbox" :value="index" v-model="selected_items" @change="handleSelectedChange(index)" />
+                        <input type="checkbox" :value="index" v-model="$parent.selected_items" @change="$parent.handleSelectedChange(index)" />
                       </checkbox>
                     </li>
                     <li v-for="(field, childIndex) in fields" :key="childIndex" class="data-table-cell p-2 d-flex align-items-center justify-content-center" >
@@ -80,33 +81,39 @@
                         {{ item[ field.field ] }}
                       </slot>
                     </li>
-                    <li class="data-table-cell p-2 d-flex align-items-center justify-content-center" v-if="has_times">
-                      <div :style="{ fontSize: '12px' }">
-                        <el-tooltip :content="item.created_at | created" placement="left">
-                          <p class="text-muted hvr-icon-bob"><i class="tim-icons icon-check-2 text-info hvr-icon"></i> {{ item.created_at | ago }}</p>
-                        </el-tooltip>
-
-                        <el-tooltip
-                          :content="item.updated_at | edited" placement="left"
-                          v-if="item.updated_at !== item.created_at">
-                          <p class="text-muted hvr-icon-hang"><i class="tim-icons icon-pencil text-warning hvr-icon"></i> {{ item.updated_at | ago }}</p>
-                        </el-tooltip>
-                      </div>
-                    </li>
-                    <li class="data-table-cell operation-cell p-2 d-flex align-items-center justify-content-center" v-if="has_operation">
-                      <el-tooltip :content="'ویرایش ' + label">
-                        <base-button v-if="canEdit" @click="methods.edit(index, item)" link class="hvr-icon-spin ml-2" :disabled="can(`update-${type}`)" :type="can(`create-${type}`) ? 'success' : 'default'" size="sm" icon>
-                          <i class="tim-icons icon-pencil hvr-icon" :style="{ fontSize: '18px !important' }"></i>
-                        </base-button>
-                      </el-tooltip>
-
-                      <el-tooltip :content="'حذف ' + label">
-                        <base-button v-if="canDelete" @click="handleDelete(index, item)" link class="ml-2" :disabled="can(`delete-${type}`)" :type="can(`create-${type}`) ? 'danger' : 'default'" size="lg" icon>
-                          <i class="tim-icons icon-trash-simple" :style="{ fontSize: '18px !important' }"></i>
-                        </base-button>
-                      </el-tooltip>
-                    </li>
+                    <!-- <li class="data-table-cell p-2 d-flex align-items-center justify-content-center" v-if="has_times">
+                      
+                    </li> -->
                   </ul>
+
+                  <span class="operation-cell" v-if="has_operation">
+                    <el-tooltip :content="'ویرایش ' + label" placement="right">
+                      <base-button v-if="canEdit" @click="methods.edit(index, item)" class="hvr-icon-spin" :disabled="can(`update-${type}`)" :type="can(`create-${type}`) ? 'default' : 'warning'" size="sm" icon>
+                        <i class="tim-icons icon-pencil hvr-icon" :style="{ fontSize: '18px !important' }"></i>
+                      </base-button>
+                    </el-tooltip>
+
+                    <el-tooltip :content="'حذف ' + label" placement="right">
+                      <base-button v-if="canDelete" @click="handleDelete(index, item)" :disabled="can(`delete-${type}`)" :type="can(`create-${type}`) ? 'default' : 'danger'" size="sm" icon>
+                        <i class="tim-icons icon-trash-simple" :style="{ fontSize: '18px !important' }"></i>
+                      </base-button>
+                    </el-tooltip>
+                  </span>
+
+                  <span class="time-lables" :style="{ fontSize: '10px' }">
+                    <el-tooltip class="created-at-label" :content="item.created_at | created" placement="left">
+                      <p><i class="tim-icons icon-check-2"></i> {{ item.created_at | ago }}</p>
+                    </el-tooltip>
+
+                    <el-tooltip
+                      class="updated-at-label"
+                      :content="item.updated_at | edited" placement="left"
+                      v-if="item.updated_at !== item.created_at">
+                      <p><i class="tim-icons icon-pencil"></i> {{ item.updated_at | ago }}</p>
+                    </el-tooltip>
+                  </span>
+
+                  <span class="shadow-first"></span>
                 </li>
               </transition-group>
             </transition>
@@ -262,7 +269,6 @@
     data() {
       return {
         layout: this.attr('is_grid_view'),
-        selected_items: this.attr('selected_items'),
         
         entered_count: 0,
         is_finished: false,
@@ -418,7 +424,7 @@
             value: 0,
           },
           marginBottom: {
-            value: 15,
+            value: 40,
           },
           scale: {
             value: 1,
@@ -456,15 +462,6 @@
           this.is_finished = true
       },
 
-      handleSelectAll(event) {
-        let temp = event.target.checked ? Array.apply(null, {length: this.tableData.length }).map( (v, i) => i) : []
-
-        this.selected_items = temp;
-        this.setAttr('selected_items', temp, true)
-      },
-      handleSelectedChange(value) {
-        this.setAttr('selected_items', this.selected_items, true)
-      },
       changeLayout(value) {
         if ( value ) 
           $('.data-table').removeClass(['animated', 'bounceInUp', 'delay-last']).addClass(['animated', 'bounceOutDown'])
@@ -514,6 +511,29 @@
     transition: transform 500ms !important;
   }
 
+  .btn-danger {
+    box-shadow: 0px 4px 20px -3px #ff3d3d, 0px 4px 18px -8px #000 !important;
+  }
+  .btn-warning {
+    box-shadow: 0px 4px 20px -3px #ff8d72, 0px 4px 18px -8px #000 !important;
+  }
+  .btn-success {
+    box-shadow: 0px 4px 20px -3px #007bff, 0px 4px 18px -8px #000 !important;
+  }
+  .data-table .btn-icon.btn-warning {
+    position: absolute;
+    top: 7PX;
+    left: -10px;
+  }
+  .data-table .btn-icon.btn-danger {
+    position: absolute;
+    top: 45PX;
+    left: -10px;
+  }
+  .data-table-cell .tim-icons.icon-trash-simple, .data-table-cell .tim-icons.icon-pencil {
+    color: #fff !important;
+  }
+
   .fade-enter-active, .fade-leave-active {
     transition: opacity .5s;
   }
@@ -558,6 +578,17 @@
     margin-left: 5px;
   }
 
+  .data-table .cavity-effect {
+    width: 30px;
+    height: 80%;
+    background: #eff6ff;
+    position: absolute;
+    right: 10px;
+    top: 10%;
+    border-radius: 5px 15px 15px 5px;
+    box-shadow: 0px 6px 35px -20px #19375a inset, 0px 5px 30px -25px #0076ff inset;
+  }
+
   .data-table {
     perspective: 600px;
     transform-origin: top center; 
@@ -571,10 +602,15 @@
     float: right;
     width: 25%;
     padding: 10px;
+    z-index: 50;
   }
 
   .operation-cell i {
     margin: 0px;
+  }
+
+  .data-table-header {
+    text-shadow: 0px 4px 18px #999;
   }
 
   .data-table-row, .data-table-header {
@@ -583,14 +619,78 @@
     overflow: hidden;
     margin-bottom: 15px;
   }
-
+  .time-lables {
+    position: absolute;
+    left: 50px;
+    top: 5px;
+    z-index: -2;
+    transition: top 200ms;
+  }
+  .data-table-row:hover .time-lables {
+    top: -15px;
+  }
+  .created-at-label {
+    background: #007bff;
+    box-shadow: 0px 4px 20px -3px #007bff, 0px 4px 18px -8px #000;
+    border-radius: 10px;
+    padding: 2px 7px 10px;
+    font-size: 8px;
+    color: #fff !important;
+    font-weight: bold;
+    float: left;
+    z-index: -2;
+  }
+  .updated-at-label {
+    background: #fd7e14;
+    box-shadow: 0px 4px 20px -3px #fd7e14, 0px 4px 18px -8px #000;
+    border-radius: 10px;
+    padding: 2px 7px 10px;
+    font-size: 8px;
+    float: left;
+    margin-left: 10px;
+    color: #fff !important;
+    font-weight: bold;
+  }
+  .created-at-label *, .updated-at-label * {
+    color: #fff !important;
+  }
   .data-table-row {
-    background: #fff;
-    box-shadow: 0px 0px 60px -30px #ff00d3;
     position: relative;
     border-radius: 10px 10px 10px 60px;
     transform: scale(1);
+    overflow: visible !important;
     transition: transform 200ms, box-shadow 250ms;
+  }
+  .data-table-row::after {
+    content: '';
+    position: absolute;
+    bottom: -7px;
+    left: 2%;
+    width: 96%;
+    height: 100%;
+    background: rgba(255, 255, 255, 0.5);
+    z-index: -1;
+    box-shadow: 0px 3px 35px -20px #19375a, 0px 2px 30px -25px #0076ff;
+    border-radius: 20px;
+  }
+  .data-table-row::before {
+    content: '';
+    position: absolute;
+    bottom: -14px;
+    left: 4%;
+    width: 92%;
+    box-shadow: 0px 3px 35px -20px #19375a, 0px 2px 30px -25px #0076ff;
+    height: 100%;
+    background: rgba(255, 255, 255, 0.3);
+    z-index: -1;
+    border-radius: 20px;
+  }
+  .data-table-row ul {
+    background: #fff;
+    box-shadow: 0px 6px 35px -20px #19375a, 0px 5px 30px -25px #0076ff;
+    position: relative;
+    border-radius: 20px;
+    overflow: hidden !important;
   }
   .data-table-row ul::before {
     z-index: -1;

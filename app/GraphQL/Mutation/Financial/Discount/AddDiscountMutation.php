@@ -33,7 +33,7 @@ class AddDiscountMutation extends BaseDiscountMutation
      */
     protected function rules(array $args = [])
     {
-        return ( new DiscountItemRequest )->rules($args);
+        return ( new DiscountItemRequest )->rules($args, 'ADD');
     }
 
     public function args()

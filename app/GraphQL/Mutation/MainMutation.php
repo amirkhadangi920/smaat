@@ -154,10 +154,10 @@ class MainMutation extends Mutation
      */
     public function requestWithImage($request, $field_name = 'logo', $model = null)
     {
-        if ( !$request->has($field_name) )
+        if ( !$request->get($field_name) )
             return $request;
 
-        /** ! TODO */
+        // TODO
         // if ( $model && file_exists( public_path($model->$field_name) ) )
         //         unlink( public_path($model->$field_name) );
 

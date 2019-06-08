@@ -30,7 +30,7 @@ trait UpdateMutation
      */
     protected function rules(array $args = [])
     {
-        return ( new $this->request )->rules($args);
+        return ( new $this->request )->rules($args, 'UPDATE');
     }
 
     public function args()

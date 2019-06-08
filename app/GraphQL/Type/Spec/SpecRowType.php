@@ -18,7 +18,7 @@ class SpecRowType extends BaseType
     {
         return [
             'is_mine' => $this->isMineField(),
-            'creator' => $this->creator('specification'),
+            'creator' => $this->creator('spec'),
             'title' => [
                 'type' => Type::string(),
                 'selectable' => false
@@ -63,8 +63,8 @@ class SpecRowType extends BaseType
             'is_required' => [
                 'type' => Type::boolean()
             ],
-            'is_active' => $this->acceptableField('specification'),
-            'audits' => $this->audits('specification'),
+            'is_active' => $this->acceptableField('spec'),
+            'audits' => $this->audits('spec'),
         ];
     }
 }

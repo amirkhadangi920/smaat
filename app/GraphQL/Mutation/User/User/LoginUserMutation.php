@@ -22,7 +22,7 @@ class LoginUserMutation extends BaseUserMutation
      */
     protected function rules(array $args = [])
     {
-        return ( new LoginRequest )->rules($args);
+        return ( new LoginRequest )->rules($args, 'LOGIN');
     }
 
     public function args()

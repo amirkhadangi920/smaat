@@ -24,6 +24,7 @@
     "socket.io-client": "^2.2.0",
     "vue": "^2.6.6",
     "vue-chartjs": "^3.4.0",
+    "vue-fab": "^2.3.1",
     "vue-i18n": "^8.8.1",
     "vue-nice-scrollbar": "^2.0.1",
     "vue-persian-datetime-picker": "^2.0.0",

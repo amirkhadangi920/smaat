@@ -35,6 +35,12 @@ use App\Models\Promocode\Promocode;
 
 Route::get('/test/amir', function() {
 
+    auth()->loginUsingId('f47370015075');
+    return auth()->user()->allPermissions();
+
+    return Category::find(1)->load('spec');
+
+
     auth()->login( User::first() );
     return factory(Promocode::class)->create();
 

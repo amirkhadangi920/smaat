@@ -1,3 +1,5 @@
+import voca from 'voca'
+
 export default {
   methods: {
     setAttr(attr, data, override = false) {
@@ -12,6 +14,21 @@ export default {
         data: final_data
       })
     },
+    clearForm()
+    {
+      this.$store.commit('clearForm', {
+        group: this.group,
+        type: this.type
+      })
+    },
+    fillFormForEditing(row)
+    {
+      this.$store.commit('fillFormForEditing', {
+        group: this.group,
+        type: this.type,
+        row
+      })
+    },
     data() {
       return this.$store.state[this.group][this.type]
     },
@@ -19,16 +36,38 @@ export default {
         return this.$store.state[this.group][attr][this.type]
     },
 
-    store() {
-      if( !this.validate() ) return;
+    create()
+    {
+      this.clearForm()
       
+      if ( typeof this.afterCreate === "function" )
+        this.afterCreate();
+
+      this.setAttr('is_open', true)
+      this.setAttr('is_creating', true)
+    },
+    edit(index, row)
+    {
+      this.fillFormForEditing(row)
+
+      this.setAttr('selected', {
+        index,
+        id: row.id
+      })
+    
+      if ( typeof this.afterEdit === "function" )
+        this.afterEdit(row);
+
+      this.setAttr('is_open', true)
+      this.setAttr('is_creating', false)
+    },
+    store()
+    {
       this.storeInServer({
-        data: this.getData(),
-        type: this.type,
-        label:this.label,
-        callback: response => {
+        callback: ({data}) => {
+
           let arr = this.data()
-          arr.unshift(response)
+          arr.unshift(data)
 
           this.setData( arr )
 
@@ -37,17 +76,13 @@ export default {
         }
       })
     },
-    update() {
-      if( !this.validate() ) return;
-      
+    update()
+    {
       this.storeInServer({
-        data: this.getData(),
-        type: this.type,
-        label: this.label,
-        url: this.selected('link'), 
-        callback: response => {
-          let index = this.selected('index');
-          this.data()[index] = response;
+        callback: ({data}) => {
+
+          let index = this.attr('selected').index;
+          this.data()[index] = data;
 
           this.setData( this.data() )
 
@@ -56,61 +91,128 @@ export default {
       })
     },
 
+    getAllFormData()
+    {
+      const form = this.attr('form');
+      
+      let args = '', params = '', variables = {};
+
+      for( let key in form )
+      {
+        params += `$${key}: ${form[key].type}, `
+        args += `${key}: $${key}, `
+        variables[key] = form[key].value
+      }
+
+      params = params.substr(0, params.length - 2)
+      args = args.substr(0, args.length - 2)
+
+      return {
+        params,
+        args,
+        variables
+      }
+    },
+
     addImage(file) {
-      this.setAttr('selected', {
-        imageFile: file.raw,
-        imageUrl: URL.createObjectURL(file.raw)
+      this.$store.commit('setFormImage', {
+        group: this.group,
+        type: this.type,
+        file: file.raw
       })
     },
 
-    storeInServer(options) {
-      let groupData = this.$store.state[this.group]
+    storeInServer(options)
+    {
+      if( !this.validate() ) return;
       
-      if( !groupData.is_creating[this.type] )
-        options.data.append('_method', 'PUT');
+      const mutation = voca.camelCase(
+        this.attr('is_creating') ? `create ${this.type}` : `update ${this.type}`
+      )
 
-      axios.post(options.url !== undefined ? options.url : `/api/v1/${options.type}`, options.data)
-        .then(response => {
-          var msg = groupData.is_creating[this.type] ? 'ثبت شد' : 'بروزرسانی شد'
+      const form = this.getAllFormData()
+  
+      if ( !this.attr('is_creating') )
+        form.args = `id: ${ this.attr('selected').id }, ` + form.args
+
+
+      const query = {
+        query: `mutation manageData(${form.params}) {
+          data: ${mutation} (${form.args}) {
+            id
+            ${this.allQuery}
+            created_at
+            updated_at
+          }
+        }`,
+        variables: form.variables
+      }
+
+      let fd = new FormData();
+      fd.append('operations' , JSON.stringify(query));
+
+      if ( this.attr('image_field') )
+      {
+        const image_field = this.attr('image_field')
+  
+        let file = this.attr('form')[image_field].file
+
+        if ( file )
+        {
+          let map = { image: [`variables.${image_field}`] }
+          fd.append('map' , JSON.stringify(map))
+          fd.append('image', file)
+        }
+        else
+          fd.append('map' , '{}')
+      }
+      else
+        fd.append('map' , '{}')
+
+      axios.post('/graphql/auth', fd).then(({data}) =>
+      {
+        var msg = this.attr('is_creating') ? 'ثبت شد' : 'بروزرسانی شد'
           
-          if ( groupData.is_creating[this.type] ) {
-            this.setAttr('counts', {
-              total: this.attr('counts').total + 1,
-            })
-          }
-
-          this.$swal.fire({
-            title: msg,
-            text: `${options.label} با موفقیت ${msg}:)`,
-            type: 'success',
-            showConfirmButton: false,
-            timer: 1000,
+        if ( this.attr('is_creating') ) {
+          this.setAttr('counts', {
+            total: this.attr('counts').total + 1,
           })
+        }
 
-          options.callback(response.data.data)
-        }).catch(error => {
-          if (error.response) {
-            console.log( error.response )
+        this.$swal.fire({
+          title: msg,
+          text: `${this.label} با موفقیت ${msg}:)`,
+          type: 'success',
+          showConfirmButton: false,
+          timer: 1000,
+        })
 
-            if (error.response.status === 422) {
+        options.callback(data.data)
 
-              for (let key in error.response.data.errors) {
-                if (!error.response.data.errors.hasOwnProperty(key)) continue;
-
-                error.response.data.errors[key].forEach(error => {
-                  this.$notify({
-                    title: 'خطا',
-                    message: error,
-                    timeout: 10000,
-                    type: 'danger',
-                    verticalAlign: 'top',
-                    horizontalAlign: 'left',
-                  })
-                });
-              }
-            }
-          }
-        });
+      }).catch(this.errorResolver)
     },
+
+    errorResolver(error)
+    {
+      console.log(error)
+
+      if ( error.type === 'validation' )
+      {
+        for (let key in error.messages)
+        {
+          error.messages[key].forEach(error =>
+          {
+            this.$notify({
+              title: 'خطا اعتبار سنجی',
+              message: error,
+              timeout: 10000,
+              type: 'danger',
+              verticalAlign: 'top',
+              horizontalAlign: 'left',
+            })
+          })
+        }
+      }
+    }
   }
 }

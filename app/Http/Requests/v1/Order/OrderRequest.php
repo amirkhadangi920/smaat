@@ -2,21 +2,11 @@
 
 namespace App\Http\Requests\v1\Order;
 
-use Illuminate\Foundation\Http\FormRequest;
+use App\Http\Requests\v1\MainRequest;
 use App\Rules\ExistsTenant;
 
-class OrderRequest extends FormRequest
+class OrderRequest extends MainRequest
 {
-    /**
-     * Determine if the user is authorized to make this request.
-     *
-     * @return bool
-     */
-    public function authorize()
-    {
-        return true;
-    }
-
     /**
      * Get the validation rules that apply to the request.
      *
@@ -30,8 +20,6 @@ class OrderRequest extends FormRequest
             'postal_code'       => 'nullable|digit:10',
             'offer'             => 'nullable|digits_between:1,10',
             'total'             => 'nullable|digits_between:1,10',
-            'docs'              => 'nullable|array',
-            'docs.*'            => 'required|image|mimes:jpeg,jpg,png|max:1024',
             'checkout'          => 'requierd|boolean',
             'type'              => 'required|integer|max:5',
 

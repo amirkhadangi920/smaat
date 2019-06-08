@@ -7,8 +7,24 @@
             Tip 2: you can change the color of the active button using the data-active-color="primary | info | success | warning | danger"
         -->
     <!-- -->
+    <div class="user-profile">
+      <div class="logo">
+
+      </div>
+      <div class="info">
+        <span class="name">
+          <i class="tim-icons icon-caps-small"></i>
+          امیر خدنگی
+        </span>
+        <span class="email">
+          <i class="tim-icons icon-single-02"></i>
+          AmirKhadangi920@Gmail.com
+        </span>
+      </div>
+    </div>
+
     <div class="sidebar-wrapper" id="style-3">
-      <div class="logo" @click="toggleSidebar">
+      <!-- <div class="logo" @click="toggleSidebar">
         <a
           :style="{ marginRight: $parent.is_collapsed ? '5px' : '20px' }"
           aria-label="sidebar mini logo"
@@ -17,14 +33,14 @@
                :class="{'logo-img-rtl': $rtl.isRTL}">
             <img
               :style="{margin: '0px'}"
-              src="/images/logo.jpg"
+              src="/images/user-test.jpg"
               alt="">
           </div>
         </a>
         <a class="simple-text logo-normal">
           {{title}}
         </a>
-      </div>
+      </div> -->
       <slot>
 
       </slot>
@@ -40,8 +56,14 @@
         </slot>
       </ul>
     </div>
+
+    <div class="logout-btn">
+      خروج از حساب
+      <i class="tim-icons icon-button-power"></i>
+    </div>
   </div>
 </template>
+
 <script>
   import SidebarLink from "./SidebarLink";
 
@@ -145,3 +167,56 @@
     }
   };
 </script>
+
+<style>
+.user-profile .info {
+  position: absolute;
+  right: 10px;
+  left: 10px;
+  top: -30px;
+  background: #fd7e14;
+  padding: 3px 10px;
+  border-radius: 5px;
+  color: #fff;
+  direction: rtl;
+  text-align: right;
+  z-index: 100 !important;
+  box-shadow: 0px 7px 21px -5px #fd7e14, 0px 3px 33px -9px #000;
+}
+.user-profile .info span {
+  display: block;
+}
+.user-profile .info .email {
+  font-size: 10px;
+}
+.user-profile .logo {
+  width: 50px;
+  height: 50px;
+  background: url('/images/user-test.jpg') center center;
+  background-size: cover;
+  border-radius: 50%;
+  position: absolute !important;
+  left: 18px;
+  top: -57px;
+  z-index: 110 !important;
+  box-shadow: 0px 6px 36px -8px #19375a, 0px 5px 33px -16px #0076ff;
+}
+.logout-btn {
+  position: absolute;
+  bottom: -20px;
+  width: 70%;
+  left: 15%;
+  background: #ff3d3d;
+  padding: 6px;
+  color: #fff;
+  text-align: center;
+  border-radius: 10px;
+  font-weight: bold;
+  z-index: 10000;
+  box-shadow: 0px 7px 21px -5px #ff3d3d, 0px 3px 33px -9px #000;
+}
+.logout-btn i {
+  font-size: 16px;
+  font-weight: bold;
+}
+</style>
