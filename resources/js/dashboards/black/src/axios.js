@@ -24,8 +24,6 @@ axios.interceptors.response.use(function (response) {
     return response
 
 }, function (error) {
-
-  console.log('fuck error')
   
   return Promise.reject(error);
 });

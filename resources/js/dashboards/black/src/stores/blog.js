@@ -87,23 +87,61 @@ export default {
             comment: [],
         },
 
+        image_field: {
+            article: 'image',
+        },
+
+        form: {
+            article: {
+                title: {
+                    type: 'String',
+                    value: ''
+                },
+                description: {
+                    type: 'String',
+                    value: ''
+                },
+                body: {
+                    type: 'String',
+                    value: ''
+                },
+                reading_time: {
+                    type: 'Int',
+                    value: ''
+                },
+                tags: {
+                    type: '[String]',
+                    value: [],
+                    resolve: tags => tags.map(tag => tag.name)
+                },
+                subjects: {
+                    type: '[Int]',
+                    value: [],
+                    // resolve: subjects => subjects.map(subject => subject.id)
+                },
+                image: {
+                    type: 'Upload',
+                    value: null,
+                    file: null,
+                    url: ''
+                },
+            },
+        },
+
         selected: {
             article: {
-                title: '',
-                description: '',
-                body: '',
-                reading_time: null,
-                tags: [],
-                subjects: [],
-                imageFile: null,
-                imageUrl: ''
+                id: null,
+                index: null
             },
             comment: {
-                name: '',
-                description: '',
-                categories: [],
-                logoFile: null,
-                imageUrl: ''
+                id: null,
+                index: null
+
+                // name: '',
+                // description: '',
+                // categories: [],
+                // logoFile: null,
+                // imageUrl: ''
             },
         },
     },

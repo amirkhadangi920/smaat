@@ -6,6 +6,7 @@ use App\Models\Product\Variation;
 use Rebing\GraphQL\Support\SelectFields;
 use GraphQL\Type\Definition\ResolveInfo;
 use Validator;
+use Cookie;
 
 class AddCartMutation extends BaseCartMutation
 {  

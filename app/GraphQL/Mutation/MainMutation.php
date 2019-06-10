@@ -155,11 +155,16 @@ class MainMutation extends Mutation
     public function requestWithImage($request, $field_name = 'logo', $model = null)
     {
         if ( !$request->get($field_name) )
-            return $request;
+            return $request->except($field_name);
 
-        // TODO
-        // if ( $model && file_exists( public_path($model->$field_name) ) )
-        //         unlink( public_path($model->$field_name) );
+        if ( $model )
+        {
+            foreach($model->logo as $item)
+            {
+                if ( file_exists( public_path($item) ) )
+                    unlink( public_path($item) );
+            }
+        }
 
         return collect( array_merge( $request->except($field_name)->all(), [
             $field_name => $this->upload_image( $request->get( $field_name ) )

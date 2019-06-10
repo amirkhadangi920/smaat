@@ -55,45 +55,86 @@ export default {
             subject: [],
         },
 
-        selected: {
+        image_field: {
+            category: 'logo',
+            subject: 'logo',
+        },
+
+        form: {
             category: {
-                title: '',
-                description: '',
-                body: '',
-                subject: [],
-                imageFile: null,
-                imageUrl: ''
+                title: {
+                    type: 'String',
+                    value: ''
+                },
+                description: {
+                    type: 'String',
+                    value: ''
+                },
+                parent_id: {
+                    type: 'Int',
+                    value: null
+                },
+                logo: {
+                    type: 'Upload',
+                    value: null,
+                    file: null,
+                    url: ''
+                },
             },
             subject: {
-                name: '',
-                description: '',
-                category: [],
-                logoFile: null,
-                imageUrl: ''
+                title: {
+                    type: 'String',
+                    value: ''
+                },
+                description: {
+                    type: 'String',
+                    value: ''
+                },
+                parent_id: {
+                    type: 'Int',
+                    value: null
+                },
+                logo: {
+                    type: 'Upload',
+                    value: null,
+                    file: null,
+                    url: ''
+                },
+            },
+        },
+
+        selected: {
+            category: {
+                id: null,
+                index: null
+            },
+            subject: {
+                id: null,
+                index: null
             },
         },
 
         query: {
             category: `{
                 categories {
-                    id
-                    title
-                    childs {
-                        id
-                        title
-                        childs {
-                            id
-                            title
-                            childs {
-                                id
-                                title
-                                childs {
-                                    id
-                                    title
-                                    childs {
-                                        id
-                                        title
-                                    }
+                    id title childs {
+                        id title childs {
+                            id title childs {
+                                id title childs {
+                                    id title childs { id title }
+                                }
+                            }
+                        }
+                    }
+                }
+            }`,
+            subject: `{
+                subjects {
+                    id title childs {
+                        id title childs {
+                            id title childs {
+                                id title childs {
+                                    id title childs { id title }
                                 }
                             }
                         }
@@ -104,6 +145,7 @@ export default {
 
         handleQuery: {
             category: (res) => res.data.categories,
+            subject: (res) => res.data.subjects,
         }
     },
 }

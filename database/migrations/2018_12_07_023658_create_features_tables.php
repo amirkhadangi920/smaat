@@ -65,8 +65,8 @@ class CreateFeaturesTables extends Migration
 
         $schema->create('sizes', function ($table) {
             $table->table([
-                'name'              => 50,
-                'description'       => 'nullable|string',
+                // 'name'              => 50,
+                // 'description'       => 'nullable|string',
                 'jalali_created_at' => 'datetime|nullable',
                 'is_active'         => 'boolean|default:1'
             ], ['users', 'tenants']);

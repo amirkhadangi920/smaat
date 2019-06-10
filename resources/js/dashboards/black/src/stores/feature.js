@@ -200,11 +200,11 @@ export default {
             brand: {
                 name: {
                     type: 'String',
-                    value: 'نام برند'
+                    value: ''
                 },
                 description: {
                     type: 'String',
-                    value: 'توضیحات کوتاه درباره برند'
+                    value: ''
                 },
                 categories: {
                     type: '[Int]',
@@ -218,6 +218,91 @@ export default {
                     url: ''
                 },
             },
+            size: {
+                name: {
+                    type: 'String',
+                    value: ''
+                },
+                description: {
+                    type: 'String',
+                    value: ''
+                },
+                categories: {
+                    type: '[Int]',
+                    value: [],
+                    resolve: categories => categories.map( category => category.id )
+                },
+            },
+            warranty: {
+                title: {
+                    type: 'String',
+                    value: ''
+                },
+                expire: {
+                    type: 'String',
+                    value: ''
+                },
+                description: {
+                    type: 'String',
+                    value: ''
+                },
+                categories: {
+                    type: '[Int]',
+                    value: [],
+                    resolve: categories => categories.map( category => category.id )
+                },
+                logo: {
+                    type: 'Upload',
+                    value: null,
+                    file: null,
+                    url: ''
+                },
+            },
+            color: {
+                name: {
+                    type: 'String',
+                    value: ''
+                },
+                code: {
+                    type: 'String',
+                    value: ''
+                },
+                categories: {
+                    type: '[Int]',
+                    value: [],
+                    resolve: categories => categories.map( category => category.id )
+                },
+            },
+            unit: {
+                title: {
+                    type: 'String',
+                    value: ''
+                },
+                description: {
+                    type: 'String',
+                    value: ''
+                },
+                categories: {
+                    type: '[Int]',
+                    value: [],
+                    resolve: categories => categories.map( category => category.id )
+                },
+            },
+            spec: {
+                title: {
+                    type: 'String',
+                    value: ''
+                },
+                description: {
+                    type: 'String',
+                    value: ''
+                },
+                categories: {
+                    type: '[Int]',
+                    value: [],
+                    resolve: categories => categories.map( category => category.id )
+                },
+            },
         },
 
         selected: {
@@ -226,31 +311,24 @@ export default {
                 index: null
             },
             size: {
-                name: '',
-                description: '',
-                categories: [],
+                id: null,
+                index: null
             },
             warranty: {
-                title: '',
-                expire: '',
-                categories: [],
-                imageFile: null,
-                imageUrl: ''
+                id: null,
+                index: null
             },
             color: {
-                name: '',
-                description: '',
-                categories: [],
+                id: null,
+                index: null
             },
             unit: {
-                title: '',
-                description: '',
-                categories: [],
+                id: null,
+                index: null
             },
             spec: {
-                title: '',
-                description: '',
-                categories: [],
+                id: null,
+                index: null
             },
         },
     },

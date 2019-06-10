@@ -101,7 +101,7 @@ export default {
       {
         params += `$${key}: ${form[key].type}, `
         args += `${key}: $${key}, `
-        variables[key] = form[key].value
+        variables[key] = form[key].resolve ? form[key].resolve( form[key].value ) : form[key].value
       }
 
       params = params.substr(0, params.length - 2)
@@ -114,7 +114,8 @@ export default {
       }
     },
 
-    addImage(file) {
+    addImage(file)
+    {
       this.$store.commit('setFormImage', {
         group: this.group,
         type: this.type,
@@ -131,6 +132,8 @@ export default {
       )
 
       const form = this.getAllFormData()
+
+      return console.log( form.variables )
   
       if ( !this.attr('is_creating') )
         form.args = `id: ${ this.attr('selected').id }, ` + form.args

@@ -137,7 +137,7 @@
 
     <template slot="modal">
       <div class="row">
-        <div class="col-md-7">
+        <div class="col-md-6">
           <md-field :class="getValidationClass('title')">
             <label>عنوان مقاله</label>
             <md-input v-model="title" :maxlength="$v.title.$params.maxLength.max" />
@@ -147,7 +147,7 @@
           </md-field>
         </div>
 
-        <div class="col-md-5">
+        <div class="col-md-6">
           <md-field :class="getValidationClass('reading_time')">
             <label>زمان مطالعه</label>
             <md-input v-model="reading_time" type="number" />
@@ -177,7 +177,11 @@
               :auto-upload="false"
               :show-file-list="false"
               :on-change="addImage">
-              <img v-if="$store.state[group].selected[type].imageUrl" :src="$store.state[group].selected[type].imageUrl" class="avatar">
+              <img
+                v-if="$store.state[group].form[type].image.url"
+                :src="$store.state[group].form[type].image.url"
+                class="avatar"
+              />
               <i v-else class="el-icon-plus avatar-uploader-icon"></i>
             </el-upload>
             <small slot="helperText" id="emailHelp" class="form-text text-muted">تصویر مورد نظر خود را انتخاب کنید</small>
@@ -213,7 +217,6 @@
       <br/>
       <md-chips v-model="tags" md-placeholder="افزودن کلمه کلیدی ...">
         <label>کلمات کلیدی مقاله</label>
-        <i class="md-icon tim-icons icon-tag"></i>
         <span class="md-helper-text">کلمات کلیدی مرتبط با مقاله خود را وارد کنید</span>
       </md-chips>
     </template>
@@ -250,16 +253,16 @@ export default {
   ],
   data() {
     return {
-        type: 'article',
-        plural: 'articles',
-        group: 'blog',
+      plural: 'articles',
+      type: 'article',
+      group: 'blog',
 
-        defaultProps: {
-          children: 'childs',
-          label: 'title',
-        },
+      defaultProps: {
+        children: 'childs',
+        label: 'title',
+      },
 
-        editor: ClassicEditor,
+      editor: ClassicEditor,
     }
   },
   mounted() {
@@ -274,31 +277,19 @@ export default {
   },
   methods: {
     changeSelectedSubjects() {
-      this.setAttr('selected', {
-        categories: this.$refs.subjects.getCheckedKeys(),
+      this.$store.commit('setFormData', {
+        group: this.group,
+        type: this.type,
+        field: 'subjects',
+        value: this.$refs.subjects.getCheckedKeys()
       })
     },
-    create() {
-      this.setAttr('selected', {
-        title: '',
-        description: '',
-        body: '',
-        reading_time: null,
-        tags: [],
-        subjects: [],
-        imageFile: null,
-        imageUrl: ''
-      })
-
-      this.setAttr('is_open', true)
-      this.setAttr('is_creating', true)
-    },
-    edit(index, row) {
+    edit2(index, row) {
       axios(row.link).then(({data}) => {
         data = data.data
 
         setTimeout(() => {
-          this.$refs.subjects.setCheckedKeys([]);
+          this.$refs.subjects.setCheckedKeys([])
   
           this.setAttr('selected', {
             index: index,
@@ -358,11 +349,14 @@ export default {
     reading_time: bind('reading_time'),
     tags: {
       get() {
-        return this.selected('tags').map( item => item.name )
+        return this.$store.state.blog.form.article.tags.value.map( item => item.name )
       },
       set(value) {
-        this.setAttr('selected', {
-          tags: value.map(item => { return { name: item } })
+        this.$store.commit('setFormData', {
+          group: this.group,
+          type: this.type,
+          field: 'tags',
+          value: value.map(item => { return { name: item } }) 
         })
       }
     },

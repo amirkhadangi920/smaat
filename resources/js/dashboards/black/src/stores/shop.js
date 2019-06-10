@@ -137,30 +137,98 @@ export default {
             discount: [],
         },
 
-        selected: {
+        image_field: {
+            shipping_method: 'logo',
+            discount: 'logo',
+        },
+
+        form: {
             shipping_method: {
-                name: '',
-                description: '',
-                cost: null,
-                minimum: null,
-                imageFile: null,
-                imageUrl: '',
+                name: {
+                    type: 'String',
+                    value: ''
+                },
+                description: {
+                    type: 'String',
+                    value: ''
+                },
+                cost: {
+                    type: 'Int',
+                    value: null
+                },
+                minimum: {
+                    type: 'Int',
+                    value: null
+                },
+                logo: {
+                    type: 'Upload',
+                    value: null,
+                    file: null,
+                    url: ''
+                },
             },
             order_status: {
-                title: '',
-                description: '',
-                color: ''
+                title: {
+                    type: 'String',
+                    value: ''
+                },
+                description: {
+                    type: 'String',
+                    value: ''
+                },
+                color: {
+                    type: 'String',
+                    value: ''
+                },
+            },
+            discount: {
+                title: {
+                    type: 'String',
+                    value: ''
+                },
+                description: {
+                    type: 'String',
+                    value: ''
+                },
+                start_at: {
+                    type: 'String',
+                    value: ''
+                },
+                expired_at: {
+                    type: 'String',
+                    value: ''
+                },
+                categories: {
+                    type: '[Int]',
+                    value: [],
+                    resolve: categories => categories.map( category => category.id )
+                },
+                logo: {
+                    type: 'Upload',
+                    value: null,
+                    file: null,
+                    url: ''
+                },
+                // items: {
+                //     type: '[Int]',
+                //     value: [],
+                // },
+            }
+        },
+
+        selected: {
+            shipping_method: {
+                id: null,
+                index: null
+            },
+            order_status: {
+                id: null,
+                index: null
             },
             order: {},
             discount: {
-                title: '',
-                description: '',
-                start_at: '',
-                expired_at: '',
-                categories: [],
-                logoFile: null,
-                imageUrl: '',
-                items: [],
+                id: null,
+                index: null
             },
         },
     },

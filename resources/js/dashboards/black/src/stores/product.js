@@ -112,20 +112,23 @@ export default {
             question_and_answer: [],
         },
 
-        selected: {
+        form: {
             review: {
-                name: '',
-                description: '',
-                categories: [],
-                logoFile: null,
-                imageUrl: ''
+                // 
             },
             question_and_answer: {
-                name: '',
-                description: '',
-                categories: [],
-                logoFile: null,
-                imageUrl: ''
+                // 
+            }
+        },
+
+        selected: {
+            review: {
+                id: null,
+                index: null
+            },
+            question_and_answer: {
+                id: null,
+                index: null
             },
         },
     },

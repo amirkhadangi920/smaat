@@ -131,14 +131,14 @@ export default new Vuex.Store({
 
             axios.get('/graphql/auth', {
                 params: {
-                    query: state.group.query.category
+                    query: state[inputs.group].query[inputs.type]
                 }
             }).then(({data}) => {
 
                 commit('setData', {
                     group: inputs.group,
                     type: inputs.type,
-                    data: state.group.handleQuery.category(data)
+                    data: state[inputs.group].handleQuery[inputs.type](data)
                 })
             })
         },

@@ -260,9 +260,11 @@ export default {
     {
       setTimeout(() => this.$refs.categories.setCheckedKeys([]) , 100);
     },
-    afterEdit()
+    afterEdit(row)
     {
-      setTimeout(() => this.$refs.categories.setCheckedKeys([]), 100);
+      setTimeout(() => this.$refs.categories.setCheckedKeys(
+        row.categories.map(i => i.id)
+      ), 100);
     },
     getData() {
       let data = new FormData();

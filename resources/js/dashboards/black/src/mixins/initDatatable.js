@@ -3,10 +3,10 @@ import anime from 'animejs'
 import Chart from 'chart.js'
 
 export default {
-  mounted() {
-    
-    if (this.data().length === 0) {
-
+  mounted()
+  {
+    if (this.data().length === 0)
+    {
       axios.get('/graphql/auth', {
         params: {
           query: `{
@@ -66,7 +66,9 @@ export default {
           }, 100);
         }, 500)
       }).catch(error => console.log(error))
-    } else {
+    }
+    else
+    {
       let data = this.data()
       this.setData([])
       this.load(false)

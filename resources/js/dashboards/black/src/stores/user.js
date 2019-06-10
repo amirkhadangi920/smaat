@@ -87,22 +87,75 @@ export default {
             role: [],
         },
 
+        image_field: {
+            user: 'avatar',
+        },
+
+        form: {
+            user: {
+                first_name: {
+                    type: 'String',
+                    value: ''
+                },
+                last_name: {
+                    type: 'String',
+                    value: ''
+                },
+                avatar: {
+                    type: 'Upload',
+                    value: null,
+                    file: null,
+                    url: ''
+                },
+                address: {
+                    type: 'String',
+                    value: ''
+                },
+                email: {
+                    type: 'String',
+                    value: ''
+                },
+                national_code: {
+                    type: 'String',
+                    value: ''
+                },
+                permissions: {
+                    type: '[Int]',
+                    value: [],
+                    resolve: permissions => permissions.map(p => p.id)
+                },
+                roles: {
+                    type: '[Int]',
+                    value: [],
+                    resolve: roles => roles.map(p => p.id)
+                },
+            },
+
+            role: {
+                display_name: {
+                    type: 'String',
+                    value: ''
+                },
+                description: {
+                    type: 'String',
+                    value: ''
+                },
+                permissions: {
+                    type: '[Int]',
+                    value: [],
+                    resolve: permissions => permissions.map(p => p.id)
+                },
+            }
+        },
+
         selected: {
             user: {
-                first_name: '',
-                last_name: '',
-                imageUrl: '',
-                imageFile: null,
-                address: '',
-                email: '',
-                national_code: '',
-                permissions: [],
-                roles: []
+                id: null,
+                index: null
             },
             role: {
-                display_name: '',
-                description: '',
-                permissions: []
+                id: null,
+                index: null
             },
         },
     },
