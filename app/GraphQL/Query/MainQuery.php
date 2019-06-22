@@ -33,7 +33,8 @@ class MainQuery extends Query
         if ( isset( $this->filter ) )
             $data = $this->model::filter( $args, $this->filter );
         else
-            $data = $this->model::latest();
+            $data = (new $this->model)->timestamps ? $this->model::latest() : $this->model::orderBy('id');
+
 
         if ( $args['ids'] ?? false )
             $data->whereIn('id', $args['ids']);

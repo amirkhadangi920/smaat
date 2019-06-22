@@ -12,9 +12,12 @@ class QuestionAndAnswerRequest extends MainRequest
      *
      * @return array
      */
-    public function rules()
+    public function rules($args, $method)
     {
+        $this->method = $method;
+
         return [
+            'title'             => 'required|string|max:100',
             'message'           => 'required|string',
 
             /* relateion */

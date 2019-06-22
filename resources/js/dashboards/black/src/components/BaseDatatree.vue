@@ -37,7 +37,7 @@
     </div>
 
     <div class="row">
-      <div class="row" v-if="attr('has_loaded')" dir="rtl">
+      <div class="row" v-if="attr('has_loaded') && false" dir="rtl">
         <div class="col-md-3">
           <card class="text-right mb-4 animated bounceInRight delay-secound tilt" :style="{ marginBottom: '32px !important', transformStyle: 'preserve-3d' }">
             <h5 class="card-category" style="transform: translateZ(20px)">کل {{ label }} های موجود</h5>
@@ -92,16 +92,24 @@
           </card>
         </div>
       </div>
+
+      <card :style="{ height: '300px', position: 'relative', zIndex: 100 }"></card>
     </div>
 
     <div class="row mt-3 mb-3">
-      <div class="col-12">
-        <div class="text-right pull-right">
-          <h1 class="animated bounceInRight delay-secound">
-            مدیریت {{ label }} ها
-            <i class="tim-icons icon-puzzle-10" :style="{fontSize: '25px'}"></i>
+      <div class="col-12 text-right">
+        <div class="pull-right">
+          <h1 class="animated bounceInRight delay-first" :style="{ color: '#fff', fontWeight: 'bold', textShadow: '0px 3px 15px #333' }">
+            مدیریت <span :style="{ color: '#ff3d3d' }">{{ label }}</span> ها
+            <i class="tim-icons icon-align-left-2" :style="{fontSize: '25px'}"></i>
           </h1>
-          <h6 class="text-muted animated bounceInRight delay-last">با استفاده از جدول زیر ، امکان مدیریت کامل {{ label }} های وبسایت برای شما ممکن خواهد شد</h6>
+          <h6 class="text-muted animated bounceInRight delay-secound">با استفاده از جدول زیر ، امکان مدیریت کامل {{ label }} های وبسایت برای شما ممکن خواهد شد</h6>
+        </div>
+        <div class="pull-left animated bounceInDown delay-last">
+          <base-button @click="createMethod(null)" :disabled="can(`create-${type}`)" size="sm" :type="can(`create-${type}`) ? 'info' : 'success'">
+            افزودن {{ label }} جدید
+            <i class="tim-icons icon-simple-add"></i>
+          </base-button>
         </div>
       </div>
     </div>
@@ -109,30 +117,36 @@
     <div class="row">
       <div class="col-12">
         <el-tree
+          class="rtl group-tree"
           :data="$store.state.group[type]"
-          show-checkbox
           node-key="id"
           empty-text="هیچ گونه اطلاعاتی یافت نشد :("
           :props="defaultProps">
           <div class="custom-tree-node col-11" slot-scope="{ node, data }">
             <div class="pull-left d-flex align-items-center">
               <img :src="data.logo ? data.logo.tiny : '/images/placeholder.png'" />
-              <div class="pull-right">
-                <h3 class="mb-0">{{ node.label }}</h3>
+              <div class="pull-right group-info">
+                <h4 class="mb-0">{{ node.label }}</h4>
                 <p class="text-muted">{{ data.description }}</p>
               </div>
             </div>
             
             <div class="operation-cell pull-right">
-              <el-tooltip :content="'ویرایش'">
-                <base-button @click="edit_row(index, row)" type="success" size="sm" icon>
+              <el-tooltip content="حذف">
+                <base-button type="danger" @click="handleDelete(node, data)" size="sm" icon>
+                  <i class="tim-icons icon-simple-remove"></i>
+                </base-button>
+              </el-tooltip>
+
+              <el-tooltip content="ویرایش">
+                <base-button class="ml-2" @click="edit(node, data)" type="warning" size="sm" icon>
                   <i class="tim-icons icon-pencil"></i>
                 </base-button>
               </el-tooltip>
 
-              <el-tooltip :content="'حذف'">
-                <base-button class="pull-right" type="danger" size="sm" icon>
-                  <i class="tim-icons icon-simple-remove"></i>
+              <el-tooltip content="ثبت گروه فرزند">
+                <base-button class="ml-2" @click="createMethod(node)" type="success" size="sm" icon>
+                  <i class="tim-icons icon-simple-add"></i>
                 </base-button>
               </el-tooltip>
             </div>
@@ -140,21 +154,106 @@
         </el-tree>
       </div>
     </div>
+    
+    <md-dialog :md-active.sync="$store.state[group].is_open[type]" class="text-right" dir="rtl">
+      <md-dialog-title>
+        <h2 class="modal-title">
+          {{ attr('is_creating') ? 'ثبت ' + label : 'ویرایش ' + label }}
+        </h2>
+        <p>از طریق فرم زیر میتوانید {{ label }} {{ attr('is_creating') ? 'جدید ثبت کنید' : 'مورد نظر خود را ویرایش کنید' }}</p>
+      </md-dialog-title>
+
+      <div class="md-dialog-content">
+        <div class="p-2">
+          <form @submit.prevent>
+            <base-input :label="'لوگوی ' + label">
+              <el-upload
+                class="avatar-uploader"
+                action="/"
+                :auto-upload="false"
+                :show-file-list="false"
+                :on-change="addImage">
+                <img
+                  v-if="$store.state[group].form[type].logo.url"
+                  :src="$store.state[group].form[type].logo.url"
+                  class="avatar"
+                />
+                <i v-else class="el-icon-plus avatar-uploader-icon"></i>
+              </el-upload>
+              <small slot="helperText" id="emailHelp" class="form-text text-muted">لوگوی مورد نظر خود را انتخاب کنید</small>
+            </base-input>
+
+            <md-field :class="getValidationClass('title')">
+              <label for="email">عنوان</label>
+              <md-input v-model="title" :maxlength="$v.title.$params.maxLength.max" />
+              <i class="md-icon tim-icons icon-tag"></i>
+              <span class="md-helper-text">برای مثال : کالای دیجیتال</span>
+              <span class="md-error" v-show="!$v.title.required">لطفا نام سایز را وارد کنید</span>
+            </md-field>
+            <br/>
+
+            <md-field :class="getValidationClass('description')">
+              <label for="email">توضیحات واحد</label>
+              <md-textarea v-model="description" md-autogrow :maxlength="$v.description.$params.maxLength.max"></md-textarea>
+              <i class="md-icon tim-icons icon-paper"></i>
+              <span class="md-helper-text">توضیحی مختصر درباره واحد</span>
+            </md-field>
+            <slot name="modal"></slot>
+          </form>
+        </div>
+      </div>
+
+      <md-dialog-actions>
+        <base-button
+          class="ml-2"
+          type="secondary"
+          simple
+          size="sm"
+          @click="setAttr('is_open', false)">
+          لغو
+        </base-button>
+        
+        <base-button
+          simple
+          size="sm" 
+          :type="attr('is_creating') ? 'danger' : 'warning'"
+          @click="attr('is_creating') ? store() : update()">
+          {{ attr('is_creating') ? 'ذخیره' : 'بروز رسانی' }} {{ label }}
+        </base-button>
+      </md-dialog-actions>
+    </md-dialog>
   </div>
 </template>
 
 <script>
-import initMixin from '../mixins/initDatatable'
 import LineChart from './Charts/LineChart';
 import ICountUp from 'vue-countup-v2';
-  
-import * as chartConfigs from './Charts/config';
-import config from '../config.js';
+import initMixin from '../mixins/initDatatree'
+import deleteMixin from '../mixins/deleteMixin';
+import createMixin from '../mixins/createMixin';
+import Binding, { bind } from '../mixins/binding'
+import { validationMixin } from 'vuelidate'
+import { required, maxLength } from 'vuelidate/lib/validators'
 
 export default {
-    props: [ 'label', 'type' ],
+  props: {
+    label: {
+      type: String,
+      required: true
+    },
+    type: {
+      type: String,
+      required: true
+    },
+    plural: String,
+    required: true
+  },
   mixins: [
-    initMixin
+    initMixin,
+    deleteMixin,
+    createMixin,
+    validationMixin,
+    Binding
   ],
   components: {
     LineChart,
@@ -162,6 +261,8 @@ export default {
   },
   data() {
     return {
+        value: [],
+        selected_node: null,
         group: 'group',
 
         defaultProps: {
@@ -171,117 +272,83 @@ export default {
     }
   },
   methods: {
-    closePanel() {
-      this.$refs.datatable.closePanel();
+    createMethod(node = null)
+    {
+      this.selected_node = node
+      
+      this.create()
     },
-    changeSelectedSubjects() {
-      this.setAttr('selected', {
-        categories: this.$refs.subjects.getCheckedKeys(),
+    afterCreate()
+    {
+      this.$store.commit('setFormData', {
+        group: this.group,
+        type: this.type,
+        field: 'parent_id',
+        value: this.selected_node ? this.selected_node.data.id : null
       })
     },
+    store()
+    {
+      this.storeInServer({
+        callback: ({data}) => {
+  
+          if ( this.selected_node )
+          {
+            data.childs = []
+            this.selected_node.data.childs.push(data)
+          }
+          else
+          {
+            let arr = this.data()
+            arr.push(data)
 
-    create() {
-      this.setAttr('selected', {
-        title: '',
-        description: '',
-        body: '',
-        reading_time: null,
-        tags: [],
-        subjects: [],
-        imageFile: null,
-        imageUrl: ''
-      })
+            this.setData( arr )
+          }
 
-      this.setAttr('is_open', true)
-      this.setAttr('is_creating', true)
-    },
-    edit(index, row) {
-      axios(row.link).then(({data}) => {
-        data = data.data
-
-        this.$refs.subjects.setCheckedKeys([]);
-
-        this.setAttr('selected', {
-          index: index,
-          link: data.link,
-          title: data.title,
-          description: data.description,
-          body: data.body,
-          tags: data.tags,
-          reading_time: data.reading_time,
-          subjects: data.subjects.map( subject => subject.id ),
-          imageFile: null,
-          imageUrl: data.image ? row.image.small : '',
-        })    
-
-        this.setAttr('is_open', true)
-        this.setAttr('is_creating', false)
-      })
-    },
-    getData() {
-      let data = new FormData();
-
-      this.fields.forEach(field => {
-        if ( ['logo', 'categories'].includes(field.field) ) return
-
-        let value = selected( field.field )
-
-        data.append(field.field, value ? value : '')
-      });
-
-      this.$refs.categories.getCheckedKeys().forEach(category => {
-        data.append('categories[]', category);
-      });
-
-      if ( selected('imageFile') )
-        data.append('logo', selected('imageFile'))
-
-      return data
-    },
-    getValidationClass (fieldName) {
-      const field = this.$v[fieldName]
-
-      if (field) {
-        return {
-          'md-invalid': field.$invalid && field.$dirty
+          this.setAttr('is_open', false)
+          this.setAttr('is_creating', false)
         }
-      }
+      })
     },
-    validate() {
-      this.$v.$touch()
+    update()
+    {
+      this.storeInServer({
+        callback: ({data}) => {
+          const parent = this.attr('selected').index.parent;
+          const children = parent.data.children || parent.data;
+          const index = children.findIndex(d => d.id === data.id);
 
-      return !this.$v.$invalid;
+          children[index].logo = data.logo;
+          children[index].title = data.title;
+          children[index].description = data.description;
+
+          this.setAttr('is_open', false)
+        }
+      })
+    },
+    afterDelete(node, data) 
+    {
+      const parent = node.parent;
+      const children = parent.data.childs || parent.data;
+      const index = children.findIndex(d => d.id === data.id);
+      children.splice(index, 1);
+    },
+  },
+  validations: {
+    title: {
+      required,
+      maxLength: maxLength(50)
+    },
+    description: {
+      maxLength: maxLength(255)
     },
   },
   computed: {
-    // title: bind('title'),
-    // description: bind('description'),
+    title: bind('title'),
+    description: bind('description'),
 
-    greenLineChart() {
-      return {
-        extraOptions: chartConfigs.greenChartOptions,
-        chartData: {
-          labels: this.$store.state[this.group].charts[this.type].labels,
-          datasets: [{
-            label: `تعداد ${this.label} های ثبت شده `,
-            fill: true,
-            borderColor: config.colors.danger,
-            borderWidth: 2,
-            borderDash: [],
-            borderDashOffset: 0.0,
-            pointBackgroundColor: config.colors.danger,
-            pointBorderColor: 'rgba(255,255,255,0)',
-            pointHoverBackgroundColor: config.colors.danger,
-            pointBorderWidth: 20,
-            pointHoverRadius: 4,
-            pointHoverBorderWidth: 15,
-            pointRadius: 4,
-            data: this.$store.state[this.group].charts[this.type].data,
-          }]
-        },
-        gradientColors: ['rgba(66,134,121,0.15)', 'rgba(66,134,121,0.0)', 'rgba(66,134,121,0)'],
-        gradientStops: [1, 0.4, 0],
-      }
+    allQuery() {
+      return `title description logo { tiny }`
     }
   },
 }
@@ -297,6 +364,40 @@ export default {
   align-items: center;
 }
 
+.el-tree.rtl,
+.el-tree.rtl .custom-tree-node img,
+.el-tree.rtl .custom-tree-node .pull-left .pull-right,
+.el-tree.rtl .custom-tree-node .operation-cell,
+.el-tree.rtl .custom-tree-node .el-checkbox__input {
+  transform: scaleX(-1)
+}
+
+.el-tree.rtl .custom-tree-node {
+  max-width: 100%;
+  padding: 0px;
+}
+.el-tree.group-tree .el-tree-node {
+  padding: 15px 0px;
+}
+.el-tree.group-tree .el-tree-node__expand-icon {
+  font-size: 18px;
+}
+.el-tree.group-tree .el-tree-node__children {
+  margin-top: 20px;
+  margin-bottom: 30px;
+}
+.el-tree.group-tree .group-info {
+  direction: rtl;
+  text-align: right;
+  max-width: calc(100% - 80px);
+  width: 400px;
+}
+.el-tree.group-tree .group-info p {
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+}
+
 /* .el-tree-node__content {
   height: 70px;
   margin-bottom: 15px;
@@ -308,10 +409,6 @@ export default {
 .el-tree-node__content:hover {
   transform: scale(1.01);
   box-shadow: 0px 0px 70px -30px #ff00d3;
-}
-
-.el-tree-node__children {
-  margin-left: 5%;
 }
 
 .custom-tree-node img {

@@ -266,26 +266,6 @@ export default {
         row.categories.map(i => i.id)
       ), 100);
     },
-    getData() {
-      let data = new FormData();
-
-      this.fields.forEach(field => {
-        if ( ['logo', 'categories'].includes(field.field) ) return
-
-        let value = this.selected( field.field )
-
-        data.append(field.field, value ? value : '')
-      });
-
-      this.$refs.categories.getCheckedKeys().forEach(category => {
-        data.append('categories[]', category);
-      });
-
-      if ( this.selected('imageFile') )
-        data.append('logo', this.selected('imageFile'))
-
-      return data
-    },
 
     changeSelectedCategories() {
       this.$store.commit('setFormData', {

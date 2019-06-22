@@ -17,7 +17,7 @@
     <template slot="filter-labels"></template>
     
     <template #permissions_count-body="slotProps">
-      <span class="badge badge-default">دارای <strong>{{ slotProps.row.permissions_count }}</strong> دسترسی</span>
+      <span class="badge badge-default">دارای <strong>{{ slotProps.row.permissions.length }}</strong> دسترسی</span>
     </template>
 
     <template slot="modal">
@@ -89,6 +89,7 @@ export default {
   data() {
     
     return {
+      plural: 'roles',
       type: 'role',
       group: 'user',
       drag: false,
@@ -110,50 +111,6 @@ export default {
       return item.label.toLowerCase().indexOf(query.toLowerCase()) > -1;
     },
 
-    create() {
-      this.setAttr('selected', {
-        display_name: '',
-        description: '',
-        permissions: []
-      })
-
-      this.setAttr('is_open', true)
-      this.setAttr('is_creating', true)
-    },
-    edit(index, row) {
-
-      axios({
-        method: 'GET',
-        url: row.link
-      }).then(({data}) => {
-        
-        this.setAttr('selected', {
-          index: index,
-          link: row.link,
-          display_name: data.data.name,
-          description: data.data.description,
-          permissions: data.data.permissions.map(p => p.id)
-        })
-
-        this.setAttr('is_open', true)
-        this.setAttr('is_creating', false)
-      })
-    },
-    getData() {
-      let data = new FormData();
-
-      ['display_name', 'description'].forEach(field => {
-        let value = this.selected( field )
-
-        data.append(field, value ? value : '')
-      });
-
-      this.selected('permissions').forEach(permission => {
-        data.append('permissions[]', permission);
-      });
-
-      return data
-    }
   },
   computed: {
     display_name: bind('display_name'),
@@ -163,7 +120,7 @@ export default {
     getFields() {
       return [
         {
-          field: 'name',
+          field: 'display_name',
           label: 'نام',
           icon: 'icon-badge'
         }, {
@@ -177,6 +134,19 @@ export default {
         },
       ]
     },
+
+    allQuery() {
+      return `
+        display_name
+        description
+        permissions { id }
+      `
+    }
+  },
+  watch: {
+    permissions(newValue, oldValue) {
+      // console.log( newValue, oldValue )
+    }
   },
   beforeRouteLeave (to, from, next) {
     this.$refs.datatable.closePanel()

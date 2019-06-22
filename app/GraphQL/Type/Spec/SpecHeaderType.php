@@ -27,7 +27,7 @@ class SpecHeaderType extends BaseType
                 'type' => Type::string(),
                 'selectable' => false
             ],
-            'rows' => $this->relationListField('spec_row', 'is_active', 'read-specification'),
+            'rows' => $this->relationListField('spec_row', 'is_active', 'read-spec'),
             'audits' => $this->audits('spec'),
             'is_active' => $this->acceptableField('spec')
         ];

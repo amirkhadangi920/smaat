@@ -210,6 +210,7 @@ export default {
   },
   data() {
     return {
+        plural: 'users',
         type: 'user',
         group: 'user',
     }
@@ -218,6 +219,11 @@ export default {
     this.$store.dispatch('getData', {
       group: 'user',
       type: 'role',
+      query: `roles {
+        data {
+          id name display_name
+        }
+      }`
     })
   },
   methods: {
@@ -260,8 +266,23 @@ export default {
       // console.log('direction => ', direction);
       // console.log('movedKeys => ', movedKeys);
     },
-    create() {},
-    edit(index, row) {
+    getRowData(row)
+    {
+      return axios.get('/graphql/auth', {
+        params: {
+          query: `{
+            singleData: ${this.type} (id: "${row.id}") {
+              national_code
+              permissions { id }
+              roles { id }
+            }
+          }`
+        }
+      })
+    },
+    edit2(index, row) {
+
+      return console.log(row, index)
 
       axios({
         method: 'GET',
@@ -338,7 +359,7 @@ export default {
           label: 'آواتار',
           icon: 'icon-badge'
         }, {
-          field: 'fullname',
+          field: 'full_name',
           label: 'نام و نام خانوادگی',
           icon: 'icon-badge'
         }, {
@@ -351,6 +372,20 @@ export default {
           icon: 'icon-caps-small'
         }
       ]
+    },
+    
+    allQuery() {
+      return `
+        avatar { tiny big }
+        first_name
+        last_name
+        full_name
+        email
+        roles {
+          id
+          display_name
+        }
+      `
     },
   },
   beforeRouteLeave (to, from, next) {

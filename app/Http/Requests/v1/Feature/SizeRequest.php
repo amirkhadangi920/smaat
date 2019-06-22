@@ -14,10 +14,17 @@ class SizeRequest extends MainRequest
      *
      * @return array
      */
-    public function rules()
+    public function rules($args, $method)
     {
+        $this->method = $method;
+
         return [
-            'name'              => [$this->requiredOrFilled(), 'string', 'max:50', new UniqueTenant('sizes')],
+            'name'              => [
+                $this->requiredOrFilled(),
+                'string',
+                'max:50',
+                new UniqueTenant('sizes', $args['id'] ?? null)
+            ],
             'description'       => 'nullable|string|max:255',
             'is_active'         => 'nullable|boolean',
 

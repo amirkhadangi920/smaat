@@ -16,6 +16,22 @@
         }
       }
     "
+    fullInfoQuery="
+      message
+      answers {
+        id
+        writer {
+          id
+          first_name
+          last_name
+          full_name
+          avatar { tiny }
+        }
+        message
+        created_at
+        updated_at
+      }
+    "
   ></base-opinion>
 </template>
 

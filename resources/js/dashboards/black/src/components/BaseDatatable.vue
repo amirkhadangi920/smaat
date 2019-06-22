@@ -146,6 +146,8 @@
         :methods="methods"
         :canDelete="canDelete"
         :canEdit="canEdit"
+        :has_loaded="attr('has_loaded')"
+        :is_grid_view="attr('is_grid_view')"
         :has_times="true"
         :has_operation="true"
       >
@@ -169,6 +171,14 @@
           <slot
             :name="`${item.field}-body`"
             v-bind="slotData"
+          />
+        </template>
+
+        <template #custom-operations="slotProps">
+          <slot
+            name="custom-operations"
+            :row="slotProps.row"
+            :index="slotProps.index"
           />
         </template>
       </base-table>
@@ -899,12 +909,6 @@
     background: transparent;
     margin-bottom: 20px;
     text-align: center;
-  }
-  
-  .data-table-cell {
-    float: right;
-    width: 25%;
-    padding: 10px;
   }
 
   .data-table-cell i.tim-icons {

@@ -12,10 +12,17 @@ class ShippingMethodRequest extends MainRequest
      *
      * @return array
      */
-    public function rules()
+    public function rules($args, $method)
     {
+        $this->method = $method;
+
         return [
-            'name'              => [$this->requiredOrFilled(), 'string', 'max:50', new UniqueTenant('shipping_methods')],
+            'name'              => [
+                $this->requiredOrFilled(),
+                'string',
+                'max:50',
+                new UniqueTenant('shipping_methods', $args['id'] ?? null)
+            ],
             'description'       => 'nullable|string|max:255',
             'logo'              => 'nullable|image|mimes:jpeg,jpg,png,gif|max:1024',
             'cost'              => [$this->requiredOrFilled(), 'digits_between:0,10', 'min:0'],

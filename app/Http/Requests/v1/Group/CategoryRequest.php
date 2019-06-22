@@ -13,11 +13,18 @@ class CategoryRequest extends MainRequest
      *
      * @return array
      */
-    public function rules()
+    public function rules($args, $method)
     {
+        $this->method = $method;
+        
         return [
-            'title'             => [$this->requiredOrFilled(), 'string', 'max:50', new UniqueTenant('categories')],
-            'description'       => 'nullable|string|min:255',
+            'title'             => [
+                $this->requiredOrFilled(),
+                'string',
+                'max:50',
+                new UniqueTenant('categories', $args['id'] ?? null)
+            ],
+            'description'       => 'nullable|string|max:255',
             'logo'              => 'nullable|image|mimes:jpeg,jpg,png,gif|max:1024',
             'is_active'         => 'nullable|boolean',
             

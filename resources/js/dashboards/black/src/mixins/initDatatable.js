@@ -14,8 +14,8 @@ export default {
               data {
                 id
                 ${this.allQuery}
-                created_at
-                updated_at
+
+                ${ this.attr('has_timestamps') ? 'created_at updated_at' : ''}
               }
               chart {
                 month
@@ -31,7 +31,6 @@ export default {
       //   params: this.filters
       // })
       .then(({data}) => {
-        // console.log(data)
         this.setData(data.data.allData.data)
 
         this.setAttr('counts', {

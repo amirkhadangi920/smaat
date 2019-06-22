@@ -21,8 +21,10 @@ class PaymentRequest extends FormRequest
      *
      * @return array
      */
-    public function rules()
+    public function rules($args, $method)
     {
+        $this->method = $method;
+
         return [
             /* User information */
             'first_name'            => 'required|string|max:20',

@@ -40,6 +40,7 @@ class QuestionAndAnswer extends Model implements AuditableContract
     protected $fillable = [
         'product_id',
         'question_id',
+        'title',
         'message',
         'is_accept'
     ];

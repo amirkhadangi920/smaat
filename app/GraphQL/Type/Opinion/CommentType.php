@@ -19,6 +19,9 @@ class CommentType extends BaseType
         return [
             'is_mine' => $this->isMineField(),
             'creator' => $this->creator('comment'),
+            'title' => [
+                'type' => Type::string()
+            ],
             'message' => [
                 'type' => Type::string()
             ],

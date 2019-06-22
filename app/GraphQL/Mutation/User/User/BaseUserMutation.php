@@ -74,8 +74,8 @@ class BaseUserMutation extends MainMutation
      */
     public function afterUpdate($request, $user)
     {
-        $user->syncPermissions( $request->get('permissions') ?? [] );
-        $user->syncRoles( $request->get('roles') ?? [] );
+        $user->syncPermissions( $request->get('permissions', []) );
+        $user->syncRoles( $request->get('roles', [])  );
     }
     
     /**

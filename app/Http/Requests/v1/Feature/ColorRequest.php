@@ -13,10 +13,17 @@ class ColorRequest extends MainRequest
      *
      * @return array
      */
-    public function rules()
+    public function rules($args, $method)
     {
+        $this->method = $method;
+
         return [
-            'name'              => [$this->requiredOrFilled(), 'string', 'max:50', new UniqueTenant('colors')],
+            'name'              => [
+                $this->requiredOrFilled(),
+                'string',
+                'max:50',
+                new UniqueTenant('colors', $args['id'] ?? null)
+            ],
             'code'              => [$this->requiredOrFilled(), 'regex:/^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/', new UniqueTenant('colors')],
             'is_active'         => 'nullable|boolean',
             

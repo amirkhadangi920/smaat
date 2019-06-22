@@ -13,6 +13,15 @@ export default {
             subject: false,
         },
         
+        is_incrementing: {
+            // 
+        },
+
+        has_timestamps: {
+            category: true,
+            subject: true,
+        },
+        
         is_creating: {
             category: false,
             subject: false,
@@ -62,6 +71,10 @@ export default {
 
         form: {
             category: {
+                parent_id: {
+                    type: 'Int',
+                    value: null
+                },
                 title: {
                     type: 'String',
                     value: ''
@@ -69,10 +82,6 @@ export default {
                 description: {
                     type: 'String',
                     value: ''
-                },
-                parent_id: {
-                    type: 'Int',
-                    value: null
                 },
                 logo: {
                     type: 'Upload',
@@ -82,6 +91,10 @@ export default {
                 },
             },
             subject: {
+                parent_id: {
+                    type: 'Int',
+                    value: null
+                },
                 title: {
                     type: 'String',
                     value: ''
@@ -89,10 +102,6 @@ export default {
                 description: {
                     type: 'String',
                     value: ''
-                },
-                parent_id: {
-                    type: 'Int',
-                    value: null
                 },
                 logo: {
                     type: 'Upload',

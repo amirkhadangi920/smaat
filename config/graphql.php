@@ -46,6 +46,13 @@ use App\GraphQL\Query\Shop\{
 // Blog Queries
 use App\GraphQL\Query\Blog\Article\{ ArticlesQuery, ArticleQuery };
 
+// Place Queries
+use App\GraphQL\Query\Place\{
+    Country\CountryQuery, Country\CountriesQuery,
+    Province\ProvinceQuery, Province\ProvincesQuery,
+    City\CityQuery, City\CitiesQuery
+};
+
 // User Queries
 use App\GraphQL\Query\User\{
     User\UserQuery, User\UsersQuery,
@@ -116,7 +123,8 @@ use App\GraphQL\Mutation\User\{
 use App\GraphQL\Mutation\Spec\{
     Spec\CreateSpecMutation, Spec\UpdateSpecMutation, Spec\DeleteSpecMutation,
     SpecHeader\CreateSpecHeaderMutation, SpecHeader\UpdateSpecHeaderMutation, SpecHeader\DeleteSpecHeaderMutation,
-    SpecRow\CreateSpecRowMutation, SpecRow\UpdateSpecRowMutation, SpecRow\DeleteSpecRowMutation
+    SpecRow\CreateSpecRowMutation, SpecRow\UpdateSpecRowMutation, SpecRow\DeleteSpecRowMutation,
+    SpecDefault\CreateSpecDefaultMutation, SpecDefault\UpdateSpecDefaultMutation, SpecDefault\DeleteSpecDefaultMutation
 };
 
 // Feature Types
@@ -303,6 +311,14 @@ return [
                 'article' => ArticleQuery::class,
                 'articles' => ArticlesQuery::class,
 
+                // Place
+                'country' => CountryQuery::class,
+                'countries' => CountriesQuery::class,
+                'province' => ProvinceQuery::class,
+                'provinces' => ProvincesQuery::class,
+                'city' => CityQuery::class,
+                'cities' => CitiesQuery::class,
+
                 // Group
                 'category' => CategoryQuery::class,
                 'categories' => CategoriesQuery::class,
@@ -373,7 +389,7 @@ return [
                 'product' => ProductQuery::class,
                 'products' => ProductsQuery::class,
                 'spec' => SpecQuery::class,
-                'spec' => SpecsQuery::class,
+                'specs' => SpecsQuery::class,
 
                 // Blog
                 'article' => ArticleQuery::class,
@@ -492,6 +508,10 @@ return [
                 'createSpecRow' => CreateSpecRowMutation::class,
                 'updateSpecRow' => UpdateSpecRowMutation::class,
                 'deleteSpecRow' => DeleteSpecRowMutation::class,
+
+                'createSpecDefault' => CreateSpecDefaultMutation::class,
+                'updateSpecDefault' => UpdateSpecDefaultMutation::class,
+                'deleteSpecDefault' => DeleteSpecDefaultMutation::class,
 
                 
                 // User
@@ -646,7 +666,7 @@ return [
     'graphiql' => [
         'prefix' => '/graphiql/{graphql_schema?}',
         'controller' => \Rebing\GraphQL\GraphQLController::class.'@graphiql',
-        'middleware' => [],
+        'middleware' => ['auth:api'],
         'view' => 'graphql::graphiql',
         'display' => env('ENABLE_GRAPHIQL', true),
     ],

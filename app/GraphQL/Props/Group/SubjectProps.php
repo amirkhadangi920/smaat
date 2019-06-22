@@ -3,9 +3,7 @@
 namespace App\GraphQL\Props\Group;
 
 use App\Models\Group\Subject;
-use App\Http\Resources\Group\Subject as SubjectResource;
 use App\Http\Requests\v1\Group\SubjectRequest;
-use App\Http\Resources\Group\SubjectCollection;
 
 trait SubjectProps
 {
@@ -24,18 +22,11 @@ trait SubjectProps
     protected $model = Subject::class;
 
     /**
-     * Resource of this controller respnoses
+     * Name of the field that should upload an image from that
      *
-     * @var [type]
+     * @var string
      */
-    protected $resource = SubjectResource::class;
-    
-    /**
-     * Resource Collection of this controller respnoses
-     *
-     * @var [type]
-     */
-    protected $collection = SubjectCollection::class;
+    protected $image_field = 'logo';
 
     /**
      * The request class of model for validation and authorization

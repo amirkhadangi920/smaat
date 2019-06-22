@@ -29,7 +29,8 @@ export default {
         return this.$store.state[this.group][attr][this.type]
     },
 
-    handleDelete(index, row) {
+    handleDelete(index, row)
+    {
       this.$swal.fire({
         title: `برای پاک کردن ${this.label} ${row.name} مطمئن هستید ؟`,
         text: "در صورت پاک کردن امکان بازگشت اطلاعات نیست !",
@@ -46,7 +47,7 @@ export default {
 
           axios.post('/graphql/auth', {
             query: `mutation {
-              ${mutation} (id: ${row.id}) {
+              ${mutation} (id: ${ this.attr('is_incrementing') ? `"${row.id}"` : row.id }) {
                 status
                 message
               }
@@ -65,13 +66,7 @@ export default {
               })
             }
 
-            this.data().splice(index, 1)
-            this.setData( this.data() )
-            
-            this.setAttr('counts', {
-              total: this.attr('counts').total - 1,
-              trash: this.attr('counts').trash + 1,
-            })
+            this.afterDelete(index, row);
 
             this.$swal.fire({
               title: 'حذف شد',
@@ -80,9 +75,18 @@ export default {
               showConfirmButton: false,
               timer: 1000,
             })
-
           }).catch(error => console.log(error));
         }
+      })
+    },
+    afterDelete(index)
+    {
+      this.data().splice(index, 1)
+      this.setData( this.data() )
+      
+      this.setAttr('counts', {
+        total: this.attr('counts').total - 1,
+        trash: this.attr('counts').trash + 1,
       })
     },
     handleSelectionChange(items) {
@@ -114,11 +118,17 @@ export default {
             ids = [...ids, this.data()[item].id]
           })
 
+          if ( this.attr('is_incrementing') )
+            ids = '"' + ids.join('", "') + '"'
+
+          else
+            ids.join(',')
+          
           const mutation = voca.camelCase(`delete ${this.type}`)
 
           axios.post('/graphql/auth', {
             query: `mutation {
-              ${mutation} (ids: [${ids.join(',')}]) {
+              ${mutation} (ids: [${ids}]) {
                 status
                 message
               }

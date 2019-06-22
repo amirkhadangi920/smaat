@@ -13,10 +13,17 @@ class WarrantyRequest extends MainRequest
      *
      * @return array
      */
-    public function rules()
+    public function rules($args, $method)
     {
+        $this->method = $method;
+
         return [
-            'title'             => [$this->requiredOrFilled(), 'string', 'max:50', new UniqueTenant('warranties')],
+            'title'             => [
+                $this->requiredOrFilled(),
+                'string',
+                'max:50',
+                new UniqueTenant('warranties', $args['id'] ?? null)
+            ],
             'description'       => 'nullable|string|max:255',
             'expire'            => [$this->requiredOrFilled(), 'string', 'max:20'],
             'logo'              => 'nullable|image|mimes:jpeg,jpg,png,gif|max:1024',

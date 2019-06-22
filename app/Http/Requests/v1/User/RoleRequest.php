@@ -13,19 +13,21 @@ class RoleRequest extends MainRequest
      *
      * @return array
      */
-    public function rules()
+    public function rules($args, $method)
     {
-        $rules = [
-            'display_name'  => ['required', 'string', 'max:100', new UniqueTenant('roles')],
+        $this->method = $method;
+        
+        return [
+            'display_name'  => [
+                'required',
+                'string',
+                'max:100',
+                new UniqueTenant('roles', $args['id'] ?? null)
+            ],
             'description'   => 'nullable|string|max:255',
-            'permissions'   => ['required', 'array', new ExistsTenant],
-            'permissions.*' => 'required|integer',
+            'permissions'   => ['required', 'array'],
+            'permissions.*' => 'required|integer|exists:permissions,id',
             'is_active'     => 'nullable|boolean',
         ];
-        
-        if ( request()->method() !== 'POST' )
-            $rules['display_name'] = 'required|string|max:100';
-
-        return $rules;
     }
 }

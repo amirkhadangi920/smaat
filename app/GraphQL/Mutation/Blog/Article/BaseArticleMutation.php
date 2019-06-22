@@ -39,7 +39,7 @@ class BaseArticleMutation extends MainMutation
             'subjects' => [
                 'type' => Type::listOf( Type::int() )
             ],
-            'keywords' => [
+            'tags' => [
                 'type' => Type::listOf( Type::string() )
             ],
             'is_active' => [
@@ -58,7 +58,7 @@ class BaseArticleMutation extends MainMutation
     public function afterCreate($request, $article)
     {
         $article->subjects()->attach( $request->get('subjects') );
-        $article->attachTags( $request->get('keywords') );
+        $article->attachTags( $request->get('tags') );
     }
 
     /**
@@ -71,6 +71,6 @@ class BaseArticleMutation extends MainMutation
     public function afterUpdate($request, $article)
     {
         $article->subjects()->sync( $request->get('subjects') );
-        $article->syncTags( $request->get('keywords') );
+        $article->syncTags( $request->get('tags') );
     }
 }

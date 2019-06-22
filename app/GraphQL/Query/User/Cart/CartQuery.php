@@ -14,7 +14,7 @@ class CartQuery extends MainQuery
 {
     public function type()
     {
-        return Type::listOf( \GraphQL::type('order_item') );
+        return Type::listOf( \GraphQL::type('me_order_item') );
     }
 
     public function args()

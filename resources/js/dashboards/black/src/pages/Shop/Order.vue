@@ -5,6 +5,7 @@
     label="سفارش"
     :fields="getFields"
     :canSearch="false"
+    :canEdit="false"
     
     :methods="{
       create: create,
@@ -51,7 +52,7 @@
 
     <template #custom-operations="slotProps">
       <el-tooltip content="مشاهده اطلاعات">
-        <base-button simple class="ml-2" @click="$router.push(`/panel/order/${slotProps.row.id}`)" type="info" size="sm" icon>
+        <base-button class="ml-2" @click="$router.push(`/panel/order/${slotProps.row.id}`)" type="info" size="sm" icon>
           i
         </base-button>
       </el-tooltip>
@@ -87,6 +88,7 @@ export default {
   ],
   data() {
     return {
+      plural: 'orders',
       type: 'order',
       group: 'shop',
     }
@@ -95,6 +97,7 @@ export default {
     this.$store.dispatch('getData', {
       group: 'shop',
       type: 'order_status',
+      query: `order_statuses(per_page: 30) { data { id title color } }`
     })
   },
   created() {
@@ -202,7 +205,25 @@ export default {
           icon: 'icon-caps-small'
         },
       ]
-    }
+    },
+
+    allQuery() {
+      return `
+        user {
+          id
+          first_name
+          last_name
+          full_name
+          avatar { tiny }
+        }
+        offer
+        total
+        status: order_status {
+          id
+          title
+          color
+        }`
+    },
   },
   beforeRouteLeave (to, from, next) {
     this.$refs.datatable.closePanel()

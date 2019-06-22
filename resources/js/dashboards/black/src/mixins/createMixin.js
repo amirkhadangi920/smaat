@@ -48,6 +48,21 @@ export default {
     },
     edit(index, row)
     {
+      if ( typeof this.getRowData === "function" )
+      {
+        const rowData = row
+        row = this.getRowData(row);
+
+        return row.then( ({data}) => this.handleEdit(index, {
+          ...rowData,
+          ...data.data.singleData
+        }))
+      }
+
+      return this.handleEdit(index, row)
+    },
+    handleEdit(index, row)
+    {
       this.fillFormForEditing(row)
 
       this.setAttr('selected', {
@@ -80,7 +95,6 @@ export default {
     {
       this.storeInServer({
         callback: ({data}) => {
-
           let index = this.attr('selected').index;
           this.data()[index] = data;
 
@@ -101,7 +115,7 @@ export default {
       {
         params += `$${key}: ${form[key].type}, `
         args += `${key}: $${key}, `
-        variables[key] = form[key].resolve ? form[key].resolve( form[key].value ) : form[key].value
+        variables[key] = form[key].clientResolver ? form[key].clientResolver( form[key].value ) : form[key].value
       }
 
       params = params.substr(0, params.length - 2)
@@ -132,26 +146,30 @@ export default {
       )
 
       const form = this.getAllFormData()
-
-      return console.log( form.variables )
-  
+      
       if ( !this.attr('is_creating') )
-        form.args = `id: ${ this.attr('selected').id }, ` + form.args
+      {
+        if ( this.attr('is_incrementing') )
+          form.args = `id: "${ this.attr('selected').id }", ` + form.args
 
+        else
+          form.args = `id: ${ this.attr('selected').id }, ` + form.args
+      }
 
       const query = {
         query: `mutation manageData(${form.params}) {
           data: ${mutation} (${form.args}) {
             id
             ${this.allQuery}
-            created_at
-            updated_at
+
+            ${ this.attr('has_timestamps') ? 'created_at updated_at' : ''}
           }
         }`,
         variables: form.variables
       }
 
       let fd = new FormData();
+
       fd.append('operations' , JSON.stringify(query));
 
       if ( this.attr('image_field') )

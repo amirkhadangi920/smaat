@@ -19,6 +19,9 @@ class QuestionAndAnswerType extends BaseType
         return [
             'is_mine' => $this->isMineField(),
             'creator' => $this->creator('question_and_answer'),
+            'title' => [
+                'type' => Type::string()
+            ],
             'message' => [
                 'type' => Type::string()
             ],

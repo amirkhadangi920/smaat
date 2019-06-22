@@ -11,11 +11,6 @@ class OrderStatusesQuery extends BaseOrderStatusQuery
 
     protected $has_more_args = true;
     
-    public function type()
-    {
-        return Type::listOf( \GraphQL::type( $this->type ) );
-    }
-    
     public function get_args()
     {
         return [
@@ -23,10 +18,5 @@ class OrderStatusesQuery extends BaseOrderStatusQuery
                 'type' => Type::boolean()
             ],
         ];
-    }
-
-    public function getPortionOfData($data, $args)
-    {
-        return $data->get();
     }
 }

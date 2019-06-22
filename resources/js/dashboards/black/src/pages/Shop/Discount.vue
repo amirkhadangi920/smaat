@@ -83,6 +83,7 @@ export default {
   ],
   data() {
     return {
+      plural: 'discounts',
       type: 'discount',
       group: 'shop',
     }
@@ -139,7 +140,21 @@ export default {
           icon: 'icon-caps-small'
         },
       ]
-    }
+    },
+    allQuery() {
+      return `
+        title
+        started_at
+        expired_at
+        categories {
+          id
+          title
+        }
+        logo {
+          tiny
+          big
+        }`
+    },
   },
   beforeRouteLeave (to, from, next) {
     this.$refs.datatable.closePanel()

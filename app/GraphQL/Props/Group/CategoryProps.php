@@ -3,9 +3,7 @@
 namespace App\GraphQL\Props\Group;
 
 use App\Models\Group\Category;
-use App\Http\Resources\Group\Category as CategoryResource;
 use App\Http\Requests\v1\Group\CategoryRequest;
-use App\Http\Resources\Group\CategoryCollection;
 
 trait CategoryProps
 {
@@ -24,18 +22,11 @@ trait CategoryProps
     protected $model = Category::class;
 
     /**
-     * Resource of this controller respnoses
+     * Name of the field that should upload an image from that
      *
-     * @var [type]
+     * @var string
      */
-    protected $resource = CategoryResource::class;
-
-    /**
-     * Resource Collection of this controller respnoses
-     *
-     * @var [type]
-     */
-    protected $collection = CategoryCollection::class;
+    protected $image_field = 'logo';
 
     /**
      * The request class of model for validation and authorization

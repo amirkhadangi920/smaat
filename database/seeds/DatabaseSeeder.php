@@ -11,6 +11,12 @@ class DatabaseSeeder extends CustomSeeder
      */
     public function run()
     {
+        // for($i = 0; $i < 100; $i++)
+        // {
+        //     $this->call(ProductTablesSeeder::class);    
+        // }
+        // die('fuck end');
+
         $this->call(LocationTablesSeeder::class);
 
         $this->call(UserTableSeeder::class);

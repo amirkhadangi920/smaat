@@ -65,7 +65,7 @@
     </template>
     
     <template v-slot:category-body="slotProps">
-      <a href="#">{{ slotProps.row.category.title }}</a>
+      <a href="#">{{ slotProps.row.category ? slotProps.row.category.title : '' }}</a>
     </template>
 
     <template slot="modal">
@@ -154,13 +154,9 @@ export default {
   ],
   data() {
     return {
-        type: 'spec',
-        group: 'feature',
-
-        defaultProps: {
-          children: 'childs',
-          label: 'title',
-        },
+      plural: 'specs',
+      type: 'spec',
+      group: 'feature',
     }
   },
   validations: {
@@ -186,36 +182,11 @@ export default {
     closePanel() {
       this.$refs.datatable.closePanel();
     },
-    create() {
-      this.setAttr('selected', {
-        name: '',
-        description: '',
-        categories: [],
-        imageFile: null,
-        imageUrl: ''
-      })
+    edit(index, row)
+    {
+      this.setAttr('is_creating', false)
 
-      // this.$refs.categories.setCheckedKeys([]);
-
-      this.setAttr('is_open', true)
-      this.setAttr('is_creating', true)
-    },
-    edit(index, row) {
-
-      console.log(row)
-      axios(row.link).then(({data}) => {
-        console.log(data.data.headers);
-        
-        this.setAttr('selected', {
-          index: index,
-          link: row.link,
-          title: data.title,
-          description: data.description
-        })
-
-        this.setAttr('is_open', true)
-        this.setAttr('is_creating', false)
-      })
+      this.$router.push(`/panel/specification/${row.id}`)
     },
     getData() {
       let data = new FormData();
@@ -275,6 +246,16 @@ export default {
         }
       ]
     },
+    allQuery() {
+      return `
+        title
+        description
+        category {
+          id
+          title
+        }
+      `
+    }
   },
   beforeRouteLeave (to, from, next) {
     this.$refs.datatable.closePanel()

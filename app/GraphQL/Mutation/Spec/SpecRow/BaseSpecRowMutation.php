@@ -29,19 +29,22 @@ class BaseSpecRowMutation extends MainMutation
             'description' => [
                 'type' => Type::string()
             ],
-            'label' => [
+            'prefix' => [
                 'type' => Type::string()
             ],
-            'values' => [
-                'type' => Type::listOf( Type::string() )
+            'postfix' => [
+                'type' => Type::string()
             ],
             'help' => [
                 'type' => Type::string()
             ],
-            'multiple' => [
+            'is_multiple' => [
                 'type' => Type::boolean()
             ],
-            'multiple' => [
+            'is_required' => [
+                'type' => Type::boolean()
+            ],
+            'is_filterable' => [
                 'type' => Type::boolean()
             ],
             'is_active' => [

@@ -10,11 +10,6 @@ class RolesQuery extends BaseRoleQuery
     use AllQuery;
     
     protected $has_more_args = true;
-    
-    public function type()
-    {
-        return Type::listOf( \GraphQL::type( $this->type ) );
-    }
 
     public function get_args()
     {
@@ -23,10 +18,5 @@ class RolesQuery extends BaseRoleQuery
                 'type' => Type::boolean()
             ]
         ];
-    }
-
-    public function getPortionOfData($data, $args)
-    {
-        return $data->get();
     }
 }

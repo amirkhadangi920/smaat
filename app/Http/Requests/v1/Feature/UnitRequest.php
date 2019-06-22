@@ -13,10 +13,17 @@ class UnitRequest extends MainRequest
      *
      * @return array
      */
-    public function rules()
+    public function rules($args, $method)
     {
+        $this->method = $method;
+
         return [
-            'title'             => [$this->requiredOrFilled(), 'string', 'max:50', new UniqueTenant('units')],
+            'title'             => [
+                $this->requiredOrFilled(),
+                'string',
+                'max:50',
+                new UniqueTenant('units', $args['id'] ?? null)
+            ],
             'description'       => 'nullable|string|max:255',
             'is_active'         => 'nullable|boolean',
 

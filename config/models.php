@@ -27,6 +27,8 @@ use App\Models\Product\{
     Variation
 };
 use App\Models\Spec\Spec;
+use App\User;
+use App\Role;
 
 return [
     // Blog models
@@ -60,4 +62,8 @@ return [
 
     // Specification models
     'spec'                  => Spec::class,
+
+    // User models
+    'user'                  => User::class,
+    'role'                  => Role::class
 ];

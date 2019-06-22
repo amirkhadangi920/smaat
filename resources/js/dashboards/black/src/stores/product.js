@@ -40,6 +40,16 @@ export default {
             question_and_answer: false,
         },
         
+        is_incrementing: {
+            product: true 
+        },
+
+        has_timestamps: {
+            product: true,
+            review: true,
+            question_and_answer: true,
+        },
+        
         is_creating: {
             product: false,
             review: false,

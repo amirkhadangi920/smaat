@@ -34,6 +34,7 @@ class Review extends Model implements AuditableContract, LikeableContract
         // 'ranks',
         'advantages',
         'disadvantages',
+        'title',
         'message',
         'is_accept'
     ];

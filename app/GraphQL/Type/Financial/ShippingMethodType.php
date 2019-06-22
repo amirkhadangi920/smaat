@@ -19,7 +19,7 @@ class ShippingMethodType extends BaseType
         return [
             'is_mine' => $this->isMineField(),
             'creator' => $this->creator('shipping_method'),
-            'title' => [
+            'name' => [
                 'type' => Type::string(),
                 'selectable' => false
             ],

@@ -15,6 +15,6 @@ class BaseSpecQuery extends MainQuery
 
     public function authorize(array $args)
     {
-        return $this->checkPermission('read-specification');
+        return $this->checkPermission('read-spec');
     }
 }

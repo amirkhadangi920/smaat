@@ -159,7 +159,7 @@ class MainMutation extends Mutation
 
         if ( $model )
         {
-            foreach($model->logo as $item)
+            foreach($model->$field_name as $item)
             {
                 if ( file_exists( public_path($item) ) )
                     unlink( public_path($item) );

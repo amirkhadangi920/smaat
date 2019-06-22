@@ -115,7 +115,7 @@ class BaseType extends GraphQLType
             if ( $paginated )
                 $query->offset( (($args['page'] ?? 1 ) - 1) * 10 )->take(10);
 
-            return $query;
+            return $query->orderBy('created_at', 'desc');
         };
     }
 

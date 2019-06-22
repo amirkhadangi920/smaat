@@ -13,16 +13,22 @@ class UserRequest extends MainRequest
      *
      * @return array
      */
-    public function rules()
+    public function rules($args, $method)
     {
-        $rules = [
+        $this->method = $method;
+        
+        return [
             'first_name'        => 'nullable|string|max:20',
             'first_name'        => 'nullable|string|max:30',
             'phones'            => 'nullable|array',
             'phones.*'          => ['required', 'string', 'regex:/09(1[0-9]|3[1-9]|2[1-9])-?[0-9]{3}-?[0-9]{4}/'],
             'social_links'      => 'nullable|array',
             'social_links.*'    => 'required|string|max:100',
-            'email'             => ['required', new UniqueTenant('users')],
+            'email'             => [
+                'required',
+                'email',
+                new UniqueTenant('users', $args['id'] ?? null)
+            ],
             'avatar'            => 'nullable|image|mimes:jpg,jpeg,png|max:1024',
             'address'           => 'nullable|string|max:255',
             'postal_code'       => 'nullable|digits:10',
@@ -36,10 +42,5 @@ class UserRequest extends MainRequest
             'roles'             => ['nullable', 'array', new ExistsTenant],
             'roles.*'           => 'required|integer',
         ];
-
-        if ( $this->method() === 'PUT' && $this->route('user')->email === $this->email )
-            $rules['email'] = 'required';
-
-        return $rules;
     }
 }

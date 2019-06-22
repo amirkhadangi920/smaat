@@ -73,44 +73,10 @@ export default {
   ],
   data() {
     return {
+      plural: 'order_statuses',
       type: 'order_status',
       group: 'shop',
     }
-  },
-  methods: {
-    create() {
-      this.setAttr('selected', {
-        title: '',
-        description: '',
-        color: ''
-      })
-
-      this.setAttr('is_open', true)
-      this.setAttr('is_creating', true)
-    },
-    edit(index, row) {
-      this.setAttr('selected', {
-        index: index,
-        link: row.link,
-        title: row.title,
-        description: row.description,
-        color: row.color
-      })    
-
-      this.setAttr('is_open', true)
-      this.setAttr('is_creating', false)
-    },
-    getData() {
-      let data = new FormData();
-
-      ['title', 'description', 'color'].forEach(field => {
-        let value = this.selected( field )
-
-        data.append(field, value ? value : '')
-      });
-
-      return data
-    },
   },
   validations: {
     title: {
@@ -145,6 +111,10 @@ export default {
           icon: 'icon-badge'
         }
       ]
+    },
+    
+    allQuery() {
+      return `title description color`
     },
   },
   beforeRouteLeave (to, from, next) {

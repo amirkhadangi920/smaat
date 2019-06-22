@@ -30,8 +30,8 @@ $factory->define(App\Models\Spec\SpecRow::class, function () use($faker) {
         'user_id'           => App\User::all()->random()->id,
         'title'             => $faker->name(),
         'description'       => nullable( Faker::sentence() ),
-        'prefix'            => nullable( $faker->name() ),
-        'postfix'           => nullable( $faker->name() ),
+        'prefix'            => nullable( $faker->word ),
+        'postfix'           => nullable( $faker->word ),
         'help'              => nullable( Faker::sentence() ),
         'is_detailable'     => $faker->boolean(10),
         'is_filterable'     => $faker->boolean(30),
@@ -42,9 +42,8 @@ $factory->define(App\Models\Spec\SpecRow::class, function () use($faker) {
 });
 
 $factory->define(App\Models\Spec\SpecDefault::class, function () use($faker) {
-
     return [
-        'value'         => [ $faker->name(), Faker::sentence()][ $faker->boolean(60) ],
+        'value' => $faker->name(),
     ];
 });
 

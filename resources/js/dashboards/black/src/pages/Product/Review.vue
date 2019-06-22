@@ -14,6 +14,12 @@
         }
       }
     "
+    fullInfoQuery="
+      message
+      ranks { title value }
+      advantages
+      disadvantages
+    "
   ></base-opinion>
 </template>
 

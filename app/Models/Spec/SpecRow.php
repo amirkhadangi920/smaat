@@ -161,6 +161,15 @@ class SpecRow extends Model implements AuditableContract
     }
 
     /**
+     * If i want to give one spec data i use it.
+     *
+     */
+    public function datas()
+    {
+        return $this->hasMany(SpecData::class, 'spec_row_id');
+    }
+
+    /**
      * Get the all of the spec data that owned spec row 
      *
      */

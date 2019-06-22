@@ -87,7 +87,7 @@
               <el-menu-item v-if="hasPermissions('shipping_method')">
                 <sidebar-link to="/panel/shipping_method" :name="$t('sidebar.list') + ' ' + $t('sidebar.shipping_method')" icon="tim-icons icon-bag-16"/>      
               </el-menu-item>
-              <el-menu-item v-if="hasPermissions('order_stauts')">
+              <el-menu-item v-if="hasPermissions('order_status')">
                 <sidebar-link to="/panel/order_status" :name="$t('sidebar.list') + ' ' + $t('sidebar.order_status')" icon="tim-icons icon-bag-16"/>      
               </el-menu-item>
               <el-menu-item v-if="hasPermissions('discount')">

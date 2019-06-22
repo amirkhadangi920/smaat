@@ -12,17 +12,29 @@ class ProductRequest extends MainRequest
      *
      * @return array
      */
-    public function rules()
+    public function rules($args, $method)
     {
+        $this->method = $method;
+
         return [
-            'name'              => ['required', 'string', 'max:50', new UniqueTenant('products')],
+            'name'              => [
+                'required',
+                'string',
+                'max:50',
+                new UniqueTenant('products', $args['id'] ?? null)
+            ],
             'second_name'       => 'nullable|string|max:50',
-            'code'              => ['nullable', 'string', 'max:20', new UniqueTenant('products')],
+            'code'              => [
+                'nullable',
+                'string',
+                'max:20',
+                new UniqueTenant('products', $args['id'] ?? null)
+            ],
             'description'       => 'nullable|string|max:255',
             'note'              => 'nullable|string|max:255',
             'aparat_video'      => 'nullable|url',
             'review'            => 'nullable|string',
-            'keywords'          => 'nullable|array',  
+            'keywords'          => 'nullable|array',
             'keywords.*'        => 'required|string|max:100',  
             'photos'            => 'required|array|min:1',
             'photos.*'          => 'required|image|mimes:jpeg,jpg,png,gif|max:1024',

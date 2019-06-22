@@ -1,10 +1,10 @@
 <template>
   <transition name="fade">
-    <div v-show="attr('has_loaded')">
+    <div v-show="has_loaded">
 
       <div class="row" v-if="false">
         <transition name="fade">
-          <div class="col-12 pt-3 animated bounceInLeft delay-last filters-row" v-show="attr('has_loaded')" dir="rtl">
+          <div class="col-12 pt-3 animated bounceInLeft delay-last filters-row" v-show="has_loaded" dir="rtl">
             <slot name="filter-labels"></slot>
           </div>
         </transition>
@@ -12,7 +12,7 @@
 
       <transition name="fade">
         <div class="row">
-          <div class="col-12 data-table animated bounceInUp delay-last" dir="rtl" v-show="!attr('is_grid_view')">
+          <div class="col-12 data-table animated bounceInUp delay-last" dir="rtl" v-show="!is_grid_view">
             <ul class="data-table-header p-2 d-flex justify-content-center">
               <li
                 class="data-table-cell p-2 d-flex align-items-center justify-content-center text-muted"
@@ -64,7 +64,7 @@
                   v-for="(item, index) in tableData"
                   :key="item.id"
                   class="data-table-row"
-                  :style="{ transform: 'scale(0)', animationDelay: is_finished ? '0ms' : `${1000 + index * 50}ms`}"
+                  :style="{ transform: `scale(${has_animation ? 0 : 1})`, animationDelay: is_finished ? '0ms' : `${1000 + index * 50}ms`}"
                 >
                   <ul class="p-2 d-flex justify-content-center">
                     <span class="cavity-effect"></span>
@@ -88,19 +88,40 @@
 
                   <span class="operation-cell" v-if="has_operation">
                     <el-tooltip :content="'ویرایش ' + label" placement="right">
-                      <base-button v-if="canEdit" @click="methods.edit(index, item)" class="hvr-icon-spin" :disabled="can(`update-${type}`)" :type="can(`create-${type}`) ? 'default' : 'warning'" size="sm" icon>
+                      <base-button
+                        v-if="canEdit"
+                        @click="methods.edit(index, item)"
+                        class="hvr-icon-spin"
+                        :disabled="can(`update-${type}`)"
+                        :type="can(`update-${type}`) ? 'default' : 'warning'"
+                        size="sm"
+                        icon
+                      >
                         <i class="tim-icons icon-pencil hvr-icon" :style="{ fontSize: '18px !important' }"></i>
                       </base-button>
                     </el-tooltip>
 
                     <el-tooltip :content="'حذف ' + label" placement="right">
-                      <base-button v-if="canDelete" @click="handleDelete(index, item)" :disabled="can(`delete-${type}`)" :type="can(`create-${type}`) ? 'default' : 'danger'" size="sm" icon>
+                      <base-button 
+                        v-if="canDelete"
+                        @click="methods.deleteSingle ?  methods.deleteSingle(index, item) : handleDelete(index, item)"
+                        :disabled="can(`delete-${type}`)"
+                        :type="can(`delete-${type}`) ? 'default' : 'danger'"
+                        size="sm"
+                        icon
+                      >
                         <i class="tim-icons icon-trash-simple" :style="{ fontSize: '18px !important' }"></i>
                       </base-button>
                     </el-tooltip>
+
+                    <slot
+                      name="custom-operations"
+                      :row="item"
+                      :index="index"
+                    />
                   </span>
 
-                  <span class="time-lables" :style="{ fontSize: '10px' }">
+                  <span class="time-lables" :style="{ fontSize: '10px' }" v-if="has_times">
                     <el-tooltip class="created-at-label" :content="item.created_at | created" placement="left">
                       <p><i class="tim-icons icon-check-2"></i> {{ item.created_at | ago }}</p>
                     </el-tooltip>
@@ -120,12 +141,11 @@
               
             <transition name="fade">
               <md-empty-state
-                v-if="false"
-                v-show="data().length === 0"
+                v-show="tableData.length === 0"
                 md-icon="search"
                 md-label="متاسفانه هیچ داده ای یافت نشد :("
                 md-description="اگر در حالت جستجو نیستید و هیچ فیلتری نیز اعمال نکرده اید ، میتوانید با کلیک بر روی دکمه زیر یک داده جدید ثبت کنید">
-                <base-button @click="methods.create" :disabled="can(`create-${type}`)" size="sm" :type="can(`create-${type}`) ? 'default' : 'info'" class="pull-left">
+                <base-button v-if="methods.create" @click="methods.create()" :disabled="can(`create-${type}`)" size="sm" :type="can(`create-${type}`) ? 'default' : 'info'" class="pull-left">
                   <i class="tim-icons icon-pencil"></i>
                   افزودن {{ label }} جدید
                 </base-button>
@@ -136,7 +156,7 @@
           <transition-group
             class="col-12 data-grid"
             tag="div"
-            v-show="attr('is_grid_view')"
+            v-show="is_grid_view"
             v-if="false"
           >
             <div
@@ -193,18 +213,11 @@
   import FiltersHelper from '../mixins/filtersHelper'
 
   import {Tooltip} from 'element-ui'
-  import {Modal} from '../components'
   import ICountUp from 'vue-countup-v2';
   import {BaseAlert} from '../../src/components'
   import Checkbox from './Checkbox.vue'
-  import LineChart from '../components/Charts/LineChart';
   import { FlipClock } from '@mvpleung/flipclock';
-  
-  import * as chartConfigs from '../components/Charts/config';
-  import config from '../config';
-  import 'owl.carousel/dist/assets/owl.carousel.css';
 
-  import { mapMutations } from 'vuex';
   import 'hover.css'
   import 'animate.css'
   import anime from 'animejs'
@@ -226,6 +239,18 @@
       fields: {
         type: Array,
         required: true
+      },
+      has_loaded: {
+        type: Boolean,
+        required: true,
+      },
+      has_animation: {
+        type: Boolean,
+        default: true,
+      },
+      is_grid_view: {
+        type: Boolean,
+        default: false,
       },
       has_times: {
         type: Boolean,
@@ -253,13 +278,9 @@
       },
     },
     components: {
-      LineChart,
-      Modal,
       Tooltip,
-      BaseAlert,
       ICountUp,
       Checkbox,
-      FlipClock
     },
     mixins: [
         deleteMixin,
@@ -268,117 +289,11 @@
     ],
     data() {
       return {
-        layout: this.attr('is_grid_view'),
+        layout: this.is_grid_view,
         
         entered_count: 0,
         is_finished: false,
       }
-    },
-    created() {
-      return;
-
-      setTimeout( () => {
-        const startAt = 140
-        const endAt = 250
-        var setAnims = false
-        var frame, duration;
-
-        setInterval(() => {
-          // document.querySelector('.row.details').classList.toggle('small')          
-        }, 4000);
-
-
-        document.querySelector('.main-panel').addEventListener('scroll', (e) => {
-
-          if ( e.srcElement.scrollTop > startAt )
-          {
-            if ( !setAnims ) {
-              setAnims = true
-
-              animation.reverse();
-              animation.play()
-            }
-
-            const el = document.querySelector('.row.details');
-            const bg = document.querySelector('.content .background')
-            
-            const width = el.clientWidth;
-            const height = el.clientHeight;
-
-            el.style.position = 'fixed'
-            el.style.zIndex = 10
-            el.style.width = `${width}px`
-            el.style.top = `${20}px`
-
-            bg.style.position = 'fixed'
-            bg.style.top = '-190px'
-
-            document.querySelector('.row.table').style.marginTop = `${height}px`
-          } else {
-            if ( setAnims ) {
-              setAnims = false
-
-              animation.reverse();
-              animation.play();
-            }
-
-            const el = document.querySelector('.row.details');
-            const bg = document.querySelector('.content .background')
-
-            el.style.position = 'relative'
-            bg.style.position = 'absolute'
-            bg.style.top = '0px'
-            document.querySelector('.row.table').style.marginTop = '0px'
-          }
-
-          // console.log( e.srcElement.offsetHeight )
-          // console.log( Math.abs( e.srcElement.scrollHeight - e.srcElement.scrollTop ) / e.srcElement.offsetHeight )
-          // console.log( ( e.srcElement.scrollHeight - e.srcElement.offsetHeight ) - e.srcElement.scrollTop )
-        })
-      }, 500)
-
-      window.addEventListener('scroll', function(e){
-        // var scrollPos = window.scrollY
-        // var winHeight = window.innerHeight
-        // var docHeight = document.documentElement.scrollHeight
-        // var perc = 100 * scrollPos / (docHeight - winHeight)
-        // vm.$el.style.width = perc + '%'
-      })
-    
-      setTimeout(() => {
-          // anime({
-          //   targets: '.animation-circle',
-          //   top() {
-          //     return anime.random(0, 50)
-          //   },
-          //   left() {
-          //     return anime.random(0, 50)
-          //   },
-          //   loop: true,
-          //   duration: 5000,
-          //   direction: 'alternate'
-          // })
-      }, 1000);
-
-
-      require('owl.carousel/dist/owl.carousel.js')
-    
-      setTimeout( () => $('.owl-carousel').owlCarousel({
-          rtl:true,
-          margin:10,
-          nav:false,
-          responsive:{
-              0:{
-                  items:1
-              },
-              600:{
-                  items:2
-              },
-              1000:{
-                  items:3
-              }
-          }
-      }), 200);
     },
     computed: {
       all_items_selected: {
@@ -387,35 +302,10 @@
         },
         set (value) { }
       },
-      greenLineChart() {
-        return {
-          extraOptions: chartConfigs.greenChartOptions,
-          chartData: {
-            labels: this.$store.state[this.group].charts[this.type].labels,
-            datasets: [{
-              label: `تعداد ${this.label} های ثبت شده `,
-              fill: true,
-              borderColor: config.colors.danger,
-              borderWidth: 2,
-              borderDash: [],
-              borderDashOffset: 0.0,
-              pointBackgroundColor: config.colors.danger,
-              pointBorderColor: 'rgba(255,255,255,0)',
-              pointHoverBackgroundColor: config.colors.danger,
-              pointBorderWidth: 20,
-              pointHoverRadius: 4,
-              pointHoverBorderWidth: 15,
-              pointRadius: 4,
-              data: this.$store.state[this.group].charts[this.type].data,
-            }]
-          },
-          gradientColors: ['rgba(66,134,121,0.15)', 'rgba(66,134,121,0.0)', 'rgba(66,134,121,0)'],
-          gradientStops: [1, 0.4, 0],
-        }
-      }
     },
     methods: {
-      enter(el, done) {
+      enter(el, done)
+      {
         el.style.marginTop = `-${el.offsetHeight + 15}px`
 
         anime({
@@ -469,7 +359,7 @@
           $('.data-grid').removeClass(['animated', 'bounceInUp', 'delay-last']).addClass(['animated', 'bounceOutDown'])
 
         setTimeout( () => {
-          this.setAttr('is_grid_view', value)
+          this.is_grid_view = value
 
           if ( value ) 
             $('.data-table').removeClass(['animated', 'bounceOutDown']).addClass(['animated', 'bounceInUp', 'delay-last'])
@@ -520,15 +410,16 @@
   .btn-success {
     box-shadow: 0px 4px 20px -3px #007bff, 0px 4px 18px -8px #000 !important;
   }
-  .data-table .btn-icon.btn-warning {
+
+  .data-table .operation-cell {
     position: absolute;
     top: 7PX;
     left: -10px;
   }
-  .data-table .btn-icon.btn-danger {
-    position: absolute;
-    top: 45PX;
-    left: -10px;
+  .data-table .btn-icon.btn-warning,
+  .data-table .btn-icon.btn-danger,
+  .data-table .btn-icon.btn-default {
+    display: block;
   }
   .data-table-cell .tim-icons.icon-trash-simple, .data-table-cell .tim-icons.icon-pencil {
     color: #fff !important;
@@ -600,7 +491,7 @@
   
   .data-table-cell {
     float: right;
-    width: 25%;
+    width: 100%;
     padding: 10px;
     z-index: 50;
   }

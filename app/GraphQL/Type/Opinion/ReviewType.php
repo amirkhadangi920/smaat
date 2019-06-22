@@ -28,6 +28,9 @@ class ReviewType extends BaseType
             'disadvantages' => [
                 'type' => Type::listOf( Type::string() )
             ],
+            'title' => [
+                'type' => Type::string()
+            ],
             'message' => [
                 'type' => Type::string()
             ],

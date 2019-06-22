@@ -32,7 +32,11 @@
               :auto-upload="false"
               :show-file-list="false"
               :on-change="addImage">
-              <img v-if="$store.state[group].selected[type].imageUrl" :src="$store.state[group].selected[type].imageUrl" class="avatar">
+              <img
+                v-if="$store.state[group].form[type].logo.url"
+                :src="$store.state[group].form[type].logo.url"
+                class="avatar"
+              />
               <i v-else class="el-icon-plus avatar-uploader-icon"></i>
             </el-upload>
             <small slot="helperText" id="emailHelp" class="form-text text-muted">لوگوی مورد نظر خود را انتخاب کنید</small>
@@ -106,6 +110,7 @@ export default {
     ICountUp
   },
   mixins: [
+    Binding,
     validationMixin,
     initDatatable,
     createMixin,
@@ -113,6 +118,7 @@ export default {
   ],
   data() {
     return {
+        plural: 'shipping_methods',
         type: 'shipping_method',
         group: 'shop',
 
@@ -138,68 +144,7 @@ export default {
     }
   },
   methods: {
-    closePanel() {
-      this.$refs.datatable.closePanel();
-    },
-    create() {
-      this.setAttr('selected', {
-        name: '',
-        description: '',
-        cost: null,
-        minimum: null,
-        imageFile: null,
-        imageUrl: '',
-      })
-
-      this.setAttr('is_open', true)
-      this.setAttr('is_creating', true)
-    },
-    edit(index, row) {
-      this.setAttr('selected', {
-        index: index,
-        link: row.link,
-        name: row.name,
-        description: row.description,
-        cost: row.cost,
-        minimum: row.cost,
-        imageFile: null,
-        imageUrl: row.logo ? row.logo.small : '',
-      })    
-
-      this.setAttr('is_open', true)
-      this.setAttr('is_creating', false)
-    },
-    getData() {
-      let data = new FormData();
-
-      this.getFields.forEach(field => {
-        if ( ['logo'].includes(field.field) ) return
-
-        if ( this.selected( field.field ) ) data.append(field.field, this.selected( field.field ))
-      });
-
-      data.append('minimum', this.selected('minimum'))
-
-      if ( this.selected('imageFile') )
-        data.append('logo', this.selected('imageFile'))
-
-      return data
-    },
     
-    getValidationClass (fieldName) {
-      const field = this.$v[fieldName]
-
-      if (field) {
-        return {
-          'md-invalid': field.$invalid && field.$dirty
-        }
-      }
-    },
-    validate() {
-      this.$v.$touch()
-
-      return !this.$v.$invalid;
-    },
   },
   computed: {
     name: bind('name'),
@@ -228,18 +173,20 @@ export default {
         }
       ]
     },
+    
+    allQuery() {
+      return `
+        name
+        description
+        cost
+        minimum
+        logo { tiny big }`
+    },
   },
-  beforeRouteLeave (to, from, next) {
+  beforeRouteLeave(to, from, next) {
     this.$refs.datatable.closePanel()
 
     setTimeout( () => next(), 700);
   },
 }
 </script>
-
-<style>
-img {
-  max-height: 20px;
-  margin-left: 10px;
-}
-</style>

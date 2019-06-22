@@ -6,6 +6,7 @@ use Illuminate\Foundation\Http\FormRequest;
 use App\Rules\ExistsTenant;
 use Illuminate\Validation\Rule;
 use App\Http\Requests\v1\MainRequest;
+use App\Rules\UniqueInSpec;
 
 class SpecificationHeaderRequest extends MainRequest
 {
@@ -14,16 +15,16 @@ class SpecificationHeaderRequest extends MainRequest
      *
      * @return array
      */
-    public function rules($args)
+    public function rules($args, $method)
     {
+        $this->method = $method;
+
         return [
             'title'             => [
                 'required',
                 'string',
                 'max:50',
-                Rule::unique('spec_headers')->where(function ($query) use($args) {
-                    return $query->where('spec_id', $args['spec_id']);
-                })
+                new UniqueInSpec('spec_headers', $args, 'spec_id')
             ],
             'description'       => 'nullable|string|max:255',
             'is_active'         => 'nullable|boolean',

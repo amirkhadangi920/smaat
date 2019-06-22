@@ -13,10 +13,17 @@ class PromocodeRequest extends MainRequest
      *
      * @return array
      */
-    public function rules()
+    public function rules($args, $method)
     {
+        $this->method = $method;
+
         return [
-            'code'                  => [$this->requiredOrFilled(), 'string', 'max:50', new UniqueTenant('promocodes', null, false)],
+            'code'                  => [
+                $this->requiredOrFilled(),
+                'string',
+                'max:50',
+                new UniqueTenant('promocodes', $args['id'] ?? null, null, false)
+            ],
             'value'                 => [$this->requiredOrFilled(), 'integer', 'min:1', 'max:99'],
             'min_total'             => 'nullable|integer|digits_between:1,10',
             'expired_at'            => [$this->requiredOrFilled(), 'date', 'after:now'],

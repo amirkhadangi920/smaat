@@ -25,7 +25,7 @@ class SpecDefault extends Model implements AuditableContract
      * @var array
      */
     protected $fillable = [
-        // 
+        'spec_row_id' 
     ];
 
     /**

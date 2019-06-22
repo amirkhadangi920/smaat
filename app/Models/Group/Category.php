@@ -52,10 +52,7 @@ class Category extends Model implements AuditableContract
      */
     protected $fillable = [
         'parent_id',
-        // 'title',
-        // 'description',
         'logo',
-        // 'scoring_feilds',
         'is_active'
     ];
 

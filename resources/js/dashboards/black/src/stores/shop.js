@@ -50,6 +50,17 @@ export default {
             discount: false,
         },
         
+        is_incrementing: {
+            order: true 
+        },
+        
+        has_timestamps: {
+            shipping_method: true,
+            order_status: true,
+            order: true,
+            discount: true,
+        },
+        
         is_creating: {
             shipping_method: false,
             order_status: false,

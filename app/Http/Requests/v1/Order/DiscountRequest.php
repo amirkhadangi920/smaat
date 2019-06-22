@@ -12,8 +12,10 @@ class DiscountRequest extends MainRequest
      *
      * @return array
      */
-    public function rules()
+    public function rules($args, $method)
     {
+        $this->method = $method;
+
         return [
             'title'                 => [$this->requiredOrFilled(), 'string', 'max:50'],
             'description'           => 'nullable|string|max:255',

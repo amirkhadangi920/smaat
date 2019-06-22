@@ -32,10 +32,16 @@ use App\Models\Product\Variation;
 use App\Models\Places\Country;
 use Grimzy\LaravelMysqlSpatial\Types\Point;
 use App\Models\Promocode\Promocode;
+use App\Models\Spec\SpecHeader;
+use App\Models\Spec\SpecDefault;
 
 Route::get('/test/amir', function() {
 
     auth()->loginUsingId('f47370015075');
+
+    // return SpecRow::find(59)->defaults()->saveMany( factory(SpecDefault::class, 5)->make() );
+
+    
     return auth()->user()->allPermissions();
 
     return Category::find(1)->load('spec');

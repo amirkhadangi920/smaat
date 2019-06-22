@@ -17,8 +17,9 @@ class SpecRowTranslation extends Model
      */
     protected $fillable = [
         'title',
+        'prefix',
+        'postfix',
         'description',
-        'label',
         'help',
     ];
     

@@ -29,6 +29,15 @@ export default {
             article: false,
             comment: false,
         },
+
+        is_incrementing: {
+            article: true,
+        },
+
+        has_timestamps: {
+            article: true,
+            comment: true,
+        },
         
         is_creating: {
             article: false,
@@ -112,12 +121,12 @@ export default {
                 tags: {
                     type: '[String]',
                     value: [],
-                    resolve: tags => tags.map(tag => tag.name)
+                    clientResolver: tags => tags.map(tag => tag.name)
                 },
                 subjects: {
                     type: '[Int]',
                     value: [],
-                    // resolve: subjects => subjects.map(subject => subject.id)
+                    serverResolver: subjects => subjects.map(subject => subject.id)
                 },
                 image: {
                     type: 'Upload',

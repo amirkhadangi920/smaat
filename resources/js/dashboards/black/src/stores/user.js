@@ -30,6 +30,16 @@ export default {
             role: false,
         },
         
+        is_incrementing: {
+            user: true 
+        },
+
+
+        has_timestamps: {
+            user: true,
+            role: true,
+        },
+        
         is_creating: {
             user: false,
             role: false,
@@ -143,7 +153,7 @@ export default {
                 permissions: {
                     type: '[Int]',
                     value: [],
-                    resolve: permissions => permissions.map(p => p.id)
+                    serverResolver: permissions => permissions.map(p => p.id)
                 },
             }
         },

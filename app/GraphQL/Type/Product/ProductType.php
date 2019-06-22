@@ -69,8 +69,8 @@ class ProductType extends BaseType
             'brand' => $this->relationItemField('brand'),
             'category' => $this->relationItemField('category'),
             'unit' => $this->relationItemField('unit'),
-            'reviews' => $this->paginatedRelationListField('review'),
-            'questions' => $this->paginatedRelationListField('question_and_answer'),
+            'reviews' => $this->paginatedRelationListField('review', 'is_accept'),
+            'questions' => $this->paginatedRelationListField('question_and_answer', 'is_accept'),
             'accessories' => $this->paginatedRelationListField('product'),
             'audits' => $this->audits('product'),
             'is_active' => $this->acceptableField('product')

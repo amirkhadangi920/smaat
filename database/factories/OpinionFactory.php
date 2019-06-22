@@ -20,6 +20,7 @@ $factory->define(App\Models\Opinion\Review::class, function () use($faker) {
                 $disadvantages[] = Faker::sentence();
             return $disadvantages;
         }][ $faker->boolean() ],
+        'title'                 => $faker->text(50),
         'message'               => Faker::sentence(),
         'is_accept'             => $faker->boolean(),
         'jalali_created_at'     => Jalalian::forge("now - {$faker->numberBetween(2, 360)} days"),
@@ -30,6 +31,7 @@ $factory->define(App\Models\Opinion\Review::class, function () use($faker) {
 $factory->define(App\Models\Opinion\Comment::class, function () use($faker) {
     return [
         'user_id'           => App\User::all()->random()->id,
+        'title'             => $faker->text(50),
         'message'           => Faker::sentence(),
         'is_accept'         => $faker->boolean(),
         'jalali_created_at' => Jalalian::forge("now - {$faker->numberBetween(2, 360)} days"),
@@ -40,6 +42,7 @@ $factory->define(App\Models\Opinion\Comment::class, function () use($faker) {
 $factory->define(App\Models\Opinion\QuestionAndAnswer::class, function () use($faker) {
     return [
         'user_id'           => App\User::all()->random()->id,
+        'title'             => $faker->text(50),
         'message'           => Faker::sentence(),
         'is_accept'         => $faker->boolean(),
         'jalali_created_at' => Jalalian::forge("now - {$faker->numberBetween(2, 360)} days")

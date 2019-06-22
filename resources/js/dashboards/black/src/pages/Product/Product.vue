@@ -17,15 +17,15 @@
     <template slot="filter-labels"></template>
     
     <template v-slot:photos-body="slotProps">
-      <img class="tilt" :src="slotProps.row.photos[0] ? slotProps.row.photos[0].tiny : '/images/placeholder.png'" />
+      <img class="tilt" :src="slotProps.row.photos && slotProps.row.photos.length !== 0 ? slotProps.row.photos[0].tiny : '/images/placeholder.png'" />
     </template>
 
     <template v-slot:brand-body="slotProps">
-      <a href="#">{{ slotProps.row.brand.name }}</a>
+      <a href="#">{{ slotProps.row.brand ? slotProps.row.brand.name : '' }}</a>
     </template>
 
     <template v-slot:category-body="slotProps">
-      <a href="#">{{ slotProps.row.category.title }}</a>
+      <a href="#">{{ slotProps.row.category ? slotProps.row.category.title : '' }}</a>
     </template>
 
     <template v-slot:votes-body="slotProps">
@@ -109,10 +109,6 @@ export default {
           label: 'دسته بندی',
           icon: 'icon-caps-small'
         }, {
-          field: 'label',
-          label: 'لیبل',
-          icon: 'icon-caps-small'
-        }, {
           field: 'votes',
           label: 'نظرات',
           icon: 'icon-heart-2'
@@ -123,7 +119,6 @@ export default {
     allQuery() {
       return `
         name
-        description
         photos {
           tiny
         }

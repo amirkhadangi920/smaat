@@ -284,51 +284,29 @@ export default {
         value: this.$refs.subjects.getCheckedKeys()
       })
     },
-    edit2(index, row) {
-      axios(row.link).then(({data}) => {
-        data = data.data
-
-        setTimeout(() => {
-          this.$refs.subjects.setCheckedKeys([])
-  
-          this.setAttr('selected', {
-            index: index,
-            link: data.link,
-            title: data.title,
-            description: data.description,
-            body: data.body,
-            tags: data.tags,
-            reading_time: data.reading_time,
-            subjects: data.subjects.map( subject => subject.id ),
-            imageFile: null,
-            imageUrl: data.image ? row.image.small : '',
-          })
-        }, 100);
-
-        this.setAttr('is_open', true)
-        this.setAttr('is_creating', false)
+    getRowData(row)
+    {
+      return axios.get('/graphql/auth', {
+        params: {
+          query: `{
+            singleData: ${this.type} (id: "${row.id}") {
+              id
+              ${this.allQuery}
+              body
+              tags { name }
+              created_at
+              updated_at
+            }
+          }`
+        }
       })
     },
-    getData() {
-      let data = new FormData();
-
-      ['title', 'reading_time', 'description', 'body'].forEach(field => {
-        let value = this.selected(field)
-        data.append(field, value ? value : '')
-      });
-
-      this.$refs.subjects.getCheckedKeys().forEach(category => {
-        data.append('subjects[]', category);
-      });
-      this.selected('tags').forEach(tag => {
-        data.append('keywords[]', tag.name);
-      });
-
-      if ( this.selected('imageFile') )
-        data.append('image', this.selected('imageFile'))
-
-      return data
-    }
+    afterEdit(row)
+    {
+      setTimeout(() => {
+        this.$refs.subjects.setCheckedKeys( row.subjects.map(i => i.id) )
+      }, 100);
+    },
   },
   validations: {
     title: {

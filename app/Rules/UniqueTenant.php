@@ -10,6 +10,8 @@ class UniqueTenant implements Rule
 {
     private $table;
 
+    private $id;
+
     private $singular;
 
     private $field;
@@ -21,9 +23,10 @@ class UniqueTenant implements Rule
      *
      * @return void
      */
-    public function __construct($table, $field = null, $has_translation = true)
+    public function __construct($table, $id = null, $field = null, $has_translation = true)
     {
         $this->table = $table;
+        $this->id = $id;
         $this->singular = Str::singular( $table );
         $this->field = $field;
         $this->has_translation = $has_translation;
@@ -42,6 +45,9 @@ class UniqueTenant implements Rule
 
         if ( $this->has_translation )
             $result->join("{$this->singular}_translations", "{$this->table}.id", '=', "{$this->singular}_translations.{$this->singular}_id");
+        
+        if ( $this->id )
+            $result->where("{$this->table}.id", '!=', $this->id);
 
         $result->where($this->field ?? $attribute, $value)
             ->where('tenant_id', $this->getTenant() );

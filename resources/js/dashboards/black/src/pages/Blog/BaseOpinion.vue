@@ -63,7 +63,7 @@
 
       <template #custom-operations="slotProps">
         <el-tooltip content="مشاهده اطلاعات">
-          <base-button simple class="ml-2" @click="info(slotProps.index, slotProps.row)" type="success" size="sm" icon>
+          <base-button class="ml-2" @click="info(slotProps.index, slotProps.row)" type="success" size="sm" icon>
             <i class="tim-icons icon-chat-33"></i>
           </base-button>
         </el-tooltip>
@@ -294,20 +294,20 @@
                     </li>
                     <li class="data-table-cell p-2 d-flex align-items-center justify-content-center" >
                       <div :style="{ fontSize: '12px' }">
-                        <el-tooltip :content="row.create_time | created" placement="left">
-                          <p class="text-muted hvr-icon-bob"><i class="tim-icons icon-check-2 text-info hvr-icon"></i> {{ row.create_time | ago }}</p>
+                        <el-tooltip :content="row.created_at | created" placement="left">
+                          <p class="text-muted hvr-icon-bob"><i class="tim-icons icon-check-2 text-info hvr-icon"></i> {{ row.created_at | ago }}</p>
                         </el-tooltip>
 
                         <el-tooltip
-                          :content="row.last_update_time | edited" placement="left"
-                          v-if="row.last_update_time !== row.create_time">
-                          <p class="text-muted hvr-icon-hang"><i class="tim-icons icon-pencil text-warning hvr-icon"></i> {{ row.last_update_time | ago }}</p>
+                          :content="row.updated_at | edited" placement="left"
+                          v-if="row.updated_at !== row.created_at">
+                          <p class="text-muted hvr-icon-hang"><i class="tim-icons icon-pencil text-warning hvr-icon"></i> {{ row.updated_at | ago }}</p>
                         </el-tooltip>
                       </div>
                     </li>
                     <li class="data-table-cell operation-cell p-2 d-flex align-items-center justify-content-center" :style="{width: '40px'}">
                       <el-tooltip content="حذف">
-                        <base-button @click="deleteAnswer(index, row)" type="danger" simple size="sm" icon>
+                        <base-button @click="deleteAnswer(index, row)" type="danger" size="sm" icon>
                           <i class="tim-icons icon-simple-remove"></i>
                         </base-button>
                       </el-tooltip>
@@ -351,6 +351,10 @@ export default {
       required: true
     },
     queryFields: {
+      type: String,
+      required: true
+    },
+    fullInfoQuery: {
       type: String,
       required: true
     },
@@ -521,11 +525,18 @@ export default {
       })
     },
 
-    info(index, row) {
-      this.showing_info = row;
-      this.showing_info.index = index;
+    info(index, row)
+    {
+      axios.get('/graphql/auth', {
+        params: {
+          query: `{ singleData: ${this.type} (id: ${row.id}) { ${this.fullInfoQuery} } }`
+        }
+      }).then(({data}) => {
+        this.showing_info = { ...row, ...data.data.singleData };
+        this.showing_info.index = index;
 
-      this.is_info_dialog_open = true;
+        this.is_info_dialog_open = true;
+      })
     },
   },
   computed: {
@@ -550,8 +561,8 @@ export default {
             label: 'مقاله / محصول',
             icon: 'icon-badge'
           }, {
-            field: 'message',
-            label: 'پیام',
+            field: 'title',
+            label: 'عنوان',
             icon: 'icon-caps-small'
           }, {
             field: 'status',
@@ -567,8 +578,8 @@ export default {
           label: 'مقاله / کاربر',
           icon: 'icon-badge'
         }, {
-          field: 'message',
-          label: 'پیام',
+          field: 'title',
+          label: 'عنوان',
           icon: 'icon-caps-small'
         }, {
           field: 'votes',
@@ -587,7 +598,7 @@ export default {
     allQuery() {
       return `
         is_accept
-        message
+        title
         ${this.queryFields}
         votes {
           likes

@@ -12,12 +12,23 @@ class OrderStatusRequest extends MainRequest
      *
      * @return array
      */
-    public function rules()
+    public function rules($args, $method)
     {
+        $this->method = $method;
+
         return [
-            'title'         => [$this->requiredOrFilled(), 'string', 'max:50', new UniqueTenant('order_statues')],
+            'title'         => [
+                $this->requiredOrFilled(),
+                'string',
+                'max:50',
+                new UniqueTenant('order_statuses', $args['id'] ?? null)
+            ],
             'description'   => 'nullable|string|max:255',
-            'color'         => ['nullable', 'regex:/^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/', new UniqueTenant('order_statues')],
+            'color'         => [
+                'nullable',
+                'regex:/^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/',
+                new UniqueTenant('order_statuses', $args['id'] ?? null)
+            ],
             'is_active'     => 'nullable|boolean',
         ];
     }

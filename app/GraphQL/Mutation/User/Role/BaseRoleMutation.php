@@ -27,6 +27,9 @@ class BaseRoleMutation extends MainMutation
             'description' => [
                 'type' => Type::string()
             ],
+            'permissions' => [
+                'type' => Type::listOf( Type::int() )
+            ],
             'is_active' => [
                 'type' => Type::boolean()
             ]
@@ -42,7 +45,7 @@ class BaseRoleMutation extends MainMutation
      */
     public function afterCreate($request, $role)
     {
-        $role->attachPermissions( $request->permissions );        
+        $role->attachPermissions( $request->get('permissions') );        
     }
 
     /**
@@ -54,6 +57,6 @@ class BaseRoleMutation extends MainMutation
      */
     public function afterUpdate($request, $role)
     {
-        $role->syncPermissions( $request->permissions );
+        $role->syncPermissions( $request->get('permissions') );
     }
 }

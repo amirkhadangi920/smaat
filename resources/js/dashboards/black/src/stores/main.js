@@ -7,6 +7,7 @@ import blog from './blog'
 import product from './product'
 import shop from './shop'
 import user from './user'
+import spec from './spec'
 
 Vue.use(Vuex)
 
@@ -17,7 +18,8 @@ export default new Vuex.Store({
         blog,
         product,
         shop,
-        user
+        user,
+        spec
     },
     state: {
         permissions: [],
@@ -60,6 +62,7 @@ export default new Vuex.Store({
                         break;
 
                     case 'Int':
+                    case 'Boolean':
                         form[field].value = null
                         break;
 
@@ -86,8 +89,8 @@ export default new Vuex.Store({
             {
                 let value = data.row[field]
                 
-                if ( typeof form[field].resolve === "function" )
-                    value = form[field].resolve(value)
+                if ( typeof form[field].serverResolver === "function" )
+                    value = form[field].serverResolver(value)
 
                 switch ( form[field].type )
                 {
@@ -96,6 +99,7 @@ export default new Vuex.Store({
                         break;
 
                     case 'Int':
+                    case 'Boolean':
                         form[field].value = value ? value : null
                         break;
 
@@ -111,7 +115,7 @@ export default new Vuex.Store({
                         break;
                 }
             }
-            
+
             return state[data.group].form[data.type] = form
         },
         setPermissions(state, permissions)
@@ -129,16 +133,31 @@ export default new Vuex.Store({
             if( state[inputs.group][inputs.type].length > 0 )
                 return state[inputs.group][inputs.type]
 
+            var query;
+
+            if ( state[inputs.group].query  && state[inputs.group].query[inputs.type] )
+            {
+                query = state[inputs.group].query[inputs.type]
+            }
+            else
+            {
+                query = `{
+                    allData: ${inputs.query}
+                }`
+            }
+
             axios.get('/graphql/auth', {
                 params: {
-                    query: state[inputs.group].query[inputs.type]
+                    query: query
                 }
             }).then(({data}) => {
 
                 commit('setData', {
                     group: inputs.group,
                     type: inputs.type,
-                    data: state[inputs.group].handleQuery[inputs.type](data)
+                    data: state[inputs.group].handleQuery && state[inputs.group].handleQuery[inputs.type]
+                        ? state[inputs.group].handleQuery[inputs.type](data)
+                        : data.data.allData.data
                 })
             })
         },

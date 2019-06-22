@@ -12,8 +12,10 @@ class ReviewRequest extends MainRequest
      *
      * @return array
      */
-    public function rules()
+    public function rules($args, $method)
     {
+        $this->method = $method;
+
         return [
             'ranks'             => 'nullable|array',
             'ranks.*'           => 'required|string|max:100',
@@ -21,6 +23,7 @@ class ReviewRequest extends MainRequest
             'advantages.*'      => 'required|string|max:100',
             'disadvantages'     => 'nullable|array',
             'disadvantages.*'   => 'required|string|max:100',
+            'title'             => 'required|string|max:100',
             'message'           => 'required|string',
 
             /* relateion */

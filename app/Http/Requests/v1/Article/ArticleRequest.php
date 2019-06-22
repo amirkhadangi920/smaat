@@ -15,11 +15,23 @@ class ArticleRequest extends MainRequest
      */
     public function rules($args, $method)
     {
+        $this->method = $method;
+
         $rules = [
-            'title'         => [$this->requiredOrFilled(), 'string', 'max:50', new UniqueTenant('articles')],
+            'title'         => [
+                $this->requiredOrFilled(),
+                'string',
+                'max:50', 
+                new UniqueTenant('articles', $args['id'] ?? null)
+            ],
             'description'   => 'nullable|string|max:255',
             'body'          => [$this->requiredOrFilled(), 'string'],
-            'image'         => [$this->requiredOrFilled(), 'image', 'mimes:jpeg,jpg,png,gif', 'max:1024'],
+            'image'         => [
+                $method === 'CREATE' ? 'required' : 'nullable',
+                'image',
+                'mimes:jpeg,jpg,png,gif',
+                'max:1024'
+            ],
             'reading_time'  => 'nullable|digits_between:1,2',
             'is_active'     => 'nullable|boolean',
             
@@ -31,11 +43,19 @@ class ArticleRequest extends MainRequest
             'keywords.*'    => 'required|string|max:100',
         ];
 
-        if (request()->method() === 'PUT')
-            $rules['image'] = 'nullable|image|mimes:jpeg,jpg,png,gif|max:1024';
-
         return $rules;
     }
+    
+    /**
+     * Get custom attributes for validator errors.
+     *
+     * @return array
+     */
+    public function attributes()
+    {
+        return [
+            'body' => 'متن مقاله',
+            'image' => 'تصویر مقاله'
+        ];
+    }
 }
- 
- 

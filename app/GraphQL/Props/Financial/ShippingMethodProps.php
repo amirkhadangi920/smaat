@@ -39,6 +39,13 @@ trait ShippingMethodProps
     protected $collection = ShippingMethodCollection::class;
 
     /**
+     * Name of the field that should upload an image from that
+     *
+     * @var string
+     */
+    protected $image_field = 'logo';
+
+    /**
      * Filter class of this eloquent model
      *
      * @var ModelFilter

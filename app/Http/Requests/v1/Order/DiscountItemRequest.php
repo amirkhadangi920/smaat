@@ -11,8 +11,10 @@ class DiscountItemRequest extends MainRequest
      *
      * @return array
      */
-    public function rules()
+    public function rules($args, $method)
     {
+        $this->method = $method;
+
         return [
             'offer'         => 'required|integer|max:100',
             'quantity'      => 'nullable|integer|max:100000',

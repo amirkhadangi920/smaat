@@ -14,10 +14,17 @@ class SpecificationRequest extends MainRequest
      *
      * @return array
      */
-    public function rules()
+    public function rules($args, $method)
     {
+        $this->method = $method;
+
         return [
-            'title'             => ['required', 'string', 'max:50', new UniqueTenant('specs')],
+            'title'             => [
+                'required',
+                'string',
+                'max:50',
+                new UniqueTenant('specs', $args['id'] ?? null)
+            ],
             'description'       => 'nullable|string|max:255',
             'is_active'         => 'nullable|boolean',
             

@@ -76,17 +76,6 @@ export default {
       return !this.$v.$invalid;
     },
   },
-  mounted() {
-
-    Echo.private(`brand.6`).listen('.task-created', (e) => {
-
-      console.log(e);
-    });
-
-    // window.Echo.channel("newTask").listen(".task-created", e => {
-    //   console.log( e );
-    // });
-  },
   computed: {
     title: bind('title'),
     description: bind('description')

@@ -70,6 +70,19 @@ export default {
             spec: false,
         },
         
+        is_incrementing: {
+            // 
+        },
+
+        has_timestamps: {
+            brand: true,
+            size: true,
+            warranty: true,
+            color: true,
+            unit: true,
+            spec: true,
+        },
+        
         is_creating: {
             brand: false,
             size: false,
@@ -209,7 +222,7 @@ export default {
                 categories: {
                     type: '[Int]',
                     value: [],
-                    resolve: categories => categories.map( category => category.id )
+                    serverResolver: categories => categories.map( category => category.id )
                 },
                 logo: {
                     type: 'Upload',
@@ -230,7 +243,7 @@ export default {
                 categories: {
                     type: '[Int]',
                     value: [],
-                    resolve: categories => categories.map( category => category.id )
+                    serverResolver: categories => categories.map( category => category.id )
                 },
             },
             warranty: {
@@ -249,7 +262,7 @@ export default {
                 categories: {
                     type: '[Int]',
                     value: [],
-                    resolve: categories => categories.map( category => category.id )
+                    serverResolver: categories => categories.map( category => category.id )
                 },
                 logo: {
                     type: 'Upload',
@@ -270,7 +283,7 @@ export default {
                 categories: {
                     type: '[Int]',
                     value: [],
-                    resolve: categories => categories.map( category => category.id )
+                    serverResolver: categories => categories.map( category => category.id )
                 },
             },
             unit: {
@@ -285,7 +298,7 @@ export default {
                 categories: {
                     type: '[Int]',
                     value: [],
-                    resolve: categories => categories.map( category => category.id )
+                    serverResolver: categories => categories.map( category => category.id )
                 },
             },
             spec: {
@@ -300,7 +313,7 @@ export default {
                 categories: {
                     type: '[Int]',
                     value: [],
-                    resolve: categories => categories.map( category => category.id )
+                    serverResolver: categories => categories.map( category => category.id )
                 },
             },
         },
