@@ -315,7 +315,7 @@ export default {
       this.storeInServer({
         callback: ({data}) => {
           const parent = this.attr('selected').index.parent;
-          const children = parent.data.children || parent.data;
+          const children = parent.data.childs || parent.data;
           const index = children.findIndex(d => d.id === data.id);
 
           children[index].logo = data.logo;
@@ -368,8 +368,16 @@ export default {
 .el-tree.rtl .custom-tree-node img,
 .el-tree.rtl .custom-tree-node .pull-left .pull-right,
 .el-tree.rtl .custom-tree-node .operation-cell,
-.el-tree.rtl .custom-tree-node .el-checkbox__input {
+.el-tree.rtl .el-checkbox__input,
+.el-tree.rtl .el-tree__empty-text,
+.el-tree-node__label {
   transform: scaleX(-1)
+}
+.el-tree.rtl .el-tree__empty-text {
+  width: 100%;
+  text-align: center;
+  left: 0px;
+  direction: rtl;
 }
 
 .el-tree.rtl .custom-tree-node {

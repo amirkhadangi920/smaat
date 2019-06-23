@@ -24,6 +24,6 @@ trait SingleQuery
    
     public function resolve($root, $args, SelectFields $fields, ResolveInfo $info)
     {   
-        return $this->getSingleData($args['id'], $fields);
+        return $this->getSingleData($args, $fields);
     }
 }

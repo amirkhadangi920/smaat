@@ -24,7 +24,7 @@ class SubjectRequest extends MainRequest
                 'max:50',
                 new UniqueTenant('subjects', $args['id'] ?? null)
             ],
-            'description'       => 'nullable|string|min:255',
+            'description'       => 'nullable|string|max:255',
             'logo'              => 'nullable|image|mimes:jpeg,jpg,png,gif|max:1024',
             'is_active'         => 'nullable|boolean',
 

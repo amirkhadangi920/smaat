@@ -26,6 +26,9 @@ class BrandsQuery extends BaseBrandQuery
             'categories' => [
                 'type' => Type::listOf( Type::int() )
             ],
+            'category' => [
+                'type' => Type::int()
+            ],
         ];
     }
 }

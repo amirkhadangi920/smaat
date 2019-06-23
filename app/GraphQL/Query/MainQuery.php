@@ -44,7 +44,7 @@ class MainQuery extends Query
         if ( method_exists($this, 'applyFilters') )
             $this->applyFilters($args, $data);
 
-        if ( $this->translatable )
+        if ( $this->translatable && !isset($args['query']) )
             $data->whereHas('translations');
 
         $data->with( $fields->getRelations() )->select( $this->getSelectFields($fields) );
@@ -59,14 +59,23 @@ class MainQuery extends Query
      * @param ID $feature
      * @return Model
      */
-    public function getSingleData($id, $fields)
+    public function getSingleData($args, $fields)
     {
         $data = $this->model::select( $this->getSelectFields($fields) )
             ->with( $fields->getRelations() );
 
         $this->showOnlyAtiveData($data);
 
-        return $data->findOrFail($id);
+        
+        if ( $args['id'] ?? false )
+            return $data->findOrFail($args['id']);
+
+        elseif ( $args['slug'] ?? false )
+        {
+            return $data->whereHas('translations', function ($query) use($args) {
+                $query->where('slug', $args['slug']);
+            })->first();
+        }
     }
 
     public function showOnlyAtiveData($data)

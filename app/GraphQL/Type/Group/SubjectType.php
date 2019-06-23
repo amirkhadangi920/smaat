@@ -19,6 +19,10 @@ class SubjectType extends BaseType
         return [
             'is_mine' => $this->isMineField(),
             'creator' => $this->creator('subject'),
+            'slug' => [
+                'type' => Type::string(),
+                'selectable' => false
+            ],
             'title' => [
                 'type' => Type::string(),
                 'selectable' => false

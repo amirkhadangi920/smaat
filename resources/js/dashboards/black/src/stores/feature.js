@@ -62,7 +62,7 @@ export default {
         },
 
         is_open: {
-            brand: false,
+            brand: true,
             size: false,
             warranty: false,
             color: false,

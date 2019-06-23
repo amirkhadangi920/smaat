@@ -63,7 +63,6 @@ class CreateGroupingTables extends Migration
 
         $schema->create('subjects', function (Blueprint $table) {
             $table->table([
-                'sluggable_info',
                 'logo'              => 'nullable|array',
                 'jalali_created_at' => 'datetime|nullable',
                 'is_active'         => 'boolean|default:1'

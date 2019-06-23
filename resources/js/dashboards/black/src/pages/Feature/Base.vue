@@ -161,6 +161,26 @@
 
       <br />
       <div class="row">
+        <div :class="has_logo ? 'col-7' : 'col-12'">
+          <base-input :label="'دسته بندی های ' + label">
+            <el-tree
+              class="rtl"
+              dir="ltr"
+              :data="$store.state.group.category"
+              :props="defaultProps"
+              :accordion="true"
+              ref="categories"
+              show-checkbox
+              node-key="id"
+              @check-change="changeSelectedCategories"
+              :default-checked-keys="selected('categories')"
+              :default-expanded-keys="selected('categories')"
+              empty-text="هیچ دسته بندی ای یافت نشد :("
+            >
+            </el-tree>
+          </base-input>
+          <small slot="helperText" id="emailHelp" class="form-text text-muted">برای انتخاب هر دسته بندی تیک قبل آن را انتخاب کنید</small>
+        </div>
         <div class="col-5" v-if="has_logo">
           <base-input :label="'لوگوی ' + label">
             <el-upload
@@ -178,25 +198,6 @@
             </el-upload>
             <small slot="helperText" id="emailHelp" class="form-text text-muted">لوگوی مورد نظر خود را انتخاب کنید</small>
           </base-input>
-        </div>
-        <div :class="has_logo ? 'col-7' : 'col-12'">
-          <base-input :label="'دسته بندی های ' + label">
-            <el-tree
-              dir="ltr"
-              :data="$store.state.group.category"
-              :props="defaultProps"
-              :accordion="true"
-              ref="categories"
-              show-checkbox
-              node-key="id"
-              @check-change="changeSelectedCategories"
-              :default-checked-keys="selected('categories')"
-              :default-expanded-keys="selected('categories')"
-              empty-text="هیچ دسته بندی ای یافت نشد :("
-            >
-            </el-tree>
-          </base-input>
-          <small slot="helperText" id="emailHelp" class="form-text text-muted">برای انتخاب هر دسته بندی تیک قبل آن را انتخاب کنید</small>
         </div>
       </div>
     </template>

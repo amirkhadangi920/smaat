@@ -22,6 +22,10 @@ class CategoryType extends BaseType
             'scoring_fields' => [
                 'type' => Type::listOf( \GraphQL::type('scoring_field') )
             ],
+            'slug' => [
+                'type' => Type::string(),
+                'selectable' => false
+            ],
             'title' => [
                 'type' => Type::string(),
                 'selectable' => false

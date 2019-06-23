@@ -53,4 +53,24 @@ class FeatureBaseFilter extends MainFilter
     {
         return $this->filter_relation('categories', $ids);
     }
+
+
+    /**
+     * Filter the Features that have specific categoroy
+     * or doesn't have any category
+     *
+     * @param array $ids
+     * @return Builder
+     */
+    public function category($id)
+    {
+        if ( !$id ) return;
+
+        $this->whereDoesntHave('categories');
+
+        return $this->orWhereHas('categories', function($query) use ($id)
+        {
+            $query->where('id', $id);
+        });
+    }
 }

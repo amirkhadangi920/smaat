@@ -19,6 +19,7 @@
   ]">
 
     <base-form :validation="$v">
+
       <smart-input
         v-model="name"
         label="نام برند"
@@ -46,6 +47,7 @@ import Binding, { bind } from '../../mixins/binding'
 import { validationMixin } from 'vuelidate'
 import { required, maxLength } from 'vuelidate/lib/validators'
 import SmartInput from '../../components/BaseInput'
+import RemoteSelect from '../../components/RemoteSelect'
 import BaseForm from '../../components/BaseForm'
 
 export default {
@@ -53,12 +55,13 @@ export default {
   components: {
     SmartInput,
     BaseFeature,
-    BaseForm
+    BaseForm,
+    RemoteSelect
   },
   data() {
     return {
       group: 'feature',
-      type: 'brand'
+      type: 'brand',
     }
   },
 

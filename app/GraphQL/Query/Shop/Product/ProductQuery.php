@@ -13,7 +13,12 @@ class ProductQuery extends BaseProductQuery
     {
         return [
             'id' => [
-                'type' => Type::nonNull( $this->incrementing ? Type::int() : Type::string() )
+                'type' => $this->incrementing ? Type::int() : Type::string(),
+                'rules' => 'required_without:slug'
+            ],
+            'slug' => [
+                'type' => Type::string(),
+                'rules' => 'required_without:id'
             ],
             'page' => [
                 'type' => Type::int()
