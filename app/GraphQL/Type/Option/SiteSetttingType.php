@@ -2,10 +2,11 @@
 
 namespace App\GraphQL\Type\Option;
 
-use Rebing\GraphQL\Support\Type as GraphQLType;
+use App\GraphQL\Type\BaseType;
 use GraphQL\Type\Definition\Type;
+use function GuzzleHttp\json_decode;
 
-class SiteSettingType extends GraphQLType
+class SiteSettingType extends BaseType
 {
     protected $attributes = [
         'name' => 'SiteSetting',
@@ -17,57 +18,58 @@ class SiteSettingType extends GraphQLType
         return [
             'title' => [
                 'type' => Type::string(),
-                'resolve' => function($data) {
-                    return $data['title'] ?? 'فروشگاه اینترنتی';
-                }
             ],
             'description' => [
                 'type' => Type::string(),
-                'resolve' => function($data) {
-                    return $data['description'] ?? 'فروشگاه اینترنتی قدرت گرفته از سیستم SmaaT shop';
-                }
             ],
             'phone' => [
                 'type' => Type::string(),
-                'resolve' => function($data) {
-                    return $data['phone'] ?? '09105009868';
-                }
             ],
             'address' => [
                 'type' => Type::string(),
-                'resolve' => function($data) {
-                    return $data['address'] ?? 'خراسان رضوی ، مشهد ، سناباد ۴۴ ، ساختمان ۵۲ ، واحد ۷';
-                }
             ],
-            'is_enabled' => [
-                'type' => Type::boolean(),
-                'resolve' => function($data) {
-                    return $data['is_enabled'] ?? true;
-                }
+            'banner_link' => [
+                'type' => Type::string(),
             ],
-            'is_enabled' => [
-                'type' => Type::boolean(),
-                'resolve' => function($data) {
-                    return $data['is_enabled'] ?? true;
-                }
-            ],
-            'logo' => [
-                'type' => \GraphQL::type('image'),
-                'resolve' => function($data) {
-                    return $data['image'] ?? [
-                        'tiny' => '/images/site_logo/tiny.png',
-                        'small' => '/images/site_logo/small.png',
-                        'medium' => '/images/site_logo/medium.png',
-                        'big' => '/images/site_logo/big.png',
-                    ];
-                }
-            ],
+            'logo' => $this->imageField('logo'),
+            'banner' => $this->imageField('banner'),
+            'header_banner' => $this->imageField('header_banner'),
+            'watermark' => $this->imageField('watermark'),
             'theme_color' => [
                 'type' => Type::string(),
-                'resolve' => function($data) {
-                    return $data['theme_color'] ?? '#500045';
-                }
             ],
+            'is_enabled' => [
+                'type' => Type::boolean(),
+            ],
+            'slider' => $this->slider('slider'),
+            'posters' => $this->slider('posters'),
+        ];
+    }
+
+    public function imageField($field = 'logo')
+    {
+        return [
+            'type' => \GraphQL::type('single_media'),
+            'is_relation' => false,
+            'resolve' => function($data) use($field) {
+                return $data[ $field ][0] ?? null;
+            }
+        ];
+    }
+
+    public function slider($type)
+    {
+        return [
+            'type' => Type::listOf( \GraphQL::type('slider_item') ),
+            'is_relation' => false,
+            'resolve' => function($data) use($type) {
+                $slider = json_decode( $data[ $type ]['value'] );
+                
+                foreach ( $slider as $slide )
+                    $slide->image = $data[ $type ]->media->where('id', $slide->image ?? null)->first();
+
+                return $slider;
+            }
         ];
     }
 }

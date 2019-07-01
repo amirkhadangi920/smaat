@@ -24,7 +24,8 @@ use App\Models\Opinion\{
 };
 use App\Models\Product\{
     Product,
-    Variation
+    Variation,
+    Label
 };
 use App\Models\Spec\Spec;
 use App\User;
@@ -59,6 +60,7 @@ return [
     // Product models
     'product'               => Product::class,
     'variation'             => Variation::class,
+    'label'                 => Label::class,
 
     // Specification models
     'spec'                  => Spec::class,

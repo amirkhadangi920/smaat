@@ -14,12 +14,16 @@ use App\Helpers\HasTenant;
 use App\Helpers\CreatorRelationship;
 use Dimsav\Translatable\Translatable;
 use Nicolaslopezj\Searchable\SearchableTrait;
+use Spatie\MediaLibrary\HasMedia\HasMedia;
+use Spatie\MediaLibrary\HasMedia\HasMediaTrait;
+use App\Helpers\MediaConversionsTrait;
 
-class Warranty extends Model implements AuditableContract
+class Warranty extends Model implements AuditableContract, HasMedia
 {
     use SoftDeletes, Auditable, Filterable, Translatable;
     use CreateTimeline, HasTenant, CreatorRelationship;
     use SearchableTrait;
+    use HasMediaTrait, MediaConversionsTrait;
 
     /****************************************
      **             Attributes
@@ -31,10 +35,6 @@ class Warranty extends Model implements AuditableContract
      * @var array
      */
     protected $fillable = [
-        // 'title',
-        // 'description',
-        // 'expire',
-        'logo',
         'is_active'
     ];
     
@@ -78,7 +78,6 @@ class Warranty extends Model implements AuditableContract
         'title',
         'description',
         'expire',
-        'logo',
         'is_active'
     ];
 
@@ -88,7 +87,6 @@ class Warranty extends Model implements AuditableContract
      * @var array
      */
     protected $casts = [
-        'logo' => 'array',
         'is_active' => 'boolean'
     ];
 
@@ -135,5 +133,13 @@ class Warranty extends Model implements AuditableContract
     public function categories()
     {
         return $this->morphToMany(Category::class, 'featureable');
+    }
+
+    /**
+     * Get the media field of the model
+     */
+    public function logo()
+    {
+        return $this->morphMany(config('medialibrary.media_model'), 'model');
     }
 }

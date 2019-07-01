@@ -23,7 +23,7 @@ class CreateDiscountTables extends Migration
         $schema->create('discounts', function (Blueprint $table) {
             $table->table([
                 // 'info',
-                'logo'              => 'nullable|array',
+                // 'logo'              => 'nullable|array',
                 'type'              => 'tinyInteger|nullable',
                 'status'            => 'tinyInteger|default:0',
                 'jalali_created_at' => 'datetime|nullable',

@@ -12,6 +12,7 @@ use App\Models\Feature\Size;
 use App\Models\Promocode\Promocode;
 use App\User;
 use App\Models\Product\Product;
+use App\Models\Product\Label;
 
 class ProductTablesSeeder extends CustomSeeder
 {
@@ -38,6 +39,8 @@ class ProductTablesSeeder extends CustomSeeder
         $this->createProducts($spec->id);
 
         $product = Product::latest()->first();
+
+        $product->categories()->attach( Category::all()->take( rand(1, 5) ) );
 
         $this->createQuestionAndAnswers( $product );
 
@@ -83,9 +86,9 @@ class ProductTablesSeeder extends CustomSeeder
     {
         return $this->products = $this->createTable(
             \App\Models\Product\Product::class,
-            [ 'id', 'name', 'code', 'user_id', 'status', 'brand_id', 'jalali_created_at' ],
+            [ 'id', 'name', 'code', 'user_id', 'status', 'label_id', 'brand_id', 'jalali_created_at' ],
             [
-                // 'category_id'   => Category::all()->random() ? Category::all()->random()->id : false,
+                'label_id'      => Label::all()->random()->id ?? false,
                 'brand_id'      => Brand::all()->random()->id ?? false,
                 'unit_id'       => Unit::all()->random()->id ?? false,
                 'spec_id'       => $spec_id,  

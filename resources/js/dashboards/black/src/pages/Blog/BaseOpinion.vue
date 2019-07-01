@@ -22,16 +22,16 @@
       <template v-slot:writer-body="slotProps">
         <div class="info-cell">
           <div class="mb-2" v-if="rel === 'article'">
-            <img class="tilt" :src="slotProps.row.article.image ? slotProps.row.article.image.tiny : '/images/placeholder.png'" />
+            <img class="tilt" :src="slotProps.row.article.image ? slotProps.row.article.image.thumb : '/images/placeholder.png'" />
             <a href="#" :style="{display: 'block'}">{{ slotProps.row.article.title }}</a>
           </div>
           <div class="mb-2" v-if="rel === 'product'">
-            <img class="tilt" :src="slotProps.row.product.photos ? slotProps.row.product.photos.tiny : '/images/placeholder.png'" />
+            <img class="tilt" :src="slotProps.row.product.photos ? slotProps.row.product.photos.thumb : '/images/placeholder.png'" />
             <a href="#" :style="{display: 'block'}">{{ slotProps.row.product.name }}</a>
           </div>
 
           <div>
-            <img class="tilt" :src="slotProps.row.writer.avatar ? slotProps.row.writer.avatar : '/images/placeholder-user.png'" />
+            <img class="tilt" :src="slotProps.row.writer.avatar ? slotProps.row.writer.avatar.thumb : '/images/placeholder-user.png'" />
             <a href="#">{{ slotProps.row.writer.full_name }}</a>
           </div>
         </div>
@@ -112,7 +112,7 @@
               </p>
             </div>
             <div class="col-6">
-              <img class="header-image tilt" :src="showing_info.writer.avatar ? showing_info.writer.avatar : '/images/placeholder-user.png'" />
+              <img class="header-image tilt" :src="showing_info.writer.avatar ? showing_info.writer.avatar.thumb : '/images/placeholder-user.png'" />
               <p class="header-paragraph">
                 <i class="tim-icons icon-user-run"></i>
                 {{ showing_info.writer.full_name }}
@@ -275,7 +275,7 @@
                       {{ index + 1 }}
                     </li>
                     <li class="data-table-cell p-2 d-flex align-items-center justify-content-center" >
-                      <img class="tilt" :src="row.writer.avatar ? row.writer.avatar.tiny : '/images/placeholder-user.png'" />
+                      <img class="tilt" :src="row.writer.avatar ? row.writer.avatar.thumb : '/images/placeholder-user.png'" />
                       {{ row.writer.full_name }}
                     </li>
                     <li class="data-table-cell p-2 d-flex align-items-center justify-content-center" >
@@ -610,8 +610,9 @@ export default {
           last_name
           full_name
           avatar {
-            tiny
-            big
+            id
+            file_name
+            thumb
           }
         }`
     },

@@ -24,7 +24,7 @@ class CreateArticlesTable extends Migration
             $table->table([
                 // 'sluggable_info',
                 // 'body',
-                'image'             => 'array',
+                // 'image'             => 'array',
                 'reading_time'      => 'nullable|mediumInteger|comment:How much time need for reading the article in minute',
                 'jalali_created_at' => 'datetime|nullable',
                 'is_active'         => 'boolean|default:1'

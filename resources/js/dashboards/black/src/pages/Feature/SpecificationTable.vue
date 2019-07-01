@@ -22,7 +22,14 @@
       <card :style="{ height: '300px' }" class="operation-cell">
         <h4 class="card-title">{{ table_title }}</h4>
         <h6 class="card-subtitle mb-2 text-muted">{{ table_description }}</h6>
-        <a class="card-link">{{ table_category ? table_category.title : '' }}</a>
+        
+        <span
+          v-for="item in table_categories"
+          :key="item.id"
+          class="badge badge-default ml-1 hvr-grow-shadow hvr-icon-grow">
+          <i class="tim-icons icon-bullet-list-67 hvr-icon"></i>
+          {{ item.title }}
+        </span>
 
         <hr />
 
@@ -397,7 +404,7 @@ export default {
       row_defaults: [],
       table_title: '',
       table_description: '',
-      table_category: null,
+      table_categories: null,
 
       type: null,
       group: 'spec',
@@ -638,7 +645,7 @@ export default {
             id
             title
             description
-            category {
+            categories {
               id
               title
             }
@@ -673,7 +680,7 @@ export default {
     .then(({data}) => {
       this.table_title = data.data.spec.title
       this.table_description = data.data.spec.description
-      this.table_category = data.data.spec.category
+      this.table_categories = data.data.spec.categories
       this.headers = data.data.spec.headers
     })
     .then( () => this.has_loaded = true)

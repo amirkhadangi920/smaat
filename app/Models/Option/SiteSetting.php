@@ -8,10 +8,14 @@ use OwenIt\Auditing\Contracts\Auditable as AuditableContract;
 use App\Helpers\HasTenant;
 use Dimsav\Translatable\Translatable;
 use App\Models\Tenant;
+use Spatie\MediaLibrary\HasMedia\HasMedia;
+use Spatie\MediaLibrary\HasMedia\HasMediaTrait;
+use App\Helpers\MediaConversionsTrait;
 
-class SiteSetting extends Model implements AuditableContract
+class SiteSetting extends Model implements AuditableContract, HasMedia
 {
     use Auditable, HasTenant, Translatable;
+    use HasMediaTrait, MediaConversionsTrait;
 
     /****************************************
      **             Attributes

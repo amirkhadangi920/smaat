@@ -11,8 +11,9 @@
         id
         title
         image {
-          tiny
-          big
+          id
+          file_name
+          thumb
         }
       }
     "

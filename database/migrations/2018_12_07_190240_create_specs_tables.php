@@ -22,7 +22,6 @@ class CreateSpecsTables extends Migration
         
         $schema->create('specs', function (Blueprint $table) {
             $table->id();
-            $table->reltoCategories();
             $table->reltoUsers();
             $table->reltoTenants();
             // $table->info();
@@ -30,6 +29,10 @@ class CreateSpecsTables extends Migration
             $table->dateTime('jalali_created_at')->nullable();
             $table->boolean('is_active')->default(1);
             // $table->unique(['title', 'tenant_id']);
+        });
+
+        $schema->create('spec_category', function ($table) {
+            $table->interface('specs', 'categories');
         });
 
         $schema->create('spec_translations', function ($table) {

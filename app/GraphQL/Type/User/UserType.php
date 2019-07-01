@@ -67,7 +67,7 @@ class UserType extends BaseType
                 },
                 'is_relation' => false
             ],
-            'avatar' => $this->imageField(),
+            'avatar' => $this->imageField('avatar'),
             'national_code' => [
                 'type' => Type::string(),
                 'privacy' => function() {

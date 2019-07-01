@@ -53,7 +53,7 @@ $factory->define(App\Models\Product\Product::class, function () use($faker, $pro
         'brand_id'          => Brand::all()->random()->id,
         'unit_id'           => Unit::all()->random()->id,
         'name'              => $faker->company,
-        'second_name'       => $faker->company,
+        'second_name'       => $faker->words(),
         'code'              => $faker->ean8,
         'description'       => Faker::sentence(),
         'note'              => Faker::sentence(),
@@ -63,12 +63,12 @@ $factory->define(App\Models\Product\Product::class, function () use($faker, $pro
         'advantages'        => $faker->sentences( rand(1, 10) ),
         'disadvantages'     => $faker->sentences( rand(1, 10) ),
         'views_count'       => $faker->numberBetween(0, 10000),
-        'photos'            => [ null, function () use($products, $selected) {
-            $photos = [];
-            for ($i = 0; $i < rand(0, 5); ++$i)
-                $photos[] = image( $products[$selected]['logo'] );
-            return $photos;
-        }][ $faker->boolean() ],
+        // 'photos'            => [ null, function () use($products, $selected) {
+        //     $photos = [];
+        //     for ($i = 0; $i < rand(0, 5); ++$i)
+        //         $photos[] = image( $products[$selected]['logo'] );
+        //     return $photos;
+        // }][ $faker->boolean() ],
         'jalali_created_at' => Jalalian::forge("now - {$faker->numberBetween(2, 360)} days"),
         'is_active'         => $faker->boolean(80)
     ];
@@ -87,5 +87,24 @@ $factory->define(App\Models\Product\Variation::class, function () use($faker) {
         'inventory'             => [ null, $faker->numberBetween(0, 100) ][ $faker->boolean() ],
         'sending_time'          => $faker->numberBetween(1, 10),
         'is_active'             => $faker->boolean(80)
+    ];
+});
+
+$factory->define(App\Models\Product\Label::class, function () use($faker) {
+
+    $labels = [
+        'توقف تولید',
+        'به زودی',
+        'عدم فروش',
+        'عدم موجودی',
+        'تخفیف ویژه',
+        'از رده خارج'
+    ];
+
+    return [
+        'title'             => $labels[ rand(0, count($labels) - 1) ],
+        'description'       => Faker::sentence(),
+        'color'             => $faker->hexColor,
+        'is_active'         => $faker->boolean(80)
     ];
 });

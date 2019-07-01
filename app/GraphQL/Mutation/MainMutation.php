@@ -106,18 +106,15 @@ class MainMutation extends Mutation
      */
     public function storeData($request)
     {
-        if ( isset($this->image_field) )
+        $model = $this->createNewModel( $this->getRequest( $request ) );
+
+        if ( isset($this->image_field) && $request->get( $this->image_field ) )
         {
-            return $this->createNewModel(
-                $this->getRequest(
-                    $this->requestWithImage( $request, $this->image_field )
-                )
-            );
+            $model->addMedia( $request->get( $this->image_field ) )
+                  ->toMediaCollection( $this->image_field );
         }
-        else
-        {
-            return $this->createNewModel( $this->getRequest( $request ) );
-        }
+
+        return $model;
     }
 
     /**
@@ -127,48 +124,19 @@ class MainMutation extends Mutation
      * @param Request $request
      * @return void
      */
-    public function updateData($request, $data)
+    public function updateData($request, $model)
     {
-        if ( isset($this->image_field) )
-        {
-            $data->update(
-                $this->getRequest(
-                    $this->requestWithImage( $request, $this->image_field, $data )
-                )
-            );
-        }
-        else
-        {
-            $data->update( $this->getRequest( $request ) );
-        }
-    }
+        $model->update( $this->getRequest( $request ) );
 
-    /**
-     * Get a request with a file and upload it's file,
-     * then return the same request with uploaded file names
-     *
-     * @param Request $request
-     * @param string $field_name
-     * @param Model $model
-     * @return Request
-     */
-    public function requestWithImage($request, $field_name = 'logo', $model = null)
-    {
-        if ( !$request->get($field_name) )
-            return $request->except($field_name);
-
-        if ( $model )
+        if ( isset($this->image_field) && $request->get( $this->image_field ) )
         {
-            foreach($model->$field_name as $item)
-            {
-                if ( file_exists( public_path($item) ) )
-                    unlink( public_path($item) );
-            }
+            $model->clearMediaCollection( $this->image_field );
+            
+            $model->addMedia( $request->get( $this->image_field ) )
+                  ->toMediaCollection( $this->image_field );
         }
 
-        return collect( array_merge( $request->except($field_name)->all(), [
-            $field_name => $this->upload_image( $request->get( $field_name ) )
-        ]) );
+        return $model;
     }
 
     /**

@@ -23,9 +23,23 @@ class SiteSettingQuery extends MainQuery
 
     public function resolve($root, $args, SelectFields $fields, ResolveInfo $info)
     {
-        return SiteSetting::select('id', 'name')
+        $options = SiteSetting::select('id', 'name')
             ->whereIn('name', $fields->getSelect() )
-            ->get()
-            ->pluck('value', 'name');
+            ->with('media:id,model_type,model_id,file_name')
+            ->get();
+
+            
+        return $options->whereIn('name', [
+            'title', 'description', 'phone', 'address', 'theme_color', 'banner_link', 'is_enabled'
+        ])
+        ->pluck('value', 'name')
+        ->merge(
+            $options->whereIn('name', [ 'logo', 'watermark', 'banner', 'header_banner' ])
+            ->pluck('media', 'name')
+        )
+        ->merge(
+            $options->whereIn('name', [ 'slider', 'posters' ])
+            ->keyBy('name')
+        );
     }
 }

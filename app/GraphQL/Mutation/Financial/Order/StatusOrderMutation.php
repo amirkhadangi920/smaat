@@ -28,11 +28,11 @@ class StatusOrderMutation extends BaseOrderMutation
     {
         return [
             'id'    => [
-                'type' => $this->incrementing ? Type::int() : Type::string()
+                'type' => Type::nonNull( $this->incrementing ? Type::int() : Type::string() )
             ],
-            'ids'    => [
-                'type' => Type::listOf( $this->incrementing ? Type::int() : Type::string() )
-            ],
+            // 'ids'    => [
+            //     'type' => Type::listOf( $this->incrementing ? Type::int() : Type::string() )
+            // ],
             'status' => [
                 'type' => Type::nonNull( Type::int() )
             ]

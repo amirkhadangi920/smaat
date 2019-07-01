@@ -52,7 +52,7 @@ class MeType extends BaseType
                 'type' => Type::listOf( \GraphQL::type('data_array') ),
                 'is_relation' => false
             ],
-            'avatar' => $this->imageField(),
+            'avatar' => $this->imageField('avatar'),
             'national_code' => [
                 'type' => Type::string(),
             ],

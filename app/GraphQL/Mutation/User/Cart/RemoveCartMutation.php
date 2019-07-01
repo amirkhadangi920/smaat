@@ -2,10 +2,10 @@
 
 namespace App\GraphQL\Mutation\User\Cart;
 
-use App\GraphQL\Mutation\MainMutation;
 use Rebing\GraphQL\Support\SelectFields;
 use GraphQL\Type\Definition\ResolveInfo;
 use App\Models\Product\Variation;
+use Cookie;
 
 class RemoveCartMutation extends BaseCartMutation
 {

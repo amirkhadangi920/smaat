@@ -28,7 +28,7 @@ class CreateUsersTable extends Migration
                 'email'             => '100',
                 'email_verified_at' => 'timestamp|nullable',
                 'password'          => 100,
-                'avatar'            => 'nullable|array',
+                // 'avatar'            => 'nullable|array',
                 'national_code'     => '10|nullable',
 
                 'rememberToken',

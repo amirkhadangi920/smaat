@@ -15,12 +15,16 @@ use App\Helpers\CreatorRelationship;
 use Askedio\SoftCascade\Traits\SoftCascadeTrait;
 use Dimsav\Translatable\Translatable;
 use Nicolaslopezj\Searchable\SearchableTrait;
+use Spatie\MediaLibrary\HasMedia\HasMedia;
+use Spatie\MediaLibrary\HasMedia\HasMediaTrait;
+use App\Helpers\MediaConversionsTrait;
 
-class Subject extends Model implements AuditableContract
+class Subject extends Model implements AuditableContract, HasMedia
 {
     use SoftDeletes, Auditable, HasTags, MultiLevel;
     use CreateTimeline, HasTenant, CreatorRelationship, SoftCascadeTrait;
     use Translatable, SearchableTrait;
+    use HasMediaTrait, MediaConversionsTrait;
 
     /****************************************
      **             Attributes
@@ -42,9 +46,6 @@ class Subject extends Model implements AuditableContract
      */
     protected $fillable = [
         'parent_id',
-        // 'title',
-        // 'description',
-        'logo',
         'is_active'
     ];
 
@@ -87,7 +88,6 @@ class Subject extends Model implements AuditableContract
         'parent_id',
         'title',
         'description',
-        'logo',
         'is_active'
     ];
 
@@ -97,7 +97,6 @@ class Subject extends Model implements AuditableContract
      * @var array
      */
     protected $casts = [
-        'logo'      => 'array',
         'is_active' => 'boolean'
     ];
 
@@ -136,6 +135,14 @@ class Subject extends Model implements AuditableContract
     public function articles ()
     {
         return $this->belongsToMany(Article::class);
+    }
+    
+    /**
+     * Get the media field of the model
+     */
+    public function logo()
+    {
+        return $this->morphMany(config('medialibrary.media_model'), 'model');
     }
     
 

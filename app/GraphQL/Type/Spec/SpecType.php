@@ -27,7 +27,7 @@ class SpecType extends BaseType
                 'type' => Type::string(),
                 'selectable' => false
             ],
-            'category' => $this->relationItemField('category'),
+            'categories' => $this->relationListField('category'),
             'headers' => $this->relationListField('spec_header', 'is_active', 'read-spec'),
             'filters' => [
                 'type'  => Type::listOf( \GraphQL::type('spec_row') ),

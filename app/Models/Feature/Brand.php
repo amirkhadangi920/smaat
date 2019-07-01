@@ -11,18 +11,21 @@ use App\Models\Group\Category;
 use App\Models\Product\Product;
 use App\Helpers\CreateTimeline;
 use App\Helpers\HasTenant;
-use App\User;
 use App\Helpers\CreatorRelationship;
 use Dimsav\Translatable\Translatable;
 use App\Helpers\TranslatableHelper;
 use Nicolaslopezj\Searchable\SearchableTrait;
+use Spatie\MediaLibrary\HasMedia\HasMedia;
+use Spatie\MediaLibrary\HasMedia\HasMediaTrait;
+use App\Helpers\MediaConversionsTrait;
 
-class Brand extends Model implements AuditableContract
+class Brand extends Model implements AuditableContract, HasMedia
 {
     use SoftDeletes, Auditable, Filterable;
     use CreateTimeline, HasTenant, CreatorRelationship;
     use Translatable, TranslatableHelper;
     use SearchableTrait;
+    use HasMediaTrait, MediaConversionsTrait;
 
     /****************************************
      **             Attributes
@@ -34,9 +37,6 @@ class Brand extends Model implements AuditableContract
      * @var array
      */
     protected $fillable = [
-        'logo',
-        // 'name',
-        // 'description',
         'is_active'
     ];
 
@@ -76,7 +76,6 @@ class Brand extends Model implements AuditableContract
      * @var array
      */
     protected $auditInclude = [
-        'logo',
         'name',
         'description',
         'is_active'
@@ -88,7 +87,6 @@ class Brand extends Model implements AuditableContract
      * @var array
      */
     protected $casts = [
-        'logo' => 'array',
         'is_active' => 'boolean'
     ];
 
@@ -120,6 +118,13 @@ class Brand extends Model implements AuditableContract
         return $this->hasMany(Product::class);
     }
 
+    /**
+     * Get the media field of the model
+     */
+    public function logo()
+    {
+        return $this->morphMany(config('medialibrary.media_model'), 'model');
+    }
 
     /****************************************
      **              Methods

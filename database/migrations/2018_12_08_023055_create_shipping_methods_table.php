@@ -23,7 +23,7 @@ class CreateShippingMethodsTable extends Migration
         $schema->create('shipping_methods', function (Blueprint $table) {
             $table->table([
                 // 'info'      => 'param:name',
-                'logo'      => 'nullable|array',
+                // 'logo'      => 'nullable|array',
                 'cost'      => 'integer',
                 'minimum'   => 'integer|default:0|comment:Minimum factor total for this method',
                 'is_active' => 'boolean|default:0',

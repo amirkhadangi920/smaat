@@ -30,6 +30,9 @@ class BaseReviewMutation extends MainMutation
             'disadvantages' => [
                 'type' => Type::listOf( Type::string() )
             ],
+            'title' => [
+                'type' => Type::string()
+            ],
             'message' => [
                 'type' => Type::string()
             ],

@@ -64,8 +64,29 @@
       </span>
     </template>
     
-    <template v-slot:category-body="slotProps">
-      <a href="#">{{ slotProps.row.category ? slotProps.row.category.title : '' }}</a>
+    <template v-slot:categories-body="slotProps">
+      <transition-group name="list">
+        <span
+          v-for="item in slotProps.row.categories.filter( (category, index) => index < 3)"
+          :key="item.id"
+          class="badge badge-default ml-1 hvr-grow-shadow hvr-icon-grow">
+          <i class="tim-icons icon-bullet-list-67 hvr-icon"></i>
+          {{ item.title }}
+        </span>
+
+        <el-dropdown v-if="slotProps.row.categories.length > 3" :key="slotProps.row.categories.map((c) => c.id).join(',')">
+          <span class="el-dropdown-link badge badge-default">
+            باقی گروه ها <i class="el-icon-arrow-down el-icon--right"></i>
+          </span>
+          <el-dropdown-menu slot="dropdown">
+            <el-dropdown-item
+              v-for="item in slotProps.row.categories.filter( (category, index) => index < 3)"
+              :key="item.id">
+              {{ item.title }}
+            </el-dropdown-item>
+          </el-dropdown-menu>
+        </el-dropdown>
+      </transition-group>
     </template>
 
     <template slot="modal">
@@ -83,47 +104,34 @@
         <i class="md-icon tim-icons icon-paper"></i>
         <span class="md-helper-text">توضیحی مختصر درباره جدول</span>
       </md-field>
-
-      <!-- <el-cascader
-        :options="$store.state.group.category"
-        :value="['id']"
-        label="title"
-        children="childs"  
-      >
-      </el-cascader> -->
       <br/>
-      <hr/>
 
-      <el-collapse>
-        <el-collapse-item name="1">
-          <template slot="title">
-            <div class="row col-12">
-              <h3 class="col-8" :style="{margin: '0px'}">مخشصات پردازنده</h3>
+      <base-input label="دسته بندی های جدول مشخصات">
+        <el-tree
+          class="rtl"
+          dir="ltr"
+          :data="$store.state.group.category"
+          :props="defaultProps"
+          :accordion="true"
+          ref="categories"
+          show-checkbox
+          node-key="id"
+          @check-change="changeSelectedCategories"
+          :default-checked-keys="selected('categories')"
+          :default-expanded-keys="selected('categories')"
+          empty-text="هیچ دسته بندی ای یافت نشد :("
+        >
+        </el-tree>
+      <small slot="helperText" id="emailHelp" class="form-text text-muted">برای انتخاب هر دسته بندی تیک قبل آن را انتخاب کنید</small>
+      </base-input>
+    </template>
 
-              <div class="col-4">
-                <el-tooltip class="pull-left" :content="'ویرایش '">
-                  <base-button type="success" size="sm" icon>
-                    <i class="tim-icons icon-pencil"></i>
-                  </base-button>
-                </el-tooltip>
-
-                <el-tooltip class="pull-left" :content="'حذف '">
-                  <base-button type="danger" size="sm" icon>
-                    <i class="tim-icons icon-simple-remove"></i>
-                  </base-button>
-                </el-tooltip>
-              </div>
-            </div>
-          </template>
-
-          <div>Consistent with real life: in line with the process and logic of real life, and comply with languages and habits that the users are used to;</div>
-          <div>Consistent within interface: all elements should be consistent, such as: design style, icons and texts, position of elements, etc.</div>
-        </el-collapse-item>
-        <el-collapse-item title="Feedback" name="2">
-          <div>Operation feedback: enable the users to clearly perceive their operations by style updates and interactive effects;</div>
-          <div>Visual feedback: reflect current state by updating or rearranging elements of the page.</div>
-        </el-collapse-item>
-      </el-collapse>
+    <template #custom-operations="slotProps">
+      <el-tooltip content="مدیریت جدول">
+        <base-button class="m-0" @click="manageTable(slotProps.index, slotProps.row)" type="success" size="sm" icon>
+          <i class="tim-icons icon-bullet-list-67"></i>
+        </base-button>
+      </el-tooltip>
     </template>
 
   </datatable>
@@ -133,6 +141,7 @@
 import {Tooltip} from 'element-ui'
 import {BaseDropdown} from '../../components'
 import Datatable from '../../components/BaseDatatable.vue'
+import RemoteSelect from '../../components/RemoteSelect'
 
 import createMixin from '../../mixins/createMixin'
 import initDatatable from '../../mixins/initDatatable'
@@ -145,6 +154,7 @@ export default {
   components: {
     Datatable,
     BaseDropdown,
+    RemoteSelect
   },
   mixins: [
     initDatatable,
@@ -157,6 +167,13 @@ export default {
       plural: 'specs',
       type: 'spec',
       group: 'feature',
+
+      // spec_categories: [],
+
+      defaultProps: {
+        children: 'childs',
+        label: 'title',
+      },
     }
   },
   validations: {
@@ -173,55 +190,39 @@ export default {
       group: 'group',
       type: 'category',
     })
-  },
-  created() {
-    setTimeout( () => $('.tilt').tilt({scale: 1.1}) ,300)
-    setTimeout( () => $('.tilt-fixed').tilt() ,300)
+
+    // axios.get('/graphql/auth', {
+    //   params: {
+    //     query: `{
+    //       specCategories { id }
+    //     }`
+    //   }
+    // }).then(({data}) => this.spec_categories = data.data.specCategories.map(i => i.id) )
   },
   methods: {
-    closePanel() {
-      this.$refs.datatable.closePanel();
-    },
-    edit(index, row)
+    manageTable(index, row)
     {
       this.setAttr('is_creating', false)
 
       this.$router.push(`/panel/specification/${row.id}`)
     },
-    getData() {
-      let data = new FormData();
-
-      this.fields.forEach(field => {
-        if ( ['logo', 'categories'].includes(field.field) ) return
-
-        let value = selected( field.field )
-
-        data.append(field.field, value ? value : '')
-      });
-
-      this.$refs.categories.getCheckedKeys().forEach(category => {
-        data.append('categories[]', category);
-      });
-
-      if ( selected('imageFile') )
-        data.append('logo', selected('imageFile'))
-
-      return data
+    changeSelectedCategories() {
+      this.$store.commit('setFormData', {
+        group: this.group,
+        type: this.type,
+        field: 'categories',
+        value: this.$refs.categories.getCheckedKeys()
+      })
     },
-    
-    getValidationClass (fieldName) {
-      const field = this.$v[fieldName]
-
-      if (field) {
-        return {
-          'md-invalid': field.$invalid && field.$dirty
-        }
-      }
+    afterCreate()
+    {
+      setTimeout(() => this.$refs.categories.setCheckedKeys([]) , 100);
     },
-    validate() {
-      this.$v.$touch()
-
-      return !this.$v.$invalid;
+    afterEdit(row)
+    {
+      setTimeout(() => this.$refs.categories.setCheckedKeys(
+        row.categories.map(i => i.id)
+      ), 100);
     },
   },
   
@@ -240,8 +241,8 @@ export default {
           label: 'توضیحات',
           icon: 'icon-single-copy-04'
         }, {
-          field: 'category',
-          label: 'دسته بندی',
+          field: 'categories',
+          label: 'دسته بندی ها',
           icon: 'icon-time-alarm'
         }
       ]
@@ -250,7 +251,7 @@ export default {
       return `
         title
         description
-        category {
+        categories {
           id
           title
         }

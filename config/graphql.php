@@ -11,7 +11,7 @@ use App\GraphQL\Query\Feature\{
 
 // Group Queries
 use App\GraphQL\Query\Group\{
-    Category\CategoryQuery, Category\CategoriesQuery,
+    Category\CategoryQuery, Category\CategoriesQuery, Category\SpecCategoriesQuery,
     Subject\SubjectQuery, Subject\SubjectsQuery
 };
 
@@ -40,7 +40,8 @@ use App\GraphQL\Query\Option\{
 // Shop Queries
 use App\GraphQL\Query\Shop\{
     Product\ProductQuery, Product\ProductsQuery,
-    Spec\SpecQuery, Spec\SpecsQuery
+    Spec\SpecQuery, Spec\SpecsQuery,
+    Label\LabelQuery, Label\LabelsQuery
 };
 
 // Blog Queries
@@ -99,7 +100,9 @@ use App\GraphQL\Mutation\Opinion\{
 
 // Product Mutations
 use App\GraphQL\Mutation\Product\{
-    Product\CreateProductMutation, Product\UpdateProductMutation, Product\DeleteProductMutation
+    Product\CreateProductMutation, Product\UpdateProductMutation, Product\DeleteProductMutation,
+    Variation\CreateVariationMutation, Variation\UpdateVariationMutation, Variation\DeleteVariationMutation,
+    Label\CreateLabelMutation, Label\UpdateLabelMutation, Label\DeleteLabelMutation
 };
 
 // Blog Mutations
@@ -110,7 +113,7 @@ use App\GraphQL\Mutation\Blog\{
 // User Mutations
 use App\GraphQL\Mutation\User\{
     User\CreateUserMutation, User\UpdateUserMutation, User\DeleteUserMutation,
-    User\LoginUserMutation, User\RegisterUserMutation,
+    User\LoginUserMutation, User\RegisterUserMutation, User\UpdateUserPasswordMutation,
 
     Role\CreateRoleMutation, Role\UpdateRoleMutation, Role\DeleteRoleMutation,
     
@@ -187,6 +190,18 @@ use App\GraphQL\Type\CoordinateType;
 use App\GraphQL\Type\Financial\MeOrderType;
 use App\GraphQL\Type\Financial\MeOrderItemType;
 use App\GraphQL\Type\Financial\PromocodeType;
+use App\GraphQL\Type\SingleMediaType;
+use App\GraphQL\Type\MediaCustomPropertiesType;
+use App\GraphQL\Input\SpecInput;
+// use App\GraphQL\Input\ReviewInput;
+use App\GraphQL\Input\ReviewInput;
+use App\GraphQL\Input\ImageColorInput;
+use App\GraphQL\Type\Product\LabelType;
+use App\GraphQL\Type\Option\SliderType;
+use App\GraphQL\Input\SliderItemInput;
+use App\GraphQL\Mutation\Option\SiteSetting\InfoSiteSettingMutation;
+use App\GraphQL\Mutation\Option\SiteSetting\SliderSiteSettingMutation;
+use App\GraphQL\Mutation\Option\SiteSetting\PostersSiteSettingMutation;
 
 return [
 
@@ -390,14 +405,25 @@ return [
                 'products' => ProductsQuery::class,
                 'spec' => SpecQuery::class,
                 'specs' => SpecsQuery::class,
+                'label' => LabelQuery::class,
+                'labels' => LabelsQuery::class,
 
                 // Blog
                 'article' => ArticleQuery::class,
                 'articles' => ArticlesQuery::class,
 
+                // Place
+                'country' => CountryQuery::class,
+                'countries' => CountriesQuery::class,
+                'province' => ProvinceQuery::class,
+                'provinces' => ProvincesQuery::class,
+                'city' => CityQuery::class,
+                'cities' => CitiesQuery::class,
+
                 // Group
                 'category' => CategoryQuery::class,
                 'categories' => CategoriesQuery::class,
+                'specCategories' => SpecCategoriesQuery::class,
                 'subject' => SubjectQuery::class,
                 'subjects' => SubjectsQuery::class,
 
@@ -489,11 +515,25 @@ return [
                 'updateQuestionAndAnswer' => UpdateQuestionAndAnswerMutation::class,
                 'deleteQuestionAndAnswer' => DeleteQuestionAndAnswerMutation::class,
 
+
+                // Option
+                'updateSiteInfo' => InfoSiteSettingMutation::class,
+                'updateSiteSlider' => SliderSiteSettingMutation::class,
+                'updateSitePosters' => PostersSiteSettingMutation::class,
+
                 
                 // Product
                 'createProduct' => CreateProductMutation::class,
                 'updateProduct' => UpdateProductMutation::class,
                 'deleteProduct' => DeleteProductMutation::class,
+
+                'createVariation' => CreateVariationMutation::class,
+                'updateVariation' => UpdateVariationMutation::class,
+                'deleteVariation' => DeleteVariationMutation::class,
+
+                'createLabel' => CreateLabelMutation::class,
+                'updateLabel' => UpdateLabelMutation::class,
+                'deleteLabel' => DeleteLabelMutation::class,
 
                 
                 // Spec
@@ -517,6 +557,7 @@ return [
                 // User
                 'updateUser'    => UpdateUserMutation::class,
                 'deleteUser'    => DeleteUserMutation::class,
+                'updateUserPassword' => UpdateUserPasswordMutation::class,
 
                 'createRole'    => CreateRoleMutation::class,
                 'updateRole'    => UpdateRoleMutation::class,
@@ -550,6 +591,10 @@ return [
     // ]
     //
     'types' => [
+        'spec_input'        => SpecInput::class,
+        'image_color_input' => ImageColorInput::class,
+        'slider_item_input' => SliderItemInput::class,
+
         // Feature
         'brand'             => BrandType::class,
         'size'              => SizeType::class,
@@ -576,10 +621,12 @@ return [
         // Option
         'site_settings'     => SiteSettingType::class,
         'user_settings'     => UserSettingType::class,
+        'slider_item'       => SliderType::class,
 
         // Product
         'product'           => ProductType::class,
         'variation'         => VariationType::class,
+        'label'             => LabelType::class,
         'price_change'      => PriceChangeType::class,
 
         // Blog
@@ -610,6 +657,9 @@ return [
         'province'          => ProvinceType::class,
         'country'           => CountryType::class,
 
+        // Inputs
+        // 'spec_input'        => ReviewInput::class,
+
 
         'coordinate'        => CoordinateType::class,
         'audit'             => AuditType::class,
@@ -620,6 +670,8 @@ return [
         'result'            => ResultMessageType::class,
         'Character'         => CharacterInterface::class,
         'chart_record'      => ChartRecordType::class,
+        'single_media'      => SingleMediaType::class,
+        'media_custom_properties' => MediaCustomPropertiesType::class,
     ],
 
     // This callable will be passed the Error object for each errors GraphQL catch.
@@ -666,7 +718,7 @@ return [
     'graphiql' => [
         'prefix' => '/graphiql/{graphql_schema?}',
         'controller' => \Rebing\GraphQL\GraphQLController::class.'@graphiql',
-        'middleware' => ['auth:api'],
+        'middleware' => [],
         'view' => 'graphql::graphiql',
         'display' => env('ENABLE_GRAPHIQL', true),
     ],

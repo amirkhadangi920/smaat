@@ -9,8 +9,9 @@
         id
         name
         photos {
-          tiny
-          big
+          id
+          file_name
+          thumb
         }
       }
     "

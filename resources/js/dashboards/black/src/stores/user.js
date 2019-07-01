@@ -117,10 +117,6 @@ export default {
                     file: null,
                     url: ''
                 },
-                address: {
-                    type: 'String',
-                    value: ''
-                },
                 email: {
                     type: 'String',
                     value: ''

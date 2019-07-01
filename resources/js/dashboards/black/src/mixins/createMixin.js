@@ -139,15 +139,15 @@ export default {
 
     storeInServer(options)
     {
-      if( !this.validate() ) return;
-      
+      if ( !this.validate() ) return;
+    
       const mutation = voca.camelCase(
         this.attr('is_creating') ? `create ${this.type}` : `update ${this.type}`
       )
 
-      const form = this.getAllFormData()
+      const form = this.getAllFormData()      
       
-      if ( !this.attr('is_creating') )
+      if ( !this.attr('is_creating') && this.group !== 'setting' )
       {
         if ( this.attr('is_incrementing') )
           form.args = `id: "${ this.attr('selected').id }", ` + form.args
@@ -159,14 +159,16 @@ export default {
       const query = {
         query: `mutation manageData(${form.params}) {
           data: ${mutation} (${form.args}) {
-            id
+            ${this.group !== 'setting' ? 'id' : ''}
             ${this.allQuery}
 
             ${ this.attr('has_timestamps') ? 'created_at updated_at' : ''}
           }
         }`,
-        variables: form.variables
+        variables: typeof this.getVariables === "function" ? this.getVariables() : form.variables
       }
+
+      // return console.log( query )
 
       let fd = new FormData();
 
@@ -190,8 +192,13 @@ export default {
       else
         fd.append('map' , '{}')
 
+      if ( typeof this.changeFormData === "function" )
+        fd = this.changeFormData(fd);      
+
+
       axios.post('/graphql/auth', fd).then(({data}) =>
       {
+        return console.log( data )
         var msg = this.attr('is_creating') ? 'ثبت شد' : 'بروزرسانی شد'
           
         if ( this.attr('is_creating') ) {

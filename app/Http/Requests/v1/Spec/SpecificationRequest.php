@@ -6,6 +6,7 @@ use Illuminate\Foundation\Http\FormRequest;
 use App\Rules\UniqueTenant;
 use App\Rules\ExistsTenant;
 use App\Http\Requests\v1\MainRequest;
+use App\Rules\CategoryWithoutSpec;
 
 class SpecificationRequest extends MainRequest
 {
@@ -20,7 +21,7 @@ class SpecificationRequest extends MainRequest
 
         return [
             'title'             => [
-                'required',
+                $this->requiredOrFilled(),
                 'string',
                 'max:50',
                 new UniqueTenant('specs', $args['id'] ?? null)
@@ -31,7 +32,7 @@ class SpecificationRequest extends MainRequest
             /**
              * relateion 
              */
-            'categories'        => ['required', 'array', new ExistsTenant],
+            'categories'        => ['required', 'array', new CategoryWithoutSpec( $args['id'] ?? null )],
             'categories.*'      => 'required|integer'
         ];
     }

@@ -25,11 +25,10 @@ class SpecificationTablesSeeder extends Seeder
      */
     public function run()
     {
-        $categories = Category::latest()->get()->take(10);
+        $categories = Category::whereDoesntHave('spec')->latest()->get()->take( rand(1, 4) );
 
-        $spec = factory(\App\Models\Spec\Spec::class)->create([
-            'category_id' => $categories->random()->id
-        ]);
+        $spec = factory(\App\Models\Spec\Spec::class)->create();
+        $spec->categories()->attach( $categories->pluck('id') );
 
         factory(\App\Models\Spec\SpecHeader::class, rand(1, 5) )->create([
             'spec_id' => $spec->id

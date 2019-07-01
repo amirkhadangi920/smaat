@@ -24,7 +24,7 @@ class ReviewRequest extends MainRequest
             'disadvantages'     => 'nullable|array',
             'disadvantages.*'   => 'required|string|max:100',
             'title'             => 'required|string|max:100',
-            'message'           => 'required|string',
+            'message'           => 'required|string|max:2000',
 
             /* relateion */
             'product_id'        => ['required', 'string', new ExistsTenant('products')],

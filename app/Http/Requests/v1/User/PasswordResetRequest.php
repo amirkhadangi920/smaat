@@ -14,6 +14,7 @@ class PasswordResetRequest extends MainRequest
     public function rules()
     {
         return [
+            'current_password' => ['required', 'string'],
             'password' => ['required', 'string', 'min:6', 'confirmed']
         ];
     }

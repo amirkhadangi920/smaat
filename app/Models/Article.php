@@ -18,13 +18,16 @@ use App\Helpers\HasTenant;
 use Askedio\SoftCascade\Traits\SoftCascadeTrait;
 use Dimsav\Translatable\Translatable;
 use Nicolaslopezj\Searchable\SearchableTrait;
+use Spatie\MediaLibrary\HasMedia\HasMedia;
+use Spatie\MediaLibrary\HasMedia\HasMediaTrait;
+use App\Helpers\MediaConversionsTrait;
 
-
-class Article extends Model implements AuditableContract , LikeableContract
+class Article extends Model implements AuditableContract , LikeableContract, HasMedia
 {
     use Auditable, SoftDeletes, HasTags, Likeable, Filterable;
     use CreateTimeline, HasTenant, CreatorRelationship;
     use SoftCascadeTrait, Translatable, SearchableTrait;
+    use HasMediaTrait, MediaConversionsTrait;
 
     /****************************************
      **             Attributes
@@ -64,7 +67,6 @@ class Article extends Model implements AuditableContract , LikeableContract
         'description',
         'body',
         'reading_time',
-        'image',
         'is_active'
     ];
 
@@ -109,7 +111,6 @@ class Article extends Model implements AuditableContract , LikeableContract
         'description',
         'body',
         'reading_time',
-        'image',
         'is_active'
     ];
 
@@ -119,7 +120,6 @@ class Article extends Model implements AuditableContract , LikeableContract
      * @var array
      */
     protected $casts = [
-        'image' => 'array',
         'is_active' => 'boolean'
     ];
 
@@ -171,6 +171,14 @@ class Article extends Model implements AuditableContract , LikeableContract
     public function subjects()
     {
         return $this->belongsToMany(Subject::class);
+    }
+    
+    /**
+     * Get the media field of the model
+     */
+    public function image()
+    {
+        return $this->morphMany(config('medialibrary.media_model'), 'model');
     }
 
 

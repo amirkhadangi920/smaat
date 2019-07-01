@@ -18,7 +18,7 @@
     <template #filter-labels></template>
     
     <template #avatar-body="slotProps">
-      <img class="tilt" :src="slotProps.row.avatar ? slotProps.row.avatar.tiny : '/images/placeholder-user.png'" />
+      <img class="tilt" :src="slotProps.row.avatar ? slotProps.row.avatar.thumb : '/images/placeholder-user.png'" />
     </template>
 
     <template #email-body="slotProps">
@@ -376,7 +376,7 @@ export default {
     
     allQuery() {
       return `
-        avatar { tiny big }
+        avatar { id file_name thumb }
         first_name
         last_name
         full_name

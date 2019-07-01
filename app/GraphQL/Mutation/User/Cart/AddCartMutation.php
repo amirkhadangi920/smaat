@@ -30,6 +30,7 @@ class AddCartMutation extends BaseCartMutation
             $this->addCartPublic($variation, $quantity);
         
         return [
+            'count' => $quantity,
             'status' => 200,
             'message' => $variation->product->name.' با موفقیت به سبد خرید شما اضافه شد .'
         ];

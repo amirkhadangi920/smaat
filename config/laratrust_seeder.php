@@ -64,6 +64,8 @@ return [
             
             'article' => 'at,r,c,u,d,sl,sc',
             'product' => 'at,r,c,u,d,sl,sc',
+            'variation' => 'at,c,u,d,sl,sc',
+            'label' => 'r,at,c,u,d,sl,sc',
 
             'shipping_method' => 'at,r,c,u,d,sl,sc',
             'order_status' => 'at,r,c,u,d,sl,sc',
@@ -72,13 +74,15 @@ return [
             'review' => 'r,c,a,d,sl',
             'question_and_answer' => 'r,c,a,d,sl',
 
-            'order' => 'r,d,s,sa,sph,si,sl',
+            'order' => 'r,d,s,sa,sph,si,sl,chst',
             'order_item' => 's,sc',
             'discount' => 'at,r,c,u,d,ad,rm,sl,sc',
             'promocode' => 'at,r,c,u,d,sl,sc',
 
             'user' => 'r,u,d,s,sa,sph,sl',
             'role' => 'at,r,c,u,d,sl,sc',
+
+            'setting' => 'u'
         ],
     ],
     // 'permission_structure' => [
@@ -101,6 +105,7 @@ return [
         'sa'    => 'see-address',
         'sph'   => 'see-phone-number',
         'si'    => 'see-items',
+        'chst'  => 'change-status'
         // 'sinv'  => 'see-inventory'
     ],
 
@@ -119,6 +124,7 @@ return [
         'see-address'       => 'مشاهده آدرس',
         'see-phone-number'  => 'مشاهده شماره تلفن',
         'see-items'         => 'مشاهده اقلام',
+        'change-status'     => 'تغییر وضعیت'
         // 'see-inventory'     => 'مشاهده موجودی',
     ],
 
@@ -135,6 +141,8 @@ return [
         
         'article' => 'مقاله',
         'product' => 'محصول',
+        'variation' => 'تنوع محصول',
+        'label' => 'لیبل محصول',
 
         'shipping_method' => 'روش ارسال',
         'order_status' => 'وضعیت سفارش',
@@ -150,6 +158,8 @@ return [
 
         'user' => 'کاربر',
         'role' => 'نقش',
+
+        'setting' => 'تنظیمات'
     ],
 
     'roles_label' => [

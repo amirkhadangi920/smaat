@@ -12,7 +12,7 @@ $factory->define(App\Models\Group\Category::class, function () use($faker, $bran
         'user_id'           => App\User::all()->random()->id,
         'title'             => Faker::fullName(),
         'description'       => nullable( Faker::sentence() ),
-        'logo'              => nullable( image ( $brands[$selected]['logo'] )),
+        // 'logo'              => nullable( image ( $brands[$selected]['logo'] )),
         'jalali_created_at' => Jalalian::forge("now - {$faker->numberBetween(2, 360)} days"),
         'is_active'         => $faker->boolean(80)
     ];
@@ -34,7 +34,7 @@ $factory->define(App\Models\Group\Subject::class, function () use($faker, $brand
         'user_id'           => App\User::all()->random()->id,
         'title'             => Faker::fullName(),
         'description'       => nullable( Faker::sentence() ),
-        'logo'              => nullable( image ( $brands[$selected]['logo'] )),
+        // 'logo'              => nullable( image ( $brands[$selected]['logo'] )),
         'jalali_created_at' => Jalalian::forge("now - {$faker->numberBetween(2, 360)} days"),
         'is_active'         => $faker->boolean(80)
         

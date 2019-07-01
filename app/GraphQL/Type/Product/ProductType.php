@@ -26,7 +26,7 @@ class ProductType extends BaseType
                 'selectable' => false
             ],
             'second_name' => [
-                'type' => Type::string(),
+                'type' => Type::listOf( Type::string() ),
                 'selectable' => false
             ],
             'code' => [
@@ -56,18 +56,22 @@ class ProductType extends BaseType
                 'selectable' => false
             ],
             'photos' => [
-                'type' => Type::listOf( \GraphQL::type('image') ),
-                'is_relation' => false
+                'type' => Type::listOf( \GraphQL::type('single_media') ),
             ],
             'views_count' => [
                 'type' => Type::int()
+            ],
+            'tags' => [
+                'type' => Type::listOf( \GraphQl::type('tag') ),
             ],
             'votes' => $this->votes(),
             'variations' => $this->relationListField('variation', 'is_active', 'read-product'),
             'variation' => $this->relationItemField('variation', 'is_active', 'read-product'),
             'spec' => $this->relationItemField('spec'),
             'brand' => $this->relationItemField('brand'),
-            'category' => $this->relationItemField('category'),
+            'label' => $this->relationItemField('label'),
+            'categories' => $this->relationListField('category'),
+            'colors' => $this->relationListField('color'),
             'unit' => $this->relationItemField('unit'),
             'reviews' => $this->paginatedRelationListField('review', 'is_accept'),
             'questions' => $this->paginatedRelationListField('question_and_answer', 'is_accept'),

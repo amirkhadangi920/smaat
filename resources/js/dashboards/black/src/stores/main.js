@@ -8,6 +8,7 @@ import product from './product'
 import shop from './shop'
 import user from './user'
 import spec from './spec'
+import setting from './setting'
 
 Vue.use(Vuex)
 
@@ -19,7 +20,8 @@ export default new Vuex.Store({
         product,
         shop,
         user,
-        spec
+        spec,
+        setting
     },
     state: {
         permissions: [],
@@ -68,6 +70,7 @@ export default new Vuex.Store({
 
                     case '[Int]':
                     case '[String]':
+                    case '[Upload]':
                         form[field].value = []
                         break;
 
@@ -105,13 +108,14 @@ export default new Vuex.Store({
 
                     case '[Int]':
                     case '[String]':
+                    case '[Upload]':
                         form[field].value = value ? value : []
                         break;
 
                     case 'Upload':
                         form[field].value = null
                         form[field].file = null
-                        form[field].url = value ? value.tiny : ''
+                        form[field].url = value ? value.thumb : ''
                         break;
                 }
             }

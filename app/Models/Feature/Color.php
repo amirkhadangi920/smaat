@@ -14,6 +14,7 @@ use App\Helpers\HasTenant;
 use App\Helpers\CreatorRelationship;
 use Dimsav\Translatable\Translatable;
 use Nicolaslopezj\Searchable\SearchableTrait;
+use App\Models\Product\Product;
 
 class Color extends Model implements AuditableContract
 {
@@ -109,5 +110,13 @@ class Color extends Model implements AuditableContract
     public function variations()
     {
         return $this->hasMany(Variation::class);
+    }
+
+    /**
+     * get the all products that owned the color
+     */
+    public function products()
+    {
+        return $this->belongsToMany(Product::class, 'product_color');
     }
 }

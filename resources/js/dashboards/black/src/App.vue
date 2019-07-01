@@ -58,13 +58,16 @@
                 <sidebar-link to="/panel/subject" :name="$t('sidebar.list') + ' ' + $t('sidebar.subject')" icon="tim-icons icon-notes"/>      
               </el-menu-item>
             </el-submenu>
-            <el-submenu index="3" v-if="canSeeMenu(['product', 'category', 'review', 'question_and_answer'])">
+            <el-submenu index="3" v-if="canSeeMenu(['product', 'label', 'category', 'review', 'question_and_answer'])">
               <template slot="title">
                 <i class="tim-icons icon-bag-16 product-icon"></i>
                 <span>محصول</span>
               </template>
               <el-menu-item v-if="hasPermissions('product')">
                 <sidebar-link to="/panel/product" :name="$t('sidebar.list') + ' ' + $t('sidebar.product')" icon="tim-icons icon-bag-16"/>      
+              </el-menu-item>
+              <el-menu-item v-if="hasPermissions('label')">
+                <sidebar-link to="/panel/label" :name="$t('sidebar.list') + ' ' + $t('sidebar.label')" icon="tim-icons icon-bag-16"/>      
               </el-menu-item>
               <el-menu-item v-if="hasPermissions('category')">
                 <sidebar-link to="/panel/category" :name="$t('sidebar.list') + ' ' + $t('sidebar.category')" icon="tim-icons icon-bag-16"/>      
@@ -111,11 +114,11 @@
                 <i class="tim-icons icon-settings-gear-63 setting-icon"></i>
                 <span>تنظیمات</span>
               </template>
-              <el-menu-item v-if="this.$store.state.permissions.includes('read-user')">
-                <sidebar-link to="/panel/user" :name="$t('sidebar.list') + ' ' + $t('sidebar.user')" icon="tim-icons icon-paper"/>      
+              <el-menu-item>
+                <sidebar-link to="/panel/setting/user" name="تنظیمات کاربر" icon="tim-icons icon-paper"/>      
               </el-menu-item>
-              <el-menu-item v-if="this.$store.state.permissions.includes('read-role')">
-                <sidebar-link to="/panel/role" :name="$t('sidebar.list') + ' ' + $t('sidebar.role')" icon="tim-icons icon-notes"/>      
+              <el-menu-item v-if="hasPermissions('setting')">
+                <sidebar-link to="/panel/setting/site" name="تنظیمات سایت" icon="tim-icons icon-notes"/>      
               </el-menu-item>
             </el-submenu>
           </el-menu>
@@ -424,5 +427,16 @@ i.feature-icon, i.blog-icon, i.product-icon, i.shop-icon, i.user-icon, i.setting
   .user-profile .logo {
     top: 10px !important;
   }
+}
+
+.md-field .md-icon {
+  background: linear-gradient(to bottom right, #ff8d72, #f56c6c);
+  padding: 5.5px 6px;
+  width: 30px;
+  height: 30px;
+  color: #fff;
+  border-radius: 5px;
+  box-shadow: 0px 4px 25px -6px #f70000, 0px 3px 10px -8px #000;
+  text-shadow: 1px 2px 7px #0000005c;
 }
 </style>

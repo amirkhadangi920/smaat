@@ -34,6 +34,7 @@ class ProductTranslation extends Model
      * @var array
      */
     protected $casts = [
+        'second_name' => 'array',
         'advantages' => 'array',
         'disadvantages' => 'array',
     ];

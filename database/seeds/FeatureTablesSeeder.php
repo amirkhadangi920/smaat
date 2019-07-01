@@ -11,6 +11,7 @@ use App\Models\Feature\{
 };
 use Illuminate\Support\Str;
 use App\User;
+use App\Models\Product\Label;
 
 class FeatureTablesSeeder extends CustomSeeder
 {
@@ -28,6 +29,8 @@ class FeatureTablesSeeder extends CustomSeeder
         $this->tenant_id = $this->getTenant();
         $this->categories = Category::all()->take(20);
 
+        $this->createTable(Label::class, ['id', 'title', 'color']);
+        
         $this->createData(Color::class, ['id', 'name', 'code']);
         $this->createData(Warranty::class , ['id', 'title', 'expire']);
         $this->createData(Brand::class, ['id', 'name']);

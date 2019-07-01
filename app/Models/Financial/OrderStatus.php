@@ -29,8 +29,6 @@ class OrderStatus extends Model implements AuditableContract
      * @var array
      */
     protected $fillable = [
-        // 'title',
-        // 'description',
         'color',
         'is_active'
     ];

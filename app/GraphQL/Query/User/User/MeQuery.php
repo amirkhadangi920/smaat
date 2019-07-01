@@ -29,6 +29,6 @@ class MeQuery extends BaseUserQuery
 
     public function resolve($root, $args, SelectFields $fields, ResolveInfo $info)
     {
-        return $this->getSingleData(auth()->user()->id, $fields);
+        return $this->getSingleData([ 'id' => auth()->user()->id ], $fields);
     }
 }

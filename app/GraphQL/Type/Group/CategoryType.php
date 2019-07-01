@@ -41,7 +41,13 @@ class CategoryType extends BaseType
             'colors' => $this->relationListField('color'),
             'sizes' => $this->relationListField('size'),
             'warranties' => $this->relationListField('warranty'),
-            'spec' => $this->relationItemField('spec'),
+            'spec' => [
+                'type'  => \GraphQL::type('spec'),
+                'query' => $this->getRelationQuery('spec', 'is_active', 'read-spec'),
+                'resolve' => function($data) {
+                    return $data->spec->count() ? $data->spec->first() : null;
+                }
+            ],
             'audits' => $this->audits('category'),
             'is_active' => $this->acceptableField('category')
         ];

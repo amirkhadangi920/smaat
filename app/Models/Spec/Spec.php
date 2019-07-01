@@ -41,9 +41,6 @@ class Spec extends Model implements AuditableContract
      * @var array
      */
     protected $fillable = [
-        'category_id',
-        // 'title',
-        // 'description',
         'is_active'
     ];
 
@@ -70,11 +67,9 @@ class Spec extends Model implements AuditableContract
         'columns' => [
             'spec_translations.title' => 10,
             'spec_translations.description' => 5,
-            'category_translations.title' => 7,
         ],
         'joins' => [
-            'spec_translations' => ['specs.id','spec_translations.spec_id'],
-            'category_translations' => ['specs.category_id', 'category_translations.category_id']
+            'spec_translations' => ['specs.id','spec_translations.spec_id']
         ],
     ];
 
@@ -84,7 +79,6 @@ class Spec extends Model implements AuditableContract
      * @var array
      */
     protected $auditInclude = [
-        'category_id',
         'title',
         'description',
         'is_active'
@@ -111,11 +105,11 @@ class Spec extends Model implements AuditableContract
      ****************************************
 
     /**
-     * Get the category that owned spec.
+     * Get all the categories that owned spec.
      */
-    public function category()
+    public function categories()
     {
-        return $this->belongsTo(Category::class);
+        return $this->belongsToMany(Category::class, 'spec_category');
     }
 
     /**

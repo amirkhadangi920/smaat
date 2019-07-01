@@ -8,12 +8,16 @@ use App\GraphQL\Props\Product\ProductProps;
 use Rebing\GraphQL\Support\UploadType;
 use App\Models\Spec\SpecData;
 use App\Models\Spec\SpecRow;
+use Spatie\MediaLibrary\Models\Media;
+use App\GraphQL\Input\ReviewInput;
 
 class BaseProductMutation extends MainMutation
 {
     use ProductProps;
     
     protected $incrementing = false;
+
+    protected $old_spec;
     
     protected $attributes = [
         'name' => 'ProductMutation',
@@ -23,10 +27,13 @@ class BaseProductMutation extends MainMutation
     public function getArgs()
     {
         return [
+            'specs' => [
+                'type' => Type::listOf( \GraphQL::type('spec_input') )
+            ],
             'brand_id' => [
                 'type' => Type::int()
             ],
-            'category_id' => [
+            'label_id' => [
                 'type' => Type::int()
             ],
             'unit_id' => [
@@ -35,6 +42,12 @@ class BaseProductMutation extends MainMutation
             'spec_id' => [
                 'type' => Type::int()
             ],
+            'categories' => [
+                'type' => Type::listOf( Type::int() )
+            ],
+            'colors' => [
+                'type' => Type::listOf( Type::int() )
+            ],
             'parent_id' => [
                 'type' => Type::int()
             ],
@@ -42,7 +55,7 @@ class BaseProductMutation extends MainMutation
                 'type' => Type::string()
             ],
             'second_name' => [
-                'type' => Type::string()
+                'type' => Type::listOf( Type::string() )
             ],
             'code' => [
                 'type' => Type::string()
@@ -53,8 +66,14 @@ class BaseProductMutation extends MainMutation
             'aparat_video' => [
                 'type' => Type::string()
             ],
-            'review' => [
+            'short_review' => [
                 'type' => Type::string()
+            ],
+            'expert_review' => [
+                'type' => Type::string()
+            ],
+            'tags' => [
+                'type' => Type::listOf( Type::string() )
             ],
             'advantages' => [
                 'type' => Type::listOf( Type::string() )
@@ -62,8 +81,14 @@ class BaseProductMutation extends MainMutation
             'disadvantages' => [
                 'type' => Type::listOf( Type::string() )
             ],
-            'product' => [
-                'type' => UploadType::getInstance()
+            'photos' => [
+                'type' => Type::listOf( \GraphQL::type('image_color_input') )
+            ],
+            'accessories' => [
+                'type' => Type::listOf( Type::string() )
+            ],
+            'deleted_images' => [
+                'type' => Type::listOf( Type::int() )
             ],
             'is_active' => [
                 'type' => Type::boolean()
@@ -80,11 +105,19 @@ class BaseProductMutation extends MainMutation
      */
     public function storeData($request)
     {
-        return $this->createNewModel(
-            $this->getRequest(
-                $this->requestWithGallery( $request, 'photos' )
-            )
-        );
+        $product = $this->createNewModel( $this->getRequest( $request ) );
+
+        if ( $request->get('photos') )
+        {
+            foreach ( $request->get('photos') as $item )
+            {
+                $product->addMedia( $item['image'] )
+                    ->withCustomProperties(['color' => $item['color']])
+                    ->toMediaCollection('photos');
+            }
+        }
+
+        return $product;
     }
 
     /**
@@ -94,13 +127,26 @@ class BaseProductMutation extends MainMutation
      * @param Request $request
      * @return void
      */
-    public function updateData($request, $data)
+    public function updateData($request, $product)
     {
-        $data->update(
-            $this->getRequest(
-                $this->requestWithGallery( $request, 'photos', $data )
-            )
-        );
+        $this->old_spec = $product->spec_id;
+
+        $product->update( $this->getRequest( $request ) );
+
+        if ( $request->get('photos') )
+        {
+            foreach ( $request->get('photos') as $item )
+            {
+                $product->addMedia( $item['image'] )
+                    ->withCustomProperties(['color' => $item['color']])
+                    ->toMediaCollection('photos');
+            }
+        }
+
+        if ( $request->get('deleted_images') )
+            Media::whereIn('id', $request->get('deleted_images'))->delete();
+
+        return $product;
     }
 
     /**
@@ -112,12 +158,14 @@ class BaseProductMutation extends MainMutation
      */
     public function afterCreate($request, $product)
     {
-        $product->variations()->createMany( $request->get('variations') );
         $product->accessories()->attach( $request->get('accessories') );
-        $product->attachTags( $request->get('keywords') );
+        $product->categories()->attach( $request->get('categories') );
+        $product->colors()->attach( $request->get('colors') );
+        $product->attachTags( $request->get('tags') );
         
-        if ( $spec_id = $product->category->spec->id ?? null )
-            $product->update([ 'spec_id' => $spec_id ]);
+        
+        if ( $request->get('specs', false) && count( $request->get('specs', []) ) )
+            $this->createSpecData($request, $product);
     }
 
     /**
@@ -129,15 +177,18 @@ class BaseProductMutation extends MainMutation
      */
     public function afterUpdate($request, $product)
     {
-        $product->variations()->delete();
-        $product->variations()->createMany( $request->get('variations') );
         $product->accessories()->sync( $request->get('accessories') );
-        $product->syncTags( $request->get('keywords') );
+        $product->categories()->sync( $request->get('categories') );
+        $product->colors()->sync( $request->get('colors') );
+        $product->syncTags( $request->get('tags') );
 
-        if ( !$product->spec_id && $spec_id = $product->category->spec->id ?? null )
-            $product->update([ 'spec_id' => $spec_id ]);
+        
+        if ( $this->old_spec !== $product->spec_id )
+            $product->spec_data()->delete();
 
-        $this->createSpecData($request, $product);
+
+        if ( $request->get('specs', false) && count( $request->get('specs', []) ) )
+            $this->createSpecData($request, $product);
     }
 
     /**
@@ -149,20 +200,59 @@ class BaseProductMutation extends MainMutation
      */
     public function createSpecData($request, $product)
     {
-        SpecData::where('product_id', $product->id)->delete();
-        
-        if ( $request->specs )
-        {
-            foreach ( $request->get('specs') as $key => $item )
-            {
-                if ( $item ?? false )
-                {
-                    SpecRow::find($key)->data()->create([
-                        'product_id' => $product->id,
-                        'data' => (gettype($item) == 'array') ? implode(',', $item) : $item
-                    ]);
-                }
+        $spec = $product->spec->load([
+            'headers:id,spec_id',
+            'headers.rows:id,spec_header_id',
+            'headers.rows.defaults:id,spec_row_id',
+            'headers.rows.data' => function($query) use($product) {
+                return $query->where('product_id', $product->id);
             }
+        ]);
+
+        $rows = $spec->headers->map(function($item) {
+            return $item->rows;
+        })->flatten(1)->keyBy('id');
+
+
+        foreach ( $request->get('specs') as $key => $item )
+        {
+            $row = $rows[ $item['id'] ];
+
+            if ( $row->defaults()->count() !== 0 )
+            {
+                $values = $row->defaults;
+
+                if ( $item['values'] ?? false )
+                    $values = $values->whereIn('id', $item['values']);
+                    
+                elseif ( $item['value'] ?? false )
+                    $values = $values->where('id', $item['value']);
+                
+                else
+                    $values = collect([]);
+                
+                $this->createNewSpecData($row, $product, null, $values->pluck('id'));
+            }
+            else
+                $this->createNewSpecData($row, $product, $item['data']);
+        }
+    }
+
+    public function createNewSpecData($row, $product, $data = null, $values = [])
+    {
+        if ( $row->data )
+        {
+            $row->data->update([ 'data' => $data ]);
+            $row->data->values()->sync( $values );
+        }
+        else
+        {
+            $spec_data = $row->data()->create([
+                'product_id' => $product->id,
+                'data' => $data
+            ]);
+
+            $spec_data->values()->sync( $values );
         }
     }
 }

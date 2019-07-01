@@ -69,6 +69,6 @@ class SpecFilter extends MainFilter
      */
     public function categories($ids)
     {
-        return $this->filter_relation('category', $ids);
+        return $this->filter_relation('categories', $ids);
     }
 }

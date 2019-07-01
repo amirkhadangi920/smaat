@@ -12,7 +12,7 @@ use App\Models\Opinion\{ Review, QuestionAndAnswer };
 use Spatie\Tags\HasTags;
 use App\Models\Spec\{ SpecData, Spec };
 use App\Models\Group\Category;
-use App\Models\Feature\{ Brand, Unit };
+use App\Models\Feature\{ Brand, Unit, Color};
 use EloquentFilter\Filterable;
 use App\Helpers\CreateTimeline;
 use App\Helpers\CreatorRelationship;
@@ -20,12 +20,17 @@ use App\Helpers\HasTenant;
 use Askedio\SoftCascade\Traits\SoftCascadeTrait;
 use Dimsav\Translatable\Translatable;
 use Nicolaslopezj\Searchable\SearchableTrait;
+use Illuminate\Support\Str;
+use Spatie\MediaLibrary\HasMedia\HasMedia;
+use Spatie\MediaLibrary\HasMedia\HasMediaTrait;
+use App\Helpers\MediaConversionsTrait;
 
-class Product extends Model implements AuditableContract, LikeableContract
+class Product extends Model implements AuditableContract, LikeableContract, HasMedia
 {
     use SoftDeletes, Auditable, HasTenant, HasTags;
     use Filterable, Likeable, CreateTimeline, CreatorRelationship;
     use SoftCascadeTrait, Translatable, SearchableTrait;
+    use HasMediaTrait, MediaConversionsTrait;
 
     /****************************************
      **             Attributes
@@ -65,14 +70,12 @@ class Product extends Model implements AuditableContract, LikeableContract
      */
     protected $fillable = [
         'brand_id',
-        'category_id',
         'unit_id',
         'spec_id',
         'code',
         'note',
         'aparat_video',
         'review',
-        'photos',
         'is_active'
     ];
 
@@ -109,11 +112,9 @@ class Product extends Model implements AuditableContract, LikeableContract
             'product_translations.advantages' => 6,
             'product_translations.disadvantages' => 6,
             'brand_translations.name' => 7,
-            'category_translations.title' => 7,
         ],
         'joins' => [
             'brand_translations' => ['products.brand_id','brand_translations.brand_id'],
-            'category_translations' => ['products.category_id','category_translations.category_id'],
             'product_translations' => ['products.id','product_translations.product_id'],
         ],
     ];
@@ -125,7 +126,6 @@ class Product extends Model implements AuditableContract, LikeableContract
      */
     protected $auditInclude = [
         'brand_id',
-        'category_id',
         'unit_id',
         'spec_id',
         'name',
@@ -138,7 +138,6 @@ class Product extends Model implements AuditableContract, LikeableContract
         'advantages',
         'disadvantages',
         'label',
-        'photos',
         'is_active'
     ];
 
@@ -148,7 +147,6 @@ class Product extends Model implements AuditableContract, LikeableContract
      * @var array
      */
     protected $casts = [
-        'photos' => 'array',
         'is_active' => 'boolean'
     ];
 
@@ -158,6 +156,22 @@ class Product extends Model implements AuditableContract, LikeableContract
      * @var array
      */
     protected $dates = ['deleted_at'];
+
+    
+    /****************************************
+     **         Scopes & Mutators
+     ***************************************/
+
+    /**
+     * Set the product aparat video link
+     *
+     * @param  string  $value
+     * @return void
+     */
+    public function setAparatVideoAttribute($value)
+    {
+        $this->attributes['aparat_video'] = Str::replaceFirst('https://www.aparat.com/v/', '', $value);
+    }
 
 
     /****************************************
@@ -213,11 +227,19 @@ class Product extends Model implements AuditableContract, LikeableContract
     }
 
     /**
-     * Get all the category that owned product.
+     * Get all the categories of the product.
      */
-    public function category()
+    public function categories()
     {
-        return $this->belongsTo(Category::class);
+        return $this->belongsToMany(Category::class, 'product_category');
+    }
+
+    /**
+     * Get all the colors of the product.
+     */
+    public function colors()
+    {
+        return $this->belongsToMany(Color::class, 'product_color');
     }
 
     /**
@@ -245,6 +267,14 @@ class Product extends Model implements AuditableContract, LikeableContract
     }
 
     /**
+     * Get the label of the product
+     */
+    public function label()
+    {
+        return $this->belongsTo(Label::class);
+    }
+
+    /**
      * Get all the spec that owned product.
      */
     public function spec()
@@ -257,6 +287,14 @@ class Product extends Model implements AuditableContract, LikeableContract
         return Static::select('id', 'category_id', 'name', 'photo')
             ->with('variation:id,product_id,price,unit,offer,offer_deadline')
             ->where('category_id', $product->category_id)->take(4)->get();
+    }
+
+    /**
+     * Get all the media galleries of the model
+     */
+    public function photos()
+    {
+        return $this->morphMany(config('medialibrary.media_model'), 'model');
     }
     
 

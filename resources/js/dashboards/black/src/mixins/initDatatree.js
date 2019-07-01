@@ -9,12 +9,12 @@ export default {
         params: {
           query: `{
             allData: ${this.plural} {
-              id title description logo { tiny } childs {
-                id title description logo { tiny } childs {
-                  id title description logo { tiny } childs {
-                    id title description logo { tiny } childs {
-                      id title description logo { tiny } childs {
-                        id title description logo { tiny }
+              id title description logo { id file_name thumb } childs {
+                id title description logo { id file_name thumb } childs {
+                  id title description logo { id file_name thumb } childs {
+                    id title description logo { id file_name thumb } childs {
+                      id title description logo { id file_name thumb } childs {
+                        id title description logo { id file_name thumb }
                       }
                     }
                   }

@@ -17,7 +17,7 @@
 
 
     <template v-slot:logo-body="slotProps">
-      <img class="tilt" :src="slotProps.row.logo ? slotProps.row.logo.tiny : '/images/placeholder.png'" />
+      <img class="tilt" :src="slotProps.row.logo ? slotProps.row.logo.thumb : '/images/placeholder.png'" />
     </template>
 
     <template v-slot:categories-body="slotProps">
@@ -151,8 +151,9 @@ export default {
           title
         }
         logo {
-          tiny
-          big
+          id
+          file_name
+          thumb
         }`
     },
   },

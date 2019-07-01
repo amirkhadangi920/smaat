@@ -47,7 +47,6 @@ import Binding, { bind } from '../../mixins/binding'
 import { validationMixin } from 'vuelidate'
 import { required, maxLength } from 'vuelidate/lib/validators'
 import SmartInput from '../../components/BaseInput'
-import RemoteSelect from '../../components/RemoteSelect'
 import BaseForm from '../../components/BaseForm'
 
 export default {
@@ -55,8 +54,7 @@ export default {
   components: {
     SmartInput,
     BaseFeature,
-    BaseForm,
-    RemoteSelect
+    BaseForm
   },
   data() {
     return {

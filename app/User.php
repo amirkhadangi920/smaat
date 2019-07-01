@@ -24,11 +24,15 @@ use App\Models\{
 use EloquentFilter\Filterable;
 use App\Helpers\CreateTimeline;
 use App\Helpers\HasTenant;
+use Spatie\MediaLibrary\HasMedia\HasMedia;
+use Spatie\MediaLibrary\HasMedia\HasMediaTrait;
+use App\Helpers\MediaConversionsTrait;
 
-class User extends Authenticatable implements AuditableContract
+class User extends Authenticatable implements AuditableContract, HasMedia
 {
     use LaratrustUserTrait, HasApiTokens, Filterable, CreateTimeline;
     use Notifiable, SoftDeletes, HasTenant, Auditable;
+    use HasMediaTrait, MediaConversionsTrait;
 
     /****************************************
      **             Attributes
@@ -64,7 +68,6 @@ class User extends Authenticatable implements AuditableContract
         'social_links',
         'email',
         'password',
-        'avatar',
         'national_code',
     ];
     
@@ -80,7 +83,6 @@ class User extends Authenticatable implements AuditableContract
         'social_links',
         'email',
         'password',
-        'avatar',
         'national_code',
     ];
     
@@ -90,7 +92,6 @@ class User extends Authenticatable implements AuditableContract
      * @var array
      */
     protected $casts = [
-        'avatar'        => 'array',
         'phones'        => 'array',
         'social_links'  => 'array',
     ];
@@ -233,5 +234,13 @@ class User extends Authenticatable implements AuditableContract
     public function reviews()
     {
         return $this->hasMany(Review::class);
+    }
+
+    /**
+     * Get the media field of the model
+     */
+    public function avatar()
+    {
+        return $this->morphMany(config('medialibrary.media_model'), 'model');
     }
 }

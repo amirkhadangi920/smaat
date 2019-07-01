@@ -50,18 +50,18 @@ class BaseUserMutation extends MainMutation
             'avatar' => [
                 'type' => UploadType::getInstance()
             ],
-            'address' => [
-                'type' => Type::string()
-            ],
-            'postal_code' => [
-                'type' => Type::string()
-            ],
             'national_code' => [
                 'type' => Type::string()
             ],
-            'is_active' => [
-                'type' => Type::boolean()
-            ]
+            'roles' => [
+                'type' => Type::listOf( Type::int() )
+            ],
+            'permissions' => [
+                'type' => Type::listOf( Type::int() )
+            ],
+            // 'is_active' => [
+            //     'type' => Type::boolean()
+            // ]
         ];
     }
     
@@ -74,8 +74,11 @@ class BaseUserMutation extends MainMutation
      */
     public function afterUpdate($request, $user)
     {
-        $user->syncPermissions( $request->get('permissions', []) );
-        $user->syncRoles( $request->get('roles', [])  );
+        if ( auth()->id() !== $request->get('id') )
+        {
+            $user->syncPermissions( $request->get('permissions', []) );
+            $user->syncRoles( $request->get('roles', [])  );
+        }
     }
     
     /**

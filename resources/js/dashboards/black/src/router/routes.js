@@ -4,7 +4,8 @@ import NotFound from "../pages/NotFoundPage.vue";
 
 // Admin pages
 import Dashboard from "../pages/Dashboard.vue";
-import Profile from "../pages/Profile.vue";
+import SiteSetting from "../pages/Setting/Site.vue";
+import UserSetting from "../pages/Setting/User.vue";
 import Notifications from "../pages/Notifications.vue";
 import Icons from "../pages/Icons.vue";
 import Maps from "../pages/Maps.vue";
@@ -21,6 +22,7 @@ import Article from '../pages/Blog/Article.vue'
 import Comment from '../pages/Blog/Comment.vue'
 import Subject from '../pages/Blog/Subject.vue'
 import Product from '../pages/Product/Product.vue'
+import Label from '../pages/Product/Label.vue'
 import ManageProduct from '../pages/Product/ManageProduct.vue'
 import Category from '../pages/Product/Category.vue'
 import Review from '../pages/Product/Review.vue'
@@ -39,9 +41,6 @@ const routes = [
     path: "/panel",
     component: DashboardLayout,
     redirect: "/panel/dashboard",
-    children: [
-      
-    ]
   },
   {
     path: "/panel/dashboard",
@@ -50,12 +49,7 @@ const routes = [
     meta: { auth: true },
   },
   {
-    path: "profile",
-    name: "profile",
-    component: Profile
-  },
-  {
-    path: "notifications",
+    path: "/panel/notifications",
     name: "notifications",
     component: Notifications
   },
@@ -65,17 +59,17 @@ const routes = [
     component: Icons
   },
   {
-    path: "maps",
+    path: "/panel/maps",
     name: "maps",
     component: Maps
   },
   {
-    path: "typography",
+    path: "/panel/typography",
     name: "typography",
     component: Typography
   },
   {
-    path: "table-list",
+    path: "/panel/table-list",
     name: "table-list",
     component: TableList
   },
@@ -143,6 +137,12 @@ const routes = [
     path: "/panel/product",
     name: "مدیریت محصولات",
     component: Product,
+    meta: { index: '3', auth: true }
+  },
+  {
+    path: "/panel/label",
+    name: "مدیریت لیبل محصولات",
+    component: Label,
     meta: { index: '3', auth: true }
   },
   {
@@ -228,6 +228,18 @@ const routes = [
     name: "مدیریت نقش ها",
     component: Role,
     meta: { index: '5', auth: true }
+  },
+  {
+    path: "/panel/setting/user",
+    name: "تنظیمات کاربر",
+    component: UserSetting,
+    meta: { index: '6', auth: true }
+  },
+  {
+    path: "/panel/setting/site",
+    name: "تنظیمات سایت",
+    component: SiteSetting,
+    meta: { index: '6', auth: true }
   },
   { path: "*", component: NotFound },
 ];

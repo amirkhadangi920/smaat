@@ -15,12 +15,16 @@ use App\Helpers\CreatorRelationship;
 use Askedio\SoftCascade\Traits\SoftCascadeTrait;
 use Dimsav\Translatable\Translatable;
 use Nicolaslopezj\Searchable\SearchableTrait;
+use Spatie\MediaLibrary\HasMedia\HasMedia;
+use Spatie\MediaLibrary\HasMedia\HasMediaTrait;
+use App\Helpers\MediaConversionsTrait;
 
-class Discount extends Model implements AuditableContract 
+class Discount extends Model implements AuditableContract, HasMedia
 {
     use Auditable, Filterable, HasTenant, Translatable;
     use CreateTimeline, SoftDeletes, CreatorRelationship, SoftCascadeTrait;
     use SearchableTrait;
+    use HasMediaTrait, MediaConversionsTrait;
     
     /****************************************
      **             Attributes
@@ -41,7 +45,6 @@ class Discount extends Model implements AuditableContract
      * @var array
      */
     protected $fillable = [
-        'logo',
         'type',
         'status',
         'started_at',
@@ -84,7 +87,6 @@ class Discount extends Model implements AuditableContract
      * @var array
      */
     protected $auditInclude = [
-        'logo',
         'started_at',
         'expired_at',
         'is_active'
@@ -96,7 +98,6 @@ class Discount extends Model implements AuditableContract
      * @var array
      */
     protected $casts = [
-        'logo' => 'array',
         'is_active' => 'boolean'
     ];
 
@@ -145,5 +146,13 @@ class Discount extends Model implements AuditableContract
     public function categories()
     {
         return $this->belongsToMany(Category::class);
+    }
+
+    /**
+     * Get the media field of the model
+     */
+    public function logo()
+    {
+        return $this->morphMany(config('medialibrary.media_model'), 'model');
     }
 }

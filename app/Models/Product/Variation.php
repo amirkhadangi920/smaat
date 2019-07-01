@@ -59,6 +59,7 @@ class Variation extends Model implements AuditableContract
      * @var array
      */
     protected $fillable = [
+        'product_id',
         'color_id', 
         'warranty_id',
         'size_id',

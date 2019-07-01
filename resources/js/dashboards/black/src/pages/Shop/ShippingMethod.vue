@@ -15,7 +15,7 @@
     ref="datatable">
     
     <template v-slot:logo-body="slotProps">
-      <img class="tilt" :src="slotProps.row.logo ? slotProps.row.logo.tiny : '/images/placeholder.png'" />
+      <img class="tilt" :src="slotProps.row.logo ? slotProps.row.logo.thumb : '/images/placeholder.png'" />
     </template>
 
     <template v-slot:cost-body="slotProps">
@@ -180,7 +180,7 @@ export default {
         description
         cost
         minimum
-        logo { tiny big }`
+        logo { id file_name thumb }`
     },
   },
   beforeRouteLeave(to, from, next) {

@@ -20,12 +20,37 @@ class CreateProductsTables extends Migration
             return new Blueprint($table, $callback);
         });
         
+        $schema->create('labels', function (Blueprint $table) {
+            $table->table([
+                'color'             => '9|comment:Hexadecimal code of the color, e.g #43df12',
+                'jalali_created_at' => 'datetime|nullable',
+                'is_active'         => 'boolean|default:1'
+            ], [
+                'tenants',
+                'users',
+            ]);
+
+            // $table->unique(['name', 'tenant_id']);
+        });
+
+        $schema->create('label_translations', function ($table) {
+            $table->increments('id');
+            $table->integer('label_id')->unsigned();
+            
+            $table->string('title', 50);
+            $table->string('description', 250)->nullable();
+
+            $table->string('locale')->index();
+            $table->unique(['label_id','locale']);
+            $table->foreign('label_id')->references('id')->on('labels')->onDelete('cascade');
+        });
+
         $schema->create('products', function (Blueprint $table) {
             $table->table([
                 'code'              => '20|nullable',
                 'note'              => '300|nullable',
                 'aparat_video'      => '10|nullable',
-                'photos'            => 'array',
+                // 'photos'            => 'array',
                 'views_count'       => 'unsignedInteger|default:0',
                 'avg_vote'          => 'unsignedInteger|default:0',
                 'votes_count'       => 'unsignedInteger|default:0',
@@ -34,8 +59,8 @@ class CreateProductsTables extends Migration
             ], [
                 'tenants',
                 'users',
-                'categories' => ['nullable', 'set null'],
                 'brands' => ['nullable', 'set null'],
+                'labels' => ['nullable', 'set null'],
                 'units' => ['nullable', 'set null'],
                 'specs' => ['nullable', 'set null']
             ], 'uuid');
@@ -49,7 +74,7 @@ class CreateProductsTables extends Migration
             
             $table->string('slug', 100);
             $table->string('name', 50);
-            $table->string('second_name', 50)->nullable();
+            $table->array('second_name');
             $table->string('description', 255)->nullable();
             $table->text('short_review')->nullable();
             $table->text('expert_review')->nullable();
@@ -62,6 +87,14 @@ class CreateProductsTables extends Migration
             $table->foreign('product_id')->references('id')->on('products')->onDelete('cascade');
         });
 
+        $schema->create('product_category', function($table) {
+            $table->interface('products', 'categories');
+        });
+
+        $schema->create('product_color', function($table) {
+            $table->interface('products', 'colors');
+        });
+
         $schema->create('variations', function (Blueprint $table) {
             $table->table([
                 'barcode'               => 'nullable',
@@ -70,7 +103,7 @@ class CreateProductsTables extends Migration
                 // 'old_purchase_prices'   => 'array|comment:Array of the all prices and it\'s changing time',
                 // 'old_sales_prices'      => 'array|comment:Array of the all prices and it\'s changing time',
                 'inventory'             => 'nullable|smallInteger|comment:Null = infinite , 0 = unavailble & number = inventory', 
-                'sending_time'          => 'tinyInteger|default:1|commnt:Sending time of this product variation in day, e.g 2days',
+                'sending_time'          => 'nullable|tinyInteger|default:1|commnt:Sending time of this product variation in day, e.g 2days',
                 'jalali_created_at'     => 'datetime|nullable',
                 'is_active'             => 'boolean|default:1'
             ], [
@@ -111,11 +144,13 @@ class CreateProductsTables extends Migration
             $table->full_timestamps();
         });
 
+        
+        
         $schema->create('spec_data_translations', function ($table) {
             $table->increments('id');
             $table->integer('spec_data_id')->unsigned();
             
-            $table->mediumText('data');
+            $table->mediumText('data')->nullable();
             
             $table->string('locale')->index();
 

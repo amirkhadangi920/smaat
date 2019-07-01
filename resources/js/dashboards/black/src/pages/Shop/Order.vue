@@ -4,8 +4,8 @@
     :group="group"
     label="سفارش"
     :fields="getFields"
-    :canSearch="false"
     :canEdit="false"
+    :canCreate="false"
     
     :methods="{
       create: create,
@@ -17,7 +17,7 @@
     ref="datatable">
 
     <template v-slot:user-body="slotProps">
-      <img class="tilt" :src="slotProps.row.user.avatar ? slotProps.row.user.avatar : '/images/placeholder-user.png'" />
+      <img class="tilt" :src="slotProps.row.user.avatar ? slotProps.row.user.avatar.tiny : '/images/placeholder-user.png'" />
       <p>{{ slotProps.row.user.full_name }}</p>
     </template>
 
@@ -31,7 +31,7 @@
 
     <template v-slot:status-body="slotProps">
       <el-select
-        :disabled="can('change-order-status')"
+        :disabled="can('change-status-order')"
         @change="changeStatus(slotProps.index, $event)"
         v-model="slotProps.row.status.id"
         :style="{ borderColor: slotProps.row.status.color }"
@@ -52,8 +52,8 @@
 
     <template #custom-operations="slotProps">
       <el-tooltip content="مشاهده اطلاعات">
-        <base-button class="ml-2" @click="$router.push(`/panel/order/${slotProps.row.id}`)" type="info" size="sm" icon>
-          i
+        <base-button class="ml-2" @click="$router.push(`/panel/order/${slotProps.row.id}`)" type="success" size="sm" icon>
+          <i class="tim-icons icon-paper"></i>
         </base-button>
       </el-tooltip>
     </template>
@@ -100,56 +100,35 @@ export default {
       query: `order_statuses(per_page: 30) { data { id title color } }`
     })
   },
-  created() {
-    setTimeout( () => $('.tilt').tilt({scale: 1.1}) ,300)
-    setTimeout( () => $('.tilt-fixed').tilt() ,300)
-  },
   methods: {
-    create() {
-      this.setAttr('selected', {
-        name: '',
-        description: '',
-        categories: [],
-        imageFile: null,
-        imageUrl: ''
-      })
-
-      this.$refs.categories.setCheckedKeys([]);
-
-      this.setAttr('is_open', true)
-      this.setAttr('is_creating', true)
-    },
-    edit(index, row) {
-      let data = {};
-    
-      this.fields.forEach(field => {
-        if ( ['logo', 'categories'].includes(field.field) ) return
-
-        data[field.field] = row[field.field]
-      });
-      data.link = row.link
-      data.index = index
-      data.categories = row.categories.map( category => category.id )
-      data.imageFile = null
-      data.imageUrl = row.logo ? row.logo.small : ''
-
-      this.$refs.categories.setCheckedKeys([]);
-
-      this.setAttr('selected', data)
-
-      this.setAttr('is_open', true)
-      this.setAttr('is_creating', false)
-    },
-
     changeStatus(index, status) {
       var selected_status = this.$store.state.shop.order_status.filter(item => item.id === status)[0];
 
-      axios({
-        method: 'PUT',
-        url: `/api/v1/order/status/${this.data()[index].id}/${selected_status.id}`,
-      }).then(({data}) => {
-        this.data()[index].status = selected_status;
-        this.data()[index].last_update_time = moment().format('YYYY-MM-DD HH:mm:ss');
+      axios.post('/graphql/auth', {
+        query: `mutation {
+          changeOrderStatus(id: "${this.data()[index].id}", status: ${selected_status.id}) {
+            status
+            message
+          }
+        }`
+      })
+      .then(({data}) => {
+
+        if ( data.data.changeOrderStatus.status === 400 )
+        {
+          this.$notify({
+            title: 'خطا',
+            message: `متاسفانه وضعیت سفارش مورد نظر تغییری نکرد :)`,
+            timeout: 3000,
+            type: 'danger',
+            verticalAlign: 'top',
+            horizontalAlign: 'left',
+          })
+        }
+
+        this.data()[index].status.color = selected_status.color;
+        this.data()[index].status.title = selected_status.title;
+        this.data()[index].updated_at = moment().format('YYYY-MM-DD HH:mm:ss');
         this.setData( this.data() )
         
         this.$notify({
@@ -160,28 +139,7 @@ export default {
           verticalAlign: 'top',
           horizontalAlign: 'left',
         })
-      }).catch( error => console.log(error.response) );
-    },
-
-    getData() {
-      let data = new FormData();
-
-      this.fields.forEach(field => {
-        if ( ['logo', 'categories'].includes(field.field) ) return
-
-        let value = selected( field.field )
-
-        data.append(field.field, value ? value : '')
-      });
-
-      this.$refs.categories.getCheckedKeys().forEach(category => {
-        data.append('categories[]', category);
-      });
-
-      if ( selected('imageFile') )
-        data.append('logo', selected('imageFile'))
-
-      return data
+      }).catch( error => console.log(error) );
     },
   },
   computed: {
@@ -252,5 +210,11 @@ export default {
 .el-input__inner {
   border-color: transparent !important;
   font-weight: bold;
+  padding-left: 0px;
+  padding-right: 10px !important;
+}
+.el-input__suffix {
+  right: auto;
+  left: 5px;
 }
 </style>

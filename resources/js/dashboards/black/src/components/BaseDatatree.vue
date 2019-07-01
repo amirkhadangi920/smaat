@@ -124,7 +124,7 @@
           :props="defaultProps">
           <div class="custom-tree-node col-11" slot-scope="{ node, data }">
             <div class="pull-left d-flex align-items-center">
-              <img :src="data.logo ? data.logo.tiny : '/images/placeholder.png'" />
+              <img :src="data.logo ? data.logo.thumb : '/images/placeholder.png'" />
               <div class="pull-right group-info">
                 <h4 class="mb-0">{{ node.label }}</h4>
                 <p class="text-muted">{{ data.description }}</p>
@@ -348,7 +348,7 @@ export default {
     description: bind('description'),
 
     allQuery() {
-      return `title description logo { tiny }`
+      return `title description logo { id file_name thumb }`
     }
   },
 }

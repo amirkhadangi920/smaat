@@ -23,7 +23,7 @@ class CreateFeaturesTables extends Migration
         $schema->create('brands', function ($table) {
             $table->table([
                 // 'sluggable_info'    => 'param:name',
-                'logo'              => 'nullable|array',
+                // 'logo'              => 'nullable|array',
                 'jalali_created_at' => 'datetime|nullable',
                 'is_active'         => 'boolean|default:1'
             ], ['users', 'tenants']);
@@ -87,7 +87,7 @@ class CreateFeaturesTables extends Migration
 
         $schema->create('warranties', function ($table) {
             $table->table([
-                'logo'              => 'nullable|array',
+                // 'logo'              => 'nullable|array',
                 'jalali_created_at' => 'datetime|nullable',
                 'is_active'         => 'boolean|default:1'
             ], ['users', 'tenants']);

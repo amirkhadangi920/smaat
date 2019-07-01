@@ -12,12 +12,16 @@ use App\Helpers\HasTenant;
 use App\Helpers\CreatorRelationship;
 use Dimsav\Translatable\Translatable;
 use Nicolaslopezj\Searchable\SearchableTrait;
+use Spatie\MediaLibrary\HasMedia\HasMedia;
+use Spatie\MediaLibrary\HasMedia\HasMediaTrait;
+use App\Helpers\MediaConversionsTrait;
 
-class ShippingMethod extends Model implements AuditableContract
+class ShippingMethod extends Model implements AuditableContract, HasMedia
 {
     use SoftDeletes, Auditable, Filterable, Translatable;
     use CreateTimeline, HasTenant, CreatorRelationship;
     use SearchableTrait;
+    use HasMediaTrait, MediaConversionsTrait;
     
     /****************************************
      **             Attributes
@@ -29,9 +33,6 @@ class ShippingMethod extends Model implements AuditableContract
      * @var array
      */
     protected $fillable = [
-        // 'name',
-        // 'description',
-        'logo',
         'cost',
         'minimum',
         'is_active'
@@ -76,7 +77,6 @@ class ShippingMethod extends Model implements AuditableContract
     protected $auditInclude = [
         'name',
         'description',
-        'logo',
         'cost',
         'minimum',
         'is_active'
@@ -89,7 +89,6 @@ class ShippingMethod extends Model implements AuditableContract
      * @var array
      */
     protected $casts = [
-        'logo'      => 'array',
         'is_active' => 'boolean',
     ];
 
@@ -105,5 +104,13 @@ class ShippingMethod extends Model implements AuditableContract
     public function orders()
     {
         return $this->hasMany(Order::class);
+    }
+
+    /**
+     * Get the media field of the model
+     */
+    public function logo()
+    {
+        return $this->morphMany(config('medialibrary.media_model'), 'model');
     }
 }

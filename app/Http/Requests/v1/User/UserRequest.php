@@ -27,7 +27,7 @@ class UserRequest extends MainRequest
             'email'             => [
                 'required',
                 'email',
-                new UniqueTenant('users', $args['id'] ?? null)
+                new UniqueTenant('users', $args['id'] ?? null, null, false)
             ],
             'avatar'            => 'nullable|image|mimes:jpg,jpeg,png|max:1024',
             'address'           => 'nullable|string|max:255',

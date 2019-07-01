@@ -28,6 +28,13 @@ class PriceChange extends Model
         'changed_at'
     ];
 
+    /**
+     * Indicates if the model should be timestamped.
+     *
+     * @var bool
+     */
+    public $timestamps = false;
+
 
     /****************************************
      **             Relations

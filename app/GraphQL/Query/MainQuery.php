@@ -63,6 +63,7 @@ class MainQuery extends Query
     {
         $data = $this->model::select( $this->getSelectFields($fields) )
             ->with( $fields->getRelations() );
+            
 
         $this->showOnlyAtiveData($data);
 

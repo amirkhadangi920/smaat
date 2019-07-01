@@ -129,11 +129,13 @@ class BaseType extends GraphQLType
         ];
     }
 
-    public function imageField()
+    public function imageField($field = 'logo')
     {
         return [
-            'type' => \GraphQl::type('image'),
-            'is_relation' => false
+            'type' => \GraphQL::type('single_media'),
+            'resolve' => function($data) use($field) {
+                return $data->$field[0] ?? null;
+            }
         ];
     }
 

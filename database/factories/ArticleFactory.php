@@ -29,7 +29,7 @@ $factory->define(App\Models\Article::class, function () use ($faker) {
         'title'             => $faker->name(),
         'description'       => nullable( Faker::sentence(250) ),
         'body'              => Faker::paragraph(),
-        'image'             => image( $faker->imageUrl($width = 640, $height = 480) ),
+        // 'image'             => image( $faker->imageUrl($width = 640, $height = 480) ),
         'reading_time'      => rand(1, 50),
         'jalali_created_at' => Jalalian::forge("now - {$faker->numberBetween(2, 360)} days"),
         'is_active'         => $faker->boolean(80)

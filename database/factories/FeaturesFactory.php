@@ -111,7 +111,7 @@ $factory->define(App\Models\Feature\Brand::class, function () use($faker, &$bran
         'user_id'           => App\User::all()->random()->id,
         'name'              => $brand['name'],
         'description'       => nullable( $faker->sentence() ),
-        'logo'              => nullable( image ( $brand['logo'] )),
+        // 'logo'              => nullable( image ( $brand['logo'] )),
         'jalali_created_at' => Jalalian::forge("now - {$faker->numberBetween(2, 360)} days"),
         'is_active'         => $faker->boolean(80)
     ];
@@ -170,7 +170,7 @@ $factory->define(App\Models\Feature\Warranty::class, function () use($faker,$bra
         'title'             => $warranties[$faker->numberBetween(0, 4)],
         'description'       => nullable( Faker::sentence(250) ),
         'expire'            => $faker->numberBetween(1, 5) . ' ' . ['سال', 'ماه'][ $faker->boolean() ],
-        'logo'              => nullable( image ( $brands[$selected]['logo'] )),
+        // 'logo'              => nullable( image ( $brands[$selected]['logo'] )),
         'jalali_created_at' => Jalalian::forge("now - {$faker->numberBetween(2, 360)} days"),
         'is_active'         => $faker->boolean(80)
     ];

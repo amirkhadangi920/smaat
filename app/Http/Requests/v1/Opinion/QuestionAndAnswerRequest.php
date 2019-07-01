@@ -18,7 +18,7 @@ class QuestionAndAnswerRequest extends MainRequest
 
         return [
             'title'             => 'required|string|max:100',
-            'message'           => 'required|string',
+            'message'           => 'required|string|max:2000',
 
             /* relateion */
             'parent_id'         => ['nullable', 'integer', new ExistsTenant('question_and_answers')],

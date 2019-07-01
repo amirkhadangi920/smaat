@@ -65,7 +65,7 @@
     </template>
     
     <template v-slot:image-body="slotProps">
-      <img class="tilt" :src="slotProps.row.image ? slotProps.row.image.tiny : '/images/placeholder.png'" />
+      <img class="tilt" :src="slotProps.row.image ? slotProps.row.image.thumb : '/images/placeholder.png'" />
     </template>
 
     <template slot="categories-header" v-if="false">
@@ -87,6 +87,7 @@
 
         <el-tree
           dir="ltr"
+          class="rtl"
           :data="$store.state.group.categories"
           :props="defaultProps"
           :accordion="true"
@@ -169,6 +170,26 @@
       <br/>
       
       <div class="row">
+        <div class="col-5">
+          <base-input label="موضوعات مقاله">
+            <el-tree
+              dir="ltr"
+              class="rtl"
+              :data="$store.state.group.subject"
+              :props="defaultProps"
+              :accordion="true"
+              ref="subjects"
+              show-checkbox
+              node-key="id"
+              @check-change="changeSelectedSubjects"
+              :default-checked-keys="selected('subjects')"
+              :default-expanded-keys="selected('subjects')"
+              empty-text="هیچ موضوعی یافت نشد :("
+            >
+            </el-tree>
+          </base-input>
+          <small slot="helperText" id="emailHelp" class="form-text text-muted">برای انتخاب هر موضوع تیک قبل آن را انتخاب کنید</small>
+        </div>
         <div class="col-7">
           <base-input label="تصویر">
             <el-upload
@@ -186,25 +207,6 @@
             </el-upload>
             <small slot="helperText" id="emailHelp" class="form-text text-muted">تصویر مورد نظر خود را انتخاب کنید</small>
           </base-input>
-        </div>
-        <div class="col-5">
-          <base-input label="موضوعات مقاله">
-            <el-tree
-              dir="ltr"
-              :data="$store.state.group.subject"
-              :props="defaultProps"
-              :accordion="true"
-              ref="subjects"
-              show-checkbox
-              node-key="id"
-              @check-change="changeSelectedSubjects"
-              :default-checked-keys="selected('subjects')"
-              :default-expanded-keys="selected('subjects')"
-              empty-text="هیچ موضوعی یافت نشد :("
-            >
-            </el-tree>
-          </base-input>
-          <small slot="helperText" id="emailHelp" class="form-text text-muted">برای انتخاب هر موضوع تیک قبل آن را انتخاب کنید</small>
         </div>
       </div>
 
@@ -370,8 +372,10 @@ export default {
         title
         description
         image {
-          tiny
-          big
+          id
+          file_name
+          thumb
+          large
         }
         reading_time
         subjects {

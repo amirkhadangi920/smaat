@@ -24,6 +24,9 @@ class BaseCommentMutation extends MainMutation
             'parent_id' => [
                 'type' => Type::int()
             ],
+            'title' => [
+                'type' => Type::string()
+            ],
             'message' => [
                 'type' => Type::string()
             ],

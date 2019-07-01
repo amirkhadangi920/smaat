@@ -13,7 +13,8 @@
     }"
 
     :getdata="[1,2,3,4,5,6,7,8,9,10]"
-    ref="datatable">
+    ref="datatable"
+  >
 
     <template slot="filter-labels">
       <span class="pull-right text-muted ml-2" v-show="hasFilter">فیلتر های اعمال شده :</span>
@@ -80,7 +81,7 @@
     </template>
 
     <template v-slot:logo-body="slotProps">
-      <img class="tilt" :src="slotProps.row.logo ? slotProps.row.logo.tiny : '/images/placeholder.png'" />
+      <img class="tilt" :src="slotProps.row.logo ? slotProps.row.logo.thumb : '/images/placeholder.png'" />
     </template>
 
     <template slot="categories-header">
@@ -249,10 +250,6 @@ export default {
       type: 'category',
     })
   },
-  created() {
-    setTimeout( () => $('.tilt').tilt({scale: 1.1}) ,300)
-    setTimeout( () => $('.tilt-fixed').tilt() ,300)
-  },
   methods: {
     closePanel() {
       this.$refs.datatable.closePanel();
@@ -324,7 +321,7 @@ export default {
       let query = ''
 
       if ( this.has_logo )
-        query += 'logo { tiny big }'
+        query += 'logo { id file_name thumb large }'
 
       query += `
         ${this.queryFields}

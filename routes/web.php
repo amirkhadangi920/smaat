@@ -37,7 +37,26 @@ use App\Models\Spec\SpecDefault;
 
 Route::get('/test/amir', function() {
 
-    auth()->loginUsingId('f47370015075');
+    $row = SpecRow::find(1);
+
+    return $row->data()->where('product_id', 'a367bea6ed91')->first()->values;
+
+    // auth()->loginUsingId('f47370015075');
+
+    return $brand = Brand::select('id')->with('media')->first();
+
+    // $brand
+    //     ->addMedia( public_path('images/user-test.jpg') )
+    //     ->preservingOriginal()
+    //     ->toMediaCollection();
+
+    // $brand->clearMediaCollection();
+
+
+    // return $brand_logo = $brand;
+    // return $brand_logo = $brand->load('media')->media[0]->getCustomProperty('primaryColor');
+    return $brand_logo = $brand->load('media')->media[0]->getFullUrl('small');
+
 
     // return SpecRow::find(59)->defaults()->saveMany( factory(SpecDefault::class, 5)->make() );
 

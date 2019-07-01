@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div :style="{ position: 'relative' }">
         <label class="remote-select-label" :class="{ 'has-focus' : hasFocus || hasValue }">{{ label }}</label>
         <el-select
             class="col-12 remote-select"
@@ -88,8 +88,10 @@ export default {
     {
         return {
             hasFocus: false,
-            options: this.defaults.filter(i => i),
+            options: this.defaults.filter(i => i && i.id),
             loading: false,
+
+            default_data: []
         }
     },
 
@@ -125,6 +127,32 @@ export default {
         },
     },
 
+    mounted() {
+        this.loading = true
+
+        axios.get('/graphql/auth', {
+            params: {
+                query: `{
+                    allData: ${this.type} (per_page: 30 ${ this.filters ? ',' + this.filters : ''}) {
+                        data {
+                            id
+                            ${this.fields}
+                        }
+                    }
+                }`
+            }
+        })
+        .then(({data}) =>
+        {   
+            this.loading = false;
+
+            const DATA = _.uniqBy([ ...this.defaults.filter(i => i && i.id), ...data.data.allData.data ], 'id')
+
+            this.default_data = DATA
+            this.options = DATA;
+        })
+    },
+
     methods: {
 
         handleClear()
@@ -135,7 +163,7 @@ export default {
 
         handleInput(value)
         {
-            // this.validation.$touch()
+            this.options = _.differenceBy(this.options, this.defaults, 'id')
 
             this.$emit('input', value)
         },
@@ -162,11 +190,11 @@ export default {
                 {
                     this.loading = false;
 
-                    this.options = _.uniqBy([ ...this.defaults.filter(i => i), ...data.data.allData.data ], 'id');
+                    this.options = _.uniqBy([ ...this.defaults.filter(i => i && i.id), ...data.data.allData.data ], 'id');
                 })
 
             } else {
-                this.options = [];
+                this.options = _.uniqBy(this.default_data, 'id');
             }
         }
     }
@@ -195,7 +223,7 @@ export default {
 
 label.remote-select-label {
     position: absolute;
-    top: 23px;
+    top: 16px;
     pointer-events: none;
     transition: .4s cubic-bezier(.25,.8,.25,1);
     transition-duration: .3s;
@@ -204,7 +232,7 @@ label.remote-select-label {
 }
 
 label.remote-select-label.has-focus {
-    top: 0px;
+    top: -5px;
     font-size: 12px;
 }
 
@@ -223,11 +251,11 @@ label.remote-select-label.has-focus {
     margin-right: -30px;
 }
 
-.el-select .el-tag__close.el-icon-close {
+.el-select.remote-select .el-tag__close.el-icon-close {
     right: 0px;
 }
 
-.el-select input {
+.el-select.remote-select input {
     padding-right: 0px !important;
     background: transparent;
 }

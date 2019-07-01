@@ -24,6 +24,9 @@ class BaseQuestionAndAnswerMutation extends MainMutation
             'question_id' => [
                 'type' => Type::int()
             ],
+            'title' => [
+                'type' => Type::string()
+            ],
             'message' => [
                 'type' => Type::string()
             ],

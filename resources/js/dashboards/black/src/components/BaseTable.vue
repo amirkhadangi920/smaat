@@ -30,7 +30,7 @@
                   />
                 </transition>
               </li>
-              <li class="data-table-cell p-2 d-flex align-items-center justify-content-center" :style="{width: '40px'}">
+              <li class="data-table-cell p-2 d-flex align-items-center justify-content-center" :style="{width: '40px'}" v-if="canSelect">
                 <checkbox>
                   <input type="checkbox" v-model="all_items_selected" @change="$parent.handleSelectAll" />
                 </checkbox>
@@ -71,7 +71,7 @@
                     <li class="data-table-cell p-2 d-flex align-items-center justify-content-center" :style="{width: '40px'}">
                       {{ index + 1 }}
                     </li>
-                    <li :style="{width: '40px'}" class="data-table-cell d-flex align-items-center justify-content-center">
+                    <li :style="{width: '40px'}" class="data-table-cell d-flex align-items-center justify-content-center" v-if="canSelect">
                       <checkbox>
                         <input type="checkbox" :value="index" v-model="$parent.selected_items" @change="$parent.handleSelectedChange(index)" />
                       </checkbox>
@@ -269,6 +269,10 @@
         required: true
       },
       canEdit: {
+        type: Boolean,
+        default: true
+      },
+      canSelect: {
         type: Boolean,
         default: true
       },

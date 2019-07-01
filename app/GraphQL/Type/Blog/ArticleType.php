@@ -36,7 +36,7 @@ class ArticleType extends BaseType
             'reading_time' => [
                 'type' => Type::int()
             ],
-            'image' => $this->imageField(),
+            'image' => $this->imageField('image'),
             'writer' => [
                 'type' => \GraphQl::type('user'),
             ],

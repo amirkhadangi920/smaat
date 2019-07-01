@@ -25,12 +25,16 @@ use App\Helpers\CreatorRelationship;
 use Askedio\SoftCascade\Traits\SoftCascadeTrait;
 use Dimsav\Translatable\Translatable;
 use Nicolaslopezj\Searchable\SearchableTrait;
+use Spatie\MediaLibrary\HasMedia\HasMedia;
+use Spatie\MediaLibrary\HasMedia\HasMediaTrait;
+use App\Helpers\MediaConversionsTrait;
 
-class Category extends Model implements AuditableContract
+class Category extends Model implements AuditableContract, HasMedia
 {
     use SoftDeletes, Auditable, HasTags, MultiLevel;
     use CreateTimeline, HasTenant, CreatorRelationship, SoftCascadeTrait;
     use Translatable, SearchableTrait;
+    use HasMediaTrait, MediaConversionsTrait;
 
     /****************************************
      **             Attributes
@@ -52,7 +56,6 @@ class Category extends Model implements AuditableContract
      */
     protected $fillable = [
         'parent_id',
-        'logo',
         'is_active'
     ];
 
@@ -95,7 +98,6 @@ class Category extends Model implements AuditableContract
         'parent_id',
         'title',
         'description',
-        'logo',
         'scoring_feilds',
         'is_active'
     ];
@@ -107,7 +109,6 @@ class Category extends Model implements AuditableContract
      */
     protected $casts = [
         'scoring_feilds'    => 'array',
-        'logo'              => 'array',
         'is_active'         => 'boolean'
     ];
 
@@ -142,7 +143,7 @@ class Category extends Model implements AuditableContract
      */
     public function products()
     {
-        return $this->hasMany(Product::class);
+        return $this->belongsToMany(Product::class, 'product_category');
     }
 
     /**
@@ -209,7 +210,7 @@ class Category extends Model implements AuditableContract
      */
     public function spec()
     {
-        return $this->hasOne(Spec::class);
+        return $this->belongsToMany(Spec::class, 'spec_category');
     }
 
     /**
@@ -242,6 +243,14 @@ class Category extends Model implements AuditableContract
     public function discounts()
     {
         return $this->belongsToMany(Discount::class);
+    }
+
+    /**
+     * Get the media field of the model
+     */
+    public function logo()
+    {
+        return $this->morphMany(config('medialibrary.media_model'), 'model');
     }
 
 

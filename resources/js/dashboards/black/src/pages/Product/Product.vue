@@ -17,15 +17,36 @@
     <template slot="filter-labels"></template>
     
     <template v-slot:photos-body="slotProps">
-      <img class="tilt" :src="slotProps.row.photos && slotProps.row.photos.length !== 0 ? slotProps.row.photos[0].tiny : '/images/placeholder.png'" />
+      <img class="tilt" :src="slotProps.row.photos && slotProps.row.photos.length !== 0 ? slotProps.row.photos[0].thumb : '/images/placeholder.png'" />
     </template>
 
     <template v-slot:brand-body="slotProps">
       <a href="#">{{ slotProps.row.brand ? slotProps.row.brand.name : '' }}</a>
     </template>
 
-    <template v-slot:category-body="slotProps">
-      <a href="#">{{ slotProps.row.category ? slotProps.row.category.title : '' }}</a>
+    <template v-slot:categories-body="slotProps">
+      <transition-group name="list">
+        <span
+          v-for="item in slotProps.row.categories.filter( (category, index) => index < 3)"
+          :key="item.id"
+          class="badge badge-default ml-1 hvr-grow-shadow hvr-icon-grow">
+          <i class="tim-icons icon-bullet-list-67 hvr-icon"></i>
+          {{ item.title }}
+        </span>
+
+        <el-dropdown v-if="slotProps.row.categories.length > 3" :key="slotProps.row.categories.map((c) => c.id).join(',')">
+          <span class="el-dropdown-link badge badge-default">
+            باقی گروه ها <i class="el-icon-arrow-down el-icon--right"></i>
+          </span>
+          <el-dropdown-menu slot="dropdown">
+            <el-dropdown-item
+              v-for="item in slotProps.row.categories.filter( (category, index) => index < 3)"
+              :key="item.id">
+              {{ item.title }}
+            </el-dropdown-item>
+          </el-dropdown-menu>
+        </el-dropdown>
+      </transition-group>
     </template>
 
     <template v-slot:votes-body="slotProps">
@@ -105,7 +126,7 @@ export default {
           label: 'برند',
           icon: 'icon-caps-small'
         }, {
-          field: 'category',
+          field: 'categories',
           label: 'دسته بندی',
           icon: 'icon-caps-small'
         }, {
@@ -120,12 +141,15 @@ export default {
       return `
         name
         photos {
-          tiny
+          id
+          file_name
+          thumb
         }
         brand {
           name
         }
-        category {
+        categories {
+          id
           title
         }
         votes {
