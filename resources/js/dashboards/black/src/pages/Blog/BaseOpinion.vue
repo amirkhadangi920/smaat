@@ -590,7 +590,6 @@ export default {
           label: 'وضعیت',
           icon: 'icon-refresh-02'
         }
-
       ]
     },
 

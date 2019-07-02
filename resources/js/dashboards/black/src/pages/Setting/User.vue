@@ -103,27 +103,27 @@
       <div class="row">
         <div class="col-md-4">
           <md-field>
-            <label>رمز عبور قدیم</label>
-            <md-input v-model="password.old" :maxlength="100" />
-            <i class="md-icon tim-icons icon-paper"></i>
-            <span class="md-helper-text">رمز عبور کنونی خود را وارد کنید</span>
+            <label>رمز عبور کنونی</label>
+            <md-input type="password" v-model="password.current" :maxlength="100" />
+            <!-- <i class="md-icon tim-icons icon-paper"></i> -->
+            <span class="md-helper-text">رمز عبور فعلی خود را وارد کنید</span>
           </md-field>
         </div>
 
         <div class="col-md-4">
           <md-field>
-            <label>رمز عبور</label>
-            <md-input v-model="password.main" :maxlength="100" />
-            <i class="md-icon tim-icons icon-paper"></i>
+            <label>رمز عبور جدید</label>
+            <md-input type="password" v-model="password.main" :maxlength="100" />
+            <!-- <i class="md-icon tim-icons icon-paper"></i> -->
             <span class="md-helper-text">رمز عبور جدید را وارد کنید</span>
           </md-field>
         </div>
 
         <div class="col-md-4">
           <md-field :class="getValidationClass('first_name')">
-            <label>تکرار رمز</label>
-            <md-input v-model="password.confirm" :maxlength="100" />
-            <i class="md-icon tim-icons icon-paper"></i>
+            <label>تکرار رمز عبور جدید</label>
+            <md-input type="password" v-model="password.confirm" :maxlength="100" />
+            <!-- <i class="md-icon tim-icons icon-paper"></i> -->
             <span class="md-helper-text">تکرار رمز عبور جدید را وارد کنید</span>
           </md-field>
         </div>
@@ -182,7 +182,7 @@ export default {
         }
       },
       password: {
-        old: '',
+        current: '',
         main: '',
         confirm: ''
       },
@@ -227,21 +227,40 @@ export default {
     updatePassword()
     {
       axios.post('/graphql/auth', {
-        params: {
-          query: `mutation {
-            updateUserPassword (
-              current_password: "${this.password.old}",
-              password: "${this.password.main}",
-              password_confirmation: "${this.password.confirm}"
-            ) {
-              status
-              message
-            }
-          }`
-        }
+        query: `mutation {
+          updateUserPassword (
+            current_password: "${this.password.current}",
+            password: "${this.password.main}",
+            password_confirmation: "${this.password.confirm}"
+          ) {
+            status
+            message
+          }
+        }`
       })
-      .then(({data}) => {
-        console.log('fuck', data )
+      .then(({data}) =>
+      {
+        if ( data.data.updateUserPassword.status === 400 )
+        {
+          return this.$swal.fire({
+            title: 'تغییری نکرد',
+            text: data.data.updateUserPassword.message,
+            type: 'error',
+            timer: 2000,
+          })
+        }
+
+        this.$swal.fire({
+          title: 'تغییر کرد',
+          text: 'رمز عبور با موفقیت تغییر کرد ، لطفا دوباره وارد حساب خود شوید',
+          type: 'success',
+          timer: 2000,
+        })
+
+        setTimeout(() => {
+          localStorage.removeItem('JWT');
+          window.location.replace('/login')
+        }, 2000);
       })
       .catch(this.errorResolver)
     },

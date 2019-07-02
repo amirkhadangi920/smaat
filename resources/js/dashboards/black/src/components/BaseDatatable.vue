@@ -835,16 +835,6 @@
     text-align: right !important;
     border-radius: 0px 50px !important;
   }
-  .card .card-image {
-    position: relative;
-    bottom: 30px;
-    box-shadow: 0px 0px 20px -4px #000000b3;
-    transition: transform 300ms;
-    background: #fff;
-  }
-  .card .card-image img {
-    max-height: 100px;
-  }
 
   @media only screen and (max-width: 768px) {
     .card.responsive {
@@ -875,15 +865,6 @@
   }
   .data-grid-item .card-footer, .data-grid-item .card-header {
     padding-top: 0px !important;
-  }
-  .card .card-image, .card .card-image img {
-    border-radius: 50%;
-    width: 100px;
-    height: 100px;
-  }
-
-  .card:hover .card-image {
-    transform: rotate(30deg)
   }
 
   .white-content .card:not(.card-white) {

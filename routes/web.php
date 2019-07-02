@@ -212,6 +212,13 @@ Route::get('/panel/{path?}', function() {
     return view("dashboards.{$dashboard_template}");
 })->where('path', '.*');
 
+Route::get('/{path?}', function() {
+    $dashboard_template = 'karma';
+
+    return view("themplates.{$dashboard_template}");
+})->where('path', '.*');
+
+
 Route::get('/login', function() {
     return view('login');
 });

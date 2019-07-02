@@ -19,13 +19,16 @@
             unique-opened
             class="el-menu-vertical-demo"
             >
+            <el-menu-item class="main" index="0">
+              <sidebar-link to="/panel" name="داشبورد" icon="tim-icons icon-tv-2 dashboard-icon"/>
+            </el-menu-item>
             <el-submenu index="1" v-if="canSeeMenu(['brand', 'unit', 'size', 'warranty', 'color', 'spec'])">
               <template slot="title">
                 <i class="tim-icons icon-single-copy-04 feature-icon"></i>
                 <span>ویژگی ها</span>
               </template>
               <el-menu-item v-if="hasPermissions('brand')">
-                <sidebar-link to="/panel/brand" :name="$t('sidebar.list') + ' ' + $t('sidebar.brand')" icon="tim-icons icon-atom"/>      
+                <sidebar-link to="/panel/brand" :name="$t('sidebar.list') + ' ' + $t('sidebar.brand')" icon="tim-icons icon-atom"/>
               </el-menu-item>
               <el-menu-item v-if="hasPermissions('unit')">
                 <sidebar-link to="/panel/unit" :name="$t('sidebar.list') + ' ' + $t('sidebar.unit')" icon="tim-icons icon-app"/>
@@ -260,7 +263,7 @@ export default {
 .sidebar {
   margin-top: 70px !important;
   height: calc(100vh - 110px) !important;
-  box-shadow: 0px 15px 60px -30px !important;
+  /* box-shadow: 0px 15px 60px -30px !important; */
   /* border-radius 300ms */
 }
 .main-panel {
@@ -286,6 +289,12 @@ export default {
 }
 .el-menu-item {
   padding-right: 0px !important;
+}
+.el-menu-item.main p {
+  font-size: 14px;
+}
+.el-menu-item.main a {
+  padding-right: 4px !important;
 }
 .el-submenu__icon-arrow {
   float: left !important;
@@ -324,16 +333,22 @@ export default {
 .sidebar {
   border-radius: 10px !important;
   background: #fbfbfb !important;
-  box-shadow: 0px 10px 60px -22px !important;
+  /* box-shadow: 0px 10px 60px -22px !important; */
+  box-shadow: none !important;
+  filter: drop-shadow(0px 5px 25px #00000017);
 }
 
-i.feature-icon, i.blog-icon, i.product-icon, i.shop-icon, i.user-icon, i.setting-icon {
+i.dashboard-icon, i.feature-icon, i.blog-icon, i.product-icon, i.shop-icon, i.user-icon, i.setting-icon {
   font-size: 16px !important;
   padding: 0px;
   width: 30px !important;
   height: 30px !important;
   border-radius: 10px;
   color: #fff !important;
+}
+.el-menu-item i.dashboard-icon {
+  background: #cc04c1;
+  box-shadow: 0px 4px 20px -3px #cc04c1, 0px 4px 18px -8px #000;
 }
 .el-submenu__title i.feature-icon {
   background: #ff3d3d;
@@ -377,7 +392,7 @@ i.feature-icon, i.blog-icon, i.product-icon, i.shop-icon, i.user-icon, i.setting
 }
 
 #style-3 {
-  box-shadow: 0px 0px 45px -20px inset;
+  /* box-shadow: 0px 0px 45px -20px inset; */
   border-radius: 10px;
 }
 
@@ -429,7 +444,7 @@ i.feature-icon, i.blog-icon, i.product-icon, i.shop-icon, i.user-icon, i.setting
   }
 }
 
-.md-field .md-icon {
+.md-field .md-icon.tim-icons {
   background: linear-gradient(to bottom right, #ff8d72, #f56c6c);
   padding: 5.5px 6px;
   width: 30px;
@@ -438,5 +453,9 @@ i.feature-icon, i.blog-icon, i.product-icon, i.shop-icon, i.user-icon, i.setting
   border-radius: 5px;
   box-shadow: 0px 4px 25px -6px #f70000, 0px 3px 10px -8px #000;
   text-shadow: 1px 2px 7px #0000005c;
+}
+.md-field .md-button.md-toggle-password {
+  right: auto;
+  left: 0px;
 }
 </style>

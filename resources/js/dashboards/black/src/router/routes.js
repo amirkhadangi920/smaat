@@ -37,16 +37,16 @@ import User from '../pages/User/User.vue'
 import Role from '../pages/User/Role.vue'
 
 const routes = [
+  // {
+  //   path: "/panel",
+  //   component: DashboardLayout,
+  //   redirect: "/panel/dashboard",
+  // },
   {
     path: "/panel",
-    component: DashboardLayout,
-    redirect: "/panel/dashboard",
-  },
-  {
-    path: "/panel/dashboard",
     name: "dashboard",
     component: Dashboard,
-    meta: { auth: true },
+    meta: { index: 0, auth: true },
   },
   {
     path: "/panel/notifications",

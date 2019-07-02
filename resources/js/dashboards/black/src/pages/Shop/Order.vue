@@ -17,7 +17,7 @@
     ref="datatable">
 
     <template v-slot:user-body="slotProps">
-      <img class="tilt" :src="slotProps.row.user.avatar ? slotProps.row.user.avatar.tiny : '/images/placeholder-user.png'" />
+      <img class="tilt" :src="slotProps.row.user.avatar ? slotProps.row.user.avatar.thumb : '/images/placeholder-user.png'" />
       <p>{{ slotProps.row.user.full_name }}</p>
     </template>
 
@@ -172,7 +172,7 @@ export default {
           first_name
           last_name
           full_name
-          avatar { tiny }
+          avatar { id file_name thumb }
         }
         offer
         total

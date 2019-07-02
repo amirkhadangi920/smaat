@@ -1,302 +1,374 @@
 <template>
-  <div>
+  <div :style="{ position: 'relative', zIndex: 10 }">
+    <div class="row owl-carousel mb-5">
+      <card class="text-right mb-0 animated bounceInLeft delay-last responsive trash-card" :style="{ transformStyle: 'preserve-3d' }">
+        <i class="tim-icons icon-trash-simple"></i>
+        <h5 class="card-category" style="transform: translateZ(20px)">تعداد محصولات</h5>
+        <h3 class="card-title" style="transform: translateZ(30px)">
+          10 محصول
+        </h3>
+        <p class="card-text text-muted" :style="{fontSize: '10px', transform: 'translateZ(15px)'}">تعداد محصولاتی که تا کنون ثبت کرده اید</p>
+      </card>
+    </div>
+    
+    <div class="row text-right">
+      <div class="col-md-12 text-right">
+        <h2 class="animated bounceInRight delay-first mb-0">
+          آخرین محصولات
+          <i class="tim-icons icon-bullet-list-67" :style="{fontSize: '20px'}"></i>
+        </h2>
+        <h6 class="text-muted animated bounceInRight delay-secound">آخرین محصولاتی که در فروشگاه ثبت کرده اید</h6>
+      </div>
+    </div>
+    <div class="row owl-carousel">
+      <card v-for="product in products" :key="product.id" dir="rtl" class="text-right">
+        <img slot="image" class="card-img-top" :src="product.photos.length ? product.photos[0].small : '/images/placeholder.png'" alt="product image"/>
+        <h4 class="card-title">
+          {{ product.name }}
+          <span class="badge badge-warning ml-1 hvr-grow-shadow hvr-icon-grow" v-if="product.brand">
+            <i class="tim-icons icon-bullet-list-67 hvr-icon"></i>
+            {{ product.brand.name }}
+          </span>
+        </h4>
+        <p class="card-text text-muted">{{ product.description }}</p>
+
+        <transition-group name="list">
+          <span
+            v-for="item in product.categories.filter( (category, index) => index < 3)"
+            :key="item.id"
+            class="badge badge-default ml-1 hvr-grow-shadow hvr-icon-grow">
+            <i class="tim-icons icon-bullet-list-67 hvr-icon"></i>
+            {{ item.title }}
+          </span>
+
+          <el-dropdown v-if="product.categories.length > 3" :key="product.categories.map((c) => c.id).join(',')">
+            <span class="el-dropdown-link badge badge-default">
+              باقی گروه ها <i class="el-icon-arrow-down el-icon--right"></i>
+            </span>
+            <el-dropdown-menu slot="dropdown">
+              <el-dropdown-item
+                v-for="item in product.categories.filter( (category, index) => index < 3)"
+                :key="item.id">
+                {{ item.title }}
+              </el-dropdown-item>
+            </el-dropdown-menu>
+          </el-dropdown>
+        </transition-group>
+      </card>
+    </div>
 
     <div class="row">
-      <div class="col-12">
-        <card type="chart">
-          <template slot="header">
-            <div class="row">
-              <div class="col-sm-6" :class="isRTL ? 'text-right' : 'text-left'">
-                <h5 class="card-category">{{$t('dashboard.totalShipments')}}</h5>
-                <h2 class="card-title">{{$t('dashboard.performance')}}</h2>
+      <div class="col-md-6" v-for="(item, index) in [comments, reviews]" :key="index">
+        <div class="row text-right">
+          <div class="col-md-6 text-right">
+            <h4 class="animated bounceInRight delay-first mb-0">
+              <i class="tim-icons icon-single-copy-04" :style="{fontSize: '20px'}"></i>
+              <span v-if="index === 0">آخرین نظرات</span>
+              <span v-if="index === 1">آخرین نقد ها</span>
+              <span v-if="index === 2">آخرین پرسش پاسخ ها</span>
+            </h4>
+          </div>
+        </div>
+
+        <base-table
+          :tableData="item"
+          type="order"
+          group="shop"
+          label="سفارش"
+          :fields="[
+            {
+              field: 'title',
+              label: 'عنوان',
+              icon: 'icon-caps-small'
+            }, {
+              field: 'status',
+              label: 'وضعیت',
+              icon: 'icon-refresh-02'
+            }
+          ]"
+          :canSelect="false"
+          :methods="{ }"
+          :has_loaded="is_loaded"
+          :has_times="true"
+          :has_operation="false"
+        >
+          <template v-slot:writer-body="slotProps">
+            <div class="info-cell">
+              <div class="mb-2">
+                <img class="tilt" :src="slotProps.row.article.image ? slotProps.row.article.image.thumb : '/images/placeholder.png'" />
+                <a href="#" :style="{display: 'block'}">{{ slotProps.row.article.title }}</a>
               </div>
-              <div class="col-sm-6">
-                <div class="btn-group btn-group-toggle"
-                     :class="isRTL ? 'float-left' : 'float-right'"
-                     data-toggle="buttons">
-                  <label v-for="(option, index) in bigLineChartCategories"
-                         :key="option"
-                         class="btn btn-sm btn-primary btn-simple"
-                         :class="{active: bigLineChart.activeIndex === index}"
-                         :id="index">
-                    <input type="radio"
-                           @click="initBigChart(index)"
-                           name="options" autocomplete="off"
-                           :checked="bigLineChart.activeIndex === index">
-                    {{option}}
-                  </label>
-                </div>
+
+              <div>
+                <img class="tilt" :src="slotProps.row.writer.avatar ? slotProps.row.writer.avatar.thumb : '/images/placeholder-user.png'" />
+                <a href="#">{{ slotProps.row.writer.full_name }}</a>
               </div>
             </div>
           </template>
-          <div class="chart-area">
-            <line-chart style="height: 100%"
-                        ref="bigChart"
-                        chart-id="big-line-chart"
-                        :chart-data="bigLineChart.chartData"
-                        :gradient-colors="bigLineChart.gradientColors"
-                        :gradient-stops="bigLineChart.gradientStops"
-                        :extra-options="bigLineChart.extraOptions">
-            </line-chart>
-          </div>
-        </card>
+
+          <template #status-body="slotProps">
+            <i v-if="slotProps.row.is_accept" class="text-success tim-icons icon-check-2"></i>
+            <i v-else class="text-danger tim-icons icon-simple-remove"></i>
+          </template>
+        </base-table>
+      </div>
+    </div>
+
+    <div class="row text-right">
+      <div class="col-md-12 text-right">
+        <h2 class="animated bounceInRight delay-first mb-0">
+          آخرین مقالات
+          <i class="tim-icons icon-single-copy-04" :style="{fontSize: '20px'}"></i>
+        </h2>
+        <h6 class="text-muted animated bounceInRight delay-secound">آخرین مقالاتی که در وبلاگ ثبت کرده اید</h6>
+      </div>
+    </div>
+    <div class="row owl-carousel">
+      <card v-for="article in articles" :key="article.id" class="text-right">
+        <img slot="image" class="card-img-top" :src="article.image ? article.image.small : '/images/placeholder.png'" alt="article image"/>
+        <h4 class="card-title">
+          {{ article.title }}
+          <span class="badge badge-info ml-1 hvr-grow-shadow hvr-icon-grow" v-if="article.reading_time">
+            <i class="tim-icons icon-bullet-list-67 hvr-icon"></i>
+            مطالعه در{{ article.reading_time }} دقیقه
+          </span>
+        </h4>
+        <p class="card-text text-muted">{{ article.description }}</p>
+
+        <transition-group name="list">
+          <span
+            v-for="item in article.subjects.filter( (category, index) => index < 3)"
+            :key="item.id"
+            class="badge badge-default ml-1 hvr-grow-shadow hvr-icon-grow">
+            <i class="tim-icons icon-bullet-list-67 hvr-icon"></i>
+            {{ item.title }}
+          </span>
+
+          <el-dropdown v-if="article.subjects.length > 3" :key="article.subjects.map((c) => c.id).join(',')">
+            <span class="el-dropdown-link badge badge-default">
+              باقی گروه ها <i class="el-icon-arrow-down el-icon--right"></i>
+            </span>
+            <el-dropdown-menu slot="dropdown">
+              <el-dropdown-item
+                v-for="item in article.subjects.filter( (category, index) => index < 3)"
+                :key="item.id">
+                {{ item.title }}
+              </el-dropdown-item>
+            </el-dropdown-menu>
+          </el-dropdown>
+        </transition-group>
+      </card>
+    </div>
+
+    <div class="row text-right">
+      <div class="col-md-12 text-right">
+        <h2 class="animated bounceInRight delay-first mb-0">
+          آخرین سفارشات
+          <i class="tim-icons icon-cart" :style="{fontSize: '20px'}"></i>
+        </h2>
+        <h6 class="text-muted animated bounceInRight delay-secound">آخرین سفارشاتی که در وبسایت ثبت شده است</h6>
       </div>
     </div>
     <div class="row">
-      <div class="col-lg-4" :class="{'text-right': isRTL}">
-        <card type="chart">
-          <template slot="header">
-            <h5 class="card-category">{{$t('dashboard.totalShipments')}}</h5>
-            <h3 class="card-title"><i class="tim-icons icon-bell-55 text-primary "></i> 763,215</h3>
-          </template>
-          <div class="chart-area">
-            <line-chart style="height: 100%"
-                        chart-id="purple-line-chart"
-                        :chart-data="purpleLineChart.chartData"
-                        :gradient-colors="purpleLineChart.gradientColors"
-                        :gradient-stops="purpleLineChart.gradientStops"
-                        :extra-options="purpleLineChart.extraOptions">
-            </line-chart>
-          </div>
-        </card>
-      </div>
-      <div class="col-lg-4" :class="{'text-right': isRTL}">
-        <card type="chart">
-          <template slot="header">
-            <h5 class="card-category">{{$t('dashboard.dailySales')}}</h5>
-            <h3 class="card-title"><i class="tim-icons icon-delivery-fast text-info "></i> 3,500€</h3>
-          </template>
-          <div class="chart-area">
-            <bar-chart style="height: 100%"
-                       chart-id="blue-bar-chart"
-                       :chart-data="blueBarChart.chartData"
-                       :gradient-stops="blueBarChart.gradientStops"
-                       :extra-options="blueBarChart.extraOptions">
-            </bar-chart>
-          </div>
-        </card>
-      </div>
-      <div class="col-lg-4" :class="{'text-right': isRTL}">
-        <card type="chart">
-          <template slot="header">
-            <h5 class="card-category">{{$t('dashboard.completedTasks')}}</h5>
-            <h3 class="card-title"><i class="tim-icons icon-send text-success "></i> 12,100K</h3>
-          </template>
-          <div class="chart-area">
-            <line-chart style="height: 100%"
-                        chart-id="green-line-chart"
-                        :chart-data="greenLineChart.chartData"
-                        :gradient-stops="greenLineChart.gradientStops"
-                        :extra-options="greenLineChart.extraOptions">
-            </line-chart>
-          </div>
-        </card>
-      </div>
-    </div>
-    <div class="row">
-      <div class="col-lg-6 col-md-12">
-        <card type="tasks" :header-classes="{'text-right': isRTL}">
-          <template slot="header">
-            <h6 class="title d-inline">{{$t('dashboard.tasks', {count: 5})}}</h6>
-            <p class="card-category d-inline">{{$t('dashboard.today')}}</p>
-            <base-dropdown menu-on-right=""
-                           tag="div"
-                           title-classes="btn btn-link btn-icon"
-                           aria-label="Settings menu"
-                           :class="{'float-left': isRTL}">
-              <i slot="title" class="tim-icons icon-settings-gear-63"></i>
-              <a class="dropdown-item" href="#pablo">{{$t('dashboard.dropdown.action')}}</a>
-              <a class="dropdown-item" href="#pablo">{{$t('dashboard.dropdown.anotherAction')}}</a>
-              <a class="dropdown-item" href="#pablo">{{$t('dashboard.dropdown.somethingElse')}}</a>
-            </base-dropdown>
-          </template>
-          <div class="table-full-width table-responsive">
-            <task-list></task-list>
-          </div>
-        </card>
-      </div>
-      <div class="col-lg-6 col-md-12">
-        <card class="card" :header-classes="{'text-right': isRTL}">
-          <h4 slot="header" class="card-title">{{$t('dashboard.simpleTable')}}</h4>
-          <div class="table-responsive">
-            <user-table></user-table>
-          </div>
-        </card>
-      </div>
+      <base-table
+        :tableData="orders"
+        type="order"
+        group="shop"
+        label="سفارش"
+        :fields="[
+          {
+            field: 'user',
+            label: 'خریدار',
+            icon: 'icon-caps-small'
+          }, {
+            field: 'offer',
+            label: 'تخفیف',
+            icon: 'icon-badge'
+          }, {
+            field: 'final_total',
+            label: 'جمع فاکتور',
+            icon: 'icon-badge'
+          }, {
+            field: 'status',
+            label: 'وضعیت',
+            icon: 'icon-caps-small'
+          },
+        ]"
+        :canSelect="false"
+        :methods="{ }"
+        :has_loaded="is_loaded"
+        :has_times="true"
+        :has_operation="false"
+      >
+        <template v-slot:user-body="slotProps">
+          <img class="tilt" :src="slotProps.row.user.avatar ? slotProps.row.user.avatar.thumb : '/images/placeholder-user.png'" />
+          <p>{{ slotProps.row.user.full_name }}</p>
+        </template>
+
+        <template v-slot:offer-body="slotProps">
+          <p>{{ slotProps.row.offer | price }} <span class="text-muted text-small" :style="{fontSize: '10px'}">تومان</span></p>
+        </template>
+
+        <template v-slot:final_total-body="slotProps">
+          <p>{{ slotProps.row.final_total | price }} <span class="text-muted text-small" :style="{fontSize: '10px'}">تومان</span></p>
+        </template>
+
+        <template v-slot:status-body="slotProps">
+          <span class="badge" :style="{ border: `1px solid ${slotProps.row.status.color}` }">{{ slotProps.row.status.title }}</span>
+        </template>
+      </base-table>
     </div>
   </div>
 </template>
 <script>
-  import LineChart from '../components/Charts/LineChart';
-  import BarChart from '../components/Charts/BarChart';
-  import * as chartConfigs from '../components/Charts/config';
-  import TaskList from './Dashboard/TaskList';
-  import UserTable from './Dashboard/UserTable';
-  import config from '../config';
+import BaseTable from '../components/BaseTable'
+import filtersHelper from '../mixins/filtersHelper';
 
-  export default {
-    components: {
-      LineChart,
-      BarChart,
-      TaskList,
-      UserTable
-    },
-    data() {
-      return {
-        bigLineChart: {
-          allData: [
-            [100, 70, 90, 70, 85, 60, 75, 60, 90, 80, 110, 100],
-            [80, 120, 105, 110, 95, 105, 90, 100, 80, 95, 70, 120],
-            [60, 80, 65, 130, 80, 105, 90, 130, 70, 115, 60, 130]
-          ],
-          activeIndex: 0,
-          chartData: {
-            labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
-            datasets: [{
-                label: '# of Votes',
-                data: [12, 19, 3, 5, 2, 3],
-                backgroundColor: [
-                    'rgba(255, 99, 132, 0.2)',
-                    'rgba(54, 162, 235, 0.2)',
-                    'rgba(255, 206, 86, 0.2)',
-                    'rgba(75, 192, 192, 0.2)',
-                    'rgba(153, 102, 255, 0.2)',
-                    'rgba(255, 159, 64, 0.2)'
-                ],
-                borderColor: [
-                    'rgba(255, 99, 132, 1)',
-                    'rgba(54, 162, 235, 1)',
-                    'rgba(255, 206, 86, 1)',
-                    'rgba(75, 192, 192, 1)',
-                    'rgba(153, 102, 255, 1)',
-                    'rgba(255, 159, 64, 1)'
-                ],
-                borderWidth: 1
-            }]
-          },
-          extraOptions: chartConfigs.purpleChartOptions,
-          gradientColors: config.colors.primaryGradient,
-          gradientStops: [1, 0.4, 0],
-          categories: []
-        },
-        purpleLineChart: {
-          extraOptions: chartConfigs.purpleChartOptions,
-          chartData: {
-            labels: ['JUL', 'AUG', 'SEP', 'OCT', 'NOV', 'DEC'],
-            datasets: [{
-              label: "Data",
-              fill: true,
-              borderColor: config.colors.primary,
-              borderWidth: 2,
-              borderDash: [],
-              borderDashOffset: 0.0,
-              pointBackgroundColor: config.colors.primary,
-              pointBorderColor: 'rgba(255,255,255,0)',
-              pointHoverBackgroundColor: config.colors.primary,
-              pointBorderWidth: 20,
-              pointHoverRadius: 4,
-              pointHoverBorderWidth: 15,
-              pointRadius: 4,
-              data: [80, 100, 70, 80, 120, 80],
-            }]
-          },
-          gradientColors: config.colors.primaryGradient,
-          gradientStops: [1, 0.2, 0],
-        },
-        greenLineChart: {
-          extraOptions: chartConfigs.greenChartOptions,
-          chartData: {
-            labels: ['JUL', 'AUG', 'SEP', 'OCT', 'NOV'],
-            datasets: [{
-              label: "My First dataset",
-              fill: true,
-              borderColor: config.colors.danger,
-              borderWidth: 2,
-              borderDash: [],
-              borderDashOffset: 0.0,
-              pointBackgroundColor: config.colors.danger,
-              pointBorderColor: 'rgba(255,255,255,0)',
-              pointHoverBackgroundColor: config.colors.danger,
-              pointBorderWidth: 20,
-              pointHoverRadius: 4,
-              pointHoverBorderWidth: 15,
-              pointRadius: 4,
-              data: [90, 27, 60, 12, 80],
-            }]
-          },
-          gradientColors: ['rgba(66,134,121,0.15)', 'rgba(66,134,121,0.0)', 'rgba(66,134,121,0)'],
-          gradientStops: [1, 0.4, 0],
-        },
-        blueBarChart: {
-          extraOptions: chartConfigs.barChartOptions,
-          chartData: {
-            labels: ['USA', 'GER', 'AUS', 'UK', 'RO', 'BR'],
-            datasets: [{
-              label: "Countries",
-              fill: true,
-              borderColor: config.colors.info,
-              borderWidth: 2,
-              borderDash: [],
-              borderDashOffset: 0.0,
-              data: [53, 20, 10, 80, 100, 45],
-            }]
-          },
-          gradientColors: config.colors.primaryGradient,
-          gradientStops: [1, 0.4, 0],
-        }
-      }
-    },
-    computed: {
-      enableRTL() {
-        return this.$route.query.enableRTL;
-      },
-      isRTL() {
-        return this.$rtl.isRTL;
-      },
-      bigLineChartCategories() {
-        return this.$t('dashboard.chartCategories');
-      }
-    },
-    methods: {
-      initBigChart(index) {
-        let chartData = {
-          datasets: [{
-            fill: true,
-            borderColor: config.colors.primary,
-            borderWidth: 2,
-            borderDash: [],
-            borderDashOffset: 0.0,
-            pointBackgroundColor: config.colors.primary,
-            pointBorderColor: 'rgba(255,255,255,0)',
-            pointHoverBackgroundColor: config.colors.primary,
-            pointBorderWidth: 20,
-            pointHoverRadius: 4,
-            pointHoverBorderWidth: 15,
-            pointRadius: 4,
-            data: this.bigLineChart.allData[index]
-          }],
-          labels: ['JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUN', 'JUL', 'AUG', 'SEP', 'OCT', 'NOV', 'DEC'],
-        }
-        this.$refs.bigChart.updateGradients(chartData);
-        this.bigLineChart.chartData = chartData;
-        this.bigLineChart.activeIndex = index;
-      }
-    },
-    mounted() {
-      this.i18n = this.$i18n;
-      if (this.enableRTL) {
-        this.i18n.locale = 'ar';
-        this.$rtl.enableRTL();
-      }
-      this.initBigChart(0);
-    },
-    beforeDestroy() {
-      if (this.$rtl.isRTL) {
-        this.i18n.locale = 'en';
-        // this.$rtl.disableRTL();
-      }
+export default {
+  components: {
+    BaseTable
+  },
+  mixins: [
+    filtersHelper,
+  ],
+  data() {
+    return {
+      orders: [],
+      comments: [],
+      reviews: [],
+      article: [],
+      question_and_answers: [],
+      products: [],
+      articles: [],
+      
+
+      is_loaded: false,
     }
-  };
+  },
+  computed: {
+    enableRTL() {
+      return this.$route.query.enableRTL;
+    },
+    isRTL() {
+      return this.$rtl.isRTL;
+    },
+    bigLineChartCategories() {
+      return this.$t('dashboard.chartCategories');
+    }
+  },
+  methods: {
+    initBigChart(index) {
+      let chartData = {
+        datasets: [{
+          fill: true,
+          borderColor: config.colors.primary,
+          borderWidth: 2,
+          borderDash: [],
+          borderDashOffset: 0.0,
+          pointBackgroundColor: config.colors.primary,
+          pointBorderColor: 'rgba(255,255,255,0)',
+          pointHoverBackgroundColor: config.colors.primary,
+          pointBorderWidth: 20,
+          pointHoverRadius: 4,
+          pointHoverBorderWidth: 15,
+          pointRadius: 4,
+          data: this.bigLineChart.allData[index]
+        }],
+        labels: ['JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUN', 'JUL', 'AUG', 'SEP', 'OCT', 'NOV', 'DEC'],
+      }
+      this.$refs.bigChart.updateGradients(chartData);
+      this.bigLineChart.chartData = chartData;
+      this.bigLineChart.activeIndex = index;
+    }
+  },
+  mounted()
+  {
+    require('owl.carousel/dist/owl.carousel.js')
+
+    axios.get('/graphql/auth', {
+      params: {
+        query: `{
+          products {
+            data {
+              id name description photos { id file_name small } categories { id title } colors { id name code } brand { id name }
+            }
+            total
+          }
+          
+          articles {
+            data {
+              id title description reading_time image { id file_name small } subjects { id title }
+            }
+          }
+
+          orders {
+            data {
+              id offer total created_at updated_at
+              status: order_status { id title color }
+              user {
+                id first_name last_name full_name avatar { id file_name thumb }
+              }
+            }
+            total
+          }
+          
+          users {
+            data {
+              id
+              first_name
+              last_name
+              full_name
+              email
+              avatar { id file_name small }
+            }
+            total
+          }
+          
+          comments(per_page: 5) {
+            data { id title is_accept created_at updated_at }
+          }
+          reviews(per_page: 5) {
+            data { id title is_accept created_at updated_at }
+          }
+          question_and_answers(per_page: 5) {
+            data { id title is_accept created_at updated_at }
+          } 
+        }`
+      }
+    })
+    .then(({data}) => {
+      this.products = data.data.products.data
+      this.articles = data.data.articles.data
+      this.orders = data.data.orders.data
+      this.comments = data.data.comments.data
+      this.reviews = data.data.reviews.data
+      this.question_and_answers = data.data.question_and_answers.data
+
+      console.log( data.data.orders )
+
+      this.is_loaded = true
+    })
+    .then(() => {
+      $('.owl-carousel').owlCarousel({
+        rtl: true,
+        nav: false,
+        loop: true,
+        margin: 10,
+        responsive: {
+            0: { items:1 },
+            600: { items:2 },
+            1000: { items: 3 }
+        }
+      })
+    })
+  },
+};
 </script>
+
 <style>
+
+.card .card-image img {
+  max-height: 150px;
+}
+
 </style>
