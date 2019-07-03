@@ -30,7 +30,7 @@
             <h6 class="text-muted animated bounceInRight delay-last">کلیه اطلاعات مشتری در این قسمت قرار میگیرد</h6>
           </div>
           <div class="col-12">
-            <img :style="{ maxHeight: '100px'}" class="tilt mb-2" :src="info.user.avatar ? info.user.avatar.tiny : '/images/placeholder-user.png'" /><br/>
+            <img :style="{ maxHeight: '100px'}" class="tilt mb-2" :src="info.user.avatar ? info.user.avatar.thumb : '/images/placeholder-user.png'" /><br/>
             <p><span class="text-muted">نام و نام خانوادگی :</span> {{ info.user.full_name }}</p>
             <p><span class="text-muted">آدرس ایمیل :</span> {{ info.user.email }}</p>
             <p>
@@ -143,7 +143,7 @@
             <h6 class="text-muted animated bounceInRight delay-last">کلیه اطلاعات درباره روش ارسال در این قسمت قرار میگیرد</h6>
           </div>
           <div class="col-12">
-            <p>
+            <p v-if="false">
               <span class="text-muted">روش ارسال :</span>
               {{ info.method.name }} 
               <span v-if="!info.method.name" class="badge badge-warning">
@@ -151,7 +151,7 @@
                 <i class="tim-icons icon-simple-remove ml-0"></i>
               </span>
             </p>
-            <p>
+            <p v-if="false">
               <span class="text-muted">هزینه ارسال :</span>
               {{ info.method.cost | price }} <span class="text-muted" v-if="info.method.cost">تومان</span> 
               <span v-if="!info.method.cost" class="badge badge-warning">
@@ -228,7 +228,7 @@
         :has_operation="false"
       >
         <template #product-body="props">
-          <img class="tilt" :src="props.row.variation.product.photos ? props.row.variation.product.photos.tiny : '/images/placeholder.png'" />
+          <img class="tilt" :src="props.row.variation.product.photos.length ? props.row.variation.product.photos[0].thumb : '/images/placeholder.png'" />
           {{ props.row.variation.product.name }}
         </template>
 
@@ -404,7 +404,7 @@ export default {
               email
               phones { id type phone_number }
               addresses { id type address postal_code }
-              avatar { tiny }
+              avatar { id file_name thumb }
               national_code
             }
             items {
@@ -420,7 +420,7 @@ export default {
                 size { id name }
                 warranty { id title expire }
                 product { 
-                  id name photos { tiny }
+                  id name photos { id file_name thumb }
                   unit { id title }
                 }
               }
@@ -432,7 +432,7 @@ export default {
     .then( ({data}) => {
       this.info = data.data.order;
     })
-    .catch( () => this.$router.push('/panel/order') )
+    // .catch( () => this.$router.push('/panel/order') )
 
     this.$store.dispatch('getData', {
       group: 'shop',

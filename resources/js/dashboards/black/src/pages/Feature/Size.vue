@@ -8,18 +8,18 @@
     :fields="[
     {
       field: 'name',
-      label: 'عنوان سایز',
+      label: 'نام سایز',
       icon: 'icon-caps-small'
     }, {
       field: 'description',
       label: 'توضیحات سایز',
-      icon: 'icon-single-copy-04'
+      icon: 'icon-paper'
     },
   ]">
     <md-field :class="getValidationClass('name')">
       <label for="email">نام سایز</label>
       <md-input v-model="name" :maxlength="$v.name.$params.maxLength.max" />
-      <i class="md-icon tim-icons icon-tag"></i>
+      <i class="md-icon tim-icons icon-caps-small"></i>
       <span class="md-helper-text">برای مثال : xxl</span>
       <span class="md-error" v-show="!$v.name.required">لطفا نام سایز را وارد کنید</span>
     </md-field>

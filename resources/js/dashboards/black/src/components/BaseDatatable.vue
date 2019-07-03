@@ -202,18 +202,21 @@
         <md-dialog-actions>
           <base-button
             class="ml-2"
-            type="secondary"
-            simple
+            type="danger"
             size="sm"
-            @click="setAttr('is_open', false)">
+            @click="setAttr('is_open', false)"
+          >
+            <i class="tim-icons icon-simple-remove"></i>
             لغو
           </base-button>
           
           <base-button
-            simple
             size="sm" 
-            :type="attr('is_creating') ? 'danger' : 'warning'"
-            @click="attr('is_creating') ? methods.store() : methods.update()">
+            :type="attr('is_creating') ? 'success' : 'warning'"
+            @click="attr('is_creating') ? methods.store() : methods.update()"
+          >
+            <i v-if="attr('is_creating')" class="tim-icons icon-simple-add"></i>
+            <i v-else class="tim-icons icon-pencil"></i>
             {{ attr('is_creating') ? 'ذخیره' : 'بروز رسانی' }} {{ label }}
           </base-button>
         </md-dialog-actions>
@@ -694,7 +697,7 @@
     border-bottom-color: #ff0000;
   }
   .md-field.md-focused:before {
-    background: #92006f;
+    background: #f56c6c;
     bottom: -1px;
   }
   .md-field .md-count {
@@ -929,7 +932,7 @@
     background: linear-gradient(to left, #f56c6c59, transparent);
     border-radius: 50%;
   } */
-  .data-table-row ul{
+  .data-table-row ul, ul.data-table-header {
     padding-left: 35px !important;
   }
 

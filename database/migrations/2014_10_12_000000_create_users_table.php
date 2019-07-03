@@ -39,22 +39,6 @@ class CreateUsersTable extends Migration
                 'cities' => ['nullable', 'set null']
             ], 'uuid', [ 'last_purchase' ]);
         });
-
-        $schema->create('user_phones', function (Blueprint $table) {
-            $table->table([
-                'type'              => '50',
-                'phone_number'      => '255'
-            ], [ 'users' ]);
-        });
-
-        $schema->create('user_addresses', function (Blueprint $table) {
-            $table->table([
-                'type'          => '50',
-                'address'       => '255',
-                'postal_code'   => '10',
-                'coordinates'   => 'point',
-            ], [ 'cities', 'users' ]);
-        });
     }
 
     /**

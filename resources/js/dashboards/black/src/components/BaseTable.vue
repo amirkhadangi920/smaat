@@ -16,7 +16,7 @@
             <ul class="data-table-header p-2 d-flex justify-content-center">
               <li
                 class="data-table-cell p-2 d-flex align-items-center justify-content-center text-muted"
-                :style="{width: '40px'}"
+                :style="{width: '60px'}"
               >
                 <transition name="fade" mode="out-in">
                   <span v-if="attr('selected_items').length === 0">#</span>
@@ -30,7 +30,7 @@
                   />
                 </transition>
               </li>
-              <li class="data-table-cell p-2 d-flex align-items-center justify-content-center" :style="{width: '40px'}" v-if="canSelect">
+              <li class="data-table-cell p-2 d-flex align-items-center justify-content-center" :style="{width: '50px'}" v-if="canSelect">
                 <checkbox>
                   <input type="checkbox" v-model="all_items_selected" @change="$parent.handleSelectAll" />
                 </checkbox>
@@ -68,10 +68,10 @@
                 >
                   <ul class="p-2 d-flex justify-content-center">
                     <span class="cavity-effect"></span>
-                    <li class="data-table-cell p-2 d-flex align-items-center justify-content-center" :style="{width: '40px'}">
+                    <li class="data-table-cell p-2 d-flex align-items-center justify-content-center" :style="{width: '60px'}">
                       {{ index + 1 }}
                     </li>
-                    <li :style="{width: '40px'}" class="data-table-cell d-flex align-items-center justify-content-center" v-if="canSelect">
+                    <li :style="{width: '50px'}" class="data-table-cell d-flex align-items-center justify-content-center" v-if="canSelect">
                       <checkbox>
                         <input type="checkbox" :value="index" v-model="$parent.selected_items" @change="$parent.handleSelectedChange(index)" />
                       </checkbox>
@@ -318,7 +318,7 @@
             value: 0,
           },
           marginBottom: {
-            value: 40,
+            value: 20,
           },
           scale: {
             value: 1,
@@ -518,7 +518,7 @@
     position: absolute;
     left: 50px;
     top: 5px;
-    z-index: -2;
+    z-index: -1;
     transition: top 200ms;
   }
   .data-table-row:hover .time-lables {
@@ -559,30 +559,32 @@
   .data-table-row::after {
     content: '';
     position: absolute;
-    bottom: -7px;
+    bottom: 0px;
     left: 2%;
     width: 96%;
     height: 100%;
     background: rgba(255, 255, 255, 0.5);
-    z-index: -1;
-    box-shadow: 0px 3px 35px -20px #19375a, 0px 2px 30px -25px #0076ff;
+    z-index: -2;
+    box-shadow: 0px 0px 35px -20px #19375a, 0px 0px 30px -25px #0076ff;
     border-radius: 20px;
+    transform: rotate(1deg);
   }
   .data-table-row::before {
     content: '';
     position: absolute;
-    bottom: -14px;
+    bottom: 0px;
     left: 4%;
     width: 92%;
-    box-shadow: 0px 3px 35px -20px #19375a, 0px 2px 30px -25px #0076ff;
+    box-shadow: 0px 0px 35px -20px #19375a, 0px 0px 30px -25px #0076ff;
     height: 100%;
     background: rgba(255, 255, 255, 0.3);
-    z-index: -1;
+    z-index: -3;
     border-radius: 20px;
+    transform: rotate(2deg);
   }
   .data-table-row ul {
     background: #fff;
-    box-shadow: 0px 6px 35px -20px #19375a, 0px 5px 30px -25px #0076ff;
+    box-shadow: 0px 0px 35px -20px #19375a, 0px 0px 30px -25px #0076ff;
     position: relative;
     border-radius: 20px;
     overflow: hidden !important;

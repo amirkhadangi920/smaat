@@ -2,7 +2,7 @@
   <datatable
     :type="type"
     :group="group"
-    label="سفارش"
+    :label="label"
     :fields="getFields"
     :canEdit="false"
     :canCreate="false"
@@ -22,11 +22,13 @@
     </template>
 
     <template v-slot:offer-body="slotProps">
-      <p>{{ slotProps.row.offer | price }} <span class="text-muted text-small" :style="{fontSize: '10px'}">تومان</span></p>
+      <p v-if="slotProps.row.offer">{{ slotProps.row.offer | price }} <span class="text-muted text-small" :style="{fontSize: '10px'}">تومان</span></p>
+      <span v-else class="badge badge-success">رایگان</span>
     </template>
 
     <template v-slot:final_total-body="slotProps">
-      <p>{{ slotProps.row.final_total | price }} <span class="text-muted text-small" :style="{fontSize: '10px'}">تومان</span></p>
+      <p v-if="slotProps.row.final_total">{{ slotProps.row.final_total | price }} <span class="text-muted text-small" :style="{fontSize: '10px'}">تومان</span></p>
+      <span v-else class="badge badge-success">رایگان</span>
     </template>
 
     <template v-slot:status-body="slotProps">
@@ -91,6 +93,7 @@ export default {
       plural: 'orders',
       type: 'order',
       group: 'shop',
+      label: 'سفارش',
     }
   },
   mounted() {
@@ -148,19 +151,19 @@ export default {
         {
           field: 'user',
           label: 'خریدار',
-          icon: 'icon-caps-small'
+          icon: 'icon-single-02'
         }, {
           field: 'offer',
           label: 'تخفیف',
-          icon: 'icon-badge'
+          icon: 'icon-scissors'
         }, {
           field: 'final_total',
           label: 'جمع فاکتور',
-          icon: 'icon-badge'
+          icon: 'icon-credit-card'
         }, {
           field: 'status',
           label: 'وضعیت',
-          icon: 'icon-caps-small'
+          icon: 'icon-refresh-02'
         },
       ]
     },

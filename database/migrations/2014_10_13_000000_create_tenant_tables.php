@@ -36,6 +36,23 @@ class CreateTenantTables extends Migration
             $table->add_foreign('tenants', true, 'uuid');
             $table->unique(['email', 'tenant_id']);
         });
+
+
+        $schema->create('user_phones', function (Blueprint $table) {
+            $table->table([
+                'type'              => '50',
+                'phone_number'      => '255'
+            ], [ 'users', 'tenants' ]);
+        });
+
+        $schema->create('user_addresses', function (Blueprint $table) {
+            $table->table([
+                'type'          => '50',
+                'address'       => '255',
+                'postal_code'   => '10',
+                'coordinates'   => 'point',
+            ], [ 'cities', 'users', 'tenants' ]);
+        });
     }
 
     /**

@@ -28,7 +28,7 @@ class CreateOpinionTables extends Migration
                 'users' => true,
                 'articles' => true,
             ]);
-            $table->string('title', 100);
+            $table->string('title', 100)->nullable();
             $table->mediumText('message');
             $table->boolean('is_accept')->defult(false);
             $table->dateTime('jalali_created_at')->nullable();
@@ -40,7 +40,7 @@ class CreateOpinionTables extends Migration
                 // 'ranks' => 'array',
                 'advantages' => 'array',
                 'disadvantages' => 'array',
-                'title' => 100,
+                'title' => '100|nullable',
                 'message' => 'mediumText',
                 'is_accept' =>  'boolean|defult:false',
                 'jalali_created_at' => 'datetime|nullable'
@@ -64,7 +64,7 @@ class CreateOpinionTables extends Migration
                 'products' => true,
             ]);
             $table->add_foreign('question_and_answers', true, 'unsignedInteger', 'question_id');
-            $table->string('title', 100);
+            $table->string('title', 100)->nullable();
             $table->mediumText('message');
             $table->boolean('is_accept')->defult(false);
             $table->dateTime('jalali_created_at')->nullable();

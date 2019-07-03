@@ -32,7 +32,7 @@ export default {
     handleDelete(index, row)
     {
       this.$swal.fire({
-        title: `برای پاک کردن ${this.label} ${row.name} مطمئن هستید ؟`,
+        title: `برای پاک کردن ${this.label} "${row.name ? row.name : row.title ? row.title : 'انتخاب شده'}" مطمئن هستید ؟`,
         text: "در صورت پاک کردن امکان بازگشت اطلاعات نیست !",
         type: 'warning',
         showCancelButton: true,
@@ -70,7 +70,7 @@ export default {
 
             this.$swal.fire({
               title: 'حذف شد',
-              text: `${this.label} "${row.name}" با موفقیت حذف شد :)`,
+              text: `${this.label} "${row.name ? row.name : row.title ? row.title : 'انتخاب شده'}" با موفقیت حذف شد :)`,
               type: 'success',
               showConfirmButton: false,
               timer: 1000,

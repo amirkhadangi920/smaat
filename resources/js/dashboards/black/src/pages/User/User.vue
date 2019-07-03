@@ -2,7 +2,7 @@
   <datatable
     :type="type"
     :group="group"
-    label="کاربر"
+    :label="label"
     :fields="getFields"
     
     :methods="{
@@ -23,6 +23,11 @@
 
     <template #email-body="slotProps">
       <a :href="`mailto:${slotProps.row.email}`">{{ slotProps.row.email }}</a>
+    </template>
+
+    <template #full_name-body="slotProps">
+      <span v-if="slotProps.row.full_name.trim()">{{ slotProps.row.full_name }}</span>
+      <span v-else class="badge badge-warning">بی نام</span>
     </template>
 
     <template #roles-body="slotProps">
@@ -73,7 +78,7 @@
           <md-field :class="getValidationClass('first_name')">
             <label>نام</label>
             <md-input v-model="first_name" :maxlength="$v.first_name.$params.maxLength.max" />
-            <i class="md-icon tim-icons icon-tag"></i>
+            <i class="md-icon tim-icons icon-badge"></i>
             <span class="md-helper-text">برای مثال : امیر</span>
             <span class="md-error" v-show="!$v.first_name.required">لطفا نام نقش را وارد کنید</span>
           </md-field>
@@ -82,7 +87,7 @@
           <md-field :class="getValidationClass('last_name')">
             <label>نام خانوادگی</label>
             <md-input v-model="last_name" :maxlength="$v.last_name.$params.maxLength.max" />
-            <i class="md-icon tim-icons icon-tag"></i>
+            <i class="md-icon tim-icons icon-badge"></i>
             <span class="md-helper-text">برای مثال : امیری نژاد</span>
             <span class="md-error" v-show="!$v.last_name.required">لطفا نام نقش را وارد کنید</span>
           </md-field>
@@ -92,20 +97,12 @@
       <md-field :class="getValidationClass('email')">
         <label>آدرس ایمیل</label>
         <md-input v-model="email" :maxlength="$v.email.$params.maxLength.max" />
-        <i class="md-icon tim-icons icon-tag"></i>
+        <i class="md-icon tim-icons icon-email-85"></i>
         <span class="md-helper-text">برای مثال : test@example.com</span>
         <span class="md-error" v-show="!$v.email.required">لطفا نام نقش را وارد کنید</span>
       </md-field>
-      
-      <md-field :class="getValidationClass('address')">
-        <label>آدرس</label>
-        <md-input v-model="address" :maxlength="$v.address.$params.maxLength.max" />
-        <i class="md-icon tim-icons icon-tag"></i>
-        <span class="md-helper-text">برای مثال : خراسان رضوی ،مشهد ، سناباد ۱ ، پلاک ۱</span>
-        <span class="md-error" v-show="!$v.address.required">لطفا آدرس کاربر را وارد کنید</span>
-      </md-field>
 
-      <md-field :class="getValidationClass('national_code')">
+      <md-field :class="getValidationClass('national_code')" v-if="false">
         <label>کد ملی</label>
         <md-input v-model="national_code" :maxlength="$v.national_code.$params.maxLength.max" />
         <i class="md-icon tim-icons icon-tag"></i>
@@ -137,7 +134,7 @@
           </template>
 
         </el-transfer>
-        <span class="text-muted">سطح دسترسی های مورد نظر خود انتخاب و آن ها را اعطاء کنید</span>
+        <span class="text-muted">نقش های مورد نظر خود انتخاب و آن ها را اعطاء کنید</span>
       </base-input>
 
       <base-input label="سطح دسترسی ها" :style="{ marginTop: '25px' }">
@@ -213,6 +210,7 @@ export default {
         plural: 'users',
         type: 'user',
         group: 'user',
+        label: 'کاربر'
     }
   },
   mounted() {
@@ -357,7 +355,7 @@ export default {
         {
           field: 'avatar',
           label: 'آواتار',
-          icon: 'icon-badge'
+          icon: 'icon-image-02'
         }, {
           field: 'full_name',
           label: 'نام و نام خانوادگی',
@@ -365,11 +363,11 @@ export default {
         }, {
           field: 'email',
           label: 'آدرس ایمیل',
-          icon: 'icon-caps-small'
+          icon: 'icon-email-85'
         }, {
           field: 'roles',
           label: 'نقش ها',
-          icon: 'icon-caps-small'
+          icon: 'icon-tap-02'
         }
       ]
     },

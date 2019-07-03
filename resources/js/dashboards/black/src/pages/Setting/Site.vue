@@ -28,7 +28,7 @@
           <md-field :class="getValidationClass('title')">
             <label>عنوان فروشگاه</label>
             <md-input v-model="info.title" :maxlength="$v.title.$params.maxLength.max" />
-            <i class="md-icon tim-icons icon-paper"></i>
+            <i class="md-icon tim-icons icon-caps-small"></i>
             <span class="md-helper-text">در تب مرورگر نمایش داده میشود</span>
           </md-field>
 
@@ -87,7 +87,7 @@
           <md-field :class="getValidationClass('phone')">
             <label>شماره تلفن فروشگاه</label>
             <md-input v-model="info.phone" />
-            <i class="md-icon tim-icons icon-paper"></i>
+            <i class="md-icon tim-icons icon-mobile"></i>
             <span class="md-helper-text">جهت نمایش در سایت</span>
           </md-field>
         </div>
@@ -96,7 +96,7 @@
           <md-field :class="getValidationClass('address')">
             <label>آدرس فروشگاه</label>
             <md-textarea v-model="info.address" md-autogrow :maxlength="$v.address.$params.maxLength.max"></md-textarea>
-            <i class="md-icon tim-icons icon-paper"></i>
+            <i class="md-icon tim-icons icon-map-big"></i>
             <span class="md-helper-text">در قسمت پاصفحه وبسایت نمایش داده میشود</span>
           </md-field>
         </div>
@@ -169,7 +169,7 @@
           <md-field :class="getValidationClass('banner_link')">
             <label>لینک بنر بالا</label>
             <md-input v-model="info.banner_link" />
-            <i class="md-icon tim-icons icon-paper"></i>
+            <i class="md-icon tim-icons icon-link-72"></i>
             <span class="md-helper-text">میتوانید هریک از لینک های سایت را قرار دهید</span>
           </md-field>
         </div>
@@ -187,10 +187,6 @@
         <card class="text-right animated bounceInBottom delay-last" v-if="is_loaded" dir="rtl">
           <span slot="header">
             مدیریت پوسترها
-            
-            <base-button class="pull-left" @click="posters.unshift({ image: {} })" size="sm" icon type="success">
-              <i class="tim-icons icon-simple-add m-0"></i>
-            </base-button>
           </span>
 
           <div class="row" v-for="(slide, index) in posters" :key="index">
@@ -245,14 +241,18 @@
             <hr class="w-100 pull-right m-3" v-if="index !== slider.length - 1" />
           </div>
 
+          <div v-if="!posters.length" class="alert alert-warning">
+            متاسفانه هیچ پوستری برای وبسایت ثبت نشده است :(
+          </div>
+
           <div class="operation-cell d-flex justify-content-center mt-3">
-            <el-tooltip content="افزودن اسلاید جدید">
+            <el-tooltip content="افزودن پوستر جدید">
               <base-button @click="posters.push({ image: {} })" class="hvr-icon-spin ml-2" type="success" size="sm" icon>
                 <i class="tim-icons icon-simple-add hvr-icon" :style="{ fontSize: '18px !important' }"></i>
               </base-button>
             </el-tooltip>          
             
-            <el-tooltip content="حذف آخرین اسلاید">
+            <el-tooltip content="حذف آخرین پوستر">
               <base-button @click="posters.pop()" class="hvr-icon-spin ml-2" type="danger" size="sm" icon>
                 <i class="tim-icons icon-trash-simple hvr-icon" :style="{ fontSize: '18px !important' }"></i>
               </base-button>
@@ -260,7 +260,7 @@
 
             <base-button @click="updateSlider('posters')" class="hvr-icon-spin" type="warning" size="sm" >
               <i class="tim-icons icon-pencil hvr-icon" :style="{ fontSize: '18px !important' }"></i>
-              بروزرسانی اسلایدر
+              بروزرسانی پوسترها
             </base-button>
           </div>
         </card>
@@ -322,6 +322,11 @@
               </md-field>
             </div>
             <hr class="w-100 pull-right m-3" v-if="index !== slider.length - 1" />
+          </div>
+
+
+          <div v-if="!slider.length" class="alert alert-warning">
+            متاسفانه اسلایدر وبسایت در حال حاضر خالیست :(
           </div>
 
           <div class="operation-cell d-flex justify-content-center mt-3">

@@ -14,7 +14,7 @@
     }, {
       field: 'description',
       label: 'توضیحات برند',
-      icon: 'icon-single-copy-04'
+      icon: 'icon-paper'
     },
   ]">
 
@@ -23,7 +23,7 @@
       <smart-input
         v-model="name"
         label="نام برند"
-        icon="icon-tag"
+        icon="icon-caps-small"
         description="برای مثال : سامسونگ"
         :validation="$v.name"
       />

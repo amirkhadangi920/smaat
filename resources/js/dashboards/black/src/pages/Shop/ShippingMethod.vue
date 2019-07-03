@@ -2,7 +2,7 @@
   <datatable
     :type="type"
     :group="group"
-    label="متد ارسال"
+    :label="label"
     :fields="getFields"
     
     :methods="{
@@ -23,6 +23,22 @@
     </template>
 
     <template slot="modal">
+      <md-field :class="getValidationClass('name')">
+        <label>عنوان روش ارسال</label>
+        <md-input v-model="name" :maxlength="$v.name.$params.maxLength.max" />
+        <i class="md-icon tim-icons icon-caps-small"></i>
+        <span class="md-helper-text">برای مثال : پست پیشتاز</span>
+        <span class="md-error" v-show="!$v.name.required">لطفا عنوان روش ارسال را وارد کنید</span>
+      </md-field>
+      <br/>
+
+      <md-field :class="getValidationClass('description')">
+        <label>توضیحات روش ارسال</label>
+        <md-textarea v-model="description" :maxlength="$v.description.$params.maxLength.max"></md-textarea>
+        <i class="md-icon tim-icons icon-paper"></i>
+        <span class="md-helper-text">توضیحی مختصر درباره روش ارسال</span>
+      </md-field>
+
       <div class="row">
         <div class="col-md-5">
           <base-input label="لوگوی روش ارسال">
@@ -44,26 +60,6 @@
         </div>
 
         <div class="col-md-7">
-          <md-field :class="getValidationClass('name')">
-            <label>عنوان روش ارسال</label>
-            <md-input v-model="name" :maxlength="$v.name.$params.maxLength.max" />
-            <i class="md-icon tim-icons icon-tag"></i>
-            <span class="md-helper-text">برای مثال : پست پیشتاز</span>
-            <span class="md-error" v-show="!$v.name.required">لطفا عنوان روش ارسال را وارد کنید</span>
-          </md-field>
-
-          <md-field :class="getValidationClass('description')">
-            <label>توضیحات روش ارسال</label>
-            <md-textarea v-model="description" :maxlength="$v.description.$params.maxLength.max"></md-textarea>
-            <i class="md-icon tim-icons icon-paper"></i>
-            <span class="md-helper-text">توضیحی مختصر درباره روش ارسال</span>
-          </md-field>
-        </div>
-      </div>
-      <br/>
-
-      <div class="row">
-        <div class="col-md-6">
           <md-field :class="getValidationClass('cost')">
             <label>هزینه روش ارسال</label>
             <md-input v-model="cost" type="number" />
@@ -71,8 +67,7 @@
             <span class="md-helper-text">هزینه روش ارسال بر حسب تومان</span>
             <span class="md-error" v-show="!$v.cost.required">لطفا هزینه روش ارسال را وارد کنید</span>
           </md-field>
-        </div>
-        <div class="col-md-6">
+
           <md-field :class="getValidationClass('minimum')">
             <label>حداقل مبلغ سفارش</label>
             <md-input v-model="minimum" type="number" />
@@ -121,11 +116,7 @@ export default {
         plural: 'shipping_methods',
         type: 'shipping_method',
         group: 'shop',
-
-        defaultProps: {
-          children: 'childs',
-          label: 'title',
-        },
+        label: 'متد ارسال'
     }
   },
   validations: {
@@ -157,7 +148,7 @@ export default {
         {
           field: 'logo',
           label: 'لوگو',
-          icon: 'icon-badge'
+          icon: 'icon-image-02'
         }, {
           field: 'name',
           label: 'نام',
@@ -165,11 +156,11 @@ export default {
         }, {
           field: 'description',
           label: 'توضیحات',
-          icon: 'icon-badge'
+          icon: 'icon-paper'
         }, {
           field: 'cost',
           label: 'هزینه',
-          icon: 'icon-badge'
+          icon: 'icon-coins'
         }
       ]
     },

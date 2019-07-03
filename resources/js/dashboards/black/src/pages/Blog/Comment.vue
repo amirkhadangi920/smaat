@@ -26,9 +26,10 @@
           first_name
           last_name
           full_name
-          avatar { tiny }
+          avatar { id file_name thumb }
         }
         message
+        is_accept
         created_at
         updated_at
       }

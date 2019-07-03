@@ -40,6 +40,9 @@ class SiteSettingType extends BaseType
             ],
             'is_enabled' => [
                 'type' => Type::boolean(),
+                'resolve' => function($data) {                    
+                    return is_null( $data['is_enabled'] ?? null ) ? true : $data['is_enabled'];
+                }
             ],
             'slider' => $this->slider('slider'),
             'posters' => $this->slider('posters'),
@@ -63,7 +66,7 @@ class SiteSettingType extends BaseType
             'type' => Type::listOf( \GraphQL::type('slider_item') ),
             'is_relation' => false,
             'resolve' => function($data) use($type) {
-                $slider = json_decode( $data[ $type ]['value'] );
+                $slider = json_decode( $data[ $type ]['value'] ?? '[]' );
                 
                 foreach ( $slider as $slide )
                     $slide->image = $data[ $type ]->media->where('id', $slide->image ?? null)->first();

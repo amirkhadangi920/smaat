@@ -20,8 +20,6 @@ class UserRequest extends MainRequest
         return [
             'first_name'        => 'nullable|string|max:20',
             'first_name'        => 'nullable|string|max:30',
-            'phones'            => 'nullable|array',
-            'phones.*'          => ['required', 'string', 'regex:/09(1[0-9]|3[1-9]|2[1-9])-?[0-9]{3}-?[0-9]{4}/'],
             'social_links'      => 'nullable|array',
             'social_links.*'    => 'required|string|max:100',
             'email'             => [

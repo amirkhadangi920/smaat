@@ -1,5 +1,5 @@
 <template>
-    <div :style="{ position: 'relative' }">
+    <div :style="{ position: 'relative' }" class="remote-select">
         <label class="remote-select-label" :class="{ 'has-focus' : hasFocus || hasValue }">{{ label }}</label>
         <el-select
             class="col-12 remote-select"
@@ -216,7 +216,7 @@ export default {
 
 .remote-select-icon {
     float: left;
-    margin-top: -26px;
+    margin-top: -36px;
     font-size: 20px !important;
     margin-left: 0px;
 }

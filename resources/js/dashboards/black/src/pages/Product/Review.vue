@@ -20,6 +20,7 @@
       ranks { title value }
       advantages
       disadvantages
+      is_accept
     "
   ></base-opinion>
 </template>

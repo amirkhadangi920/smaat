@@ -14,116 +14,9 @@
 
     :getdata="[1,2,3,4,5,6,7,8,9,10]"
     ref="datatable"
-  >
-
-    <template slot="filter-labels">
-      <span class="pull-right text-muted ml-2" v-show="hasFilter">فیلتر های اعمال شده :</span>
-
-      <span
-        class="badge badge-default p-2 ml-2 pull-right"
-        @click="filterLogo(null)"
-        v-show="filter('hasLogo') === 1">
-        فقط عکس دار ها
-        <i class="tim-icons icon-simple-remove remove-button"></i>
-      </span>
-      <span
-        class="badge badge-default p-2 ml-2 pull-right"
-        @click="filterLogo(null)"
-        v-show="filter('hasLogo') == 0">
-        فقط بدون عکس
-        <i class="tim-icons icon-simple-remove remove-button"></i>
-      </span>
-
-      <span
-        class="badge badge-default p-2 ml-2 pull-right"
-        @click="filterCategory(null)"
-        v-show="filter('hasCategories') == 1">
-        فقط با دسته بندی ها
-        <i class="tim-icons icon-simple-remove remove-button"></i>
-      </span>
-      <span 
-        class="badge badge-default p-2 ml-2 pull-right"
-        @click="filterCategory(null)"
-        v-show="filter('hasCategories') == 0">
-        فقط بدون دسته بندی ها
-        <i class="tim-icons icon-simple-remove remove-button"></i>
-      </span>
-
-      <span
-        class="badge badge-default p-2 ml-2 pull-right"
-        @click="$refs.filter_categories.setCheckedNodes([]); filterCategory( filter('hasCategories') )"
-        v-show="filter('categories', []) && filter('categories_string')">
-        فقط برای گروه {{ filter('categories', []).length !== 1 ? 'های' : '' }} : <b>{{ filter('categories_string') }}</b>
-        <i class="tim-icons icon-simple-remove remove-button"></i>
-      </span>
-
-      <span
-        class="badge badge-default p-2 ml-2 pull-right"
-        @click="setAttr('filters', {query: null}); filterSearch()"
-        v-show="filter('query')">
-        جستجو برای : {{ filter('query') }}
-        <i class="tim-icons icon-simple-remove remove-button"></i>
-      </span>
-    </template>
-    
-    <template slot="logo-header">
-      <el-dropdown @command="filterLogo">
-        <span class="el-dropdown-link text-muted">
-          <i class="tim-icons icon-image-02"></i>
-          لوگو <i class="el-icon-arrow-down el-icon--right"></i>
-        </span>
-        <el-dropdown-menu slot="dropdown" dir="rtl">
-          <el-dropdown-item icon="el-icon-tickets" :command="null">همه</el-dropdown-item>
-          <el-dropdown-item icon="el-icon-check" :command="1">با لوگو</el-dropdown-item>
-          <el-dropdown-item icon="el-icon-error" :command="0">بدون لوگو</el-dropdown-item>
-        </el-dropdown-menu>
-      </el-dropdown>
-    </template>
-
+  > 
     <template v-slot:logo-body="slotProps">
       <img class="tilt" :src="slotProps.row.logo ? slotProps.row.logo.thumb : '/images/placeholder.png'" />
-    </template>
-
-    <template slot="categories-header">
-      <el-popover placement="top-start" width="200" trigger="hover"
-        content="this is content, this is content, this is content">
-
-        <el-dropdown @command="filterCategory">
-          <span class="el-dropdown-link">
-            با / بدون دسته بندی <i class="el-icon-arrow-down el-icon--right"></i>
-          </span>
-          <el-dropdown-menu slot="dropdown" dir="rtl">
-            <el-dropdown-item icon="el-icon-tickets" :command="null">همه</el-dropdown-item>
-            <el-dropdown-item icon="el-icon-check" :command="1">با دسته بندی</el-dropdown-item>
-            <el-dropdown-item icon="el-icon-error" :command="0">بدون دسته بندی</el-dropdown-item>
-          </el-dropdown-menu>
-        </el-dropdown>
-
-        <hr />
-
-        <el-tree
-          dir="ltr"
-          :data="$store.state.group.category"
-          :props="defaultProps"
-          :accordion="true"
-          ref="filter_categories"
-          empty-text="هیچ دسته بندی ای یافت نشد :("
-          show-checkbox
-          node-key="id"
-        >
-          <span class="custom-tree-node" slot-scope="{ node }">
-            <span>{{ node.label }}</span>
-          </span>
-        </el-tree>
-        <hr />
-        <base-button @click="filterCategory( filter('hasCategories') )" size="sm">اعمال</base-button>
-
-        <p class="text-muted hvr-icon-up" slot="reference">
-          <i class="tim-icons icon-bullet-list-67 hvr-icon"></i>
-          دسته بندی ها
-          <i class="el-icon-arrow-down el-icon--right"></i>
-        </p>
-      </el-popover>
     </template>
 
     <template v-slot:categories-body="slotProps">
@@ -306,12 +199,14 @@ export default {
         this.fields.unshift({
           field: 'logo',
           label: 'لوگو',
+          icon: 'icon-image-02'
         })
       }
 
       this.fields.push({
         field: 'categories',
         label: 'دسته بندی ها',
+        icon: 'icon-bullet-list-67'
       })
       
       return this.fields;
@@ -321,7 +216,7 @@ export default {
       let query = ''
 
       if ( this.has_logo )
-        query += 'logo { id file_name thumb large }'
+        query += 'logo { id file_name thumb medium }'
 
       query += `
         ${this.queryFields}

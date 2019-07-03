@@ -17,12 +17,12 @@ class QuestionAndAnswerRequest extends MainRequest
         $this->method = $method;
 
         return [
-            'title'             => 'required|string|max:100',
+            'title'             => 'required_without:question_id|string|max:100',
             'message'           => 'required|string|max:2000',
 
             /* relateion */
-            'parent_id'         => ['nullable', 'integer', new ExistsTenant('question_and_answers')],
-            'product_id'        => ['required', 'string', new ExistsTenant('products')],
+            'question_id'       => ['nullable', 'integer', new ExistsTenant('question_and_answers')],
+            'product_id'        => ['required_without:question_id', 'string', new ExistsTenant('products')],
         ];
     }
 }

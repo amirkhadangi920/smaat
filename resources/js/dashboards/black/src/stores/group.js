@@ -125,8 +125,8 @@ export default {
 
         query: {
             category: `{
-                categories {
-                    id title childs {
+                allData: categories {
+                    data {
                         id title childs {
                             id title childs {
                                 id title childs {
@@ -138,8 +138,8 @@ export default {
                 }
             }`,
             subject: `{
-                subjects {
-                    id title childs {
+                allData: subjects {
+                    data {
                         id title childs {
                             id title childs {
                                 id title childs {
@@ -151,10 +151,5 @@ export default {
                 }
             }`
         },
-
-        handleQuery: {
-            category: (res) => res.data.categories,
-            subject: (res) => res.data.subjects,
-        }
     },
 }

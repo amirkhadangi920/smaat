@@ -19,6 +19,9 @@ class UserAddressType extends BaseType
     public function get_fields()
     {
         return [
+            'city' => [
+                'type' => \GraphQL::type('city')
+            ],
             'type' => [
                 'type' => Type::string()
             ],

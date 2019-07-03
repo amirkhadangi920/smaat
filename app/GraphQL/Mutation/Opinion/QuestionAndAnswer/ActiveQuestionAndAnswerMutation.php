@@ -8,5 +8,5 @@ class ActiveQuestionAndAnswerMutation extends BaseQuestionAndAnswerMutation
 {
     use ActiveMutation;
 
-    protected $acceptable_field = 'is_active';
+    protected $acceptable_field = 'is_accept';
 }

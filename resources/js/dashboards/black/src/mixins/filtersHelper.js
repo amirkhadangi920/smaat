@@ -28,7 +28,7 @@ export default {
             return numeral(number).format('0,0')
         },
         price(price) {
-            return price === 0 ? 'رایگان' : numeral(price).format('0,0')
+            return numeral(price).format('0,0')
         },
     }
 }

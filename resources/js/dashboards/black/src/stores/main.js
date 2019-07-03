@@ -115,7 +115,7 @@ export default new Vuex.Store({
                     case 'Upload':
                         form[field].value = null
                         form[field].file = null
-                        form[field].url = value ? value.thumb : ''
+                        form[field].url = value ? value.medium : ''
                         break;
                 }
             }

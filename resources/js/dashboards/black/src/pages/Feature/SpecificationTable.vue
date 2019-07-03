@@ -19,8 +19,8 @@
         </div>
       </div>
 
-      <card :style="{ height: '300px' }" class="operation-cell">
-        <h4 class="card-title">{{ table_title }}</h4>
+      <card :style="{ height: '160px' }" class="mt-4 operation-cell text-right" dir="rtl">
+        <h3 class="card-title">{{ table_title }}</h3>
         <h6 class="card-subtitle mb-2 text-muted">{{ table_description }}</h6>
         
         <span
@@ -30,7 +30,6 @@
           <i class="tim-icons icon-bullet-list-67 hvr-icon"></i>
           {{ item.title }}
         </span>
-
         <hr />
 
         <base-button @click="createMethod(null, 'header')" type="success" size="sm" class="ml-2">
@@ -39,8 +38,8 @@
         </base-button>
 
         <base-button @click="$router.push('/panel/specification')" size="sm" type="warning" class="pull-left">
-            <i class="tim-icons icon-double-left"></i>
             بازگشت
+            <i class="tim-icons icon-double-left"></i>
           </base-button>
       </card>
 
@@ -58,14 +57,14 @@
               <md-field>
                 <label>عنوان</label>
                 <md-input v-model="header_form.title.value" :maxlength="50" />
-                <i class="md-icon tim-icons icon-tag"></i>
+                <i class="md-icon tim-icons icon-caps-small"></i>
                 <span class="md-helper-text">برای مثال : مشخصات پردازنده</span>
                 <!-- <span class="md-error" v-show="!$v.title.required">لطفا عنوان را وارد کنید</span> -->
               </md-field>
               <br/>
               <md-field>
                 <label>توضیحات</label>
-                <md-textarea v-model="header_form.description.value" md-autogrow :maxlength="250"></md-textarea>
+                <md-textarea v-model="header_form.description.value" :maxlength="250"></md-textarea>
                 <i class="md-icon tim-icons icon-paper"></i>
                 <span class="md-helper-text">توضیحی مختصر درباره این عنوان</span>
               </md-field>
@@ -75,16 +74,22 @@
 
         <md-dialog-actions>
           <base-button
-            simple
-            type="secondary"
-            @click="$store.state.spec.is_open.spec_header = false">
+            size="sm"
+            class="ml-2"
+            type="danger"
+            @click="$store.state.spec.is_open.spec_header = false"
+          >
+            <i class="tim-icons icon-simple-remove"></i>
             لغو
           </base-button>
           
-          <base-button 
-            simple
-            :type="$store.state.spec.is_creating.spec_header ? 'primary' : 'danger'"
-            @click="$store.state.spec.is_creating.spec_header ? store() : update()">
+          <base-button
+            size="sm"
+            :type="$store.state.spec.is_creating.spec_header ? 'success' : 'warning'"
+            @click="$store.state.spec.is_creating.spec_header ? store() : update()"
+          >
+            <i v-if="$store.state.spec.is_creating.spec_header" class="tim-icons icon-simple-add"></i>
+            <i v-else class="tim-icons icon-pencil"></i>
             {{ $store.state.spec.is_creating.spec_header ? 'ذخیره' : 'بروز رسانی' }} عنوان جدول مشخصات
           </base-button>
         </md-dialog-actions>
@@ -104,7 +109,7 @@
               <md-field>
                 <label>عنوان</label>
                 <md-input v-model="row_form.title.value" :maxlength="50" />
-                <i class="md-icon tim-icons icon-paper"></i>
+                <i class="md-icon tim-icons icon-caps-small"></i>
                 <!-- <span class="md-error" v-show="!$v.title.required">لطفا عنوان ردیف را وارد کنید</span> -->
               </md-field>
 
@@ -113,7 +118,7 @@
                   <md-field>
                     <label>پیشوند</label>
                     <md-input v-model="row_form.prefix.value" :maxlength="20" />
-                    <i class="md-icon tim-icons icon-tag"></i>
+                    <i class="md-icon tim-icons icon-double-right"></i>
                     <span class="md-helper-text">پیشوند مقادیر جدول</span>
                   </md-field>
                 </div>
@@ -121,7 +126,7 @@
                   <md-field>
                     <label>پسوند</label>
                     <md-input v-model="row_form.postfix.value" :maxlength="20" />
-                    <i class="md-icon tim-icons icon-puzzle-10"></i>
+                    <i class="md-icon tim-icons icon-double-left"></i>
                     <span class="md-helper-text">پسوند مقادیر جدول</span>
                   </md-field>
                 </div>
@@ -171,14 +176,22 @@
 
         <md-dialog-actions>
           <base-button
-            type="secondary"
-            @click="$store.state.spec.is_open.spec_row = false">
+            size="sm"
+            class="ml-2"
+            type="danger"
+            @click="$store.state.spec.is_open.spec_row = false"
+          >
+            <i class="tim-icons icon-simple-remove"></i>
             لغو
           </base-button>
           
           <base-button
-            :type="$store.state.spec.is_creating.spec_row ? 'primary' : 'danger'"
-            @click="$store.state.spec.is_creating.spec_row ? store() : update()">
+            size="sm"
+            :type="$store.state.spec.is_creating.spec_row ? 'success' : 'warning'"
+            @click="$store.state.spec.is_creating.spec_row ? store() : update()"
+          >
+            <i v-if="$store.state.spec.is_creating.spec_row" class="tim-icons icon-simple-add"></i>
+            <i v-else class="tim-icons icon-pencil"></i>
             {{ $store.state.spec.is_creating.spec_row ? 'ذخیره' : 'بروز رسانی' }} ردیف جدول مشخصات
           </base-button>
         </md-dialog-actions>
@@ -192,13 +205,6 @@
 
         <div class="md-dialog-content">
           <div class="p-2">
-            <div>
-              <base-button @click="createDefault(null, null, true)" type="success" size="sm">
-                <i class="tim-icons icon-simple-add"></i>
-                ثبت مقدار جدید
-              </base-button>
-            </div>
-
             <base-table
               :style="{ width: '100%' }"
               :tableData="row_defaults"
@@ -218,15 +224,33 @@
               :has_operation="true"
               :has_times="false"
             >
+              <template #value-body="props">
+                {{ selected_row.prefix }}
+                {{ props.row.value }}
+                {{ selected_row.postfix }}
+              </template>
             </base-table>
           </div>
         </div>
 
         <md-dialog-actions>
           <base-button
-            type="secondary"
-            @click="$store.state.spec.is_open.spec_default = false">
-            لغو
+            class="ml-2"
+            size="sm"
+            type="danger"
+            @click="$store.state.spec.is_open.spec_default = false"
+          >
+            <i class="tim-icons icon-simple-remove"></i>
+            بستن
+          </base-button>
+
+          <base-button
+            size="sm"
+            type="success"
+            @click="createDefault(null, null, true)"
+          >
+            <i class="tim-icons icon-simple-add"></i>
+            افزودن مقدار جدید
           </base-button>
         </md-dialog-actions>
       </md-dialog>
@@ -306,7 +330,9 @@
                 :key="item.id"
                 class="badge badge-default ml-1 hvr-grow-shadow hvr-icon-grow">
                 <i class="tim-icons icon-bullet-list-67 hvr-icon"></i>
+                {{ slotProps.row.prefix }}
                 {{ item.value }}
+                {{ slotProps.row.postfix }}
               </span>
 
               <el-dropdown v-if="slotProps.row.defaults.length > 3" :key="slotProps.row.defaults.map((c) => c.id).join(',')">
@@ -353,11 +379,11 @@
           <template #texts-body="slotProps">
             <div>
               <p v-if="slotProps.row.postfix">
-                <i class="tim-icons icon-double-right"></i>
+                <i class="tim-icons icon-double-left"></i>
                 {{ slotProps.row.postfix }}
               </p>
               <p v-if="slotProps.row.prefix">
-                <i class="tim-icons icon-double-left"></i>
+                <i class="tim-icons icon-double-right"></i>
                 {{ slotProps.row.prefix }}
               </p>
             </div>
@@ -375,7 +401,7 @@
 
       <transition name="fade">
         <md-empty-state
-          v-show="headers.length === 0"
+          v-show="has_loaded && headers.length === 0"
           md-icon="search"
           md-label="متاسفانه هیچ داده ای یافت نشد :("
           md-description="اگر در حالت جستجو نیستید و هیچ فیلتری نیز اعمال نکرده اید ، میتوانید با کلیک بر روی دکمه زیر یک داده جدید ثبت کنید">
@@ -411,7 +437,8 @@ export default {
       has_loaded: false,
       is_modal_open: false,
       is_open_value_prompt: false,
-      selected_type: false
+      selected_type: false,
+      selected_row: null
     }
   },
   methods: {
@@ -578,6 +605,7 @@ export default {
     manageValues(index, row)
     {
       this.row_defaults = row.defaults
+      this.selected_row = row
       this.type = 'spec_default'
 
       this.$store.commit('setFormData', {

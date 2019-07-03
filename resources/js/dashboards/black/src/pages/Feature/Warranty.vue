@@ -18,14 +18,14 @@
     }, {
       field: 'description',
       label: 'توضیحات گارانتی',
-      icon: 'icon-single-copy-04'
+      icon: 'icon-paper'
     },
   ]">
   
     <md-field :class="getValidationClass('title')">
       <label for="email">نام گارانتی</label>
       <md-input v-model="title" :maxlength="$v.title.$params.maxLength.max" />
-      <i class="md-icon tim-icons icon-tag"></i>
+      <i class="md-icon tim-icons icon-caps-small"></i>
       <span class="md-helper-text">برای مثال : مدیران</span>
       <span class="md-error" v-show="!$v.title.required">لطفا نام گارانتی را وارد کنید</span>
     </md-field>

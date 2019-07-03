@@ -2,7 +2,7 @@
   <datatable
     :type="type"
     :group="group"
-    label="محصول"
+    :label="label"
     :fields="getFields"
     
     :methods="{
@@ -21,7 +21,7 @@
     </template>
 
     <template v-slot:brand-body="slotProps">
-      <a href="#">{{ slotProps.row.brand ? slotProps.row.brand.name : '' }}</a>
+      {{ slotProps.row.brand ? slotProps.row.brand.name : '' }}
     </template>
 
     <template v-slot:categories-body="slotProps">
@@ -89,6 +89,7 @@ export default {
         type: 'product',
         plural: 'products',
         group: 'product',
+        label: 'محصول',
 
         defaultProps: {
           children: 'childs',
@@ -116,19 +117,19 @@ export default {
         {
           field: 'photos',
           label: 'تصویر محصول',
-          icon: 'icon-badge'
+          icon: 'icon-image-02'
         }, {
           field: 'name',
           label: 'نام محصول',
-          icon: 'icon-badge'
+          icon: 'icon-caps-small'
         }, {
           field: 'brand',
           label: 'برند',
-          icon: 'icon-caps-small'
+          icon: 'icon-atom'
         }, {
           field: 'categories',
           label: 'دسته بندی',
-          icon: 'icon-caps-small'
+          icon: 'icon-components'
         }, {
           field: 'votes',
           label: 'نظرات',

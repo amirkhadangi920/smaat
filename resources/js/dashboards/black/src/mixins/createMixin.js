@@ -198,7 +198,7 @@ export default {
 
       axios.post('/graphql/auth', fd).then(({data}) =>
       {
-        return console.log( data )
+        // return console.log( data )
         var msg = this.attr('is_creating') ? 'ثبت شد' : 'بروزرسانی شد'
           
         if ( this.attr('is_creating') ) {

@@ -8,14 +8,18 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use EloquentFilter\Filterable;
 use Illuminate\Database\Eloquent\Model;
 use Grimzy\LaravelMysqlSpatial\Eloquent\SpatialTrait;
+use App\Helpers\HasTenant;
+use App\Models\Places\City;
 
 class UserAddress extends Model implements AuditableContract
 {
-    use Filterable, SoftDeletes, Auditable, SpatialTrait;
+    use Filterable, SoftDeletes, Auditable, SpatialTrait, HasTenant;
 
     /****************************************
      **             Attributes
      ***************************************/
+
+    protected static $jalali_time = false;
 
     /**
      * The attributes that are mass assignable.
@@ -23,6 +27,7 @@ class UserAddress extends Model implements AuditableContract
      * @var array
      */
     protected $fillable = [
+        'city_id',
         'type',
         'adress',
         'postal_code',
@@ -44,6 +49,7 @@ class UserAddress extends Model implements AuditableContract
      * @var array
      */
     protected $auditInclude = [
+        'city_id',
         'type',
         'adress',
         'postal_code',
@@ -68,5 +74,13 @@ class UserAddress extends Model implements AuditableContract
     public function user()
     {
         return $this->belongsTo(App\User::class);
+    }
+
+    /**
+     * Get the user that owned this phone number
+     */
+    public function city()
+    {
+        return $this->belongsTo(City::class);
     }
 }

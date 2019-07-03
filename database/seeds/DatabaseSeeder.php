@@ -17,13 +17,13 @@ class DatabaseSeeder extends CustomSeeder
         // }
         // die('fuck end');
 
-        $this->call(LocationTablesSeeder::class);
+        // $this->call(LocationTablesSeeder::class);
 
-        $this->call(UserTableSeeder::class);
+        // $this->call(UserTableSeeder::class);
 
-        $this->call(LaratrustSeeder::class);
+        // $this->call(LaratrustSeeder::class);
 
-        $this->call(OptionTableSeeder::class);
+        // $this->call(OptionTableSeeder::class);
     
         $this->call(BlogTablesSeeder::class);
 
@@ -39,7 +39,7 @@ class DatabaseSeeder extends CustomSeeder
 
         $this->call(AbstractTablesSeeder::class);
         
-        $this->call(OrderTablesSeeder::class);
+        // $this->call(OrderTablesSeeder::class);
     }
 
     /**

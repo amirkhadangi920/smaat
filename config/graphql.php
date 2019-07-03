@@ -93,9 +93,9 @@ use App\GraphQL\Mutation\Financial\{
 
 // Product Mutations
 use App\GraphQL\Mutation\Opinion\{
-    Comment\CreateCommentMutation, Comment\UpdateCommentMutation, Comment\DeleteCommentMutation,
-    Review\CreateReviewMutation, Review\UpdateReviewMutation, Review\DeleteReviewMutation,
-    QuestionAndAnswer\CreateQuestionAndAnswerMutation, QuestionAndAnswer\UpdateQuestionAndAnswerMutation, QuestionAndAnswer\DeleteQuestionAndAnswerMutation
+    Comment\CreateCommentMutation, Comment\UpdateCommentMutation, Comment\DeleteCommentMutation, Comment\ActiveCommentMutation,
+    Review\CreateReviewMutation, Review\UpdateReviewMutation, Review\DeleteReviewMutation, Review\ActiveReviewMutation,
+    QuestionAndAnswer\CreateQuestionAndAnswerMutation, QuestionAndAnswer\UpdateQuestionAndAnswerMutation, QuestionAndAnswer\DeleteQuestionAndAnswerMutation, QuestionAndAnswer\ActiveQuestionAndAnswerMutation
 };
 
 // Product Mutations
@@ -119,7 +119,9 @@ use App\GraphQL\Mutation\User\{
     
     Cart\AddCartMutation, Cart\RemoveCartMutation,
     Compare\AddCompareMutation, Compare\RemoveCompareMutation,
-    Favorite\AddFavoriteMutation, Favorite\RemoveFavoriteMutation
+    Favorite\AddFavoriteMutation, Favorite\RemoveFavoriteMutation,
+    UserPhone\CreateUserPhoneMutation, UserPhone\UpdateUserPhoneMutation, UserPhone\DeleteUserPhoneMutation,
+    UserAddress\CreateUserAddressMutation, UserAddress\UpdateUserAddressMutation, UserAddress\DeleteUserAddressMutation
 };
 
 // Spec Mutations
@@ -503,14 +505,17 @@ return [
 
 
                 // Opinion
+                'acceptComment' => ActiveCommentMutation::class,
                 'createComment' => CreateCommentMutation::class,
                 'updateComment' => UpdateCommentMutation::class,
                 'deleteComment' => DeleteCommentMutation::class,
 
+                'acceptReview' => ActiveReviewMutation::class,
                 'createReview' => CreateReviewMutation::class,
                 'updateReview' => UpdateReviewMutation::class,
                 'deleteReview' => DeleteReviewMutation::class,
 
+                'acceptQuestionAndAnswer' => ActiveQuestionAndAnswerMutation::class,
                 'createQuestionAndAnswer' => CreateQuestionAndAnswerMutation::class,
                 'updateQuestionAndAnswer' => UpdateQuestionAndAnswerMutation::class,
                 'deleteQuestionAndAnswer' => DeleteQuestionAndAnswerMutation::class,
@@ -562,6 +567,14 @@ return [
                 'createRole'    => CreateRoleMutation::class,
                 'updateRole'    => UpdateRoleMutation::class,
                 'deleteRole'    => DeleteRoleMutation::class,
+
+                'createUserPhone' => CreateUserPhoneMutation::class,
+                'updateUserPhone' => UpdateUserPhoneMutation::class,
+                'deleteUserPhone' => DeleteUserPhoneMutation::class,
+
+                'createUserAddress' => CreateUserAddressMutation::class,
+                'updateUserAddress' => UpdateUserAddressMutation::class,
+                'deleteUserAddress' => DeleteUserAddressMutation::class,
                 
 
                 // Cart

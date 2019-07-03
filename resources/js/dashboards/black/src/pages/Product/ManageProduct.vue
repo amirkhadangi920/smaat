@@ -375,64 +375,6 @@
 
         <div class="row">
           <div class="col-md-6">
-            <remote-select
-              v-if="is_loaded"
-              :filters="categoriesFilter"
-              type="brands"
-              label="برند"
-              icon="icon-molecule-40"
-              placeholder="لطفا برند محصول خود را انتخاب کنید"
-              labelfield="name"
-              fields="id name logo { id file_name thumb }"
-              v-model="form_data.brand.id"
-              :defaults="[form_data.brand]"
-            >
-              <template #content="props">
-                <img :src="props.item.logo ? props.item.logo.thumb : '/images/placeholder.png'" alt="brand logo">
-                <span>{{ props.item.name }}</span>
-              </template>
-            </remote-select>
-          </div>
-
-          <div class="col-md-6">
-            <remote-select
-              v-if="is_loaded"
-              :filters="categoriesFilter"
-              type="units"
-              label="واحد اندازه گیری"
-              icon="icon-components"
-              placeholder="لطفا واحد اندازه گیری محصول را انتخاب کنید"
-              fields="id title"
-              v-model="form_data.unit.id"
-              :defaults="[form_data.unit]"
-            />
-          </div>
-          <div class="col-md-12">
-            <br/>
-            <remote-select
-              v-if="is_loaded"
-              :filters="categoriesFilter"
-              multiple
-              type="colors"
-              label="رنگ محصول"
-              labelfield="name"
-              icon="icon-palette"
-              ref="colors"
-              placeholder="لطفا رنگ محصول را انتخاب کنید"
-              fields="id name code"
-              v-model="colors_id"
-              :defaults="form_data.colors"
-            >
-              <template #content="props">
-                <span :style="{ borderRight: `3px solid ${props.item.code}` }" class="pr-2">{{ props.item.name }}</span>
-              </template>
-            </remote-select>
-          </div>
-        </div>
-        <br/>
-
-        <div class="row">
-          <div class="col-md-6">
             <base-input label="دسته بندی های محصول">
               <el-tree
                 class="rtl"
@@ -452,8 +394,59 @@
               <small slot="helperText" id="emailHelp" class="form-text text-muted">برای انتخاب هر دسته بندی تیک قبل آن را انتخاب کنید</small>
             </base-input>
           </div>
-          
+
           <div class="col-md-6">
+            <remote-select
+              v-if="is_loaded"
+              :filters="categoriesFilter"
+              type="brands"
+              label="برند"
+              icon="icon-molecule-40"
+              placeholder="لطفا برند محصول خود را انتخاب کنید"
+              labelfield="name"
+              fields="id name logo { id file_name thumb }"
+              v-model="form_data.brand.id"
+              :defaults="[form_data.brand]"
+            >
+              <template #content="props">
+                <img :src="props.item.logo ? props.item.logo.thumb : '/images/placeholder.png'" alt="brand logo">
+                <span>{{ props.item.name }}</span>
+              </template>
+            </remote-select>
+            <br/>
+
+            <remote-select
+              v-if="is_loaded"
+              :filters="categoriesFilter"
+              type="units"
+              label="واحد اندازه گیری"
+              icon="icon-components"
+              placeholder="لطفا واحد اندازه گیری محصول را انتخاب کنید"
+              fields="id title"
+              v-model="form_data.unit.id"
+              :defaults="[form_data.unit]"
+            />
+            <br/>
+            <remote-select
+              v-if="is_loaded"
+              :filters="categoriesFilter"
+              multiple
+              type="colors"
+              label="رنگ محصول"
+              labelfield="name"
+              icon="icon-palette"
+              ref="colors"
+              placeholder="لطفا رنگ محصول را انتخاب کنید"
+              fields="id name code"
+              v-model="colors_id"
+              :defaults="form_data.colors"
+            >
+              <template #content="props">
+                <span :style="{ borderRight: `3px solid ${props.item.code}` }" class="pr-2">{{ props.item.name }}</span>
+              </template>
+            </remote-select>
+            <br/>
+
             <remote-select
               v-if="is_loaded"
               type="labels"
@@ -468,17 +461,19 @@
                 <span :style="{ borderRight: `3px solid ${props.item.color}` }" class="pr-2">{{ props.item.title }}</span>
               </template>
             </remote-select>
-          </div>
-
-          <div class="col-6 d-flex align-items-center justify-content-center" dir="ltr">
-            
-            <el-switch
-              v-model="form_data.is_active"
-              active-text="ثبت"
-              inactive-text="پیش نویس">
-            </el-switch>
+            <br/>
+            <div class="d-flex align-items-center justify-content-center" dir="ltr">
+              <el-switch
+                v-model="form_data.is_active"
+                active-text="ثبت"
+                inactive-text="پیش نویس"
+                active-color="#ff8d72"
+              >
+              </el-switch>
+            </div>
           </div>
         </div>
+        <br/>
       </md-tab>
     </md-tabs>
 
@@ -1067,26 +1062,28 @@ export default {
 
       const rows = _.flatten( this.form_data.spec.headers.map(i => i.rows) )
 
+      let specs = []
+
       for (let id in this.specifications)
       {
         let row = rows.filter(i => i.id == id)[0]
 
         if ( row.defaults.length === 0 && row.is_multiple )
-          this.specifications[id] = { data: JSON.stringify( this.specifications[id] ) }
+          specs[id] = { data: JSON.stringify( this.specifications[id] ) }
 
         else if ( row.defaults.length === 0 && !row.is_multiple )
-          this.specifications[id] = { data: this.specifications[id] }
+          specs[id] = { data: this.specifications[id] }
 
         else if ( row.defaults.length !== 0 && row.is_multiple )
-          this.specifications[id] = { values: this.specifications[id] }
+          specs[id] = { values: this.specifications[id] }
 
         else
-          this.specifications[id] = { value: this.specifications[id] }
+          specs[id] = { value: this.specifications[id] }
 
-        this.specifications[id].id = id
+        specs[id].id = id
       }
 
-      return Object.values( this.specifications )
+      return Object.values( specs )
     },
     changeFormData(fd)
     {
@@ -1147,8 +1144,27 @@ export default {
             product[0].created_at = data.created_at
             product[0].updated_at = data.updated_at
           }
+          else
+          {
+            let arr = this.data()
+            
+            if ( arr.length )
+            {
+              arr.unshift({
+                id: data.id,
+                name: data.name,
+                photos: data.photos,
+                brand: data.brand,
+                categories: data.categories,
+                created_at: data.created_at,
+                updated_at: data.updated_at,
+                votes: { likes: 0, dislikes: 0}
+              })
+              this.setData( arr )
+            }
 
-          this.$router.push('/panel/product')
+            this.$router.push(`/panel/product/${data.id}/edit`)
+          }
         }
       })
     },
@@ -1196,6 +1212,19 @@ export default {
 </script>
 
 <style scope>
+#tab-specifications .md-suffix, #tab-specifications .md-prefix {
+  background: linear-gradient(to bottom right, #ff8d72, #f56c6c);
+  padding: 0px 10px;
+  color: #fff;
+  line-height: 20px;
+  border-radius: 5px;
+  box-shadow: 0px 4px 25px -6px #f70000, 0px 3px 10px -8px #000;
+  text-shadow: 1px 2px 7px #0000005c;
+}
+#tab-specifications .md-prefix {
+  margin-left: 5px;
+}
+
 .md-tab {
   text-align: right;
   direction: rtl;
@@ -1250,11 +1279,31 @@ export default {
   margin: 0px 10px;
 }
 
+.el-checkbox__inner:hover {
+  border-color: #f56c6c;
+}
+.el-checkbox__input.is-checked .el-checkbox__inner {
+  background-color: #ff8d72;
+  border-color: #f56c6c;
+}
+
+.el-switch__label.is-active {
+  color: #ff8d72;
+}
+.md-chips .md-chip {
+  background: linear-gradient(to bottom right, #ff8d72, #f56c6c);
+  box-shadow: 0px 4px 25px -6px #f70000, 0px 3px 10px -8px #000;
+  text-shadow: 1px 2px 10px #999;
+}
 .disadvantages .md-chip {
-  background: #ff4c4c;
+  background: linear-gradient(to bottom right, #ff4c4c, #fd5d93);
+  box-shadow: 0px 4px 25px -6px #ff4c4c, 0px 3px 10px -8px #000;
+  text-shadow: 1px 2px 10px #999;
 }
 .advantages .md-chip {
-  background: #00f2c3;
+  background: linear-gradient(to bottom right, #00f2c3, #00caa2);
+  box-shadow: 0px 4px 25px -6px #00caa2, 0px 3px 10px -8px #000;
+  text-shadow: 1px 2px 10px #999;
 }
 
 .product-colors-thumbnails img {

@@ -37,13 +37,14 @@ use App\Models\Spec\SpecDefault;
 
 Route::get('/test/amir', function() {
 
-    $row = SpecRow::find(1);
+    // $row = SpecRow::find(1);
 
-    return $row->data()->where('product_id', 'a367bea6ed91')->first()->values;
+    // return $row->data()->where('product_id', 'a367bea6ed91')->first()->values;
 
-    // auth()->loginUsingId('f47370015075');
+    // auth()->loginUsingId( User::first()->id );
+    // return factory(OrderStatus::class)->create([ 'id' => 1 ]);
 
-    return $brand = Brand::select('id')->with('media')->first();
+    // return $brand = Brand::select('id')->with('media')->first();
 
     // $brand
     //     ->addMedia( public_path('images/user-test.jpg') )
@@ -212,16 +213,15 @@ Route::get('/panel/{path?}', function() {
     return view("dashboards.{$dashboard_template}");
 })->where('path', '.*');
 
+Route::get('/login', function() {
+    return view('login');
+});
+
 Route::get('/{path?}', function() {
     $dashboard_template = 'karma';
 
     return view("themplates.{$dashboard_template}");
 })->where('path', '.*');
-
-
-Route::get('/login', function() {
-    return view('login');
-});
 
 // Route::view('/{vue?}', "dashboards.{$dashboard_template}")->where('vue', '[\/\w\.-]*');
 

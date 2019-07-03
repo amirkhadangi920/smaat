@@ -1,7 +1,7 @@
 import Vue from 'vue'
 
 import './loadModules'
-import './laravel_echo'
+// import './laravel_echo'
 import './axios'
 
 import VueRouter from "vue-router";

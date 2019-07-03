@@ -24,26 +24,26 @@
             </el-menu-item>
             <el-submenu index="1" v-if="canSeeMenu(['brand', 'unit', 'size', 'warranty', 'color', 'spec'])">
               <template slot="title">
-                <i class="tim-icons icon-single-copy-04 feature-icon"></i>
+                <i class="tim-icons icon-tie-bow feature-icon"></i>
                 <span>ویژگی ها</span>
               </template>
               <el-menu-item v-if="hasPermissions('brand')">
-                <sidebar-link to="/panel/brand" :name="$t('sidebar.list') + ' ' + $t('sidebar.brand')" icon="tim-icons icon-atom"/>
+                <sidebar-link to="/panel/brand" name="برند ها" icon="tim-icons icon-atom"/>
               </el-menu-item>
               <el-menu-item v-if="hasPermissions('unit')">
-                <sidebar-link to="/panel/unit" :name="$t('sidebar.list') + ' ' + $t('sidebar.unit')" icon="tim-icons icon-app"/>
+                <sidebar-link to="/panel/unit" name="واحدهای اندازه گیری" icon="tim-icons icon-app"/>
               </el-menu-item>
               <el-menu-item v-if="hasPermissions('size')">
-                <sidebar-link to="/panel/size" :name="$t('sidebar.list') + ' ' + $t('sidebar.size')" icon="tim-icons icon-chart-bar-32"/>
+                <sidebar-link to="/panel/size" name="سایز و اندازه ها" icon="tim-icons icon-chart-bar-32"/>
               </el-menu-item>
               <el-menu-item v-if="hasPermissions('warranty')">
-                <sidebar-link to="/panel/warranty" :name="$t('sidebar.list') + ' ' + $t('sidebar.warranty')" icon="tim-icons icon-bank"/>
+                <sidebar-link to="/panel/warranty" name="گارانتی ها" icon="tim-icons icon-bank"/>
               </el-menu-item>
               <el-menu-item v-if="hasPermissions('color')">
-                <sidebar-link to="/panel/color" :name="$t('sidebar.list') + ' ' + $t('sidebar.color')" icon="tim-icons icon-palette"/>
+                <sidebar-link to="/panel/color" name="رنگ بندی ها" icon="tim-icons icon-palette"/>
               </el-menu-item>
               <el-menu-item v-if="hasPermissions('spec')">
-                <sidebar-link to="/panel/specification" :name="$t('sidebar.list') + ' ' + $t('sidebar.spec')" icon="tim-icons icon-palette"/>
+                <sidebar-link to="/panel/specification" name="جداول مشخصات" icon="tim-icons icon-bullet-list-67"/>
               </el-menu-item>
             </el-submenu>
             <el-submenu index="2" v-if="canSeeMenu(['article', 'comment', 'subject'])">
@@ -52,13 +52,13 @@
                 <span>وبلاگ</span>
               </template>
               <el-menu-item v-if="hasPermissions('article')">
-                <sidebar-link to="/panel/article" :name="$t('sidebar.list') + ' ' + $t('sidebar.article')" icon="tim-icons icon-paper"/>      
+                <sidebar-link to="/panel/article" name="مقالات" icon="tim-icons icon-single-copy-04"/>
               </el-menu-item>
               <el-menu-item v-if="hasPermissions('comment')">
-                <sidebar-link to="/panel/comment" :name="$t('sidebar.list') + ' ' + $t('sidebar.comment')" icon="tim-icons icon-notes"/>      
+                <sidebar-link to="/panel/comment" name="نظرات کاربران" icon="tim-icons icon-pencil"/>
               </el-menu-item>
               <el-menu-item v-if="hasPermissions('subject')">
-                <sidebar-link to="/panel/subject" :name="$t('sidebar.list') + ' ' + $t('sidebar.subject')" icon="tim-icons icon-notes"/>      
+                <sidebar-link to="/panel/subject" name="موضوعات" icon="tim-icons icon-tag"/>      
               </el-menu-item>
             </el-submenu>
             <el-submenu index="3" v-if="canSeeMenu(['product', 'label', 'category', 'review', 'question_and_answer'])">
@@ -67,19 +67,19 @@
                 <span>محصول</span>
               </template>
               <el-menu-item v-if="hasPermissions('product')">
-                <sidebar-link to="/panel/product" :name="$t('sidebar.list') + ' ' + $t('sidebar.product')" icon="tim-icons icon-bag-16"/>      
+                <sidebar-link to="/panel/product" name="محصولات" icon="tim-icons icon-basket-simple"/>      
               </el-menu-item>
               <el-menu-item v-if="hasPermissions('label')">
-                <sidebar-link to="/panel/label" :name="$t('sidebar.list') + ' ' + $t('sidebar.label')" icon="tim-icons icon-bag-16"/>      
+                <sidebar-link to="/panel/label" name="لیبل وضعیت محصول" icon="tim-icons icon-tag"/>
               </el-menu-item>
               <el-menu-item v-if="hasPermissions('category')">
-                <sidebar-link to="/panel/category" :name="$t('sidebar.list') + ' ' + $t('sidebar.category')" icon="tim-icons icon-bag-16"/>      
+                <sidebar-link to="/panel/category" name="گروه بندی محصولات" icon="tim-icons icon-components"/>      
               </el-menu-item>
               <el-menu-item v-if="hasPermissions('review')">
-                <sidebar-link to="/panel/review" :name="$t('sidebar.list') + ' ' + $t('sidebar.review')" icon="tim-icons icon-bag-16"/>      
+                <sidebar-link to="/panel/review" name="نقد و بررسی محصولات" icon="tim-icons icon-shape-star"/>      
               </el-menu-item>
               <el-menu-item v-if="hasPermissions('question_and_answer')">
-                <sidebar-link to="/panel/question_and_answer" :name="$t('sidebar.list') + ' ' + $t('sidebar.question_and_answer')" icon="tim-icons icon-bag-16"/>      
+                <sidebar-link to="/panel/question_and_answer" name="پرسش و پاسخ کاربران" icon="tim-icons icon-bulb-63"/>
               </el-menu-item>
             </el-submenu>
             <el-submenu index="4" v-if="canSeeMenu(['shipping_method', 'order_stauts']) || this.$store.state.permissions.includes('read-order')">
@@ -88,17 +88,17 @@
                 <span>فروشگاه</span>
               </template>
               <el-menu-item v-if="this.$store.state.permissions.includes('read-order')">
-                <sidebar-link to="/panel/order" :name="$t('sidebar.list') + ' ' + $t('sidebar.order')" icon="tim-icons icon-bag-16"/>      
+                <sidebar-link to="/panel/order" name="سفارشات" icon="tim-icons icon-coins"/>
               </el-menu-item>
               <el-menu-item v-if="hasPermissions('shipping_method')">
-                <sidebar-link to="/panel/shipping_method" :name="$t('sidebar.list') + ' ' + $t('sidebar.shipping_method')" icon="tim-icons icon-bag-16"/>      
+                <sidebar-link to="/panel/shipping_method" name="روش های ارسال کالا" icon="tim-icons icon-delivery-fast"/>      
               </el-menu-item>
               <el-menu-item v-if="hasPermissions('order_status')">
-                <sidebar-link to="/panel/order_status" :name="$t('sidebar.list') + ' ' + $t('sidebar.order_status')" icon="tim-icons icon-bag-16"/>      
+                <sidebar-link to="/panel/order_status" name="وضعیت های سفارش" icon="tim-icons icon-refresh-02"/>      
               </el-menu-item>
-              <el-menu-item v-if="hasPermissions('discount')">
+              <!-- <el-menu-item v-if="hasPermissions('discount')">
                 <sidebar-link to="/panel/discount" :name="$t('sidebar.list') + ' ' + $t('sidebar.discount')" icon="tim-icons icon-bag-16"/>      
-              </el-menu-item>
+              </el-menu-item> -->
             </el-submenu>
             <el-submenu index="5" v-if="this.$store.state.permissions.includes('read-user') || this.$store.state.permissions.includes('read-role')">
               <template slot="title">
@@ -106,10 +106,10 @@
                 <span>کاربران</span>
               </template>
               <el-menu-item v-if="this.$store.state.permissions.includes('read-user')">
-                <sidebar-link to="/panel/user" :name="$t('sidebar.list') + ' ' + $t('sidebar.user')" icon="tim-icons icon-paper"/>      
+                <sidebar-link to="/panel/user" name="کاربران" icon="tim-icons icon-single-02"/>      
               </el-menu-item>
               <el-menu-item v-if="this.$store.state.permissions.includes('read-role')">
-                <sidebar-link to="/panel/role" :name="$t('sidebar.list') + ' ' + $t('sidebar.role')" icon="tim-icons icon-notes"/>      
+                <sidebar-link to="/panel/role" name="نقش ها" icon="tim-icons icon-tap-02"/>      
               </el-menu-item>
             </el-submenu>
             <el-submenu index="6">
@@ -118,10 +118,10 @@
                 <span>تنظیمات</span>
               </template>
               <el-menu-item>
-                <sidebar-link to="/panel/setting/user" name="تنظیمات کاربر" icon="tim-icons icon-paper"/>      
+                <sidebar-link to="/panel/setting/user" name="اطلاعات کاربری" icon="tim-icons icon-single-02"/>      
               </el-menu-item>
               <el-menu-item v-if="hasPermissions('setting')">
-                <sidebar-link to="/panel/setting/site" name="تنظیمات سایت" icon="tim-icons icon-notes"/>      
+                <sidebar-link to="/panel/setting/site" name="تنظیمات سایت" icon="tim-icons icon-link-72"/>      
               </el-menu-item>
             </el-submenu>
           </el-menu>
@@ -444,7 +444,7 @@ i.dashboard-icon, i.feature-icon, i.blog-icon, i.product-icon, i.shop-icon, i.us
   }
 }
 
-.md-field .md-icon.tim-icons {
+.md-field .md-icon.tim-icons, .remote-select .md-icon.tim-icons {
   background: linear-gradient(to bottom right, #ff8d72, #f56c6c);
   padding: 5.5px 6px;
   width: 30px;

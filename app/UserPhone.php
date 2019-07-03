@@ -7,14 +7,17 @@ use OwenIt\Auditing\Contracts\Auditable as AuditableContract;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use EloquentFilter\Filterable;
 use Illuminate\Database\Eloquent\Model;
+use App\Helpers\HasTenant;
 
 class UserPhone extends Model implements AuditableContract
 {
-    use Filterable, SoftDeletes, Auditable;
+    use Filterable, SoftDeletes, Auditable, HasTenant;
 
     /****************************************
      **             Attributes
      ***************************************/
+
+    protected static $jalali_time = false;
 
     /**
      * The attributes that are mass assignable.

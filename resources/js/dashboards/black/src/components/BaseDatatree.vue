@@ -1,101 +1,5 @@
 <template>
-  <div>
-    <div class="row mb-3">
-      <div class="col-12">
-        <div class="text-right pull-right">
-        <h1 class="animated bounceInRight delay-first">
-          جزئیات {{ label }} ها
-          <i class="tim-icons icon-align-left-2" :style="{fontSize: '25px'}"></i>
-        </h1>
-        <h6 class="text-muted animated bounceInRight delay-secound">کلیه نمودار ها و اطلاعات موجود درباره ی {{ label }} ها</h6>
-        </div>
-
-        <div class="animated bounceInLeft delay-secound">
-          <base-button size="sm" type="info" class="pull-left">
-            <i class="tim-icons icon-pencil"></i>
-            افزودن {{ label }} جدید
-          </base-button>
-          
-          <!-- <transition name="fade">
-            <base-button v-show="attr('selected_items').length >= 1" size="sm" type="danger"
-              class="pull-left">
-              <i class="tim-icons icon-trash-simple"></i>
-              حذف
-              <ICountUp
-                :style="{display: 'inline'}"
-                :endVal="attr('selected_items').length"
-                :options="{
-                  useEasing: true,
-                  useGrouping: true,
-                }"
-              />
-              مورد انتخاب شده
-            </base-button>
-          </transition> -->
-        </div>
-      </div>
-    </div>
-
-    <div class="row">
-      <div class="row" v-if="attr('has_loaded') && false" dir="rtl">
-        <div class="col-md-3">
-          <card class="text-right mb-4 animated bounceInRight delay-secound tilt" :style="{ marginBottom: '32px !important', transformStyle: 'preserve-3d' }">
-            <h5 class="card-category" style="transform: translateZ(20px)">کل {{ label }} های موجود</h5>
-            <h3 class="card-title" style="transform: translateZ(30px)">
-              <i class="tim-icons icon-attach-87 text-success"></i>
-              <ICountUp
-                style="transform: translateZ(30px)"
-                :endVal="attr('counts').total"
-                :options="{
-                  useEasing: true,
-                  useGrouping: true,
-                  separator: ',',
-                  suffix: ' ' + label
-                }"
-              />
-            </h3>
-            <p class="card-text text-muted" :style="{fontSize: '10px', transform: 'translateZ(15px)'}">تعداد {{ label }} هایی که تا کنون در وبسایت ثبت شده است</p>
-          </card>
-          <card class="text-right mb-0 animated bounceInRight delay-last tilt responsive" :style="{ transformStyle: 'preserve-3d' }">
-            <h5 class="card-category" style="transform: translateZ(20px)">{{ label}} های حذف شده</h5>
-            <h3 class="card-title" style="transform: translateZ(30px)">
-              <i class="tim-icons icon-trash-simple text-danger"></i>
-              <ICountUp
-                style="transform: translateZ(30px)"
-                :endVal="attr('counts').trash"
-                :options="{
-                  useEasing: true,
-                  useGrouping: true,
-                  separator: ',',
-                  suffix: ' ' + label
-                }"
-              />
-            </h3>
-            <p class="card-text text-muted" :style="{fontSize: '10px', transform: 'translateZ(15px)'}">تعداد {{ label }} هایی که تا کنون حذف کرده اید</p>
-          </card>
-        </div>
-
-        <div class="col-md-9 text-right animated bounceInLeft delay-secound">
-          <card type="chart" class="mb-3">
-            <template slot="header">
-              <h5 class="card-category">نمودار زمانی ثبت {{ label }} ها</h5>
-            </template>
-            <div class="chart-area">
-              <line-chart style="height: 100%"
-                ref="chart"
-                chart-id="green-line-chart"
-                :chart-data="greenLineChart.chartData"
-                :gradient-stops="greenLineChart.gradientStops"
-                :extra-options="greenLineChart.extraOptions">
-              </line-chart>
-            </div>
-          </card>
-        </div>
-      </div>
-
-      <card :style="{ height: '300px', position: 'relative', zIndex: 100 }"></card>
-    </div>
-
+  <div :style="{ position: 'relative', zIndex: 10 }">
     <div class="row mt-3 mb-3">
       <div class="col-12 text-right">
         <div class="pull-right">
@@ -106,11 +10,81 @@
           <h6 class="text-muted animated bounceInRight delay-secound">با استفاده از جدول زیر ، امکان مدیریت کامل {{ label }} های وبسایت برای شما ممکن خواهد شد</h6>
         </div>
         <div class="pull-left animated bounceInDown delay-last">
-          <base-button @click="createMethod(null)" :disabled="can(`create-${type}`)" size="sm" :type="can(`create-${type}`) ? 'info' : 'success'">
-            افزودن {{ label }} جدید
-            <i class="tim-icons icon-simple-add"></i>
-          </base-button>
+          <flip-clock :options="{
+            label: false,
+            clockFace: 'TwentyFourHourClock'
+          }" />
         </div>
+      </div>
+    </div>
+
+    <transition name="fade">
+      <slot name="charts">
+        <div class="row details mb-3" :style="{ position: 'relative', zIndex: 2 }" dir="rtl">
+          <div class="col-md-3">
+            <div class="tilt">
+              <card class="text-right mb-4 animated bounceInLeft delay-secound total-card" :style="{ marginBottom: '32px !important', transformStyle: 'preserve-3d' }">
+                <i class="tim-icons icon-attach-87"></i>
+                <h5 class="card-category" style="transform: translateZ(20px)">کل {{ label }} های موجود</h5>
+                <h3 class="card-title" style="transform: translateZ(30px)">
+                  <ICountUp
+                    style="transform: translateZ(30px)"
+                    :endVal="attr('counts').total"
+                    :options="{
+                      useEasing: true,
+                      useGrouping: true,
+                      separator: ',',
+                      suffix: ' ' + label
+                    }"
+                  />
+                </h3>
+                <p class="card-text text-muted" :style="{fontSize: '10px', transform: 'translateZ(15px)'}">تعداد {{ label }} هایی که تا کنون در وبسایت ثبت شده است</p>
+              </card>
+            </div>
+            <div class="tilt" :style="{ position: 'relative', top: '0px', right: '0px' }">
+              <card class="text-right mb-0 animated bounceInLeft delay-last responsive trash-card" :style="{ transformStyle: 'preserve-3d' }">
+                <i class="tim-icons icon-trash-simple"></i>
+                <h5 class="card-category" style="transform: translateZ(20px)">{{ label}} های حذف شده</h5>
+                <h3 class="card-title" style="transform: translateZ(30px)">
+                  <ICountUp
+                    style="transform: translateZ(30px)"
+                    :endVal="attr('counts').trash"
+                    :options="{
+                      useEasing: true,
+                      useGrouping: true,
+                      separator: ',',
+                      suffix: ' ' + label
+                    }"
+                  />
+                </h3>
+                <p class="card-text text-muted" :style="{fontSize: '10px', transform: 'translateZ(15px)'}">تعداد {{ label }} هایی که تا کنون حذف کرده اید</p>
+              </card>
+            </div>
+          </div>
+
+          <div class="col-md-9 text-right animated bounceInRight delay-secound chart-card">
+            <card type="chart" class="mb-3">
+              <template slot="header">
+                <h5 class="card-category">نمودار زمانی ثبت {{ label }} ها</h5>
+              </template>
+              <div class="chart-area">
+                <canvas id="myChart" height="100%"></canvas>
+              </div>
+              <!-- <div class="chart-area" :style="{ height: '60px', position: 'absolute', top: '0px', right: '0px' }">
+                <canvas id="miniChart" height="100%"></canvas>
+              </div> -->
+            </card>
+          </div>
+        </div>
+      </slot>
+    </transition>
+
+    <div class="row mb-4">
+      <div class="pull-left animated bounceInDown delay-last">
+        <base-button @click="createMethod(null)" :disabled="can(`create-${type}`)" size="sm" :type="can(`create-${type}`) ? 'info' : 'success'">
+          افزودن {{ label }} جدید
+          <i class="tim-icons icon-simple-add"></i>
+        </base-button>
       </div>
     </div>
 
@@ -122,7 +96,7 @@
           node-key="id"
           empty-text="هیچ گونه اطلاعاتی یافت نشد :("
           :props="defaultProps">
-          <div class="custom-tree-node col-11" slot-scope="{ node, data }">
+          <div class="custom-tree-node data-table-row col-12 pr-3" slot-scope="{ node, data }">
             <div class="pull-left d-flex align-items-center">
               <img :src="data.logo ? data.logo.thumb : '/images/placeholder.png'" />
               <div class="pull-right group-info">
@@ -186,7 +160,7 @@
             <md-field :class="getValidationClass('title')">
               <label for="email">عنوان</label>
               <md-input v-model="title" :maxlength="$v.title.$params.maxLength.max" />
-              <i class="md-icon tim-icons icon-tag"></i>
+              <i class="md-icon tim-icons icon-caps-small"></i>
               <span class="md-helper-text">برای مثال : کالای دیجیتال</span>
               <span class="md-error" v-show="!$v.title.required">لطفا نام سایز را وارد کنید</span>
             </md-field>
@@ -206,18 +180,21 @@
       <md-dialog-actions>
         <base-button
           class="ml-2"
-          type="secondary"
-          simple
+          type="danger"
           size="sm"
-          @click="setAttr('is_open', false)">
+          @click="setAttr('is_open', false)"
+        >
+          <i class="tim-icons icon-simple-remove"></i>
           لغو
         </base-button>
         
         <base-button
-          simple
           size="sm" 
-          :type="attr('is_creating') ? 'danger' : 'warning'"
-          @click="attr('is_creating') ? store() : update()">
+          :type="attr('is_creating') ? 'success' : 'warning'"
+          @click="attr('is_creating') ? store() : update()"
+        >
+          <i v-if="attr('is_creating')" class="tim-icons icon-simple-add"></i>
+          <i v-else class="tim-icons icon-pencil"></i>
           {{ attr('is_creating') ? 'ذخیره' : 'بروز رسانی' }} {{ label }}
         </base-button>
       </md-dialog-actions>
@@ -234,6 +211,9 @@ import createMixin from '../mixins/createMixin';
 import Binding, { bind } from '../mixins/binding'
 import { validationMixin } from 'vuelidate'
 import { required, maxLength } from 'vuelidate/lib/validators'
+import initDatatable from '../mixins/initDatatable';
+import { FlipClock } from '@mvpleung/flipclock';
+
 
 export default {
   props: {
@@ -249,7 +229,7 @@ export default {
     required: true
   },
   mixins: [
-    initMixin,
+    initDatatable,
     deleteMixin,
     createMixin,
     validationMixin,
@@ -257,7 +237,8 @@ export default {
   ],
   components: {
     LineChart,
-    ICountUp
+    ICountUp,
+    FlipClock
   },
   data() {
     return {
@@ -347,7 +328,21 @@ export default {
     title: bind('title'),
     description: bind('description'),
 
-    allQuery() {
+    allQuery()
+    {
+      if ( this.data().length === 0 )
+      {
+        return `
+          title logo { id file_name thumb } childs {
+            id title logo { id file_name thumb } childs {
+              id title logo { id file_name thumb } childs {
+                id title logo { id file_name thumb } childs { id title }
+              }
+            }
+          }
+        `
+      }
+
       return `title description logo { id file_name thumb }`
     }
   },
@@ -355,6 +350,22 @@ export default {
 </script>
 
 <style>
+
+.el-tree.group-tree .el-tree-node__children .el-tree-node__expand-icon {
+  background: #878787;
+  margin-right: 7px;
+  margin-left: 5px;
+  padding: 0px;
+  border-radius: 40%;
+  color: #eaf1fa;
+  font-size: 12px;
+}
+
+.el-tree.group-tree .el-tree-node__children .el-tree-node__expand-icon.is-leaf {
+  background: unset !important;
+  color: transparent !important;
+}
+
 .el-tree {
   background: transparent;
 }
@@ -383,17 +394,49 @@ export default {
 .el-tree.rtl .custom-tree-node {
   max-width: 100%;
   padding: 0px;
+  background: #fff;
+  border-radius: 10px;
 }
 .el-tree.group-tree .el-tree-node {
   padding: 15px 0px;
 }
 .el-tree.group-tree .el-tree-node__expand-icon {
   font-size: 18px;
+  margin-top: -15px;
 }
 .el-tree.group-tree .el-tree-node__children {
   margin-top: 20px;
-  margin-bottom: 30px;
+  padding-top: 10px;
+  position: relative;
 }
+.el-tree.group-tree .el-tree-node__children::before {
+  content: '';
+  background: #888;
+  width: 2px;
+  height: calc(100% - 50px);
+  position: absolute;
+  border-radius: 3px;
+  left: 13px;
+  top: 0px;
+}
+.el-tree.group-tree .el-tree-node__children .el-tree-node__content {
+  position: relative;
+}
+.el-tree.group-tree .el-tree-node__children .el-tree-node__content:hover {
+  transform: scale(1);
+}
+.el-tree.group-tree .el-tree-node__children .el-tree-node__content::before {
+  content: '';
+  width: 100px;
+  height: 2px;
+  border-radius: 3px;
+  background: #888;
+  display: inline-block;
+  position: absolute;
+  left: 14px;
+  top: 4px;
+}
+
 .el-tree.group-tree .group-info {
   direction: rtl;
   text-align: right;
@@ -406,17 +449,22 @@ export default {
   overflow: hidden;
 }
 
-/* .el-tree-node__content {
-  height: 70px;
+.el-tree.group-tree .el-tree-node__content {
+  /* height: 70px;
   margin-bottom: 15px;
   background: #fff !important;
-  border-radius: 10px;
-  transition: transform 200ms, box-shadow 250ms;
-} */
+  border-radius: 10px; */
+  width: calc(100% - 40px);
+  margin-bottom: 15px;
+  background: transparent !important;
+  transition: transform 200ms;
+}
 
 .el-tree-node__content:hover {
   transform: scale(1.01);
-  box-shadow: 0px 0px 70px -30px #ff00d3;
+}
+.el-tree.group-tree .operation-cell {
+  height: 50px;
 }
 
 .custom-tree-node img {

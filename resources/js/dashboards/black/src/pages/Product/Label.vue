@@ -2,7 +2,7 @@
   <datatable
     :type="type"
     :group="group"
-    label="لیبل محصول"
+    :label="label"
     :fields="getFields"
     
     :methods="{
@@ -28,7 +28,7 @@
           <md-field :class="getValidationClass('title')">
             <label>عنوان لیبل</label>
             <md-input v-model="title" :maxlength="$v.title.$params.maxLength.max" />
-            <i class="md-icon tim-icons icon-tag"></i>
+            <i class="md-icon tim-icons icon-caps-small"></i>
             <span class="md-helper-text">برای مثال : خارج از تولید</span>
             <span class="md-error" v-show="!$v.title.required">لطفا عنوان را وارد کنید</span>
           </md-field>
@@ -78,6 +78,7 @@ export default {
         type: 'label',
         plural: 'labels',
         group: 'product',
+        label: 'لیبل محصول',
     }
   },
   validations: {
@@ -102,15 +103,15 @@ export default {
         {
           field: 'title',
           label: 'عنوان',
-          icon: 'icon-badge'
+          icon: 'icon-caps-small'
         }, {
           field: 'description',
           label: 'توضیحات',
-          icon: 'icon-caps-small'
+          icon: 'icon-paper'
         }, {
           field: 'color',
           label: 'رنگ',
-          icon: 'icon-caps-small'
+          icon: 'icon-palette'
         }
       ]
     },

@@ -50,7 +50,7 @@
               <md-field :class="getValidationClass('first_name')">
                 <label>نام</label>
                 <md-input v-model="info.first_name" :maxlength="$v.first_name.$params.maxLength.max" />
-                <i class="md-icon tim-icons icon-paper"></i>
+                <i class="md-icon tim-icons icon-badge"></i>
                 <span class="md-helper-text">برای مثال : علی رضا</span>
               </md-field>
             </div>
@@ -59,7 +59,7 @@
               <md-field :class="getValidationClass('last_name')">
                 <label>نام خانوادگی</label>
                 <md-input v-model="info.last_name" :maxlength="$v.last_name.$params.maxLength.max" />
-                <i class="md-icon tim-icons icon-paper"></i>
+                <i class="md-icon tim-icons icon-badge"></i>
                 <span class="md-helper-text">برای مثال : حسین زاده</span>
               </md-field>
             </div>
@@ -70,7 +70,7 @@
               <md-field :class="getValidationClass('email')">
                 <label>آدرس ایمیل</label>
                 <md-input v-model="info.email" :maxlength="$v.email.$params.maxLength.max" />
-                <i class="md-icon tim-icons icon-paper"></i>
+                <i class="md-icon tim-icons icon-email-85"></i>
                 <span class="md-helper-text">برای مثال : info@example.com</span>
               </md-field>
             </div>
@@ -79,7 +79,7 @@
               <md-field :class="getValidationClass('national_code')">
                 <label>کد ملی</label>
                 <md-input v-model="info.national_code" :maxlength="$v.national_code.$params.maxLength.max" />
-                <i class="md-icon tim-icons icon-paper"></i>
+                <i class="md-icon tim-icons icon-single-02"></i>
                 <span class="md-helper-text">برای مثال : ۰۹۲۱۲۳۴۵۶۷</span>
               </md-field>
             </div>

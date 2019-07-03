@@ -13,7 +13,7 @@
     }, {
       field: 'code',
       label: 'کد رنگ',
-      icon: 'icon-single-copy-04'
+      icon: 'icon-palette'
     }
   ]">
 
@@ -22,7 +22,7 @@
         <md-field :class="getValidationClass('name')">
           <label>نام رنگ</label>
           <md-input v-model="name" :maxlength="$v.name.$params.maxLength.max" />
-          <i class="md-icon tim-icons icon-tag"></i>
+          <i class="md-icon tim-icons icon-caps-small"></i>
           <span class="md-helper-text">برای مثال : نارنجی</span>
           <span class="md-error" v-show="!$v.name.required">لطفا نام رنگ را وارد کنید</span>
         </md-field>

@@ -2,7 +2,7 @@
   <datatable
     :type="type"
     :group="group"
-    label="جدول مشخصات"
+    :label="label"
     :fields="getFields"
     
     :methods="{
@@ -13,56 +13,6 @@
     }"
     
     ref="datatable">
-
-    <template slot="filter-labels" v-if="false">
-      <span class="pull-right text-muted ml-2" v-show="hasFilter">فیتلر های اعمال شده :</span>
-
-      <span
-        class="badge badge-default p-2 ml-2 pull-right"
-        @click="filterLogo(null)"
-        v-show="filter('hasLogo') == 1">
-        فقط عکس دار ها
-        <i class="tim-icons icon-simple-remove remove-button"></i>
-      </span>
-      <span
-        class="badge badge-default p-2 ml-2 pull-right"
-        @click="filterLogo(null)"
-        v-show="filter('hasLogo') == 0">
-        فقط بدون عکس
-        <i class="tim-icons icon-simple-remove remove-button"></i>
-      </span>
-
-      <span
-        class="badge badge-default p-2 ml-2 pull-right"
-        @click="filterCategory(null)"
-        v-show="filter('hasCategories') == 1">
-        فقط با دسته بندی ها
-        <i class="tim-icons icon-simple-remove remove-button"></i>
-      </span>
-      <span 
-        class="badge badge-default p-2 ml-2 pull-right"
-        @click="filterCategory(null)"
-        v-show="filter('hasCategories') == 0">
-        فقط بدون دسته بندی ها
-        <i class="tim-icons icon-simple-remove remove-button"></i>
-      </span>
-
-      <span
-        class="badge badge-default p-2 ml-2 pull-right"
-        @click="$refs.filter_categories.setCheckedNodes([]); filterCategory( filter('hasCategories') )"
-        v-show="filter('categories') && filter('categories_string')">
-        فقط برای گروه {{ filter('categories').length !== 1 ? 'های' : '' }} : <b>{{ filter('categories_string') }}</b>
-        <i class="tim-icons icon-simple-remove remove-button"></i>
-      </span>
-
-      <span
-        class="badge badge-default p-2 ml-2 pull-right"
-        @click="$store.state[group].filters[type].query = null; filterSearch()"
-        v-show="filter('query')">
-        جستجو برای : {{ filter('query') }}
-        <i class="tim-icons icon-simple-remove remove-button"></i>
-      </span>
-    </template>
     
     <template v-slot:categories-body="slotProps">
       <transition-group name="list">
@@ -93,7 +43,7 @@
       <md-field :class="getValidationClass('title')">
         <label>عنوان جدول</label>
         <md-input v-model="title" :maxlength="$v.title.$params.maxLength.max" />
-        <i class="md-icon tim-icons icon-tag"></i>
+        <i class="md-icon tim-icons icon-caps-small"></i>
         <span class="md-helper-text">میتوانید از نام خود گروه استفاده کنید</span>
         <span class="md-error" v-show="!$v.title.required">لطفا عنوان جدول را وارد کنید</span>
       </md-field>
@@ -167,6 +117,7 @@ export default {
       plural: 'specs',
       type: 'spec',
       group: 'feature',
+      label: 'جدول مشخصات',
 
       // spec_categories: [],
 
@@ -239,11 +190,11 @@ export default {
         }, {
           field: 'description',
           label: 'توضیحات',
-          icon: 'icon-single-copy-04'
+          icon: 'icon-paper'
         }, {
           field: 'categories',
           label: 'دسته بندی ها',
-          icon: 'icon-time-alarm'
+          icon: 'icon-bullet-list-67'
         }
       ]
     },

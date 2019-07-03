@@ -4,7 +4,7 @@ import Chart from 'chart.js'
 
 export default {
   mounted()
-  {
+  { 
     if (this.data().length === 0)
     {
       axios.get('/graphql/auth', {

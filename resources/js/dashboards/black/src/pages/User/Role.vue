@@ -2,7 +2,7 @@
   <datatable
     :type="type"
     :group="group"
-    label="نقش"
+    :label="label"
     :fields="getFields"
     
     :methods="{
@@ -12,12 +12,10 @@
       update: update
     }"  
     ref="datatable"
-  >
-
-    <template slot="filter-labels"></template>
-    
+  > 
     <template #permissions_count-body="slotProps">
-      <span class="badge badge-default">دارای <strong>{{ slotProps.row.permissions.length }}</strong> دسترسی</span>
+      <span v-if="slotProps.row.permissions.length" class="badge badge-default">دارای <strong>{{ slotProps.row.permissions.length }}</strong> دسترسی</span>
+      <span v-else class="badge badge-danger">بدون دسترسی دسترسی</span>
     </template>
 
     <template slot="modal">
@@ -25,7 +23,7 @@
         <md-field :class="getValidationClass('display_name')">
           <label>نام نقش</label>
           <md-input v-model="display_name" :maxlength="$v.display_name.$params.maxLength.max" />
-          <i class="md-icon tim-icons icon-tag"></i>
+          <i class="md-icon tim-icons icon-caps-small"></i>
           <span class="md-helper-text">برای مثال : مدیر فروش</span>
           <span class="md-error" v-show="!$v.display_name.required">لطفا نام نقش را وارد کنید</span>
         </md-field>
@@ -92,9 +90,7 @@ export default {
       plural: 'roles',
       type: 'role',
       group: 'user',
-      drag: false,
-
-      value: []
+      label: 'نقش',
     }
   },
   validations: {
@@ -122,15 +118,15 @@ export default {
         {
           field: 'display_name',
           label: 'نام',
-          icon: 'icon-badge'
+          icon: 'icon-caps-small'
         }, {
           field: 'description',
           label: 'توضیحات',
-          icon: 'icon-badge'
+          icon: 'icon-paper'
         }, {
           field: 'permissions_count',
-          label: 'دسترسی ها',
-          icon: 'icon-badge'
+          label: 'میزان دسترسی',
+          icon: 'icon-key-25'
         },
       ]
     },

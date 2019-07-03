@@ -2,7 +2,7 @@
   <datatable
     :type="type"
     :group="group"
-    label="وضعیت سفارش"
+    :label="label"
     :fields="getFields"
     
     :methods="{
@@ -26,7 +26,7 @@
           <md-field :class="getValidationClass('title')">
             <label>نام وضعیت</label>
             <md-input v-model="title" :maxlength="$v.title.$params.maxLength.max" />
-            <i class="md-icon tim-icons icon-tag"></i>
+            <i class="md-icon tim-icons icon-caps-small"></i>
             <span class="md-helper-text">برای مثال : در حال بسته بندی</span>
             <span class="md-error" v-show="!$v.title.required">لطفا نام وضعیت را وارد کنید</span>
           </md-field>
@@ -76,6 +76,7 @@ export default {
       plural: 'order_statuses',
       type: 'order_status',
       group: 'shop',
+      label: 'وضعیت سفارش'
     }
   },
   validations: {
@@ -104,11 +105,11 @@ export default {
         }, {
           field: 'description',
           label: 'توضیحات',
-          icon: 'icon-badge'
+          icon: 'icon-paper'
         }, {
           field: 'color',
           label: 'رنگ',
-          icon: 'icon-badge'
+          icon: 'icon-palette'
         }
       ]
     },

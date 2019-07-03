@@ -9,30 +9,23 @@
       :canEdit="false"
       :canSearch="false"
       
-      :methods="{
-        create: create,
-        edit: edit,
-        store: store,
-        update: update
-      }"
+      :methods="{}"
       ref="datatable"
     >
-      <template slot="filter-labels"></template>
-      
       <template v-slot:writer-body="slotProps">
         <div class="info-cell">
           <div class="mb-2" v-if="rel === 'article'">
             <img class="tilt" :src="slotProps.row.article.image ? slotProps.row.article.image.thumb : '/images/placeholder.png'" />
-            <a href="#" :style="{display: 'block'}">{{ slotProps.row.article.title }}</a>
+            <span>{{ slotProps.row.article.title }}</span>
           </div>
           <div class="mb-2" v-if="rel === 'product'">
             <img class="tilt" :src="slotProps.row.product.photos ? slotProps.row.product.photos.thumb : '/images/placeholder.png'" />
-            <a href="#" :style="{display: 'block'}">{{ slotProps.row.product.name }}</a>
+            <span>{{ slotProps.row.product.name }}</span>
           </div>
 
           <div>
             <img class="tilt" :src="slotProps.row.writer.avatar ? slotProps.row.writer.avatar.thumb : '/images/placeholder-user.png'" />
-            <a href="#">{{ slotProps.row.writer.full_name }}</a>
+            <span>{{ slotProps.row.writer.full_name }}</span>
           </div>
         </div>
       </template>
@@ -71,9 +64,14 @@
 
       <template #custom-buttons>
         <transition name="fade">
-          <base-button @click="accept_multiple" v-show="attr('selected_items').length >= 1" :disabled="can(`accept-${type}`)" size="sm" :type="acceptType ? 'success' : 'warning'"
-            class="pull-left">
-            <i class="tim-icons" :class="acceptType ? 'icon-check-2' : 'icon-simple-remove'"></i>
+          <base-button
+            @click="accept_multiple"
+            v-show="attr('selected_items').length >= 1"
+            :disabled="can(`accept-${type}`)"
+            size="sm"
+            :type="acceptType ? 'success' : 'warning'"
+            class="pull-left mr-2"
+          >
             {{ acceptType ? 'تایید' : 'رد' }}
             <ICountUp
               :style="{display: 'inline'}"
@@ -84,6 +82,7 @@
               }"
             />
             مورد انتخاب شده
+            <i class="tim-icons" :class="acceptType ? 'icon-check-2' : 'icon-refresh-01'"></i>
           </base-button>
         </transition>
       </template>
@@ -105,7 +104,7 @@
               </p>
             </div>
             <div class="col-6" v-if="rel === 'product'">
-              <img class="header-image tilt" :src="showing_info.product.photos ? showing_info.product.photos.medium : '/images/placeholder.png'" />
+              <img class="header-image tilt" :src="showing_info.product.photos && showing_info.product.photos.length ? showing_info.product.photos[0].medium : '/images/placeholder.png'" />
               <p class="header-paragraph">
                 <i class="tim-icons icon-basket-simple"></i>
                 {{ showing_info.product.name }}
@@ -140,7 +139,7 @@
           </div>
           <hr/>
 
-          <div v-if="type === 'review'">
+          <div v-if="type === 'review' && false">
             <div class="row">
               <div class="col-12">
                 <h3 class="animated bounceInRight delay-first mb-0">
@@ -230,101 +229,75 @@
                 </h3>
               </div>
             </div>
-            <div class="col-12">
-              <ul class="data-table-header p-2 d-flex justify-content-center animated bounceInUp delay-second">
-                <li 
-                  class="data-table-cell p-2 d-flex align-items-center justify-content-center text-muted"
-                  :style="{width: '40px'}"
-                >#
-                </li>
-                <li class="data-table-cell p-2 d-flex align-items-center justify-content-center text-muted hvr-icon-up">
-                  <i class="tim-icons icon-badge hvr-icon"></i>
-                  نویسنده
-                </li>
-                <li class="data-table-cell p-2 d-flex align-items-center justify-content-center text-muted hvr-icon-up">
-                  <i class="tim-icons icon-caps-small hvr-icon"></i>
-                  پاسخ
-                </li>
-                <li class="data-table-cell p-2 d-flex align-items-center justify-content-center text-muted hvr-icon-up">
-                  <i class="tim-icons icon-refresh-02 hvr-icon"></i>
-                  وضعیت
-                </li>
-                <li class="data-table-cell p-2 d-flex align-items-center justify-content-center text-muted hvr-icon-up">
-                  <i class="tim-icons icon-time-alarm hvr-icon"></i>
-                  ثبت / تایید
-                </li>
-                <li class="data-table-cell p-2 d-flex align-items-center justify-content-center text-muted hvr-icon-up" :style="{width: '40px'}">
-                  <i class="tim-icons icon-settings hvr-icon"></i>
-                  حذف
-                </li>
-              </ul>
-              <md-empty-state
-                v-show="showing_info.answers.length === 0"
-                md-icon="search"
-                md-label="هیچ پاسخی یافت نشد"
-                :md-description="`تا کنون هیچ پاسخی برای این ${label} ثبت نشده است :(`">
-              </md-empty-state>
-              <ul class="animated bounceInUp delay-last" v-if="showing_info.answers.length !== 0">
-                <li
-                  v-for="(row, index) of showing_info.answers" :key="index"
-                  class="data-table-row animated bounceInUp"
-                  :style="{ background: '#f9f9f9', animationDelay: `${500 + index * 100}ms` }"
-                >
-                  <ul class="p-2 d-flex justify-content-center">
-                    <li class="data-table-cell p-2 d-flex align-items-center justify-content-center" :style="{width: '40px'}">
-                      {{ index + 1 }}
-                    </li>
-                    <li class="data-table-cell p-2 d-flex align-items-center justify-content-center" >
-                      <img class="tilt" :src="row.writer.avatar ? row.writer.avatar.thumb : '/images/placeholder-user.png'" />
-                      {{ row.writer.full_name }}
-                    </li>
-                    <li class="data-table-cell p-2 d-flex align-items-center justify-content-center" >
-                      {{ row.message }}
-                    </li>
-                    <li class="data-table-cell p-2 d-flex align-items-center justify-content-center" >
-                      <i class="tim-icons icon-check-2 text-success ml-2"></i>  
-                      <el-switch
-                        :disabled="can(`accept-${type}`)"
-                        @change="accept(index, $event, true)"
-                        v-model="row.is_accept"
-                        active-color="#13ce66"
-                        inactive-color="#ff4949"
-                      ></el-switch>
-                      <i class="tim-icons icon-simple-remove text-danger mr-2"></i>
-                    </li>
-                    <li class="data-table-cell p-2 d-flex align-items-center justify-content-center" >
-                      <div :style="{ fontSize: '12px' }">
-                        <el-tooltip :content="row.created_at | created" placement="left">
-                          <p class="text-muted hvr-icon-bob"><i class="tim-icons icon-check-2 text-info hvr-icon"></i> {{ row.created_at | ago }}</p>
-                        </el-tooltip>
 
-                        <el-tooltip
-                          :content="row.updated_at | edited" placement="left"
-                          v-if="row.updated_at !== row.created_at">
-                          <p class="text-muted hvr-icon-hang"><i class="tim-icons icon-pencil text-warning hvr-icon"></i> {{ row.updated_at | ago }}</p>
-                        </el-tooltip>
-                      </div>
-                    </li>
-                    <li class="data-table-cell operation-cell p-2 d-flex align-items-center justify-content-center" :style="{width: '40px'}">
-                      <el-tooltip content="حذف">
-                        <base-button @click="deleteAnswer(index, row)" type="danger" size="sm" icon>
-                          <i class="tim-icons icon-simple-remove"></i>
-                        </base-button>
-                      </el-tooltip>
-                    </li>
-                  </ul>
-                </li>
-              </ul>
-            </div>
+            <base-table
+              :tableData="showing_info.answers"
+              :has_animation="false"
+              :type="type"
+              :group="group"
+              :label="label"
+              :fields="[
+                {
+                  field: 'writer',
+                  label: 'نویسنده',
+                  icon: 'icon-badge',
+                }, {
+                  field: 'message',
+                  label: 'پاسخ',
+                  icon: 'icon-paper',
+                }, {
+                  field: 'status',
+                  label: 'وضعیت',
+                  icon: 'icon-refresh-02',
+                }
+              ]"
+              :methods="{ deleteSingle: deleteAnswer }"
+              :canDelete="true"
+              :canEdit="false"
+              :has_loaded="true"
+              :has_times="true"
+              :has_operation="true"
+            >
+              <template #writer-body="props">
+                <img class="tilt" :src="props.row.writer.avatar ? props.row.writer.avatar.thumb : '/images/placeholder-user.png'" />
+                {{ props.row.writer.full_name }}
+              </template>
+
+              <template #status-body="props">
+                <i class="tim-icons icon-check-2 text-success ml-2"></i>  
+                <el-switch
+                  :disabled="can(`accept-${type}`)"
+                  @change="accept(props.index, $event, true)"
+                  v-model="props.row.is_accept"
+                  active-color="#13ce66"
+                  inactive-color="#ff4949"
+                ></el-switch>
+                <i class="tim-icons icon-simple-remove text-danger mr-2"></i>
+              </template>
+            </base-table>
           </div>
         </div>
       </div>
 
       <md-dialog-actions>
         <base-button
-          type="secondary"
-          @click="is_info_dialog_open = false">
+          size="sm"
+          type="danger"
+          @click="is_info_dialog_open = false"
+        >
+          <i class="tim-icons icon-simple-remove"></i>
           بستن
+        </base-button>
+        
+        <base-button
+          class="mr-2"
+          v-if="type !== 'review'"
+          size="sm"
+          type="success"
+          @click="createAnswer"
+        >
+          <i class="tim-icons icon-simple-add"></i>
+          افزودن پاسخ جدید
         </base-button>
       </md-dialog-actions>
     </md-dialog>
@@ -333,6 +306,7 @@
 
 <script>
 import {Tooltip} from 'element-ui'
+import BaseTable from '../../components/BaseTable'
 import {BaseDropdown} from '../../components'
 import Datatable from '../../components/BaseDatatable.vue'
 import ICountUp from 'vue-countup-v2';
@@ -342,6 +316,8 @@ import initDatatable from '../../mixins/initDatatable'
 import tilt from 'tilt.js'
 import {ElTree} from 'element-ui'
 import filtersHelper from '../../mixins/filtersHelper';
+import voca from 'voca'
+import deleteMixin from '../../mixins/deleteMixin';
 
 export default {
   props: {
@@ -371,16 +347,19 @@ export default {
   components: {
     Datatable,
     BaseDropdown,
-    ICountUp
+    ICountUp,
+    BaseTable
   },
   mixins: [
     filtersHelper,
     initDatatable,
     createMixin,
+    deleteMixin
   ],
   data() {
     return {
       selected_count: 0,
+      delete_from_answers: false,
 
       showing_info: {
         index: null,
@@ -410,64 +389,127 @@ export default {
     }
   },
   methods: {
-    create() {},
-    edit() {},
     closePanel() {
-      this.$refs.datatable.closePanel()
+      this.$refs.datatable.closePanel();
     },
-    
     accept(index, status, parent = false) {
-      var id = parent ? this.data()[ this.showing_info.index ].answers[index].id : this.data()[index].id;
+      var id = parent ? this.showing_info.answers[index].id : this.data()[index].id;
 
-      axios.put(`/api/v1/${this.type}/accept/${id}`, { accept: status })
-        .then(({data}) => {
-          if ( parent ) {
-            this.data()[index].answers[index].is_accept = status
-          } else {
-            this.data()[index].is_accept = status
+      axios.post(`/graphql/auth`, {
+        query: `
+          mutation {
+            ${ voca.camelCase(`accept ${this.type}`) } (id: ${id}, status: ${status}) {
+              status
+              message
+            }
           }
-          this.setData( this.data() )
-          
-          this.$notify({
-            title: status ? 'تایید شد' : 'رد شد',
-            message: `${this.label} مورد نظر با موفقیت ${ status ? 'تایید شد' : 'رد شد' } :)`,
-            timeout: 1500,
-            type: status ? 'success' : 'danger',
-            verticalAlign: 'top',
-            horizontalAlign: 'left',
-          })
-        }).catch( error => console.log(error) );
+        `
+      })
+      .then(({data}) => {
+        if ( parent ) {
+          // this.data()[index].answers[index].is_accept = status
+        } else {
+          this.data()[index].is_accept = status
+        }
+        this.setData( this.data() )
+        
+        this.$notify({
+          title: status ? 'تایید شد' : 'رد شد',
+          message: `${this.label} مورد نظر با موفقیت ${ status ? 'تایید شد' : 'رد شد' } :)`,
+          timeout: 1500,
+          type: status ? 'success' : 'danger',
+          verticalAlign: 'top',
+          horizontalAlign: 'left',
+        })
+      })
+      .catch( error => console.log(error) );
     },
-    deleteAnswer(index, row) {
+    deleteAnswer(index, row)
+    {
+      this.delete_from_answers = true
+      this.handleDelete(index, row)
+    },
+    createAnswer()
+    {
       this.$swal.fire({
-        title: `برای پاک کردن ${this.label} مطمئن هستید ؟`,
-        text: "در صورت پاک کردن امکان بازگشت اطلاعات نیست !",
-        type: 'warning',
+        input: 'textarea',
+        inputPlaceholder: 'متن پیام خود را بنویسید',
         showCancelButton: true,
+        title: `متن پیام خود را وارد کنید`,
+        type: 'warning',
         confirmButtonColor: 'linear-gradient(to bottom left, #00f2c3, #0098f0)',
         confirmButtonColor: '#0098f0',
         cancelButtonColor: '#d33',
-        confirmButtonText: 'بله ، مطمئنم !',
-        cancelButtonText: 'نه ، اشتباه شده'
-      }).then((result) => {
-        if (result.value) {
-          axios({
-            method: 'delete',
-            url: row.link
-          }).then(response => {
-            this.data()[this.showing_info.index].answers.splice(index, 1)
-            this.setData( this.data() )
-            
+        confirmButtonText: 'ثبت پاسخ',
+        cancelButtonText: 'منصرف شدم'
+      })
+      .then(({value}) => {
+        if (value) {
+          axios.post(`/graphql/auth`, {
+            query: `mutation {
+              create: ${ voca.camelCase(`create ${this.type}`) } (
+                ${this.type === 'comment' ? 'parent_id' : 'question_id'}: ${this.showing_info.id}, 
+                message: "${value}"
+              ) {
+                id
+                writer {
+                  id
+                  first_name
+                  last_name
+                  full_name
+                  avatar { id file_name thumb }
+                }
+                message
+                is_accept
+                created_at
+                updated_at
+              }
+            }`
+          })
+          .then(({data})=> {
+            this.showing_info.answers.unshift(data.data.create)
+
             this.$swal.fire({
-              title: 'حذف شد',
-              text: `${this.label} با موفقیت حذف شد :)`,
+              title: `ثبت شد`,
+              text: `پاسخ شما با موفقیت ثبت شد`,
               type: 'success',
-              showConfirmButton: false,
               timer: 1000,
+              showConfirmButton: false,
             })
-          }).catch(error => console.log(error));
+          })
+          .catch(error => {
+            if (error.response) {
+              this.$swal.fire({
+                title: 'خطایی رخ داد !',
+                text: error.response.data.message,
+                type: 'error',
+                timer: 5000,
+                confirmButtonText: 'بسیار خب :('
+              })
+            } else {
+              console.log(error)
+            }
+          });
         }
       })
+    },
+    afterDelete(index, row)
+    {
+      if ( this.delete_from_answers )
+      {
+        this.showing_info.answers.splice(index, 1)
+        this.delete_from_answers = false
+      }
+      else
+      {
+        this.data().splice(index, 1)
+        this.setData( this.data() )
+        
+        this.setAttr('counts', {
+          total: this.attr('counts').total - 1,
+          trash: this.attr('counts').trash + 1,
+        })
+      }
     },
     accept_multiple() {
       this.$swal.fire({
@@ -487,11 +529,17 @@ export default {
             ids = [...ids, this.data()[item].id]
           })
 
-          axios({
-            method: 'put',
-            url: `/api/v1/${this.type}/accept/${ids.join(',')}`,
-            data: { accept: this.acceptType }
-          }).then(response => {
+          axios.post(`/graphql/auth`, {
+            query: `
+              mutation {
+                ${ voca.camelCase(`active ${this.type}`) } (ids: [${ids.join(',')}], status: ${this.acceptType}) {
+                  status
+                  message
+                }
+              }
+            `
+          })
+          .then(({data})=> {
             let used_status = this.acceptType;
             this.attr('selected_items').forEach(index => {
               this.data()[index].is_accept = used_status
@@ -508,7 +556,8 @@ export default {
               showConfirmButton: false,
             })
 
-          }).catch(error => {
+          })
+          .catch(error => {
             if (error.response) {
               this.$swal.fire({
                 title: 'خطایی رخ داد !',
@@ -524,7 +573,6 @@ export default {
         }
       })
     },
-
     info(index, row)
     {
       axios.get('/graphql/auth', {

@@ -2,7 +2,7 @@
   <datatable
     :type="type"
     :group="group"
-    label="مقاله"
+    :label="label"
     :fields="getFields"
 
     :methods="{
@@ -142,7 +142,7 @@
           <md-field :class="getValidationClass('title')">
             <label>عنوان مقاله</label>
             <md-input v-model="title" :maxlength="$v.title.$params.maxLength.max" />
-            <i class="md-icon tim-icons icon-tag"></i>
+            <i class="md-icon tim-icons icon-caps-small"></i>
             <span class="md-helper-text">عنوان مقاله را وارد کنید ...</span>
             <span class="md-error" v-show="!$v.title.required">لطفا عنوان مقاله را وارد کنید</span>
           </md-field>
@@ -258,6 +258,7 @@ export default {
       plural: 'articles',
       type: 'article',
       group: 'blog',
+      label: 'مقاله',
 
       defaultProps: {
         children: 'childs',
@@ -346,7 +347,7 @@ export default {
         {
           field: 'image',
           label: 'تصویر مقاله',
-          icon: 'icon-caps-small'
+          icon: 'icon-image-02'
         }, {
           field: 'title',
           label: 'عنوان مقاله',
@@ -354,15 +355,15 @@ export default {
         }, {
           field: 'description',
           label: 'توضیحات مقاله',
-          icon: 'icon-single-copy-04'
+          icon: 'icon-paper'
         }, {
           field: 'reading_time',
           label: 'زمان مطالعه',
-          icon: 'icon-time-alarm'
+          icon: 'icon-watch-time'
         }, {
           field: 'subjects',
           label: 'دسته بندی ها',
-          icon: 'icon-time-alarm'
+          icon: 'icon-tag'
         }
       ]
     },
@@ -375,7 +376,7 @@ export default {
           id
           file_name
           thumb
-          large
+          medium
         }
         reading_time
         subjects {
