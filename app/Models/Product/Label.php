@@ -20,8 +20,6 @@ class Label extends Model implements AuditableContract
      **             Attributes
      ***************************************/
 
-    protected static $jalali_time = false;
-
     /**
      * The attributes that are mass assignable.
      *

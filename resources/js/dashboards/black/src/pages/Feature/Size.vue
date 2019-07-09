@@ -36,13 +36,16 @@
 
 <script>
 import BaseFeature from './Base.vue'
-import Binding, { bind } from '../../mixins/binding'
 
+import Binding, { bind } from '../../mixins/binding'
 import { validationMixin } from 'vuelidate'
 import { required, maxLength } from 'vuelidate/lib/validators'
 
 export default {
-  mixins: [ validationMixin, Binding ],
+  mixins: [
+    validationMixin,
+    Binding
+  ],
   components: {
     BaseFeature
   },
@@ -52,6 +55,9 @@ export default {
       type: 'size'
     }
   },
+  metaInfo: {
+    title: 'سایز و اندازه ها',
+  },
   validations: {
     name: {
       required,
@@ -59,22 +65,6 @@ export default {
     },
     description: {
       maxLength: maxLength(255)
-    },
-  },
-  methods: {
-    getValidationClass (fieldName) {
-      const field = this.$v[fieldName]
-
-      if (field) {
-        return {
-          'md-invalid': field.$invalid && field.$dirty
-        }
-      }
-    },
-    validate() {
-      this.$v.$touch()
-
-      return !this.$v.$invalid;
     },
   },
   computed: {

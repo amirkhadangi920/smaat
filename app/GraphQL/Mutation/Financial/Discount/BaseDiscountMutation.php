@@ -31,6 +31,9 @@ class BaseDiscountMutation extends MainMutation
             'categories' => [
                 'type' => Type::listOf( Type::int() )
             ],
+            'is_deleted_image' => [
+                'type' => Type::boolean()
+            ],
             'is_active' => [
                 'type' => Type::boolean()
             ],

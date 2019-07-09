@@ -1,5 +1,6 @@
 <template>
   <datatable
+    class="spec-datatable"
     :type="type"
     :group="group"
     :label="label"
@@ -78,7 +79,7 @@
 
     <template #custom-operations="slotProps">
       <el-tooltip content="مدیریت جدول">
-        <base-button class="m-0" @click="manageTable(slotProps.index, slotProps.row)" type="success" size="sm" icon>
+        <base-button class="m-0" @click.once="manageTable(slotProps.index, slotProps.row)" type="success" size="sm" icon>
           <i class="tim-icons icon-bullet-list-67"></i>
         </base-button>
       </el-tooltip>
@@ -88,23 +89,17 @@
 </template>
 
 <script>
-import {Tooltip} from 'element-ui'
-import {BaseDropdown} from '../../components'
 import Datatable from '../../components/BaseDatatable.vue'
-import RemoteSelect from '../../components/RemoteSelect'
 
 import createMixin from '../../mixins/createMixin'
 import initDatatable from '../../mixins/initDatatable'
-
 import Binding, { bind } from '../../mixins/binding'
 import { validationMixin } from 'vuelidate'
 import { required, maxLength } from 'vuelidate/lib/validators'
 
 export default {
   components: {
-    Datatable,
-    BaseDropdown,
-    RemoteSelect
+    Datatable
   },
   mixins: [
     initDatatable,
@@ -112,14 +107,15 @@ export default {
     validationMixin,
     Binding
   ],
+  metaInfo: {
+    title: 'جداول مشخصات',
+  },
   data() {
     return {
       plural: 'specs',
       type: 'spec',
       group: 'feature',
       label: 'جدول مشخصات',
-
-      // spec_categories: [],
 
       defaultProps: {
         children: 'childs',
@@ -141,14 +137,6 @@ export default {
       group: 'group',
       type: 'category',
     })
-
-    // axios.get('/graphql/auth', {
-    //   params: {
-    //     query: `{
-    //       specCategories { id }
-    //     }`
-    //   }
-    // }).then(({data}) => this.spec_categories = data.data.specCategories.map(i => i.id) )
   },
   methods: {
     manageTable(index, row)
@@ -176,7 +164,6 @@ export default {
       ), 100);
     },
   },
-  
   computed: {
     title: bind('title'),
     description: bind('description'),
@@ -216,3 +203,11 @@ export default {
   },
 }
 </script>
+
+<style>
+
+.spec-datatable .data-table-row ul {
+  min-height: 120px;
+}
+
+</style>

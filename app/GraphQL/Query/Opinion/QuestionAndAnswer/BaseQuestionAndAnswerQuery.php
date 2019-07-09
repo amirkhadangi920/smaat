@@ -15,4 +15,11 @@ class BaseQuestionAndAnswerQuery extends MainQuery
     {
         return $this->checkPermission('read-question_and_answer');
     }
+
+    public function applyFilters($args, $data)
+    {
+        $data->where('parent_id', null);
+    }
+
+    
 }

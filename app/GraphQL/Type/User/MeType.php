@@ -48,6 +48,9 @@ class MeType extends BaseType
             'addresses' => [
                 'type' => Type::listOf( \GraphQL::type('user_address') ),
             ],
+            'gender' => [
+                'type' => Type::boolean(),
+            ],
             'social_links' => [
                 'type' => Type::listOf( \GraphQL::type('data_array') ),
                 'is_relation' => false

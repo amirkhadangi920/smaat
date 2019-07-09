@@ -53,8 +53,14 @@ class BaseUserMutation extends MainMutation
             'national_code' => [
                 'type' => Type::string()
             ],
+            'gender' => [
+                'type' => Type::boolean()
+            ],
             'roles' => [
                 'type' => Type::listOf( Type::int() )
+            ],
+            'is_deleted_image' => [
+                'type' => Type::boolean()
             ],
             'permissions' => [
                 'type' => Type::listOf( Type::int() )
@@ -90,15 +96,12 @@ class BaseUserMutation extends MainMutation
     public function getRequest( $request)
     {
         return $request->only(
-            'city_id',
             'first_name',
             'last_name',
-            'phones',
-            'social_links',
             'email',
             'avatar',
-            'address',
-            'postal_code'
+            'national_code',
+            'gender'
         )->all();
     }
 
@@ -122,9 +125,15 @@ class BaseUserMutation extends MainMutation
 
     public function moveLocalCartToServer()
     {
+        $local_cart = $this->getLocalCart();
+
+        if ( count($local_cart) === 0 )
+            return;
+
+            
         $order = $this->getCart();
 
-        foreach ( $this->getLocalCart() as $item )
+        foreach ( $local_cart as $item )
         {
             $order->items()->updateOrCreate([
                 'variation_id' => $item['variation']['id'],

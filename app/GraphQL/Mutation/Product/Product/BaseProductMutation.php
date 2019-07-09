@@ -138,7 +138,7 @@ class BaseProductMutation extends MainMutation
             foreach ( $request->get('photos') as $item )
             {
                 $product->addMedia( $item['image'] )
-                    ->withCustomProperties(['color' => $item['color']])
+                    ->withCustomProperties(['color' => $item['color'] ?? null])
                     ->toMediaCollection('photos');
             }
         }

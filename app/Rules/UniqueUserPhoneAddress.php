@@ -47,6 +47,7 @@ class UniqueUserPhoneAddress implements Rule
 
         $result->where($this->field ?? $attribute, $value)
             ->where('tenant_id', $this->getTenant() )
+            ->where("deleted_at", null)
             ->where('user_id', auth()->id() );
 
         return $result->count() === 0;

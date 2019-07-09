@@ -28,16 +28,14 @@ class CreateUsersTable extends Migration
                 'email'             => '100',
                 'email_verified_at' => 'timestamp|nullable',
                 'password'          => 100,
-                // 'avatar'            => 'nullable|array',
                 'national_code'     => '10|nullable',
+                'gender'            => 'nullable|boolean',
 
                 'rememberToken',
                 'purchase_counts'   => 'unsignedInteger|default:0',
                 'total_payments'    => 'unsignedInteger|default:0',
                 'jalali_created_at' => 'datetime|nullable'
-            ], [
-                'cities' => ['nullable', 'set null']
-            ], 'uuid', [ 'last_purchase' ]);
+            ], [], 'uuid', [ 'last_purchase' ]);
         });
     }
 

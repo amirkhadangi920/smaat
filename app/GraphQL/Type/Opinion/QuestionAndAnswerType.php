@@ -33,7 +33,9 @@ class QuestionAndAnswerType extends BaseType
             'question' => $this->relationItemField('question_and_answer', 'is_accept'),
             'answers' => $this->relationListField('question_and_answer', 'is_accept'),
             'audits' => $this->audits('question_and_answer'),
-            'is_accept' => $this->acceptableField('question_and_answer'),
+            'is_accept' => [
+                'type' => Type::boolean(),
+            ],
         ];
     }
 }

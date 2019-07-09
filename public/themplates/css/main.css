@@ -4,10 +4,10 @@
 
 @font-face {
     font-family: 'IRANSans';
-    src: url('/fonts/iransans/Iransans.eot') format('eot'),
-        url('/fonts/iransans/Iransans.woff') format('woff'),
-        url('/fonts/iransans/Iransans.woff2') format('woff2'),
-        url('/fonts/iransans/Iransans.ttf') format('truetype');
+    src: url('/themplates/fonts/iransans/Iransans.eot') format('eot'),
+        url('/themplates/fonts/iransans/Iransans.woff') format('woff'),
+        url('/themplates/fonts/iransans/Iransans.woff2') format('woff2'),
+        url('/themplates/fonts/iransans/Iransans.ttf') format('truetype');
 }
 
 /* Medium Layout: 1280px */

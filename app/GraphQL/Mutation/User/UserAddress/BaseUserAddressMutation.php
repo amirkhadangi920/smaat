@@ -22,6 +22,12 @@ class BaseUserAddressMutation extends MainMutation
             'city_id' => [
                 'type' => Type::int()
             ],
+            'full_name' => [
+                'type' => Type::string()
+            ],
+            'phone_number' => [
+                'type' => Type::string()
+            ],
             'type' => [
                 'type' => Type::string()
             ],

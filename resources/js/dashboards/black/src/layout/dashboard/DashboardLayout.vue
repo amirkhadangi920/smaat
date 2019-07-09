@@ -89,22 +89,6 @@
         </el-menu>
       </template>
     </side-bar>
-    
-    <vue-nice-scrollbar class="my-scrollbar" :speed="100" theme="light">
-      <div class="main-panel">
-        <div class="test"></div>
-        
-
-        <!-- <vue-particles color="#f1f1f1" :moveSpeed="1" shapeType="triangle" :particlesNumber="120"></vue-particles>
-        <top-navbar></top-navbar>
-        <dashboard-content @click.native="toggleSidebar">
-
-        </dashboard-content>
-
-        <content-footer></content-footer> -->
-
-      </div>
-    </vue-nice-scrollbar>
   </div>
 </template>
 

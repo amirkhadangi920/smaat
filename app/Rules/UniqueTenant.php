@@ -50,7 +50,10 @@ class UniqueTenant implements Rule
             $result->where("{$this->table}.id", '!=', $this->id);
 
         $result->where($this->field ?? $attribute, $value)
-            ->where('tenant_id', $this->getTenant() );
+            ->where(function($query) {
+                $query->where('tenant_id', $this->getTenant())->orWhere('tenant_id', null);
+            })
+            ->where("{$this->table}.deleted_at", null);
 
         return $result->count() === 0;
     }

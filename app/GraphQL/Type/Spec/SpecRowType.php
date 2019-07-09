@@ -51,6 +51,9 @@ class SpecRowType extends BaseType
                 'type' => Type::string(),
                 'selectable' => false
             ],
+            'icon' => [
+                'type' => Type::string()
+            ],
             'is_detailable' => [
                 'type' => Type::boolean()
             ],

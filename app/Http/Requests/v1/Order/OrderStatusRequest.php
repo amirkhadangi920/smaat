@@ -29,6 +29,7 @@ class OrderStatusRequest extends MainRequest
                 'regex:/^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/',
                 new UniqueTenant('order_statuses', $args['id'] ?? null)
             ],
+            'icon'          => 'nullable|string|max:50',
             'is_active'     => 'nullable|boolean',
         ];
     }

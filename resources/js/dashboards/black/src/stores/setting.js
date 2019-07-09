@@ -46,6 +46,22 @@ export default {
             site_slider: false,
             site_posters: false,
         },
+
+        is_mutation_loading: {
+            site_info: false,
+            site_slider: false,
+            site_posters: false,
+            user_info: false,
+            user_password: false,
+        },
+        
+        is_query_loading: {
+            site_info: false,
+            site_slider: false,
+            site_posters: false,
+            user_info: false,
+            user_password: false,
+        },
         
         is_loading: {
             site_info: false,

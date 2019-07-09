@@ -26,6 +26,98 @@ export default new Vuex.Store({
     state: {
         permissions: [],
         permissions_list: [],
+        me: {
+            id: null,
+            first_name: '',
+            last_name: '',
+            full_name: '',
+            email: '',
+            avatar: {
+                thumb: ''
+            }
+        },
+        siteSetting: {
+            title: null
+        },
+        icons: [
+            {
+                label: 'Action',
+                icons: [
+                    'accessibility',
+                    'accessible',
+                    'account_balance',
+                    'account_balance_wallet',
+                    'account_box',
+                    'account_circle',
+                    'add_shopping_cart',
+                    'alarm',
+                    'alarm_add',
+                    'alarm_off',
+                    'alarm_on',
+                    'all_inbox',
+                    'android',
+                    'announcement',
+                    'arrow_right_alt',
+                    'aspect_ratio',
+                    'assessment',
+                    'assignment',
+                    'assignment_ind',
+                    'assignment_late',
+                    'bookmarks',
+                    'autorenew',
+                    'build',
+                    'commute',
+                    'compare_arrows',
+                    'credit_card',
+                    'dashboard',
+                    'delete',
+                    'event',
+                    'flight_land',
+                    'flight_takeoff',
+                    'gavel',
+                    'grade',
+                    'group_work',
+                    'help',
+                    'home',
+                    'hourglass_empty',
+                    'invert_colors',
+                    'language',
+                    'loyalty',
+                    'motorcycle',
+                    'pan_tool',
+                    'perm_camera_mic',
+                    'perm_phone_msg',
+                    'perm_device_information',
+                    'print',
+                    'redeem',
+                    'room',
+                    'rowing',
+                    'settings_brightness',
+                    'settings_bluetooth',
+                    'settings',
+                    'settings_input_antenna',
+                    'settings_input_component',
+                    'settings_input_hdmi',
+                    'settings_overscan',
+                    'settings_voice',
+                    'shopping_basket',
+                    'store',
+                    'theaters',
+                    'timeline',
+                    'touch_app',
+                    'track_changes',
+                    'verified_user',
+                ]
+            },
+            {
+                label: 'Alert',
+                icons: [
+                    'add_alert',
+                    'error',
+                    'warning',
+                ]
+            },
+        ]
     },
     mutations: {
         setData(state, data)
@@ -47,8 +139,8 @@ export default new Vuex.Store({
             return state[data.group].form[data.type][field] = {
                 type: 'Upload',
                 value: null,
-                file: data.file,
-                url: URL.createObjectURL(data.file)
+                file: data.file ? data.file : null,
+                url: data.file ? URL.createObjectURL(data.file) : ''
             }
         },
         clearForm(state, data)
@@ -65,7 +157,7 @@ export default new Vuex.Store({
 
                     case 'Int':
                     case 'Boolean':
-                        form[field].value = null
+                        form[field].value = field === 'is_deleted_image' ? false : null
                         break;
 
                     case '[Int]':
@@ -103,7 +195,7 @@ export default new Vuex.Store({
 
                     case 'Int':
                     case 'Boolean':
-                        form[field].value = value ? value : null
+                        form[field].value = value ? value : field === 'is_deleted_image' ? false : null
                         break;
 
                     case '[Int]':
@@ -115,7 +207,7 @@ export default new Vuex.Store({
                     case 'Upload':
                         form[field].value = null
                         form[field].file = null
-                        form[field].url = value ? value.medium : ''
+                        form[field].url = value ? value.medium ? value.medium : value.thumb : ''
                         break;
                 }
             }
@@ -125,6 +217,14 @@ export default new Vuex.Store({
         setPermissions(state, permissions)
         {
             return state.permissions = permissions.map(value => value.name)
+        },
+        setMeInfo(state, data)
+        {
+            return state.me = data
+        },
+        setSiteSetting(state, data)
+        {
+            return state.siteSetting = data
         },
         setPermissionsList(state, permissions)
         {
@@ -163,6 +263,26 @@ export default new Vuex.Store({
                         ? state[inputs.group].handleQuery[inputs.type](data)
                         : data.data.allData.data
                 })
+
+                commit('setAttr', {
+                    group: inputs.group,
+                    type: inputs.type,
+                    attr: 'counts',
+                    data: {
+                        total: data.data.allData.total,
+                        trash: data.data.allData.trash
+                    }
+                })
+
+                commit('setAttr', {
+                    group: inputs.group,
+                    type: inputs.type,
+                    attr: 'charts',
+                    data: {
+                        labels: data.data.allData.chart.map(period => period.month),
+                        data: data.data.allData.chart.map(period => period.count)
+                    }
+                })
             })
         },
         getPermissions({ commit, state }, inputs)
@@ -170,13 +290,38 @@ export default new Vuex.Store({
             if( state.permissions.length > 0 )
                 return state.permissions
 
-            axios({
-                method: 'get',
-                url: '/api/v1/user/permissions'
-            }).then(({data}) => {
-                commit('setPermissions', data.data)
-                commit('setPermissionsList', data.data)
-            }).catch(error => {
+            axios.get('/graphql/auth', {
+                params: {
+                    query: `{
+                        me {
+                            id
+                            first_name
+                            last_name
+                            full_name
+                            email
+                            avatar { id file_name thumb }
+                            allPermissions { id name display_name description }
+                        }
+
+                        siteSetting {
+                            title
+                        }
+                    }`
+                }
+            })
+            .then(({data}) => {
+                if ( data.data.me.allPermissions.length === 0 )
+                {
+                    localStorage.removeItem('JWT')
+                    window.location = "/login"    
+                }
+
+                commit('setPermissions', data.data.me.allPermissions)
+                commit('setPermissionsList', data.data.me.allPermissions)
+                commit('setMeInfo', data.data.me)
+                commit('setSiteSetting', data.data.siteSetting)
+            })
+            .catch(error => {
                 localStorage.removeItem('JWT')
                 window.location = "/login"
             })

@@ -115,7 +115,9 @@ export default {
       {
         params += `$${key}: ${form[key].type}, `
         args += `${key}: $${key}, `
-        variables[key] = form[key].clientResolver ? form[key].clientResolver( form[key].value ) : form[key].value
+        variables[key] = form[key].clientResolver
+                        ? form[key].clientResolver( form[key].value, this.$store.state )
+                        : form[key].value
       }
 
       params = params.substr(0, params.length - 2)
@@ -136,16 +138,34 @@ export default {
         file: file.raw
       })
     },
+    deleteImage(event)
+    {
+      event.stopPropagation()
+
+      this.$store.commit('setFormImage', {
+        group: this.group,
+        type: this.type,
+      })
+      
+      this.$store.commit('setFormData', {
+        group: this.group,
+        type: this.type,
+        field: 'is_deleted_image',
+        value: true
+      })
+    },
 
     storeInServer(options)
     {
       if ( !this.validate() ) return;
+
+      this.setAttr('is_mutation_loading', true)
     
       const mutation = voca.camelCase(
         this.attr('is_creating') ? `create ${this.type}` : `update ${this.type}`
       )
 
-      const form = this.getAllFormData()      
+      const form = this.getAllFormData()
       
       if ( !this.attr('is_creating') && this.group !== 'setting' )
       {
@@ -215,15 +235,20 @@ export default {
           timer: 1000,
         })
 
-        options.callback(data.data)
+        this.setAttr('is_mutation_loading', false)
 
-      }).catch(this.errorResolver)
+        options.callback(data.data)
+      })
+      .catch(this.errorResolver)
     },
 
     errorResolver(error)
     {
-      console.log(error)
-
+      console.error(error)
+      
+      this.setAttr('is_mutation_loading', false)
+      
+      
       if ( error.type === 'validation' )
       {
         for (let key in error.messages)
@@ -240,6 +265,17 @@ export default {
             })
           })
         }
+      }
+      else if ( error.type === 'not found' )
+      {
+        this.$notify({
+          title: 'یافت نشد',
+          message: `متاسفانه اطلاعات ${this.label} درخواستی شما یافت نشد :(`,
+          timeout: 10000,
+          type: 'danger',
+          verticalAlign: 'top',
+          horizontalAlign: 'left',
+        })
       }
     }
   }

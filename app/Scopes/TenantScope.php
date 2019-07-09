@@ -22,9 +22,10 @@ class TenantScope implements Scope
             return Hostname::whereDomain( request()->getHost() )->first()->tenant_id ?? false;
         });
 
-        if ( !$tenant_id && env('APPLY_TENANT_FILTERS') ) abort(404);
+        if ( !$tenant_id && env('APPLY_TENANT_FILTERS', true) ) abort(404);
 
-        if( env('APPLY_TENANT_FILTERS') )
-            $builder->where( $model->getTable().'.tenant_id', $tenant_id);
+        if( env('APPLY_TENANT_FILTERS', true) )
+            $builder->where( $model->getTable().'.tenant_id', $tenant_id)
+                    ->orWhereNull( $model->getTable().'.tenant_id' );
     }
 }

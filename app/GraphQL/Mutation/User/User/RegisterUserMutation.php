@@ -7,12 +7,13 @@ use App\Http\Requests\v1\RegisterRequest;
 use App\User;
 use Rebing\GraphQL\Support\SelectFields;
 use GraphQL\Type\Definition\ResolveInfo;
+use Rebing\GraphQL\Support\UploadType;
 
 class RegisterUserMutation extends BaseUserMutation
 {
     public function type()
     {
-        return \GraphQL::type('user');
+        return \GraphQL::type('me');
     }
 
     /**
@@ -28,33 +29,52 @@ class RegisterUserMutation extends BaseUserMutation
     public function args()
     {
         return [
-            'email'                 => [
+            'city_id' => [
+                'type' => Type::int()
+            ],
+            'first_name' => [
                 'type' => Type::string()
             ],
-            'password'              => [
+            'last_name' => [
+                'type' => Type::string()
+            ],
+            'email' => [
+                'type' => Type::string()
+            ],
+            'password' => [
                 'type' => Type::string()
             ],
             'password_confirmation' => [
                 'type' => Type::string()
+            ],
+            'avatar' => [
+                'type' => UploadType::getInstance()
+            ],
+            'national_code' => [
+                'type' => Type::string()
+            ],
+            'gender' => [
+                'type' => Type::boolean()
             ],
         ];
     }
    
     public function resolve($root, $args, SelectFields $fields, ResolveInfo $info)
     {
-        $user = User::create([
-            'email' => $args['email'],
-            'password' => bcrypt( $args['password'] )
-        ]);
+        $user = User::create(array_merge(
+            $this->getRequest( collect( $args ) ), [
+                'password' => bcrypt( $args['password'] )
+            ]
+        ));
 
         auth()->login( $user );
 
         $this->moveLocalCartToServer();
 
-        return [
-            'id'    => $user->id,
-            'email' => $user->email,
-            'token' => $user->createToken('web')->accessToken
-        ];
+        $data = collect( $user->toArray() );
+            
+        $data->put('token', $user->createToken('web')->accessToken);
+
+        return $data;
     }
 }

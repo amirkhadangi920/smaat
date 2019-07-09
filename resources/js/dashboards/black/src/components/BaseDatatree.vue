@@ -5,9 +5,9 @@
         <div class="pull-right">
           <h1 class="animated bounceInRight delay-first" :style="{ color: '#fff', fontWeight: 'bold', textShadow: '0px 3px 15px #333' }">
             مدیریت <span :style="{ color: '#ff3d3d' }">{{ label }}</span> ها
-            <i class="tim-icons icon-align-left-2" :style="{fontSize: '25px'}"></i>
+            <i class="header-nav-icon tim-icons icon-align-left-2" :style="{fontSize: '25px'}"></i>
           </h1>
-          <h6 class="text-muted animated bounceInRight delay-secound">با استفاده از جدول زیر ، امکان مدیریت کامل {{ label }} های وبسایت برای شما ممکن خواهد شد</h6>
+          <h6 class="header-description animated bounceInRight delay-secound">با استفاده از جدول زیر ، امکان مدیریت کامل {{ label }} های وبسایت برای شما ممکن خواهد شد</h6>
         </div>
         <div class="pull-left animated bounceInDown delay-last">
           <flip-clock :options="{
@@ -70,9 +70,6 @@
               <div class="chart-area">
                 <canvas id="myChart" height="100%"></canvas>
               </div>
-              <!-- <div class="chart-area" :style="{ height: '60px', position: 'absolute', top: '0px', right: '0px' }">
-                <canvas id="miniChart" height="100%"></canvas>
-              </div> -->
             </card>
           </div>
         </div>
@@ -81,26 +78,30 @@
 
     <div class="row mb-4">
       <div class="pull-left animated bounceInDown delay-last">
-        <base-button @click="createMethod(null)" :disabled="can(`create-${type}`)" size="sm" :type="can(`create-${type}`) ? 'info' : 'success'">
+        <base-button @click="createMethod(null)" :disabled="can(`create-${type}`) || $store.state.group[type].length >= 10" size="sm" :type="can(`create-${type}`) ? 'info' : 'success'">
           افزودن {{ label }} جدید
           <i class="tim-icons icon-simple-add"></i>
         </base-button>
       </div>
     </div>
 
-    <div class="row">
-      <div class="col-12">
+    <div class="row" v-if="attr('has_loaded')">
+      <div class="col-12 animated bounceInBottom delay-last">
         <el-tree
           class="rtl group-tree"
           :data="$store.state.group[type]"
           node-key="id"
           empty-text="هیچ گونه اطلاعاتی یافت نشد :("
-          :props="defaultProps">
+          :props="defaultProps"
+        >
           <div class="custom-tree-node data-table-row col-12 pr-3" slot-scope="{ node, data }">
             <div class="pull-left d-flex align-items-center">
               <img :src="data.logo ? data.logo.thumb : '/images/placeholder.png'" />
               <div class="pull-right group-info">
-                <h4 class="mb-0">{{ node.label }}</h4>
+                <h4 class="md-list-item-text mb-0" :style="{ overflow: 'visible' }">
+                  <i class="material-icons" v-if="data.icon">{{ data.icon }}</i>
+                  {{ data.title }}
+                </h4>
                 <p class="text-muted">{{ data.description }}</p>
               </div>
             </div>
@@ -108,7 +109,7 @@
             <div class="operation-cell pull-right">
               <el-tooltip content="حذف">
                 <base-button type="danger" @click="handleDelete(node, data)" size="sm" icon>
-                  <i class="tim-icons icon-simple-remove"></i>
+                  <i class="tim-icons icon-trash-simple"></i>
                 </base-button>
               </el-tooltip>
 
@@ -118,7 +119,7 @@
                 </base-button>
               </el-tooltip>
 
-              <el-tooltip content="ثبت گروه فرزند">
+              <el-tooltip content="ثبت گروه فرزند" v-if="node.level < 5">
                 <base-button class="ml-2" @click="createMethod(node)" type="success" size="sm" icon>
                   <i class="tim-icons icon-simple-add"></i>
                 </base-button>
@@ -128,6 +129,26 @@
         </el-tree>
       </div>
     </div>
+
+    <transition name="fade">
+      <div class="main-panel-loading" v-if="!attr('has_loaded')">
+        <fingerprint-spinner
+          :animation-duration="1000"
+          :size="100"
+          color="#fff"
+        />
+      </div>
+    </transition>
+
+    <transition name="loading">
+      <div class="query-loader" v-if="attr('is_query_loading')">
+        <half-circle-spinner
+          :animation-duration="800"
+          :size="40"
+          color="#fff"
+        />
+      </div>
+    </transition>
     
     <md-dialog :md-active.sync="$store.state[group].is_open[type]" class="text-right" dir="rtl">
       <md-dialog-title>
@@ -140,22 +161,25 @@
       <div class="md-dialog-content">
         <div class="p-2">
           <form @submit.prevent>
-            <base-input :label="'لوگوی ' + label">
-              <el-upload
-                class="avatar-uploader"
-                action="/"
-                :auto-upload="false"
-                :show-file-list="false"
-                :on-change="addImage">
-                <img
-                  v-if="$store.state[group].form[type].logo.url"
-                  :src="$store.state[group].form[type].logo.url"
-                  class="avatar"
-                />
-                <i v-else class="el-icon-plus avatar-uploader-icon"></i>
-              </el-upload>
-              <small slot="helperText" id="emailHelp" class="form-text text-muted">لوگوی مورد نظر خود را انتخاب کنید</small>
-            </base-input>
+            <div class="row d-flex justify-content-center">
+              <div class="col-md-8">
+                <base-input :label="'لوگوی ' + label">
+                  <el-upload
+                    class="avatar-uploader"
+                    action="/"
+                    :auto-upload="false"
+                    :show-file-list="false"
+                    :on-change="addImage">
+                    <div v-if="$store.state[group].form[type].logo.url">
+                      <img :src="$store.state[group].form[type].logo.url" class="avatar" />
+                      <i @click.once.prevent="deleteImage" class="el-icon-delete avatar-uploader-icon"></i>
+                    </div>
+                    <i v-else class="el-icon-plus avatar-uploader-icon"></i>
+                  </el-upload>
+                  <small slot="helperText" id="emailHelp" class="form-text text-muted">لوگوی مورد نظر خود را انتخاب کنید</small>
+                </base-input>
+              </div>
+            </div>
 
             <md-field :class="getValidationClass('title')">
               <label for="email">عنوان</label>
@@ -172,6 +196,21 @@
               <i class="md-icon tim-icons icon-paper"></i>
               <span class="md-helper-text">توضیحی مختصر درباره واحد</span>
             </md-field>
+
+            <md-field>
+              <label>آیکون</label>
+              <md-select v-model="icon" >
+                <md-optgroup v-for="group in $store.state.icons" :key="group.label" :label="group.label">
+                  <md-option
+                  v-for="icon in group.icons"
+                  :key="icon"
+                  :value="icon">{{ icon }} <span class="material-icons pull-left">{{ icon }}</span></md-option>
+                </md-optgroup>
+              </md-select>
+              <i class="md-icon tim-icons material-icons">{{ icon }}</i>
+              <span class="md-helper-text">آیکون {{ label }} را مشخص کنید</span>
+            </md-field>
+
             <slot name="modal"></slot>
           </form>
         </div>
@@ -187,14 +226,25 @@
           <i class="tim-icons icon-simple-remove"></i>
           لغو
         </base-button>
-        
+      
         <base-button
-          size="sm" 
+          size="sm"
+          :loading="attr('is_mutation_loading')"
           :type="attr('is_creating') ? 'success' : 'warning'"
           @click="attr('is_creating') ? store() : update()"
         >
-          <i v-if="attr('is_creating')" class="tim-icons icon-simple-add"></i>
-          <i v-else class="tim-icons icon-pencil"></i>
+          <transition name="fade" mode="out-in">
+            <semipolar-spinner
+              :animation-duration="2000"
+              :size="17"
+              color="#fff"
+              v-if="attr('is_mutation_loading')"
+            />
+            <span v-else class="pull-right ml-2" >
+              <i v-if="attr('is_creating')" class="tim-icons icon-simple-add"></i>
+              <i v-else class="tim-icons icon-pencil"></i>
+            </span>
+          </transition>
           {{ attr('is_creating') ? 'ذخیره' : 'بروز رسانی' }} {{ label }}
         </base-button>
       </md-dialog-actions>
@@ -213,6 +263,7 @@ import { validationMixin } from 'vuelidate'
 import { required, maxLength } from 'vuelidate/lib/validators'
 import initDatatable from '../mixins/initDatatable';
 import { FlipClock } from '@mvpleung/flipclock';
+import {SemipolarSpinner, HalfCircleSpinner, FingerprintSpinner} from 'epic-spinners'
 
 
 export default {
@@ -238,7 +289,10 @@ export default {
   components: {
     LineChart,
     ICountUp,
-    FlipClock
+    FlipClock,
+    SemipolarSpinner,
+    HalfCircleSpinner,
+    FingerprintSpinner
   },
   data() {
     return {
@@ -272,7 +326,7 @@ export default {
     {
       this.storeInServer({
         callback: ({data}) => {
-  
+
           if ( this.selected_node )
           {
             data.childs = []
@@ -281,7 +335,9 @@ export default {
           else
           {
             let arr = this.data()
-            arr.push(data)
+
+            data.childs = []
+            arr.unshift(data)
 
             this.setData( arr )
           }
@@ -301,6 +357,7 @@ export default {
 
           children[index].logo = data.logo;
           children[index].title = data.title;
+          children[index].icon = data.icon;
           children[index].description = data.description;
 
           this.setAttr('is_open', false)
@@ -313,6 +370,11 @@ export default {
       const children = parent.data.childs || parent.data;
       const index = children.findIndex(d => d.id === data.id);
       children.splice(index, 1);
+      
+      this.setAttr('counts', {
+        total: this.attr('counts').total - 1,
+        trash: this.attr('counts').trash + 1,
+      })
     },
   },
   validations: {
@@ -327,23 +389,26 @@ export default {
   computed: {
     title: bind('title'),
     description: bind('description'),
+    icon: bind('icon'),
 
     allQuery()
     {
       if ( this.data().length === 0 )
       {
         return `
-          title logo { id file_name thumb } childs {
-            id title logo { id file_name thumb } childs {
-              id title logo { id file_name thumb } childs {
-                id title logo { id file_name thumb } childs { id title }
+          title description icon logo { id file_name thumb } childs {
+            id title description icon logo { id file_name thumb } childs {
+              id title description icon logo { id file_name thumb } childs {
+                id title description icon logo { id file_name thumb } childs {
+                  id title description icon
+                }
               }
             }
           }
         `
       }
 
-      return `title description logo { id file_name thumb }`
+      return `title description icon logo { id file_name thumb }`
     }
   },
 }
@@ -351,6 +416,10 @@ export default {
 
 <style>
 
+.el-tree.group-tree img {
+  max-height: 40px;
+  margin-top: 5px !important;
+}
 .el-tree.group-tree .el-tree-node__children .el-tree-node__expand-icon {
   background: #878787;
   margin-right: 7px;
@@ -396,6 +465,15 @@ export default {
   padding: 0px;
   background: #fff;
   border-radius: 10px;
+}
+.el-tree.group-tree .group-info h4 {
+  margin-top: 7px;
+}
+.el-tree.group-tree .group-info p {
+  font-size: 10px;
+}
+.el-tree.group-tree .group-info .material-icons {
+  float: right;
 }
 .el-tree.group-tree .el-tree-node {
   padding: 15px 0px;
@@ -464,7 +542,7 @@ export default {
   transform: scale(1.01);
 }
 .el-tree.group-tree .operation-cell {
-  height: 50px;
+  height: 52px;
 }
 
 .custom-tree-node img {

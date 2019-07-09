@@ -1,4 +1,3 @@
-import DashboardLayout from "../layout/dashboard/DashboardLayout.vue";
 // GeneralViews
 import NotFound from "../pages/NotFoundPage.vue";
 
@@ -6,11 +5,6 @@ import NotFound from "../pages/NotFoundPage.vue";
 import Dashboard from "../pages/Dashboard.vue";
 import SiteSetting from "../pages/Setting/Site.vue";
 import UserSetting from "../pages/Setting/User.vue";
-import Notifications from "../pages/Notifications.vue";
-import Icons from "../pages/Icons.vue";
-import Maps from "../pages/Maps.vue";
-import Typography from "../pages/Typography.vue";
-import TableList from "../pages/TableList.vue";
 import Brand from '../pages/Feature/Brand.vue';
 import Size from '../pages/Feature/Size.vue';
 import Color from '../pages/Feature/Color.vue';
@@ -37,41 +31,15 @@ import User from '../pages/User/User.vue'
 import Role from '../pages/User/Role.vue'
 
 const routes = [
-  // {
-  //   path: "/panel",
-  //   component: DashboardLayout,
-  //   redirect: "/panel/dashboard",
-  // },
+  {
+    path: "/panel",
+    redirect: "/panel/product",
+  },
   {
     path: "/panel",
     name: "dashboard",
     component: Dashboard,
     meta: { index: 0, auth: true },
-  },
-  {
-    path: "/panel/notifications",
-    name: "notifications",
-    component: Notifications
-  },
-  {
-    path: "/panel/icons",
-    name: "icons",
-    component: Icons
-  },
-  {
-    path: "/panel/maps",
-    name: "maps",
-    component: Maps
-  },
-  {
-    path: "/panel/typography",
-    name: "typography",
-    component: Typography
-  },
-  {
-    path: "/panel/table-list",
-    name: "table-list",
-    component: TableList
   },
   {
     path: "/panel/brand",

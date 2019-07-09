@@ -3,6 +3,12 @@
 start of imporing fonts file
 ========================= */
 
+/* Import Material-icon font files */
+@font-face {
+    font-family: 'Material Icons';
+    src: url('../fonts/material.woff2') format('woff2'); /* Super Modern Browsers */
+}
+
 /* Import Roua font files */
 @font-face {
     font-family: 'Roya';

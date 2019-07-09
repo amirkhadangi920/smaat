@@ -28,8 +28,10 @@ class UserAddress extends Model implements AuditableContract
      */
     protected $fillable = [
         'city_id',
+        'full_name',
+        'phone_number',
         'type',
-        'adress',
+        'address',
         'postal_code',
         'coordinates'
     ];

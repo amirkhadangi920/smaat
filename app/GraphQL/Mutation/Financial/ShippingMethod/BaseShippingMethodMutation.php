@@ -31,6 +31,9 @@ class BaseShippingMethodMutation extends MainMutation
             'logo' => [
                 'type' => UploadType::getInstance()
             ],
+            'is_deleted_image' => [
+                'type' => Type::boolean()
+            ],
             'minimum' => [
                 'type' => Type::int()
             ],

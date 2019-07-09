@@ -13,33 +13,91 @@
       ref="datatable"
     >
       <template v-slot:writer-body="slotProps">
-        <div class="info-cell">
-          <div class="mb-2" v-if="rel === 'article'">
-            <img class="tilt" :src="slotProps.row.article.image ? slotProps.row.article.image.thumb : '/images/placeholder.png'" />
-            <span>{{ slotProps.row.article.title }}</span>
-          </div>
-          <div class="mb-2" v-if="rel === 'product'">
-            <img class="tilt" :src="slotProps.row.product.photos ? slotProps.row.product.photos.thumb : '/images/placeholder.png'" />
-            <span>{{ slotProps.row.product.name }}</span>
-          </div>
+        <table class="spec-feature-table">
+          <tbody>
+            <tr v-if="rel === 'article' && slotProps.row.article">
+              <td>
+                <img class="tilt" :src="slotProps.row.article.image ? slotProps.row.article.image.thumb : '/images/placeholder.png'" />
+              </td>
+              <td class="text-right">
+                <el-popover
+                  placement="top-end"
+                  width="300"
+                  trigger="hover"
+                  :disabled="typeof slotProps.row.article.title === 'string' ? slotProps.row.article.title.length <= 30 : false"
+                  :content="slotProps.row.article.title"
+                >
+                  <span slot="reference">{{ slotProps.row.article.title | truncate(30) }}</span>
+                </el-popover>
+              </td>
+            </tr>
 
-          <div>
-            <img class="tilt" :src="slotProps.row.writer.avatar ? slotProps.row.writer.avatar.thumb : '/images/placeholder-user.png'" />
-            <span>{{ slotProps.row.writer.full_name }}</span>
-          </div>
-        </div>
+            <tr v-if="rel === 'product' && slotProps.row.product">
+              <td>
+                <img class="tilt" :src="slotProps.row.product.photos && slotProps.row.product.photos.length ? slotProps.row.product.photos[0].thumb : '/images/placeholder.png'" />
+              </td>
+              <td class="text-right">
+                <el-popover
+                  placement="top-end"
+                  width="300"
+                  trigger="hover"
+                  :disabled="typeof slotProps.row.product.name === 'string' ? slotProps.row.product.name.length <= 30 : false"
+                  :content="slotProps.row.product.name"
+                >
+                  <span slot="reference">{{ slotProps.row.product.name | truncate(30) }}</span>
+                </el-popover>
+              </td>
+            </tr>
+            
+            <tr class="mt-2" v-if="slotProps.row.writer">
+              <td>
+                <img class="tilt" :src="slotProps.row.writer.avatar ? slotProps.row.writer.avatar.thumb : '/images/placeholder-user.png'" />
+              </td>
+              <td class="text-right">
+                <el-popover
+                  placement="top-end"
+                  width="300"
+                  trigger="hover"
+                  :disabled="typeof slotProps.row.writer.full_name === 'string' ? slotProps.row.writer.full_name.length <= 30 : false"
+                  :content="slotProps.row.writer.full_name"
+                >
+                  <span slot="reference">{{ slotProps.row.writer.full_name | truncate(30) }}</span>
+                </el-popover>
+
+                <span class="badge badge-warning" v-if="!slotProps.row.writer.full_name.trim()">کاربر ناشناس</span>
+              </td>
+            </tr>
+          </tbody>
+        </table>
       </template>
 
       <template v-slot:votes-body="slotProps">
-        <div :style="{ fontSize: '12px' }">
-          <el-tooltip :content="slotProps.row.votes.dislikes + ' بار پسندیده شده'" placement="left">
-            <p class="text-muted hvr-icon-bob" :style="{display: 'block'}"><i class="tim-icons icon-heart-2 text-default hvr-icon"></i> {{ slotProps.row.votes.dislikes }}</p>
-          </el-tooltip>
-
-          <el-tooltip :content="slotProps.row.votes.dislikes + ' بار نسپندیده شده'" placement="left">
-            <p class="text-muted hvr-icon-hang"><i class="tim-icons icon-heart-2 text-danger hvr-icon"></i> {{ slotProps.row.votes.likes }}</p>
-          </el-tooltip>
-        </div>
+        <table class="spec-feature-table">
+          <tr>
+            <td>
+              <i class="tim-icons icon-heart-2 text-default hvr-icon"></i>
+            </td>
+            <td class="text-right">
+              <el-tooltip :content="slotProps.row.votes.dislikes + ' بار پسندیده شده'" placement="left">
+                <p class="text-muted hvr-icon-bob" :style="{display: 'block'}">
+                  {{ slotProps.row.votes.dislikes }}
+                </p>
+              </el-tooltip>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <i class="tim-icons icon-heart-2 text-danger hvr-icon"></i>
+            </td>
+            <td class="text-right">
+              <el-tooltip :content="slotProps.row.votes.dislikes + ' بار نسپندیده شده'" placement="left">
+                <p class="text-muted hvr-icon-hang">
+                  {{ slotProps.row.votes.likes }}
+                </p>
+              </el-tooltip>
+            </td>
+          </tr>
+        </table>
       </template>
 
       <template #status-body="slotProps">
@@ -65,7 +123,7 @@
       <template #custom-buttons>
         <transition name="fade">
           <base-button
-            @click="accept_multiple"
+            @click.once="accept_multiple"
             v-show="attr('selected_items').length >= 1"
             :disabled="can(`accept-${type}`)"
             size="sm"
@@ -96,15 +154,15 @@
       <div class="md-dialog-content">
         <div class="p-2">
           <div class="row" :style="{ position: 'relative', zIndex: 1}">
-            <div class="col-6" v-if="rel === 'article'">
+            <div class="col-6" v-if="rel === 'article' && showing_info.article">
               <img class="header-image tilt" :src="showing_info.article.image ? showing_info.article.image.medium : '/images/placeholder.png'" />
               <p class="header-paragraph">
                 <i class="tim-icons icon-single-copy-04"></i>
                 {{ showing_info.article.title }}
               </p>
             </div>
-            <div class="col-6" v-if="rel === 'product'">
-              <img class="header-image tilt" :src="showing_info.product.photos && showing_info.product.photos.length ? showing_info.product.photos[0].medium : '/images/placeholder.png'" />
+            <div class="col-6" v-if="rel === 'product' && showing_info.product">
+              <img class="header-image tilt" :src="showing_info.product.photos && showing_info.product.photos.length ? showing_info.product.photos[0].thumb : '/images/placeholder.png'" />
               <p class="header-paragraph">
                 <i class="tim-icons icon-basket-simple"></i>
                 {{ showing_info.product.name }}
@@ -113,7 +171,7 @@
             <div class="col-6">
               <img class="header-image tilt" :src="showing_info.writer.avatar ? showing_info.writer.avatar.thumb : '/images/placeholder-user.png'" />
               <p class="header-paragraph">
-                <i class="tim-icons icon-user-run"></i>
+                <i class="tim-icons icon-single-02"></i>
                 {{ showing_info.writer.full_name }}
               </p>
             </div>
@@ -139,8 +197,8 @@
           </div>
           <hr/>
 
-          <div v-if="type === 'review' && false">
-            <div class="row">
+          <div v-if="type === 'review'">
+            <div class="row" v-if="false">
               <div class="col-12">
                 <h3 class="animated bounceInRight delay-first mb-0">
                   <i class="tim-icons icon-chart-bar-32" :style="{fontSize: '20px'}"></i>
@@ -171,7 +229,7 @@
                 </span>
               </div>                        
             </div>
-            <hr/>
+            <hr v-if="false" />
 
             <div class="row mt-3">
               <div class="col-6">
@@ -180,7 +238,7 @@
                   نکات مثبت
                 </h3>
 
-                <div v-if="showing_info.advantages">
+                <div v-if="showing_info.advantages && showing_info.advantages.length">
                   <span
                     :style="{ animationDelay: `${500 + index * 100}ms` }"
                     class="col-12 badge badge-success data-badge mb-2  animated bounceLeftUp"
@@ -189,9 +247,7 @@
                     {{ item }}
                   </span>
                 </div>
-                <span
-                  class="col-12 badge badge-warning data-badge mb-2"
-                  v-if="!showing_info.advantages">
+                <span v-else class="col-12 badge badge-warning data-badge mb-2">
                   هیچ نکته مثبتی ثبت نشده است :(
                 </span>
               </div>
@@ -202,7 +258,7 @@
                   نکات منفی
                 </h3>
 
-                <div v-if="showing_info.disadvantages">
+                <div v-if="showing_info.disadvantages && showing_info.disadvantages.length">
                   <span
                     :style="{ animationDelay: `${500 + index * 100}ms` }"
                     class="col-12 badge badge-danger data-badge mb-2 animated bounceRightUp"
@@ -211,9 +267,7 @@
                     {{ item }}
                   </span>
                 </div>
-                <span
-                  class="col-12 badge badge-primary data-badge mb-2"
-                  v-if="!showing_info.disadvantages">
+                <span v-else class="col-12 badge badge-primary data-badge mb-2">
                   هیچ نکته منفی ثبت نشده است :)
                 </span>
               </div>
@@ -231,6 +285,7 @@
             </div>
 
             <base-table
+              class="w-100"
               :tableData="showing_info.answers"
               :has_animation="false"
               :type="type"
@@ -252,6 +307,7 @@
                 }
               ]"
               :methods="{ deleteSingle: deleteAnswer }"
+              :canSelect="false"
               :canDelete="true"
               :canEdit="false"
               :has_loaded="true"
@@ -305,19 +361,15 @@
 </template>
 
 <script>
-import {Tooltip} from 'element-ui'
-import BaseTable from '../../components/BaseTable'
-import {BaseDropdown} from '../../components'
 import Datatable from '../../components/BaseDatatable.vue'
-import ICountUp from 'vue-countup-v2';
-import {mapActions, mapMutations} from 'vuex'
+import BaseTable from '../../components/BaseTable'
+
 import createMixin from '../../mixins/createMixin'
 import initDatatable from '../../mixins/initDatatable'
-import tilt from 'tilt.js'
-import {ElTree} from 'element-ui'
-import filtersHelper from '../../mixins/filtersHelper';
-import voca from 'voca'
 import deleteMixin from '../../mixins/deleteMixin';
+import filtersHelper from '../../mixins/filtersHelper';
+
+import voca from 'voca'
 
 export default {
   props: {
@@ -346,8 +398,6 @@ export default {
   },
   components: {
     Datatable,
-    BaseDropdown,
-    ICountUp,
     BaseTable
   },
   mixins: [
@@ -393,6 +443,8 @@ export default {
       this.$refs.datatable.closePanel();
     },
     accept(index, status, parent = false) {
+      this.setAttr('is_query_loading', true)
+
       var id = parent ? this.showing_info.answers[index].id : this.data()[index].id;
 
       axios.post(`/graphql/auth`, {
@@ -406,6 +458,8 @@ export default {
         `
       })
       .then(({data}) => {
+        this.setAttr('is_query_loading', false)
+
         if ( parent ) {
           // this.data()[index].answers[index].is_accept = status
         } else {
@@ -422,7 +476,10 @@ export default {
           horizontalAlign: 'left',
         })
       })
-      .catch( error => console.log(error) );
+      .catch( error => {
+        this.setAttr('is_query_loading', false)
+        console.log(error)
+      } );
     },
     deleteAnswer(index, row)
     {
@@ -445,6 +502,8 @@ export default {
       })
       .then(({value}) => {
         if (value) {
+          this.setAttr('is_query_loading', true)
+
           axios.post(`/graphql/auth`, {
             query: `mutation {
               create: ${ voca.camelCase(`create ${this.type}`) } (
@@ -467,6 +526,7 @@ export default {
             }`
           })
           .then(({data})=> {
+            this.setAttr('is_query_loading', false)
             this.showing_info.answers.unshift(data.data.create)
 
             this.$swal.fire({
@@ -477,19 +537,7 @@ export default {
               showConfirmButton: false,
             })
           })
-          .catch(error => {
-            if (error.response) {
-              this.$swal.fire({
-                title: 'خطایی رخ داد !',
-                text: error.response.data.message,
-                type: 'error',
-                timer: 5000,
-                confirmButtonText: 'بسیار خب :('
-              })
-            } else {
-              console.log(error)
-            }
-          });
+          .catch(this.errorResolver)
         }
       })
     },
@@ -524,6 +572,8 @@ export default {
         cancelButtonText: 'نه ، اشتباه شده'
       }).then((result) => {
         if (result.value) {
+          this.setAttr('is_query_loading', true)
+
           var ids = [];
           this.attr('selected_items').forEach( item => {
             ids = [...ids, this.data()[item].id]
@@ -532,7 +582,7 @@ export default {
           axios.post(`/graphql/auth`, {
             query: `
               mutation {
-                ${ voca.camelCase(`active ${this.type}`) } (ids: [${ids.join(',')}], status: ${this.acceptType}) {
+                ${ voca.camelCase(`accept ${this.type}`) } (ids: [${ids.join(',')}], status: ${this.acceptType}) {
                   status
                   message
                 }
@@ -540,6 +590,8 @@ export default {
             `
           })
           .then(({data})=> {
+            this.setAttr('is_query_loading', false)
+
             let used_status = this.acceptType;
             this.attr('selected_items').forEach(index => {
               this.data()[index].is_accept = used_status
@@ -558,6 +610,8 @@ export default {
 
           })
           .catch(error => {
+            this.setAttr('is_query_loading', false)
+
             if (error.response) {
               this.$swal.fire({
                 title: 'خطایی رخ داد !',
@@ -575,6 +629,8 @@ export default {
     },
     info(index, row)
     {
+      this.setAttr('is_query_loading', true)
+
       axios.get('/graphql/auth', {
         params: {
           query: `{ singleData: ${this.type} (id: ${row.id}) { ${this.fullInfoQuery} } }`
@@ -582,8 +638,9 @@ export default {
       }).then(({data}) => {
         this.showing_info = { ...row, ...data.data.singleData };
         this.showing_info.index = index;
-
         this.is_info_dialog_open = true;
+        
+        this.setAttr('is_query_loading', false)
       })
     },
   },
@@ -641,7 +698,6 @@ export default {
       ]
     },
 
-
     allQuery() {
       return `
         is_accept
@@ -668,6 +724,12 @@ export default {
 </script>
 
 <style>
+.md-dialog .data-table-row ul {
+  background: #f2f2f2;
+}
+.md-dialog .data-table-row .cavity-effect {
+  background: #fff;
+}
 .data-badge {
   font-size: 12px !important;
   white-space: unset !important;

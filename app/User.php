@@ -27,12 +27,13 @@ use App\Helpers\HasTenant;
 use Spatie\MediaLibrary\HasMedia\HasMedia;
 use Spatie\MediaLibrary\HasMedia\HasMediaTrait;
 use App\Helpers\MediaConversionsTrait;
+use Nicolaslopezj\Searchable\SearchableTrait;
 
 class User extends Authenticatable implements AuditableContract, HasMedia
 {
     use LaratrustUserTrait, HasApiTokens, Filterable, CreateTimeline;
     use Notifiable, SoftDeletes, HasTenant, Auditable;
-    use HasMediaTrait, MediaConversionsTrait;
+    use HasMediaTrait, MediaConversionsTrait, SearchableTrait;
 
     /****************************************
      **             Attributes
@@ -62,13 +63,34 @@ class User extends Authenticatable implements AuditableContract, HasMedia
      * @var array
      */
     protected $fillable = [
-        'city_id',
         'first_name',
         'last_name',
-        'social_links',
+        // 'social_links',
         'email',
         'password',
         'national_code',
+        'gender'
+    ];
+
+    /**
+     * Searchable rules.
+     * 
+     * Columns and their priority in search results.
+     * Columns with higher values are more important.
+     * Columns with equal values have equal importance.
+     *
+     * @var array
+     */
+    protected $searchable = [
+        'columns' => [
+            'first_name' => 10,
+            'last_name' => 10,
+            'email' => 10,
+            'national_code' => 10,
+        ],
+        'joins' => [
+            // 'brand_translations' => ['brands.id','brand_translations.brand_id'],
+        ],
     ];
     
     /**

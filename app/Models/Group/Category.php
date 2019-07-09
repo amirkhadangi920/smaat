@@ -56,6 +56,7 @@ class Category extends Model implements AuditableContract, HasMedia
      */
     protected $fillable = [
         'parent_id',
+        'icon',
         'is_active'
     ];
 
@@ -108,22 +109,7 @@ class Category extends Model implements AuditableContract, HasMedia
      * @var array
      */
     protected $casts = [
-        'scoring_feilds'    => 'array',
-        'is_active'         => 'boolean'
-    ];
-
-    /**
-     * The attributes that should be hidden for arrays.
-     *
-     * @var array
-     */
-    protected $hidden = [
-        'id',
-        'parent_id',
-        'deleted_at',
-        'created_at',
-        'updated_at',
-        'scoring_feilds'
+        'is_active' => 'boolean'
     ];
 
     /**

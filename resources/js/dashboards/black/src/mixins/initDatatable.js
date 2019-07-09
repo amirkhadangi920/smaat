@@ -27,9 +27,6 @@ export default {
           }`
         }
       })
-      // axios.get(`/api/v1/${this.type}`, {
-      //   params: this.filters
-      // })
       .then(({data}) => {
         this.setData(data.data.allData.data)
 
@@ -42,29 +39,19 @@ export default {
           labels: data.data.allData.chart.map(period => period.month),
           data: data.data.allData.chart.map(period => period.count)
         })
-
-        // if (data.links && data.links.next === null)
-        //   this.setAttr('has_more', false)
-
-      }).then(() => {
-        setTimeout(() => {
-          this.load(true)
-
-          $('.tilt').tilt({ scale: 1.1 })
-
-          anime({
-            targets: '.card i',
-            rotate: '1turn',
-            easing: 'linear',
-            loop: true,
-            duration: 200000,
-          })
-
-          setTimeout(() => {
-            this.createChart()
-          }, 100);
-        }, 500)
-      }).catch(error => console.log(error))
+      }).then(() => this.load(true))
+      .then(() => $('.tilt').tilt({ scale: 1.1 }))
+      .then(() => {
+        anime({
+          targets: '.card i',
+          rotate: '1turn',
+          easing: 'linear',
+          loop: true,
+          duration: 200000,
+        })
+      })
+      .then(() => this.createChart())
+      .catch(error => console.log(error))
     }
     else
     {
@@ -86,7 +73,6 @@ export default {
   },
   methods: {
     createChart() {
-
       let draw = Chart.controllers.line.prototype.draw;
       Chart.controllers.line = Chart.controllers.line.extend({
         draw: function () {
@@ -221,11 +207,9 @@ export default {
     selected(field) {
       return this.$store.state[this.group].selected[this.type][field]
     },
-
     load(status) {
       this.setAttr('has_loaded', status)
     },
-
     changeTableData() {
       axios.get(`/api/v1/${this.type}`, {
         params: this.attr('filters')
@@ -239,49 +223,57 @@ export default {
         }, 500);
       })
     },
-
-    loadMore() {
-      this.setPage({
-        type: this.type,
-        page: this.$store.state.feature.page[this.type] + 1
-      })
-      this.setLoadingSatus({
-        type: this.type,
-        status: true
-      })
-
-      axios.get(`/api/v1/${this.type}`, {
+    handlePagination(page)
+    {
+      axios.get('/graphql/auth', {
         params: {
-          page: this.$store.state.feature.page[this.type],
-        },
-      }).then(({
-        data
-      }) => {
-        setTimeout(() => {
-          if (data.links.next === null) {
-            this.setHasMoreStatus({
-              type: this.type,
-              status: false
-            })
-          }
+          query: `{
+            allData: ${this.plural} (page: ${page}) {
+              data {
+                id ${this.allQuery}
+                ${ this.attr('has_timestamps') ? 'created_at updated_at' : ''}
+              }
+              total
+            }
+          }`
+        }
+      })
+      .then(({data}) => {
+        this.setData(data.data.allData.data)
 
-          var time = 0;
-          data.data.forEach(item => {
-            setTimeout(() => {
-              this.setFeature({
-                type: this.type,
-                data: [...this.$store.state.feature[this.type], item]
-              })
-            }, time)
-            time += 200;
-          });
+        this.setAttr('counts', { total: data.data.allData.total })
 
-          this.setLoadingSatus({
-            type: this.type,
-            status: false
-          })
-        }, 300)
-      });
+        this.setAttr('page', page)
+      })
+      .then(() => this.load(true) )
+      .catch(error => console.log(error))
     },
+    handleSearch(query)
+    {
+      if ( query.length >= 3 || query.length === 0  )
+      {
+        axios.get('/graphql/auth', {
+          params: {
+            query: `{
+              allData: ${this.plural} (query: "${query}") {
+                data {
+                  id ${this.allQuery}
+                  ${ this.attr('has_timestamps') ? 'created_at updated_at' : ''}
+                }
+                total
+              }
+            }`
+          }
+        })
+        .then(({data}) => {
+          this.setData(data.data.allData.data)
+          this.setAttr('counts', { total: data.data.allData.total })
+          this.setAttr('page', 1)
+        })
+        .then(() => this.load(true) )
+        .catch(error => console.log(error))
+      }
+
+    }
   },
 };

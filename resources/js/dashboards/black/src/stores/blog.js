@@ -25,6 +25,16 @@ export default {
             comment: false,
         },
 
+        is_mutation_loading: {
+            article: false,
+            comment: false,
+        },
+
+        is_query_loading: {
+            article: false,
+            comment: false,
+        },
+
         is_open: {
             article: false,
             comment: false,

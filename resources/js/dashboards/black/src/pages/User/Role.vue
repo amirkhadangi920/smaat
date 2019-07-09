@@ -10,7 +10,8 @@
       edit: edit,
       store: store,
       update: update
-    }"  
+    }"
+    :ignoreOperations="ignoreOperations"
     ref="datatable"
   > 
     <template #permissions_count-body="slotProps">
@@ -84,6 +85,9 @@ export default {
     Binding,
     validationMixin
   ],
+  metaInfo: {
+    title: 'نقش ها',
+  },
   data() {
     
     return {
@@ -91,6 +95,7 @@ export default {
       type: 'role',
       group: 'user',
       label: 'نقش',
+      ignoreOperations: ['1']
     }
   },
   validations: {

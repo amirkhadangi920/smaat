@@ -19,7 +19,8 @@
     </template>
 
     <template v-slot:cost-body="slotProps">
-      {{ slotProps.row.cost | comma }}
+      <p v-if="slotProps.row.cost">{{ slotProps.row.cost | comma }} <span class="text-muted text-small" :style="{fontSize: '10px'}">تومان</span></p>
+      <span v-else class="badge badge-success">رایگان</span>
     </template>
 
     <template slot="modal">
@@ -48,11 +49,10 @@
               :auto-upload="false"
               :show-file-list="false"
               :on-change="addImage">
-              <img
-                v-if="$store.state[group].form[type].logo.url"
-                :src="$store.state[group].form[type].logo.url"
-                class="avatar"
-              />
+              <div v-if="$store.state[group].form[type].logo.url">
+                <img :src="$store.state[group].form[type].logo.url" class="avatar" />
+                <i @click.prevent="deleteImage" class="el-icon-delete avatar-uploader-icon"></i>
+              </div>
               <i v-else class="el-icon-plus avatar-uploader-icon"></i>
             </el-upload>
             <small slot="helperText" id="emailHelp" class="form-text text-muted">لوگوی مورد نظر خود را انتخاب کنید</small>
@@ -83,26 +83,18 @@
 </template>
 
 <script>
-import {Tooltip} from 'element-ui'
-import {BaseDropdown} from '../../components'
 import Datatable from '../../components/BaseDatatable.vue'
-import ICountUp from 'vue-countup-v2';
-import {mapActions, mapMutations} from 'vuex'
+
 import createMixin from '../../mixins/createMixin'
 import filtersHelper from '../../mixins/filtersHelper.js'
 import initDatatable from '../../mixins/initDatatable'
-import tilt from 'tilt.js'
-
 import Binding, { bind } from '../../mixins/binding'
-
 import { validationMixin } from 'vuelidate'
 import { required, maxLength } from 'vuelidate/lib/validators'
 
 export default {
   components: {
     Datatable,
-    BaseDropdown,
-    ICountUp
   },
   mixins: [
     Binding,
@@ -111,12 +103,15 @@ export default {
     createMixin,
     filtersHelper
   ],
+  metaInfo: {
+    title: 'روش های ارسال کالا',
+  },
   data() {
     return {
         plural: 'shipping_methods',
         type: 'shipping_method',
         group: 'shop',
-        label: 'متد ارسال'
+        label: 'روش ارسال'
     }
   },
   validations: {
@@ -133,9 +128,6 @@ export default {
     minimum: {
       required
     }
-  },
-  methods: {
-    
   },
   computed: {
     name: bind('name'),

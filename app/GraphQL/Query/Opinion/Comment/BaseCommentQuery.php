@@ -15,4 +15,9 @@ class BaseCommentQuery extends MainQuery
     {
         return $this->checkPermission('read-comment');
     }
+
+    public function applyFilters($args, $data)
+    {
+        $data->where('parent_id', null);
+    }
 }

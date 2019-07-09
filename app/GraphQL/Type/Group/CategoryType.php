@@ -34,6 +34,9 @@ class CategoryType extends BaseType
                 'type' => Type::string(),
                 'selectable' => false
             ],
+            'icon' => [
+                'type' => Type::string(),
+            ],
             'parent' => $this->relationItemField('category'),
             'logo' => $this->imageField(),
             'childs' => $this->relationListField('category'),

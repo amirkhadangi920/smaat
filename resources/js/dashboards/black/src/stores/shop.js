@@ -50,6 +50,20 @@ export default {
             discount: false,
         },
         
+        is_mutation_loading: {
+            shipping_method: false,
+            order_status: false,
+            order: false,
+            discount: false,
+        },
+        
+        is_query_loading: {
+            shipping_method: false,
+            order_status: false,
+            order: false,
+            discount: false,
+        },
+        
         is_incrementing: {
             order: true 
         },
@@ -177,6 +191,10 @@ export default {
                     file: null,
                     url: ''
                 },
+                is_deleted_image: {
+                    type: 'Boolean',
+                    value: false
+                }
             },
             order_status: {
                 title: {
@@ -188,6 +206,10 @@ export default {
                     value: ''
                 },
                 color: {
+                    type: 'String',
+                    value: ''
+                },
+                icon: {
                     type: 'String',
                     value: ''
                 },
@@ -220,6 +242,10 @@ export default {
                     file: null,
                     url: ''
                 },
+                is_deleted_image: {
+                    type: 'Boolean',
+                    value: false
+                }
                 // items: {
                 //     type: '[Int]',
                 //     value: [],

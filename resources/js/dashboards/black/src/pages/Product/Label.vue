@@ -55,11 +55,10 @@
 
 <script>
 import Datatable from '../../components/BaseDatatable.vue'
+
 import createMixin from '../../mixins/createMixin'
 import initDatatable from '../../mixins/initDatatable'
-
 import Binding, { bind } from '../../mixins/binding'
-
 import { validationMixin } from 'vuelidate'
 import { required, maxLength } from 'vuelidate/lib/validators'
 
@@ -73,6 +72,9 @@ export default {
     Binding,
     validationMixin
   ],
+  metaInfo: {
+    title: 'لیبل وضعیت محصول',
+  },
   data() {
     return {
         type: 'label',
@@ -87,7 +89,7 @@ export default {
       maxLength: maxLength(50)
     },
     description: {
-      maxLength: maxLength(255)
+      maxLength: maxLength(250)
     },
     color: {
       // 

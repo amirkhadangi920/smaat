@@ -50,6 +50,7 @@ class SpecRow extends Model implements AuditableContract
      */
     protected $fillable = [
         'spec_header_id',
+        'icon',
         'is_detailable',
         'is_filterable',
         'is_multiple',

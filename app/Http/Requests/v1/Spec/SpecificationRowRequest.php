@@ -25,6 +25,7 @@ class SpecificationRowRequest extends MainRequest
                 'max:50',
                 new UniqueInSpec('spec_rows', $args, 'spec_header_id')
             ],
+            'icon'                      => 'nullable|string|max:50',
             'description'               => 'nullable|string|max:255',
             'label'                     => 'nullable|string|max:50',
             'values'                    => 'nullable|array',

@@ -19,6 +19,12 @@ class UserAddressRequest extends MainRequest
         return [
             'city_id'       => 'required|integer|exists:cities,id',
             'type'          => 'required|string|max:20',
+            'full_name'     => 'required|string|max:50',
+            'phone_number'  => [
+                'required',
+                'string',
+                'regex:/09(1[0-9]|3[1-9]|2[1-9]0[1-9])-?[0-9]{3}-?[0-9]{4}/',
+            ],
             'address'       => [
                 'required',
                 'string',

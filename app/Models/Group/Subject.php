@@ -46,6 +46,7 @@ class Subject extends Model implements AuditableContract, HasMedia
      */
     protected $fillable = [
         'parent_id',
+        'icon',
         'is_active'
     ];
 

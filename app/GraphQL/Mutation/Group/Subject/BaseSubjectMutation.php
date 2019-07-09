@@ -29,6 +29,12 @@ class BaseSubjectMutation extends MainMutation
             'description' => [
                 'type' => Type::string()
             ],
+            'icon' => [
+                'type' => Type::string()
+            ],
+            'is_deleted_image' => [
+                'type' => Type::boolean()
+            ],
             'logo' => [
                 'type' => UploadType::getInstance()
             ],

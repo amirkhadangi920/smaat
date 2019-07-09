@@ -38,6 +38,9 @@ class BaseSpecRowMutation extends MainMutation
             'help' => [
                 'type' => Type::string()
             ],
+            'icon' => [
+                'type' => Type::string()
+            ],
             'is_multiple' => [
                 'type' => Type::boolean()
             ],

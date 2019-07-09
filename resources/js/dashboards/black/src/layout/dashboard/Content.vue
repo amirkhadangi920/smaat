@@ -317,4 +317,5 @@ export default {
 .white-content .main-panel {
   background: #eff6ff !important;
 }
+
 </style>

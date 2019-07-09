@@ -30,6 +30,7 @@ class OrderStatus extends Model implements AuditableContract
      */
     protected $fillable = [
         'color',
+        'icon',
         'is_active'
     ];
     
@@ -72,6 +73,7 @@ class OrderStatus extends Model implements AuditableContract
         'title',
         'description',
         'color',
+        'icon',
         'is_active'
     ];
 

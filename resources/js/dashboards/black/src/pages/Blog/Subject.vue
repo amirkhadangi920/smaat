@@ -7,6 +7,9 @@ import Datatree from '../../components/BaseDatatree'
 
 export default {
   components: { Datatree },
+  metaInfo: {
+    title: 'موضوعات',
+  },
   data() {
     return {
       plural: 'subjects',

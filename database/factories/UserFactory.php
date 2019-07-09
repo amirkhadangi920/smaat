@@ -45,6 +45,7 @@ $factory->define(App\User::class, function () use($faker , $avatars) {
         // 'address'           => nullable( $faker->address ),
         // 'postal_code'       => nullable( $faker->postcode ),
         'national_code'     => nullable( '0'.$faker->numberBetween(910000000, 959999999) ),
+        'gender'            => nullable( $faker->boolean() ),
         // 'type'              => 0,
         'remember_token'    => str_random(10),
         'last_purchase'     => nullable( $faker->dateTimeBetween('-3 years', 'now') ),

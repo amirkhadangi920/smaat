@@ -31,6 +31,9 @@ class SubjectType extends BaseType
                 'type' => Type::string(),
                 'selectable' => false
             ],
+            'icon' => [
+                'type' => Type::string(),
+            ],
             'parent' => $this->relationItemField('subject'),
             'childs' => $this->relationListField('subject'),
             'logo' => $this->imageField(),

@@ -18,7 +18,11 @@ class SiteSettingRequest extends MainRequest
         return [
             'title'                 => 'filled|string|max:50',
             'description'           => 'nullable|string|max:250',
-            'phone'                 => ['nullable', 'string', 'regex:/09(1[0-9]|3[1-9]|2[1-9])-?[0-9]{3}-?[0-9]{4}/'],
+            'phone'                 => [
+                'nullable',
+                'string',
+                'regex:/09(1[0-9]|3[1-9]|2[1-9]|0[1-9])-?[0-9]{3}-?[0-9]{4}/',
+            ],
             'address'               => 'nullable|string|max:250',
             'theme_color'           => ['nullable', 'regex:/^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/'],
             'is_active'             => 'nullable|boolean',

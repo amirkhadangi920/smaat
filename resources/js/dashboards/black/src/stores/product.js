@@ -47,6 +47,22 @@ export default {
             // 
         },
 
+        is_mutation_loading: {
+            product: false,
+            label: false,
+            variation: false,
+            review: false,
+            question_and_answer: false,
+        },
+        
+        is_query_loading: {
+            product: false,
+            label: false,
+            variation: false,
+            review: false,
+            question_and_answer: false,
+        },
+
         is_open: {
             product: false,
             label: false,

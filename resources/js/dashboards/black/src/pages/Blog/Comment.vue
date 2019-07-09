@@ -44,6 +44,9 @@ export default {
   components: {
     BaseOpinion
   },
+  metaInfo: {
+    title: 'نظرات کاربران',
+  },
   data() {
     return {
       type: 'comment',

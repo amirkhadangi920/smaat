@@ -39,6 +39,7 @@ class SingleMediaType extends GraphQLType
             'medium' => $this->imageType('medium'),
             'large' => $this->imageType('large'),
             'wide' => $this->imageType('wide'),
+            'watermark' => $this->imageType('watermark'),
         ];
     }
 
@@ -58,6 +59,8 @@ class SingleMediaType extends GraphQLType
         $file = pathinfo($image->file_name ?? $image->name);
 
         $ext = $file['extension'] ?? 'jpg';
+
+        if ( $ext === 'jpeg') $ext = 'jpg';
                     
         return "/uploads/images/{$image->id}/conversions/{$file['filename']}-{$type}.{$ext}";
     }

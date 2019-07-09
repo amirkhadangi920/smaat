@@ -53,10 +53,10 @@ class MainMutation extends Mutation
         $result = false;
 
         if ( $args['id'] ?? false )
-            $result = $this->model::where('id', $args['id'] ?? false)->delete();
+            $result = $this->model::whereNotNull('tenant_id')->where('id', $args['id'] ?? false)->delete();
 
         elseif ( $args['ids'] ?? false )
-            $result = $this->model::whereIn('id', $args['ids'] ?? false)->delete();
+            $result = $this->model::whereNotNull('tenant_id')->whereIn('id', $args['ids'] ?? false)->delete();
         
         return [
             'status' => $result ? 200 : 400,
@@ -75,10 +75,10 @@ class MainMutation extends Mutation
         $result = false;
 
         if ( $args['id'] ?? false )
-            $model = $this->model::where('id', $args['id'] ?? false);
+            $model = $this->model::whereNotNull('tenant_id')->where('id', $args['id'] ?? false);
 
         elseif ( $args['ids'] ?? false )
-            $model = $this->model::whereIn('id', $args['ids'] ?? false);
+            $model = $this->model::whereNotNull('tenant_id')->whereIn('id', $args['ids'] ?? false);
 
 
         if ( $model ?? false )
@@ -135,6 +135,8 @@ class MainMutation extends Mutation
             $model->addMedia( $request->get( $this->image_field ) )
                   ->toMediaCollection( $this->image_field );
         }
+        elseif ( isset($this->image_field) && $request->get('is_deleted_image') )
+            $model->clearMediaCollection( $this->image_field );
 
         return $model;
     }
@@ -160,7 +162,7 @@ class MainMutation extends Mutation
      */
     public function getModel($data)
     {
-        return $this->model::findOrFail($data);
+        return $this->model::whereNotNull('tenant_id')->findOrFail($data);
     }
 
     /**

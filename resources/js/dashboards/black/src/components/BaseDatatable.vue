@@ -1,228 +1,272 @@
 <template>
-  <transition name="fade">
-    <div v-show="attr('has_loaded')">
-      <div class="row mb-3" :style="{ position: 'relative', zIndex: 2 }">
-        <div class="row col-12">
-          <div class="col-12 text-right">
-            <div class="pull-right">
-              <h1 class="animated bounceInRight delay-first" :style="{ color: '#fff', fontWeight: 'bold', textShadow: '0px 3px 15px #333' }">
-                مدیریت <span :style="{ color: '#ff3d3d' }">{{ label }}</span> ها
-                <i class="tim-icons icon-align-left-2" :style="{fontSize: '25px'}"></i>
-              </h1>
-              <h6 class="text-muted animated bounceInRight delay-secound">با استفاده از جدول زیر ، امکان مدیریت کامل {{ label }} های وبسایت برای شما ممکن خواهد شد</h6>
-            </div>
-            <div class="pull-left animated bounceInDown delay-last">
-              <flip-clock :options="{
-                label: false,
-                clockFace: 'TwentyFourHourClock'
-              }" />
+  <div>
+    <transition name="fade" mode="out-in">
+      <div v-show="attr('has_loaded')">
+        <div class="row mb-3" :style="{ position: 'relative', zIndex: 2 }">
+          <div class="row col-12">
+            <div class="col-12 text-right">
+              <div class="pull-right">
+                <h1 class="animated bounceInRight delay-first" :style="{ color: '#fff', fontWeight: 'bold', textShadow: '0px 3px 15px #333' }">
+                  مدیریت <span :style="{ color: '#ff3d3d' }">{{ label }}</span> ها
+                  <i class="header-nav-icon tim-icons icon-align-left-2" :style="{fontSize: '25px'}"></i>
+                </h1>
+                <h6 class="header-description animated bounceInRight delay-secound">با استفاده از جدول زیر ، امکان مدیریت کامل {{ label }} های وبسایت برای شما ممکن خواهد شد</h6>
+              </div>
+              <div class="pull-left animated bounceInDown delay-last">
+                <flip-clock :options="{
+                  label: false,
+                  clockFace: 'TwentyFourHourClock'
+                }" />
+              </div>
             </div>
           </div>
         </div>
-      </div>
 
-      <transition name="fade">
-        <slot name="charts">
-          <div class="row details mb-3" :style="{ position: 'relative', zIndex: 2 }" dir="rtl">
-            <div class="col-md-3">
-              <div class="tilt">
-                <card class="text-right mb-4 animated bounceInLeft delay-secound total-card" :style="{ marginBottom: '32px !important', transformStyle: 'preserve-3d' }">
-                  <i class="tim-icons icon-attach-87"></i>
-                  <h5 class="card-category" style="transform: translateZ(20px)">کل {{ label }} های موجود</h5>
-                  <h3 class="card-title" style="transform: translateZ(30px)">
-                    <ICountUp
-                      style="transform: translateZ(30px)"
-                      :endVal="attr('counts').total"
-                      :options="{
-                        useEasing: true,
-                        useGrouping: true,
-                        separator: ',',
-                        suffix: ' ' + label
-                      }"
-                    />
-                  </h3>
-                  <p class="card-text text-muted" :style="{fontSize: '10px', transform: 'translateZ(15px)'}">تعداد {{ label }} هایی که تا کنون در وبسایت ثبت شده است</p>
-                </card>
-              </div>
-              <div class="tilt" :style="{ position: 'relative', top: '0px', right: '0px' }">
-                <card class="text-right mb-0 animated bounceInLeft delay-last responsive trash-card" :style="{ transformStyle: 'preserve-3d' }">
-                  <i class="tim-icons icon-trash-simple"></i>
-                  <h5 class="card-category" style="transform: translateZ(20px)">{{ label}} های حذف شده</h5>
-                  <h3 class="card-title" style="transform: translateZ(30px)">
-                    <ICountUp
-                      style="transform: translateZ(30px)"
-                      :endVal="attr('counts').trash"
-                      :options="{
-                        useEasing: true,
-                        useGrouping: true,
-                        separator: ',',
-                        suffix: ' ' + label
-                      }"
-                    />
-                  </h3>
-                  <p class="card-text text-muted" :style="{fontSize: '10px', transform: 'translateZ(15px)'}">تعداد {{ label }} هایی که تا کنون حذف کرده اید</p>
-                </card>
-              </div>
-            </div>
-
-            <div class="col-md-9 text-right animated bounceInRight delay-secound chart-card">
-              <card type="chart" class="mb-3">
-                <template slot="header">
-                  <h5 class="card-category">نمودار زمانی ثبت {{ label }} ها</h5>
-                </template>
-                <div class="chart-area">
-                  <canvas id="myChart" height="100%"></canvas>
+        <transition name="fade">
+          <slot name="charts">
+            <div class="row details mb-3" :style="{ position: 'relative', zIndex: 2 }" dir="rtl">
+              <div class="col-md-3">
+                <div class="tilt">
+                  <card class="text-right mb-4 animated bounceInLeft delay-secound total-card" :style="{ marginBottom: '32px !important', transformStyle: 'preserve-3d' }">
+                    <i class="tim-icons icon-attach-87"></i>
+                    <h5 class="card-category" style="transform: translateZ(20px)">کل {{ label }} های موجود</h5>
+                    <h3 class="card-title" style="transform: translateZ(30px)">
+                      <ICountUp
+                        style="transform: translateZ(30px)"
+                        :endVal="attr('counts').total"
+                        :options="{
+                          useEasing: true,
+                          useGrouping: true,
+                          separator: ',',
+                          suffix: ' ' + label
+                        }"
+                      />
+                    </h3>
+                    <p class="card-text text-muted" :style="{fontSize: '10px', transform: 'translateZ(15px)'}">تعداد {{ label }} هایی که تا کنون در وبسایت ثبت شده است</p>
+                  </card>
                 </div>
-                <!-- <div class="chart-area" :style="{ height: '60px', position: 'absolute', top: '0px', right: '0px' }">
-                  <canvas id="miniChart" height="100%"></canvas>
-                </div> -->
-              </card>
+                <div class="tilt" :style="{ position: 'relative', top: '0px', right: '0px' }">
+                  <card class="text-right mb-0 animated bounceInLeft delay-last responsive trash-card" :style="{ transformStyle: 'preserve-3d' }">
+                    <i class="tim-icons icon-trash-simple"></i>
+                    <h5 class="card-category" style="transform: translateZ(20px)">{{ label}} های حذف شده</h5>
+                    <h3 class="card-title" style="transform: translateZ(30px)">
+                      <ICountUp
+                        style="transform: translateZ(30px)"
+                        :endVal="attr('counts').trash"
+                        :options="{
+                          useEasing: true,
+                          useGrouping: true,
+                          separator: ',',
+                          suffix: ' ' + label
+                        }"
+                      />
+                    </h3>
+                    <p class="card-text text-muted" :style="{fontSize: '10px', transform: 'translateZ(15px)'}">تعداد {{ label }} هایی که تا کنون حذف کرده اید</p>
+                  </card>
+                </div>
+              </div>
+
+              <div class="col-md-9 text-right animated bounceInRight delay-secound chart-card">
+                <card type="chart" class="mb-3">
+                  <template slot="header">
+                    <h5 class="card-category">نمودار زمانی ثبت {{ label }} ها</h5>
+                  </template>
+                  <div class="chart-area">
+                    <canvas id="myChart" height="100%"></canvas>
+                  </div>
+                  <!-- <div class="chart-area" :style="{ height: '60px', position: 'absolute', top: '0px', right: '0px' }">
+                    <canvas id="miniChart" height="100%"></canvas>
+                  </div> -->
+                </card>
+              </div>
+            </div>
+          </slot>
+        </transition>
+
+        <div class="row table">
+          <div class="w-100">
+            <div class="animated bounceInLeft delay-secound mt-2 pull-right" v-if="false">
+              <el-tooltip content="نمای جدول">
+                <i class="tim-icons icon-bullet-list-67"></i>
+              </el-tooltip>
+              <el-switch 
+                v-model="layout"
+                @change="changeLayout"
+                active-color="#133051"
+                inactive-color="#254c78">
+              </el-switch>
+              <el-tooltip content="نمای کارد">
+                <i class="tim-icons icon-components"></i>
+              </el-tooltip>
+            </div>
+
+            <div class="animated bounceInLeft delay-secound">
+              <input type="text" v-if="canSearch" :value="filter('query')" @keyup.enter="search" dir="rtl" class="pull-right form-control col-3 ml-2 d-inline-block" placeholder="جستجو کنید ...">
+
+              <base-button @click="methods.create" v-if="canCreate" :disabled="can(`create-${type}`)" size="sm" :type="can(`create-${type}`) ? 'info' : 'success'">
+                افزودن {{ label }} جدید
+                <i class="tim-icons icon-simple-add"></i>
+              </base-button>
+              
+              <transition name="fade">
+                <base-button @click="handleDeleteMultiple" v-if="canDelete" v-show="attr('selected_items').length >= 1" size="sm" type="danger">
+                  حذف
+                  <ICountUp
+                    :style="{display: 'inline'}"
+                    :endVal="attr('selected_items').length"
+                    :options="{
+                      useEasing: true,
+                      useGrouping: true,
+                    }"
+                  />
+                  مورد انتخاب شده
+                  <i class="tim-icons icon-trash-simple"></i>
+                </base-button>
+              </transition>
+
+              <slot name="custom-buttons"></slot>
             </div>
           </div>
-        </slot>
-      </transition>
+        </div>
 
-      <div class="row table">
-        <div class="col-12">
-          <div class="animated bounceInLeft delay-secound mt-2 pull-right">
-            <el-tooltip content="نمای جدول">
-              <i class="tim-icons icon-bullet-list-67"></i>
-            </el-tooltip>
-            <el-switch 
-              v-model="layout"
-              @change="changeLayout"
-              active-color="#133051"
-              inactive-color="#254c78">
-            </el-switch>
-            <el-tooltip content="نمای کارد">
-              <i class="tim-icons icon-components"></i>
-            </el-tooltip>
+        <!-- <div class="row">
+          <transition name="fade">
+            <div class="col-12 pt-3 animated bounceInLeft delay-last filters-row" v-show="attr('has_loaded')" dir="rtl">
+              <slot name="filter-labels"></slot>
+            </div>
+          </transition>
+        </div> -->
 
+        <base-table
+          :tableData="data()"
+          :type="type"
+          :group="group"
+          :label="label"
+          :fields="fields"
+          :methods="methods"
+          :canDelete="canDelete"
+          :canEdit="canEdit"
+          :ignoreOperations="ignoreOperations"
+          :has_loaded="attr('has_loaded')"
+          :is_grid_view="attr('is_grid_view')"
+          :has_times="true"
+          :has_operation="true"
+        >
+          <template 
+            v-for="(item, index) in fields"
+            :slot="`${item.field}-header`"
+            slot-scope="slotData"
+          >
+            <slot
+              :name="`${item.field}-header`"
+              v-bind="slotData"
+            />
+          </template>
+        
+          <template 
+            v-for="(item, index) in fields"
+            :slot="`${item.field}-body`"
+            slot-scope="slotData"
+          >
+            <slot
+              :name="`${item.field}-body`"
+              v-bind="slotData"
+            />
+          </template>
 
-            <input type="text" v-if="canSearch" :value="filter('query')" @keyup.enter="search" dir="rtl" class="form-control col-3 ml-2 d-inline-block" placeholder="جستجو کنید ...">
+          <template #custom-operations="slotProps">
+            <slot
+              name="custom-operations"
+              :row="slotProps.row"
+              :index="slotProps.index"
+            />
+          </template>
+        </base-table>
+
+        <el-pagination
+          v-if="attr('counts').total > 10"
+          dir="rtl"
+          class="text-center"
+          :hide-on-single-page="false"
+          layout="prev, pager, next"
+          :current-page="attr('page')"
+          :total="attr('counts').total"
+          @current-change="$parent.handlePagination"
+        >
+        </el-pagination>
+
+        <md-dialog :md-active.sync="$store.state[group].is_open[type]" class="text-right" dir="rtl">
+          <md-dialog-title>
+            <h2 class="modal-title">
+              {{ attr('is_creating') ? 'ثبت ' + label : 'ویرایش ' + label }}
+            </h2>
+            <p>از طریق فرم زیر میتوانید {{ label }} {{ attr('is_creating') ? 'جدید ثبت کنید' : 'مورد نظر خود را ویرایش کنید' }}</p>
+          </md-dialog-title>
+
+          <div class="md-dialog-content">
+            <div class="p-2">
+              <form @submit.prevent>
+                <slot name="modal"></slot>
+              </form>
+            </div>
           </div>
 
-          <div class="animated bounceInLeft delay-secound pull-left">
-            <base-button @click="methods.create" v-if="canCreate" :disabled="can(`create-${type}`)" size="sm" :type="can(`create-${type}`) ? 'info' : 'success'">
-              افزودن {{ label }} جدید
-              <i class="tim-icons icon-simple-add"></i>
+          <md-dialog-actions>
+            <base-button
+              class="ml-2"
+              type="danger"
+              size="sm"
+              @click="setAttr('is_open', false)"
+            >
+              <i class="tim-icons icon-simple-remove"></i>
+              لغو
             </base-button>
             
-            <transition name="fade">
-              <base-button @click="handleDeleteMultiple" v-if="canDelete" v-show="attr('selected_items').length >= 1" size="sm" type="danger">
-                حذف
-                <ICountUp
-                  :style="{display: 'inline'}"
-                  :endVal="attr('selected_items').length"
-                  :options="{
-                    useEasing: true,
-                    useGrouping: true,
-                  }"
+            <base-button
+              size="sm" 
+              :loading="attr('is_mutation_loading')"
+              :type="attr('is_creating') ? 'success' : 'warning'"
+              @click="attr('is_creating') ? methods.store() : methods.update()"
+            >
+              <transition name="fade" mode="out-in">
+                <semipolar-spinner
+                  :animation-duration="2000"
+                  :size="17"
+                  color="#fff"
+                  v-if="attr('is_mutation_loading')"
                 />
-                مورد انتخاب شده
-                <i class="tim-icons icon-trash-simple"></i>
-              </base-button>
-            </transition>
-
-            <slot name="custom-buttons"></slot>
-          </div>
-        </div>
+                <span v-else class="pull-right ml-2" >
+                  <i v-if="attr('is_creating')" class="tim-icons icon-simple-add"></i>
+                  <i v-else class="tim-icons icon-pencil"></i>
+                </span>
+              </transition>
+              {{ attr('is_creating') ? 'ذخیره' : 'بروز رسانی' }} {{ label }}
+            </base-button>
+          </md-dialog-actions>
+        </md-dialog>
       </div>
+    </transition>
 
-      <div class="row">
-        <transition name="fade">
-          <div class="col-12 pt-3 animated bounceInLeft delay-last filters-row" v-show="attr('has_loaded')" dir="rtl">
-            <slot name="filter-labels"></slot>
-          </div>
-        </transition>
+    <transition name="fade">
+      <div class="main-panel-loading" v-if="!attr('has_loaded')">
+        <fingerprint-spinner
+          :animation-duration="1000"
+          :size="100"
+          color="#fff"
+        />
       </div>
+    </transition>
 
-      <base-table
-        :tableData="data()"
-        :type="type"
-        :group="group"
-        :label="label"
-        :fields="fields"
-        :methods="methods"
-        :canDelete="canDelete"
-        :canEdit="canEdit"
-        :has_loaded="attr('has_loaded')"
-        :is_grid_view="attr('is_grid_view')"
-        :has_times="true"
-        :has_operation="true"
-      >
-
-        <template 
-          v-for="(item, index) in fields"
-          :slot="`${item.field}-header`"
-          slot-scope="slotData"
-        >
-          <slot
-            :name="`${item.field}-header`"
-            v-bind="slotData"
-          />
-        </template>
-      
-        <template 
-          v-for="(item, index) in fields"
-          :slot="`${item.field}-body`"
-          slot-scope="slotData"
-        >
-          <slot
-            :name="`${item.field}-body`"
-            v-bind="slotData"
-          />
-        </template>
-
-        <template #custom-operations="slotProps">
-          <slot
-            name="custom-operations"
-            :row="slotProps.row"
-            :index="slotProps.index"
-          />
-        </template>
-      </base-table>
-
-      <md-dialog :md-active.sync="$store.state[group].is_open[type]" class="text-right" dir="rtl">
-        <md-dialog-title>
-          <h2 class="modal-title">
-            {{ attr('is_creating') ? 'ثبت ' + label : 'ویرایش ' + label }}
-          </h2>
-          <p>از طریق فرم زیر میتوانید {{ label }} {{ attr('is_creating') ? 'جدید ثبت کنید' : 'مورد نظر خود را ویرایش کنید' }}</p>
-        </md-dialog-title>
-
-        <div class="md-dialog-content">
-          <div class="p-2">
-            <form @submit.prevent>
-              <slot name="modal"></slot>
-            </form>
-          </div>
-        </div>
-
-        <md-dialog-actions>
-          <base-button
-            class="ml-2"
-            type="danger"
-            size="sm"
-            @click="setAttr('is_open', false)"
-          >
-            <i class="tim-icons icon-simple-remove"></i>
-            لغو
-          </base-button>
-          
-          <base-button
-            size="sm" 
-            :type="attr('is_creating') ? 'success' : 'warning'"
-            @click="attr('is_creating') ? methods.store() : methods.update()"
-          >
-            <i v-if="attr('is_creating')" class="tim-icons icon-simple-add"></i>
-            <i v-else class="tim-icons icon-pencil"></i>
-            {{ attr('is_creating') ? 'ذخیره' : 'بروز رسانی' }} {{ label }}
-          </base-button>
-        </md-dialog-actions>
-      </md-dialog>
-    </div>
-  </transition>
+    <transition name="loading">
+      <div class="query-loader" v-if="attr('is_query_loading')">
+        <half-circle-spinner
+          :animation-duration="800"
+          :size="40"
+          color="#fff"
+        />
+      </div>
+    </transition>
+  </div>
 </template>
 
 <script>
@@ -238,6 +282,7 @@
   import Checkbox from './Checkbox.vue'
   import LineChart from '../components/Charts/LineChart';
   import { FlipClock } from '@mvpleung/flipclock';
+  import {SemipolarSpinner, HalfCircleSpinner, FingerprintSpinner} from 'epic-spinners'
   
   import * as chartConfigs from '../components/Charts/config';
   import config from '../config';
@@ -285,7 +330,11 @@
       },
       canSearch: {
         type: Boolean,
-        default: true
+        default: () => true
+      },
+      ignoreOperations: {
+        type: Array,
+        default: () => []
       },
       getdata: Array
     },
@@ -298,7 +347,10 @@
       BaseAlert,
       ICountUp,
       Checkbox,
-      FlipClock
+      FlipClock,
+      SemipolarSpinner,
+      HalfCircleSpinner,
+      FingerprintSpinner
     },
     mixins: [
         deleteMixin,
@@ -307,132 +359,18 @@
     ],
     data() {
       return {
-        bgColor: '#778899',
-        position: 'top-right',
-        fabActions: [
-          {
-            name: 'cache',
-            icon: 'cached'
-          },
-          {
-            name: 'alertMe',
-            icon: 'add_alert'
-          }
-        ],
-
         layout: this.attr('is_grid_view'),
         selected_items: this.attr('selected_items'),
         
         entered_count: 0,
         is_finished: false,
+        test_loading: false
       }
     },
-    created() {
-
-      return;
-
-      setTimeout( () => {
-        const startAt = 140
-        const endAt = 250
-        var setAnims = false
-        var frame, duration;
-
-        setInterval(() => {
-          // document.querySelector('.row.details').classList.toggle('small')          
-        }, 4000);
-
-
-        document.querySelector('.main-panel').addEventListener('scroll', (e) => {
-
-          if ( e.srcElement.scrollTop > startAt )
-          {
-            if ( !setAnims ) {
-              setAnims = true
-
-              animation.reverse();
-              animation.play()
-            }
-
-            const el = document.querySelector('.row.details');
-            const bg = document.querySelector('.content .background')
-            
-            const width = el.clientWidth;
-            const height = el.clientHeight;
-
-            el.style.position = 'fixed'
-            el.style.zIndex = 10
-            el.style.width = `${width}px`
-            el.style.top = `${20}px`
-
-            bg.style.position = 'fixed'
-            bg.style.top = '-190px'
-
-            document.querySelector('.row.table').style.marginTop = `${height}px`
-          } else {
-            if ( setAnims ) {
-              setAnims = false
-
-              animation.reverse();
-              animation.play();
-            }
-
-            const el = document.querySelector('.row.details');
-            const bg = document.querySelector('.content .background')
-
-            el.style.position = 'relative'
-            bg.style.position = 'absolute'
-            bg.style.top = '0px'
-            document.querySelector('.row.table').style.marginTop = '0px'
-          }
-
-          // console.log( e.srcElement.offsetHeight )
-          // console.log( Math.abs( e.srcElement.scrollHeight - e.srcElement.scrollTop ) / e.srcElement.offsetHeight )
-          // console.log( ( e.srcElement.scrollHeight - e.srcElement.offsetHeight ) - e.srcElement.scrollTop )
-        })
-      }, 500)
-
-      window.addEventListener('scroll', function(e){
-        // var scrollPos = window.scrollY
-        // var winHeight = window.innerHeight
-        // var docHeight = document.documentElement.scrollHeight
-        // var perc = 100 * scrollPos / (docHeight - winHeight)
-        // vm.$el.style.width = perc + '%'
-      })
-    
-      setTimeout(() => {
-          // anime({
-          //   targets: '.animation-circle',
-          //   top() {
-          //     return anime.random(0, 50)
-          //   },
-          //   left() {
-          //     return anime.random(0, 50)
-          //   },
-          //   loop: true,
-          //   duration: 5000,
-          //   direction: 'alternate'
-          // })
-      }, 1000);
-
-
-      require('owl.carousel/dist/owl.carousel.js')
-    
-      setTimeout( () => $('.owl-carousel').owlCarousel({
-          rtl:true,
-          margin:10,
-          nav:false,
-          responsive:{
-              0:{
-                  items:1
-              },
-              600:{
-                  items:2
-              },
-              1000:{
-                  items:3
-              }
-          }
-      }), 200);
+    mounted() {
+      setInterval(() => {
+        this.test_loading = !this.test_loading
+      }, 5000);
     },
     computed: {
       all_items_selected: {
@@ -475,28 +413,13 @@
       alert(){
           alert('Clicked on alert icon');
       },
-
-
       handleScroll() {
         console.log('dsf')
       },
-
-      changeTableData()
+      search(event)
       {
-        axios.get(`/api/v1/${this.type}`, {
-          params: this.attr('filters')
-        }).then(({data}) => {
-          setTimeout( () => {
-            this.setData( data.data )
-            
-            setTimeout( () => $('.tilt').tilt({scale: 1.1}), 300)
-          }, 500);
-        })
-      },
-      search(event) {
-          this.setAttr('filters', { query: event.target.value })
-
-          this.changeTableData();
+        this.setAttr('filters', { query: event.target.value })
+        this.$parent.handleSearch( event.target.value )
       },
 
       enter(el, done) {
@@ -621,6 +544,54 @@
 </script>
 
 <style>
+
+.main-panel-loading {
+  width: 100%;
+  height: 100%;
+  left: 0px;
+  top: 0px;
+  z-index: 100;
+  position: fixed;
+  background: #0001353b;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.query-loader {
+  width: 75px;
+  height: 60px;
+  position: fixed;
+  z-index: 100;
+  bottom: 50px;
+  left: 0px;
+  border-radius: 0px 44% 44% 0px;
+  padding: 10px;
+  padding-left: 23px;
+  box-shadow: 0px 5px 15px -14px #19375a, 0px 4px 10px -11px #0076ff !important;
+  background: linear-gradient(60deg,#0c2646 0,#204065 60%,#2a5788);
+  transition: left 200ms;
+}
+
+.loading-enter-to, .loading-leave {
+  left: 0px !important;
+}
+.loading-leave-to, .loading-enter {
+  left: -80px !important;
+}
+
+.header-description {
+  color: #e4e4e4de !important;
+  font-weight: bold;
+  margin-top: 3px;
+  text-shadow: 1px 2px 10px #00000047;
+}
+
+.btn .semipolar-spinner {
+  float: right;
+  margin-left: 10px;
+}
+
   .flip-clock-wrapper ul {
     width: 30px;
     height: 40px;
@@ -871,7 +842,7 @@
   }
 
   .white-content .card:not(.card-white) {
-    box-shadow: 0px 6px 35px -20px #19375a, 0px 5px 30px -25px #0076ff !important;
+    box-shadow: 0px 5px 15px -14px #19375a, 0px 4px 10px -11px #0076ff !important;
   }
 
   .remove-button {
@@ -909,29 +880,6 @@
     overflow: hidden;
     margin-bottom: 15px;
   }
-
-  /* .data-table-row::before {
-    z-index: -1;
-    content: '';
-    position: absolute;
-    bottom: -339px;
-    right: -254px;
-    width: 600px;
-    height: 400px;
-    background: linear-gradient(to left, #fd5d9330, transparent);
-    border-radius: 50%;
-  }
-  .data-table-row::after {
-    z-index: -1;
-    content: '';
-    position: absolute;
-    bottom: -372px;
-    right: -96px;
-    width: 600px;
-    height: 400px;
-    background: linear-gradient(to left, #f56c6c59, transparent);
-    border-radius: 50%;
-  } */
   .data-table-row ul, ul.data-table-header {
     padding-left: 35px !important;
   }
@@ -948,33 +896,8 @@
     background: linear-gradient(to right, #254c78, transparent);
   }
 
-  .data-table-row ul .animation-circle {
-    content: '';
-    background: #fdb7ce30;
-    position: absolute;
-    top: 100px;
-    left: 150px;
-    width: 50px;
-    height: 50px;
-    border-radius: 50%;
-    z-index: -1;
-    box-shadow: 0px 10px 50px -15px rgb(231, 109, 215);
-  }
-
-  .data-table-row ul .animation-circle.small {
-    width: 30px;
-    height: 30px;
-    background: #e782a430;
-    box-shadow: 0px 10px 50px -15px rgb(238, 88, 218);
-  }
-
   .data-table-row ul li:first-of-type {
     text-shadow: 0px 10px 37px #440139;
-  }
-  
-  .data-table-row:hover {
-    transform: scale(1.003) !important;
-    box-shadow: 0px 6px 32px -15px #19375a, 0px 5px 35px -25px #0076ff;
   }
 
   .data-table-hidden-cell {
@@ -1008,13 +931,9 @@
   .data-table-row td:last-child {
     border-radius: 6px 0px 0px 6px !important;
   }
-  
-  .data-table img {
-    max-height: 50px;
-    box-shadow: 0px 12px 40px -15px #000000a6;
-  }
 
   .md-dialog {
+    border-radius: 7px;
     background: #fff;
     overflow: hidden;
     max-height: 90%;
@@ -1025,7 +944,7 @@
   }
 
   .md-dialog.md-dialog-fullscreen {
-    box-shadow: 0 15px 150px -50px #fd5d93, 0 5px 15px rgba(0, 0, 0, 0.17) !important;
+    box-shadow: 0px 5px 15px -14px #19375a, 0px 4px 10px -11px #0076ff !important;
   }
 
   .modal.show .modal-dialog {
@@ -1038,7 +957,7 @@
   }
 
   .md-dialog-title {
-    /* background: url('/images/modal-header.png') center bottom; */
+    background: url('/images/modal-header.png') center bottom;
     /* height: 130px; */
     background-size: cover;
     display: block !important;
@@ -1047,14 +966,12 @@
   }
   .md-dialog-title::after {
     content: '';
+    background: linear-gradient(to bottom, #ff8d726e, transparent);
     width: 100%;
     height: 70px;
     position: absolute;
     top: 0px;
     left: 0px;
-    background: url('/images/modal_footer.svg') no-repeat;
-    background-size: cover;
-    transform: rotate(180deg) scaleY(1.5);
   }
   .md-dialog-actions {
     width: 100%;
@@ -1066,8 +983,8 @@
   .md-dialog-title h2 {
     position: relative;
     z-index: 3;
-    color: #fff !important;
-    text-shadow: 0px 0px 10px #000;
+    color: #5a5a5a !important;
+    text-shadow: 0px 2px 10px #888;
     font-size: 35px;
     margin-top: -5px;
     font-weight: bold;
@@ -1075,13 +992,33 @@
   .md-dialog-title p {
     position: relative;
     display: block;
-    text-shadow: 0px 0px 10px #000;
-    color: #f3f3f3 !important;
+    color: #4646464f !important;
+    text-shadow: 0px 2px 10px #bbb;
     font-size: 14px;
     font-weight: bold;
     z-index: 1;
   }
-  
+
+  .el-upload .el-icon-delete.avatar-uploader-icon {
+    width: 30px;
+    height: 30px;
+    font-size: 20px;
+    border-radius: 5px;
+    position: absolute;
+    top: 5px;
+    left: 5px;
+    background: #3031333d;
+    color: #fff;
+    opacity: 0;
+    line-height: 30px;
+    transition: opacity 200ms, background 200ms;
+  }
+  .el-upload:hover .el-icon-delete.avatar-uploader-icon {
+    opacity: 1;
+  }
+  .el-upload .el-icon-delete.avatar-uploader-icon:hover {
+    background: #ff000087;
+  }
 
   button.swal2-confirm {
     background: linear-gradient(to bottom left, #00f2c3, #0098f0) !important;
@@ -1113,6 +1050,22 @@
     .modal-dialog.big {
       max-width: 90% !important;
     }
+
+    .header-nav-icon {
+      opacity: 0;
+    }
+
+    .navbar-wrapper {
+      margin-top: 32px;
+    }
+    .navbar-toggler-bar {
+      background: #fff !important;
+      height: 2px !important;
+      width: 30px !important;
+    }
+    .navbar-toggler-bar.bar2 {
+      width: 25px !important;
+    }
   }
 
   /* Upload image */
@@ -1143,5 +1096,27 @@
     height: 178px;
     display: block;
     max-height: inherit;
+  }
+
+  .el-pagination .el-icon-arrow-right, .el-pagination .el-icon-arrow-left {
+    transform: scaleX(-1);
+  }
+  .el-pagination li, .el-pagination button {
+    background: transparent !important;
+  }
+  .el-pager li {
+    transition: color 200ms;
+  }
+  .el-pagination li.active {
+    background: linear-gradient(to bottom right, #ff8d72, #f56c6c) !important;
+    padding: 5px;
+    color: #fff !important;
+    line-height: 20px;
+    border-radius: 5px;
+    box-shadow: 0px 5px 10px -4px #ff8d72, 0px 4px 6px -5px #000 !important;
+    text-shadow: 1px 2px 7px #0000005c;
+  }
+  .el-pager li:hover {
+    color: #ff8d72;
   }
 </style>

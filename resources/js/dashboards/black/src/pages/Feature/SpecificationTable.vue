@@ -6,9 +6,9 @@
           <div class="pull-right">
             <h1 class="animated bounceInRight delay-first" :style="{ color: '#fff', fontWeight: 'bold', textShadow: '0px 3px 15px #333' }">
               مدیریت <span :style="{ color: '#ff3d3d' }">جدول مشخصات</span> فنی
-              <i class="tim-icons icon-align-left-2" :style="{fontSize: '25px'}"></i>
+              <i class="header-nav-icon tim-icons icon-align-left-2" :style="{fontSize: '25px'}"></i>
             </h1>
-            <h6 class="text-muted animated bounceInRight delay-secound">با استفاده از جداول زیر ، امکان مدیریت کامل جدول مشخصات فنی مورد نظر برای شما ممکن خواهد شد</h6>
+            <h6 class="header-description animated bounceInRight delay-secound">با استفاده از جداول زیر ، امکان مدیریت کامل جدول مشخصات فنی مورد نظر برای شما ممکن خواهد شد</h6>
           </div>
           <div class="pull-left animated bounceInDown delay-last">
             <flip-clock :options="{
@@ -19,7 +19,7 @@
         </div>
       </div>
 
-      <card :style="{ height: '160px' }" class="mt-4 operation-cell text-right" dir="rtl">
+      <card v-if="has_loaded" :style="{ height: '160px' }" class="mt-4 operation-cell text-right animated bounceInRight delay-first" dir="rtl">
         <h3 class="card-title">{{ table_title }}</h3>
         <h6 class="card-subtitle mb-2 text-muted">{{ table_description }}</h6>
         
@@ -38,9 +38,9 @@
         </base-button>
 
         <base-button @click="$router.push('/panel/specification')" size="sm" type="warning" class="pull-left">
-            بازگشت
-            <i class="tim-icons icon-double-left"></i>
-          </base-button>
+          بازگشت
+          <i class="tim-icons icon-double-left"></i>
+        </base-button>
       </card>
 
       <md-dialog :md-active.sync="$store.state.spec.is_open.spec_header" class="text-right" dir="rtl">
@@ -83,13 +83,25 @@
             لغو
           </base-button>
           
+          
           <base-button
             size="sm"
+            :loading="$store.state.spec.is_mutation_loading.spec_header"
             :type="$store.state.spec.is_creating.spec_header ? 'success' : 'warning'"
             @click="$store.state.spec.is_creating.spec_header ? store() : update()"
           >
-            <i v-if="$store.state.spec.is_creating.spec_header" class="tim-icons icon-simple-add"></i>
-            <i v-else class="tim-icons icon-pencil"></i>
+            <transition name="fade" mode="out-in">
+              <semipolar-spinner
+                :animation-duration="2000"
+                :size="17"
+                color="#fff"
+                v-if="$store.state.spec.is_mutation_loading.spec_header"
+              />
+              <span v-else class="pull-right ml-2" >
+                <i v-if="$store.state.spec.is_creating.spec_header" class="tim-icons icon-simple-add"></i>
+                <i v-else class="tim-icons icon-pencil"></i>
+              </span>
+            </transition>
             {{ $store.state.spec.is_creating.spec_header ? 'ذخیره' : 'بروز رسانی' }} عنوان جدول مشخصات
           </base-button>
         </md-dialog-actions>
@@ -149,23 +161,40 @@
               </md-field>
               <br/>
 
+              <md-field>
+                <label>آیکون</label>
+                <md-select v-model="row_form.icon.value" >
+                  <md-optgroup v-for="group in $store.state.icons" :key="group.label" :label="group.label">
+                    <md-option
+                    v-for="icon in group.icons"
+                    :key="icon"
+                    :value="icon">{{ icon }} <span class="material-icons pull-left">{{ icon }}</span></md-option>
+                  </md-optgroup>
+                </md-select>
+                <i class="md-icon tim-icons material-icons">{{ row_form.icon.value }}</i>
+                <span class="md-helper-text">آیکون سطر جدول را مشخص کنید</span>
+              </md-field>
+
               <div class="row" dir="ltr">
                 <el-switch
                   class="col-4 d-flex justify-content-center"
                   v-model="row_form.is_filterable.value"
                   active-text="قابلیت فیتلر"
+                  active-color="#ff8d72"
                   inactive-text="غیرقابل فیلتر">
                 </el-switch>
                 <el-switch
                   class="col-4 d-flex justify-content-center"
                   v-model="row_form.is_multiple.value"
                   active-text="چند مقداری"
+                  active-color="#ff8d72"
                   inactive-text="تک مقداری">
                 </el-switch>
                 <el-switch
                   class="col-4 d-flex justify-content-center"
                   v-model="row_form.is_required.value"
                   active-text="اجباری"
+                  active-color="#ff8d72"
                   inactive-text="اختیاری">
                 </el-switch>
               </div>
@@ -187,11 +216,22 @@
           
           <base-button
             size="sm"
+            :loading="$store.state.spec.is_mutation_loading.spec_row"
             :type="$store.state.spec.is_creating.spec_row ? 'success' : 'warning'"
             @click="$store.state.spec.is_creating.spec_row ? store() : update()"
           >
-            <i v-if="$store.state.spec.is_creating.spec_row" class="tim-icons icon-simple-add"></i>
-            <i v-else class="tim-icons icon-pencil"></i>
+            <transition name="fade" mode="out-in">
+              <semipolar-spinner
+                :animation-duration="2000"
+                :size="17"
+                color="#fff"
+                v-if="$store.state.spec.is_mutation_loading.spec_row"
+              />
+              <span v-else class="pull-right ml-2" >
+                <i v-if="$store.state.spec.is_creating.spec_row" class="tim-icons icon-simple-add"></i>
+                <i v-else class="tim-icons icon-pencil"></i>
+              </span>
+            </transition>
             {{ $store.state.spec.is_creating.spec_row ? 'ذخیره' : 'بروز رسانی' }} ردیف جدول مشخصات
           </base-button>
         </md-dialog-actions>
@@ -220,6 +260,7 @@
                 }
               ]"
               :has_loaded="true"
+              :canSelect="false"
               :methods="{ deleteSingle: deleteDefault, edit: createDefault }"
               :has_operation="true"
               :has_times="false"
@@ -287,6 +328,7 @@
         </div>
 
         <base-table
+          class="spec-rows-table"
           :style="{ width: '100%' }"
           :tableData="header.rows"
           :has_animation="false"
@@ -318,22 +360,41 @@
           :has_operation="true"
         >
           <template #title-body="slotProps">
-            <el-tooltip :content="slotProps.row.help">
-              <p>{{ slotProps.row.title }}</p>
-            </el-tooltip>
+            <el-popover
+              placement="top-end"
+              width="300"
+              trigger="hover"
+              :title="slotProps.row.title"
+              :disabled="typeof slotProps.row.title === 'string' ? slotProps.row.title.length <= 50 : false"
+              :content="slotProps.row.help"
+            >
+              <p slot="reference" class="md-list-item-text text-center" :style="{ overflow: 'visible' }">
+                <i v-if="slotProps.row.icon" class="material-icons">{{ slotProps.row.icon }}</i>
+                {{ slotProps.row.title | truncate(50) }}
+              </p>
+            </el-popover>
           </template>
 
           <template #defaults-body="slotProps">
             <transition-group name="list">
-              <span
+              <el-popover
                 v-for="item in slotProps.row.defaults.filter( (i, index) => index < 3)"
                 :key="item.id"
-                class="badge badge-default ml-1 hvr-grow-shadow hvr-icon-grow">
-                <i class="tim-icons icon-bullet-list-67 hvr-icon"></i>
-                {{ slotProps.row.prefix }}
-                {{ item.value }}
-                {{ slotProps.row.postfix }}
-              </span>
+                placement="top-end"
+                width="300"
+                trigger="hover"
+                :disabled="typeof item.value === 'string' ? item.value.length <= 20 : false"
+                :content="item.value"
+              >
+                <span
+                  slot="reference"
+                  class="badge badge-default ml-1 hvr-grow-shadow hvr-icon-grow">
+                  <i class="tim-icons icon-bullet-list-67 hvr-icon"></i>
+                  {{ slotProps.row.prefix }}
+                  {{ item.value | truncate(20) }}
+                  {{ slotProps.row.postfix }}
+                </span>
+              </el-popover>
 
               <el-dropdown v-if="slotProps.row.defaults.length > 3" :key="slotProps.row.defaults.map((c) => c.id).join(',')">
                 <span class="el-dropdown-link badge badge-default">
@@ -352,41 +413,62 @@
 
           <template #features-body="slotProps">
             <div>
-              <el-tooltip content="ایجاد شده در" placement="left">
-                <p :class="slotProps.row.is_required ? 'text-success' : 'text-danger'">
-                  <i class="tim-icons icon-lock-circle"></i>
-                  {{ slotProps.row.is_required ? 'اجباری' : 'اختیاری' }}
-                </p>
-              </el-tooltip>
-
-              <el-tooltip content="ایجاد شده در" placement="left">
-                <p :class="slotProps.row.is_multiple ? 'text-success' : 'text-danger'">
-                  <i class="tim-icons icon-bullet-list-67"></i>
-                  {{ slotProps.row.is_multiple ? 'چند مقداری' : 'تک مقداری' }}
-                </p>
-              </el-tooltip>
-              
-              <el-tooltip content="ایجاد شده در" placement="left">
-                <p :class="slotProps.row.is_filterable ? 'text-success' : 'text-danger'">
-                  <i class="tim-icons icon-pin"></i>
-                  {{ slotProps.row.is_filterable ? 'قابلیت فیلتر' : 'غیرقابل فیلتر' }}
-                </p>
-              </el-tooltip>
+              <table class="spec-feature-table">
+                <tbody>
+                  <tr>
+                    <td>
+                      <i class="tim-icons icon-lock-circle"></i>
+                    </td>
+                    <td class="text-right" :class="slotProps.row.is_required ? 'text-success' : 'text-danger'">
+                      {{ slotProps.row.is_required ? 'اجباری' : 'اختیاری' }}
+                    </td>
+                  </tr>
+                  
+                  <tr>
+                    <td>
+                      <i class="tim-icons icon-bullet-list-67"></i>    
+                    </td>
+                    <td class="text-right" :class="slotProps.row.is_multiple ? 'text-success' : 'text-danger'">
+                      {{ slotProps.row.is_multiple ? 'چند مقداری' : 'تک مقداری' }}
+                    </td>
+                  </tr>
+                  
+                  <tr>
+                    <td>
+                      <i class="tim-icons icon-pin"></i>
+                    </td>
+                    <td class="text-right" :class="slotProps.row.is_filterable ? 'text-success' : 'text-danger'">
+                      {{ slotProps.row.is_filterable ? 'قابلیت فیلتر' : 'غیرقابل فیلتر' }}
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
             </div>
 
           </template>
 
           <template #texts-body="slotProps">
-            <div>
-              <p v-if="slotProps.row.postfix">
-                <i class="tim-icons icon-double-left"></i>
-                {{ slotProps.row.postfix }}
-              </p>
-              <p v-if="slotProps.row.prefix">
-                <i class="tim-icons icon-double-right"></i>
-                {{ slotProps.row.prefix }}
-              </p>
-            </div>
+            <table class="spec-feature-table">
+              <tbody>
+                <tr v-if="slotProps.row.postfix">
+                  <td>
+                    <i class="tim-icons icon-double-left"></i>
+                  </td>
+                  <td class="text-right">
+                    {{ slotProps.row.postfix }}
+                  </td>
+                </tr>
+
+                <tr v-if="slotProps.row.prefix">
+                  <td>
+                    <i class="tim-icons icon-double-right"></i>
+                  </td>
+                  <td class="text-right">
+                    {{ slotProps.row.prefix }}
+                  </td>
+                </tr>
+              </tbody>
+            </table>
           </template>
 
           <template #custom-operations="slotProps">
@@ -398,6 +480,26 @@
           </template>
         </base-table>
       </div>
+      
+      <transition name="fade">
+        <div class="main-panel-loading" v-if="!has_loaded">
+          <fingerprint-spinner
+            :animation-duration="1000"
+            :size="100"
+            color="#fff"
+          />
+        </div>
+      </transition>
+
+      <transition name="loading">
+        <div class="query-loader" v-if="$store.state.spec.is_mutation_loading.spec_default">
+          <half-circle-spinner
+            :animation-duration="800"
+            :size="40"
+            color="#fff"
+          />
+        </div>
+      </transition>
 
       <transition name="fade">
         <md-empty-state
@@ -418,12 +520,28 @@
 <script>
 import BaseTable from '../../components/BaseTable.vue'
 import { FlipClock } from '@mvpleung/flipclock';
+import {SemipolarSpinner, HalfCircleSpinner, FingerprintSpinner} from 'epic-spinners'
+
 import deleteMixin from '../../mixins/deleteMixin';
 import createMixin from '../../mixins/createMixin';
 
 export default {
-  mixins: [ createMixin, deleteMixin ],
-  components: { BaseTable, FlipClock },
+  mixins: [
+    createMixin,
+    deleteMixin
+  ],
+  components: {
+    BaseTable,
+    FlipClock,
+    SemipolarSpinner,
+    HalfCircleSpinner,
+    FingerprintSpinner
+  },
+  metaInfo() {
+    return {
+      title: `جدول ${this.table_title}`,
+    }
+  },
   data() {
     return {
       headers: [],
@@ -482,8 +600,11 @@ export default {
             return 'فیلد مقدار نمیتواند خالی باشد :('
           }
         }
-      }).then(({value}) => {
+      })
+      .then(({value}) => {
         
+        if (!value) return
+
         this.$store.commit('setFormData', {
           group: this.group,
           type: this.type,
@@ -638,6 +759,7 @@ export default {
           help
           postfix
           prefix
+          icon
           is_required
           is_multiple
           is_filterable
@@ -689,6 +811,7 @@ export default {
                 help
                 postfix
                 prefix
+                icon
                 is_required
                 is_multiple
                 is_filterable
@@ -715,3 +838,29 @@ export default {
   },
 }
 </script>
+
+<style>
+.spec-feature-table td {
+  padding: 2px;
+}
+.spec-rows-table .data-table-row ul {
+  min-height: 120px;
+}
+.md-list-item-text {
+  display: block;
+  text-align: right;
+}
+.md-list-item-text .material-icons {
+  width: auto;
+  font-style: normal;
+  background: linear-gradient(to bottom right, #ff8d72, #f56c6c);
+  padding: 4px;
+  margin-bottom: 9px;
+  margin-left: 7px;
+  font-size: 20px;
+  color: #fff;
+  border-radius: 5px;
+  box-shadow: 0px 5px 10px -4px #ff8d72, 0px 4px 6px -5px #000 !important;
+  text-shadow: 1px 2px 7px #0000005c;
+}
+</style>

@@ -214,7 +214,8 @@
         </template>
 
         <template v-slot:status-body="slotProps">
-          <span class="badge" :style="{ border: `1px solid ${slotProps.row.status.color}` }">{{ slotProps.row.status.title }}</span>
+          <span v-if="slotProps.row.status" class="badge" :style="{ border: `1px solid ${slotProps.row.status.color}` }">{{ slotProps.row.status.title }}</span>
+          <span v-else class="badge badge-warning">نا مشخص :(</span>
         </template>
       </base-table>
     </div>
@@ -231,6 +232,9 @@ export default {
   mixins: [
     filtersHelper,
   ],
+  metaInfo: {
+    title: 'داشبورد',
+  },
   data() {
     return {
       orders: [],
@@ -343,8 +347,6 @@ export default {
       this.comments = data.data.comments.data
       this.reviews = data.data.reviews.data
       this.question_and_answers = data.data.question_and_answers.data
-
-      console.log( data.data.orders )
 
       this.is_loaded = true
     })

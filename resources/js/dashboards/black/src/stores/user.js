@@ -39,7 +39,17 @@ export default {
             user: true,
             role: true,
         },
+
+        is_mutation_loading: {
+            user: false,
+            role: false,
+        },
         
+        is_query_loading: {
+            user: false,
+            role: false,
+        },
+
         is_creating: {
             user: false,
             role: false,
@@ -125,16 +135,37 @@ export default {
                     type: 'String',
                     value: ''
                 },
+                gender: {
+                    type: 'Boolean',
+                    value: null,
+                    clientResolver: gender => {
+                        return gender === 'true' ? true : gender === 'false' ? false : null
+                    }
+                },
                 permissions: {
                     type: '[Int]',
                     value: [],
-                    resolve: permissions => permissions.map(p => p.id)
+                    serverResolver: permissions => permissions.map(p => p.id),
+                    clientResolver: (permissions, state) => {
+                        let finalPermissions = []
+
+                        permissions.forEach(permission => {
+                            if ( !_.find( state.permissions_list, ['id', permission]).disabled )
+                                finalPermissions.push(permission)
+                        })
+                        
+                        return finalPermissions
+                    }
                 },
                 roles: {
                     type: '[Int]',
                     value: [],
-                    resolve: roles => roles.map(p => p.id)
+                    serverResolver: roles => roles.map(p => p.id)
                 },
+                is_deleted_image: {
+                    type: 'Boolean',
+                    value: false
+                }
             },
 
             role: {

@@ -27,14 +27,22 @@ class CompareQuery extends MainQuery
     public function resolve($root, $args, SelectFields $fields, ResolveInfo $info)
     {
         if ( !Cookie::get('compare_table') || !Cookie::get('compare_products') )
-            die(json_encode([ 'status' => false  ]));
+        {
+            die(json_encode([
+                'status' => 400,
+                'message' => 'هیچ محصولی به مقایسه اضافه نشده است'
+            ]));
+        }
             
         $products = json_decode( \Cookie::get('compare_products', '[]') );
             
         if ( Product::find($products)->count() !== count($products) )
         {
             setcookie('compare_products', '[]', time() - 1);
-            die(json_encode([ 'status' => false  ]));
+            die(json_encode([
+                'status' => 400,
+                'message' => 'محصولات ثبت شده در مقایسه معتبر نمیباشد'
+            ]));
         }
 
         return Spec::whereId( Cookie::get('compare_table') )

@@ -1,6 +1,6 @@
 <template>
   <div :style="{ position: 'relative', zIndex: 10 }">
-    <div class="row">
+    <div class="row" v-if="is_loaded">
       <div class="col-12 text-right">
         <div class="pull-right">
           <h1 class="animated bounceInRight delay-first" :style="{ color: '#fff', fontWeight: 'bold', textShadow: '0px 3px 15px #333' }">
@@ -10,9 +10,9 @@
             <span v-else>
               ثبت <span :style="{ color: '#ff3d3d' }">محصول</span> جدید
             </span>
-            <i class="tim-icons icon-align-left-2" :style="{fontSize: '25px'}"></i>
+            <i class="header-nav-icon tim-icons icon-align-left-2" :style="{fontSize: '25px'}"></i>
           </h1>
-          <h6 class="text-muted animated bounceInRight delay-secound">از طریق فرم زیر میتوانید به صورت کامل اطلاعات محصول جدید خود را به ثبت برسانید</h6>
+          <h6 class="header-description animated bounceInRight delay-secound">از طریق فرم زیر میتوانید به صورت کامل اطلاعات محصول جدید خود را به ثبت برسانید</h6>
         </div>
         <div class="pull-left animated bounceInDown delay-last">
           <base-button @click="$router.push('/panel/product')" size="sm" type="warning" class="pull-left">
@@ -23,7 +23,7 @@
       </div>
     </div>
 
-    <md-tabs class="animated bounceInUp delay-last" md-active-tab="tab-info" @md-changed="checkNewPosts">
+    <md-tabs class="animated bounceInUp delay-last" v-if="is_loaded" md-active-tab="tab-info" @md-changed="checkNewPosts">
       <md-tab id="tab-variations" md-label="تنوع محصولات" v-if="$route.params.id">
         <div class="row">
           <div class="col-12 text-right">
@@ -122,7 +122,6 @@
         </div>
 
         <hr />
-
         <div v-for="(header, index) in form_data.spec.headers" :key="header.id">
           <h3 class="mb-0">
             <i class="text-warning tim-icons icon-molecule-40"></i>
@@ -165,7 +164,7 @@
                 </md-select>
 
                 <span class="md-suffix">{{ row.postfix }}</span>
-                <span class="md-helper-text">{{ row.description }}</span>
+                <span class="md-helper-text" :title="row.help">{{ row.help }}</span>
               </md-field>
             </div>
           </div>
@@ -301,7 +300,6 @@
               :auto-upload="false"
               list-type="picture-card"
               :file-list="form_data.photos"
-              :on-preview="handlePictureCardPreview"
               :on-change="handleSelectPhotos"
               :on-remove="handleRemove">
               <i class="el-icon-plus"></i>
@@ -315,7 +313,13 @@
 
       <md-tab id="tab-description" md-label="توضیحات محصول">
         <base-input label="نقد و بررسی مختصر">
-          <ckeditor :editor="editor" v-model="form_data.short_review" ></ckeditor>
+          <ckeditor :editor="editor" :config="{
+              height: 300,
+              filebrowserUploadUrl: '/upload',
+              defaultLanguage: 'fa'
+            }"
+            v-model="form_data.short_review"
+          ></ckeditor>
           <small slot="helperText" class="form_data-text text-muted">متن کامل توضیحات و نقد و بررسی محصول</small>
         </base-input>
         <br/>
@@ -356,7 +360,7 @@
           <br/>
 
           <div class="col-md-12">
-            <md-chips v-model="form_data.second_name" md-placeholder="افزودن مزیت ...">
+            <md-chips v-model="form_data.second_name" md-placeholder="افزودن نام ...">
               <label>دیگر نام های محصول</label>
               <span class="md-helper-text">مزیت های محصول خود را در این قسمت وارد کنید</span>
             </md-chips>
@@ -477,10 +481,33 @@
       </md-tab>
     </md-tabs>
 
-    <div v-if="activeTab !== 'tab-variations'">
-      <base-button @click="update()" size="sm" type="success" class="pull-left mt-3">
-        <i class="tim-icons icon-double-left"></i>
+    <div class="row" v-if="is_loaded">
+      <base-button
+        v-if="activeTab !== 'tab-variations'"
+        :loading="attr('is_mutation_loading')"
+        size="sm"
+        type="success"
+        class="pull-left mt-3"
+        @click="update()"
+      >
+        <transition name="fade" mode="out-in">
+          <semipolar-spinner
+            :animation-duration="2000"
+            :size="17"
+            color="#fff"
+            v-if="attr('is_mutation_loading')"
+          />
+          <span v-else class="pull-right ml-2" >
+            <i v-if="attr('is_creating')" class="tim-icons icon-simple-add"></i>
+            <i v-else class="tim-icons icon-pencil"></i>
+          </span>
+        </transition>
         ذخیره
+      </base-button>
+
+      <base-button @click="$router.push('/panel/product')" size="sm" type="danger" class="pull-left mt-3 ml-2">
+        <i class="tim-icons icon-simple-remove"></i>
+        بازگشت
       </base-button>
     </div>
 
@@ -570,20 +597,57 @@
 
       <md-dialog-actions>
         <base-button
-          simple
-          type="secondary"
-          @click="$store.state.product.is_open.variation = false">
+          size="sm"
+          class="ml-2"
+          type="danger"
+          @click="$store.state.product.is_open.variation = false"
+        >
+          <i class="tim-icons icon-simple-remove"></i>
           لغو
         </base-button>
         
-        <base-button 
-          simple
-          :type="$store.state.product.is_creating.variation ? 'success' : 'danger'"
-          @click="$store.state.product.is_creating.variation ? storeVariation() : updateVariation()">
+        <base-button
+          size="sm"
+          :loading="$store.state.product.is_mutation_loading.variation"
+          :type="$store.state.product.is_creating.variation ? 'success' : 'warning'"
+          @click="$store.state.product.is_creating.variation ? storeVariation() : updateVariation()"
+        >
+          <transition name="fade" mode="out-in">
+            <semipolar-spinner
+              :animation-duration="2000"
+              :size="17"
+              color="#fff"
+              v-if="$store.state.product.is_mutation_loading.variation"
+            />
+            <span v-else class="pull-right ml-2" >
+              <i v-if="$store.state.product.is_creating.variation" class="tim-icons icon-simple-add"></i>
+              <i v-else class="tim-icons icon-pencil"></i>
+            </span>
+          </transition>
           {{ $store.state.product.is_creating.variation ? 'ذخیره' : 'بروز رسانی' }} تنوع محصول
         </base-button>
       </md-dialog-actions>
     </md-dialog>
+
+    <transition name="fade">
+      <div class="main-panel-loading" v-if="!is_loaded">
+        <fingerprint-spinner
+          :animation-duration="1000"
+          :size="100"
+          color="#fff"
+        />
+      </div>
+    </transition>
+
+    <transition name="loading">
+      <div class="query-loader" v-if="attr('is_query_loading')">
+        <half-circle-spinner
+          :animation-duration="800"
+          :size="40"
+          color="#fff"
+        />
+      </div>
+    </transition>
   </div>
 </template>
 
@@ -598,11 +662,15 @@ import { required, maxLength } from 'vuelidate/lib/validators'
 import createMixin from '../../mixins/createMixin'
 import filtersHelper from '../../mixins/filtersHelper'
 import deleteMixin from '../../mixins/deleteMixin'
+import {SemipolarSpinner, HalfCircleSpinner, FingerprintSpinner} from 'epic-spinners'
 
 export default {
   components: {
     BaseTable,
-    RemoteSelect
+    RemoteSelect,
+    SemipolarSpinner,
+    HalfCircleSpinner,
+    FingerprintSpinner
   },
   mixins: [
     Binding,
@@ -612,6 +680,11 @@ export default {
     filtersHelper,
     deleteMixin
   ],
+  metaInfo() {
+    return {
+      title: this.$route.params.id ? 'ثبت محصول' : this.form_data.name,
+    }
+  },
   data() {
     return {
       type: 'product',
@@ -762,7 +835,7 @@ export default {
         brand { id name logo { id file_name thumb } }
         tags { name }
         short_review expert_review
-        photos { id file_name small custom_properties { color } }
+        photos { id file_name thumb small custom_properties { color } }
         advantages disadvantages tags { name }
         is_active
         spec {
@@ -915,8 +988,12 @@ export default {
 
         this.$swal.fire({
           title: 'رنگ مرتبط با این عکس را انتخاب کنید :',
-          input: 'radio',
+          text: "در صورت مشخص کردن رنگ برای عکس ها ، در صفحه محصولات با کلیک بر روی نام هر رنگ عکس مرتبط نمایش داده خواهد شد",
+          input: selected_colors.length < 5 ? 'radio' : 'select',
           inputOptions: colors,
+          showCancelButton: true,
+          confirmButtonText: 'ثبت رنگ',
+          cancelButtonText: 'لغو'
         }).then((result) => {
           if (result.value)
             file.color = result.value
@@ -1102,28 +1179,43 @@ export default {
 
       return fd;
     },
+    IsJsonString(str)
+    {
+      try {
+          JSON.parse(str);
+      } catch (e) {
+          return false;
+      }
+      return true;
+    },
     handleSpecification(headers)
     {
+      this.specifications = {}
+
       _.flatten( headers.map(i => i.rows) ).map(i => {
+
         if ( i.data == null)
           this.specifications[i.id] = i.is_multiple ? [] : null
-
         else
         {
           this.specifications[i.id] = i.data.values.length === 0 ? i.data.data : i.data.values.map(i => i.id)
           
-
           if ( i.defaults.length === 0 && i.is_multiple )
-            this.specifications[i.id] = i.data.data ? JSON.parse( i.data.data ) : []
+            this.specifications[i.id] = i.data.data ? this.IsJsonString(i.data.data) ? JSON.parse( i.data.data ) : [i.data.data] : []
 
-          else if ( i.defaults.length !== 0 && !i.is_multiple && Array.isArray(this.specifications[i.id]))
-            this.specifications[i.id] = this.specifications[i.id][0] ? this.specifications[i.id][0] : null
+          else if ( i.defaults.length !== 0 && !i.is_multiple )
+          {
+            if ( Array.isArray(this.specifications[i.id]) )
+              this.specifications[i.id] = this.specifications[i.id][0] ? this.specifications[i.id][0] : null
+
+            else 
+              this.specifications[i.id] = this.specifications[i.id] ? this.specifications[i.id] : null
+          }
 
           else if ( i.defaults.length !== 0 && i.is_multiple )
             this.specifications[i.id] = i.data.values.map(i => i.id)
         }
       })
-
       // console.log( this.specifications )
     },
     update()
@@ -1133,6 +1225,8 @@ export default {
 
       this.storeInServer({
         callback: ({data}) => {
+          this.deleted_images = []
+          
           const product = this.$store.state.product.product.filter(i => i.id === data.id)
 
           if ( product.length !== 0 )
@@ -1141,6 +1235,7 @@ export default {
             product[0].photos = data.photos
             product[0].brand = data.brand
             product[0].categories = data.categories
+            product[0].is_active = data.is_active
             product[0].created_at = data.created_at
             product[0].updated_at = data.updated_at
           }
@@ -1155,6 +1250,7 @@ export default {
                 name: data.name,
                 photos: data.photos,
                 brand: data.brand,
+                is_active: data.is_active,
                 categories: data.categories,
                 created_at: data.created_at,
                 updated_at: data.updated_at,
@@ -1177,7 +1273,7 @@ export default {
     },
     'form_data.spec.id': function(newVal, oldVal)
     {
-      if ( ! this.is_loaded) return
+      if ( ! this.is_loaded ) return
 
       axios.get('/graphql/auth', {
         params: {
@@ -1212,6 +1308,12 @@ export default {
 </script>
 
 <style scope>
+#tab-specifications .md-helper-text {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  width: 100%;
+}
 #tab-specifications .md-suffix, #tab-specifications .md-prefix {
   background: linear-gradient(to bottom right, #ff8d72, #f56c6c);
   padding: 0px 10px;
@@ -1245,7 +1347,7 @@ export default {
   margin-top: 30px;
   text-align: right;
   background: rgb(255, 255, 255);
-  box-shadow: 0px 6px 40px -15px;
+  box-shadow: 0px 5px 15px -14px #19375a, 0px 4px 10px -11px #0076ff !important;
   border-radius: 5px;
   transition: height 300ms ease 0s;
 }
@@ -1282,7 +1384,8 @@ export default {
 .el-checkbox__inner:hover {
   border-color: #f56c6c;
 }
-.el-checkbox__input.is-checked .el-checkbox__inner {
+.el-checkbox__input.is-checked .el-checkbox__inner,
+.el-checkbox__input.is-indeterminate .el-checkbox__inner {
   background-color: #ff8d72;
   border-color: #f56c6c;
 }
@@ -1292,17 +1395,17 @@ export default {
 }
 .md-chips .md-chip {
   background: linear-gradient(to bottom right, #ff8d72, #f56c6c);
-  box-shadow: 0px 4px 25px -6px #f70000, 0px 3px 10px -8px #000;
+  box-shadow: 0px 5px 12px -4px #ff8d72, 0px 4px 8px -5px #000 !important;
   text-shadow: 1px 2px 10px #999;
 }
 .disadvantages .md-chip {
   background: linear-gradient(to bottom right, #ff4c4c, #fd5d93);
-  box-shadow: 0px 4px 25px -6px #ff4c4c, 0px 3px 10px -8px #000;
+  box-shadow: 0px 5px 12px -4px #ff4c4c, 0px 4px 8px -5px #000 !important;
   text-shadow: 1px 2px 10px #999;
 }
 .advantages .md-chip {
   background: linear-gradient(to bottom right, #00f2c3, #00caa2);
-  box-shadow: 0px 4px 25px -6px #00caa2, 0px 3px 10px -8px #000;
+  box-shadow: 0px 5px 12px -4px #00caa2, 0px 4px 8px -5px #000 !important;
   text-shadow: 1px 2px 10px #999;
 }
 

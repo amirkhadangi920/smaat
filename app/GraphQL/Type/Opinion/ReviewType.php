@@ -40,7 +40,9 @@ class ReviewType extends BaseType
             'votes' => $this->votes(),
             'product' => $this->relationItemField('product'),
             'audits' => $this->audits('review'),
-            'is_accept' => $this->acceptableField('review'),
+            'is_accept' => [
+                'type' => Type::boolean(),
+            ],
         ];
     }
 }

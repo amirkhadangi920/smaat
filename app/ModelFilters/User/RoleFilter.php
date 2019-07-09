@@ -2,10 +2,11 @@
 
 use App\ModelFilters\MainFilter;
 use App\ModelFilters\Query;
+use App\ModelFilters\SimpleOrdering;
 
 class RoleFilter extends MainFilter
 {
-    use Query;
+    use Query, SimpleOrdering;
     
     /**
      * Define the search fields of this data type filter class 

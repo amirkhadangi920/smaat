@@ -11,7 +11,7 @@
         </div>
 
         <div class="animated bounceInLeft delay-secound">
-          <base-button @click="$router.push('/panel/discount')" size="sm" type="warning" class="pull-left">
+          <base-button @click.once="$router.push('/panel/discount')" size="sm" type="warning" class="pull-left">
             <i class="tim-icons icon-double-left"></i>
             بازگشت
           </base-button>
@@ -48,7 +48,10 @@
               :auto-upload="false"
               :show-file-list="false"
               :on-change="addImage">
-              <img v-if="$store.state[group].selected[type].imageUrl" :src="$store.state[group].selected[type].imageUrl" class="avatar">
+              <div v-if="$store.state[group].form[type].logo.url">
+                <img :src="$store.state[group].form[type].logo.url" class="avatar" />
+                <i @click.prevent="deleteImage" class="el-icon-delete avatar-uploader-icon"></i>
+              </div>
               <i v-else class="el-icon-plus avatar-uploader-icon"></i>
             </el-upload>
             <small slot="helperText" id="emailHelp" class="form-text text-muted">لوگوی مورد نظر خود را انتخاب کنید</small>
@@ -106,7 +109,7 @@
         simple
         size="sm" 
         :type="attr('is_creating') ? 'danger' : 'warning'"
-        @click="attr('is_creating') ? store() : update()">
+        @click.once="attr('is_creating') ? store() : update()">
         {{ attr('is_creating') ? 'ذخیره' : 'بروز رسانی' }} تخفیف
       </base-button>
     </card>
@@ -602,14 +605,6 @@ img {
 }
 .md-tabs-navigation {
   justify-content: center !important;
-}
-.md-content.md-tabs-content {
-  margin-top: 30px;
-  text-align: right;
-  background: rgb(255, 255, 255);
-  box-shadow: rgb(253, 93, 147) 0px 0px 90px -35px;
-  border-radius: 5px;
-  transition: height 300ms ease 0s;
 }
 
 .upload-photo-gallery img {

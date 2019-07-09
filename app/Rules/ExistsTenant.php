@@ -39,13 +39,15 @@ class ExistsTenant implements Rule
         else
             $result->where($this->field, $value);
 
-        $result = $result->where('tenant_id', $this->getTenant() )->count();
+        $result->where(function($query) {
+            $query->where('tenant_id', $this->getTenant())->orWhere('tenant_id', null);
+        });
 
         if ( gettype($value) === 'array' )
-            return $result === count($value);
+            return $result->count() === count($value);
             
         else
-            return $result === 1;
+            return $result->count() === 1;
     }
 
     public function getTenant()

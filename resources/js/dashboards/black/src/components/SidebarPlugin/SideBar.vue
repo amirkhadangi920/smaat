@@ -1,24 +1,27 @@
 <template>
-  <div class="sidebar animated bounceInRight"
-      :style="{ borderRadius: `${$parent.is_collapsed ? 10 : 90}px 10px 10px 10px`, animationDelay: '3300ms' }"
-       :data="backgroundColor">
+  <div 
+    class="sidebar animated bounceInRight"
+    :style="{ borderRadius: `${$parent.is_collapsed ? 10 : 90}px 10px 10px 10px`, animationDelay: '3300ms' }"
+    :data="backgroundColor">
     <!--
             Tip 1: you can change the color of the sidebar's background using: data-background-color="white | black | darkblue"
             Tip 2: you can change the color of the active button using the data-active-color="primary | info | success | warning | danger"
         -->
     <!-- -->
     <div class="user-profile">
-      <div class="logo">
-
-      </div>
+      <div class="logo" :style="{
+        backgroundImage: `url('${ $store.state.me.avatar ? $store.state.me.avatar.thumb : '/images/placeholder-user.png'}') !important`,
+        backgroundSize: 'cover !important'
+      }"></div>
       <div class="info">
         <span class="name">
           <i class="tim-icons icon-caps-small"></i>
-          امیر خدنگی
+          {{ $store.state.me.full_name }}
+          <span class="d-inline" v-if="!$store.state.me.full_name.trim()">بدون نام</span>
         </span>
         <span class="email">
           <i class="tim-icons icon-single-02"></i>
-          AmirKhadangi920@Gmail.com
+          {{ $store.state.me.email }}
         </span>
       </div>
     </div>
@@ -57,7 +60,7 @@
       </ul>
     </div>
 
-    <div class="logout-btn">
+    <div class="logout-btn" @click="logout">
       خروج از حساب
       <i class="tim-icons icon-button-power"></i>
     </div>
@@ -154,6 +157,11 @@
       },
       toggleSidebar() {
         this.$parent.is_collapsed = !this.$parent.is_collapsed 
+      },
+      logout()
+      {
+        localStorage.removeItem('JWT');
+        window.location.replace('/login')
       }
     },
     mounted() {
@@ -181,7 +189,7 @@
   direction: rtl;
   text-align: right;
   z-index: 100 !important;
-  box-shadow: 0px 7px 21px -5px #fd7e14, 0px 3px 33px -9px #000;
+  box-shadow: 0px 5px 10px -4px #fd7e14, 0px 4px 6px -5px #000;
 }
 .user-profile .info span {
   display: block;
@@ -192,20 +200,19 @@
 .user-profile .logo {
   width: 50px;
   height: 50px;
-  background: url('/images/user-test.jpg') center center;
-  background-size: cover;
   border-radius: 50%;
   position: absolute !important;
   left: 18px;
   top: -57px;
   z-index: 110 !important;
-  box-shadow: 0px 6px 36px -8px #19375a, 0px 5px 33px -16px #0076ff;
+  box-shadow: 0px 5px 10px -4px #19375a, 0px 4px 6px -5px #0076ff;
 }
 .logout-btn {
   position: absolute;
   bottom: -20px;
   width: 70%;
   left: 15%;
+  cursor: pointer;
   background: #ff3d3d;
   padding: 6px;
   color: #fff;
@@ -213,7 +220,7 @@
   border-radius: 10px;
   font-weight: bold;
   z-index: 10000;
-  box-shadow: 0px 7px 21px -5px #ff3d3d, 0px 3px 33px -9px #000;
+  box-shadow: 0px 5px 10px -4px #ff3d3d, 0px 4px 6px -5px #000;
 }
 .logout-btn i {
   font-size: 16px;

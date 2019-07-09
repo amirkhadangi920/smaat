@@ -26,6 +26,7 @@ class SubjectRequest extends MainRequest
             ],
             'description'       => 'nullable|string|max:255',
             'logo'              => 'nullable|image|mimes:jpeg,jpg,png,gif|max:1024',
+            'icon'              => 'nullable|string|max:50',
             'is_active'         => 'nullable|boolean',
 
             /* relateion */

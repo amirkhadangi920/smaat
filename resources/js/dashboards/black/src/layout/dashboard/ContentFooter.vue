@@ -3,8 +3,9 @@
     <div class="container-fluid">
       <ul class="nav">
         <li class="nav-item">
-          <a class="nav-link" href="http://www.creative-tim.com">
-            SmaaT
+          <a class="nav-link" title="+98 910 500 9868" href="telto:+989105009868">
+            <i class="tim-icons icon-support-17"></i>
+            تماس با پشتیبانی
           </a>
         </li>
       </ul>

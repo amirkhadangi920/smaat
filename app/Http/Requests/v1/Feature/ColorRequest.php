@@ -24,7 +24,11 @@ class ColorRequest extends MainRequest
                 'max:50',
                 new UniqueTenant('colors', $args['id'] ?? null)
             ],
-            'code'              => [$this->requiredOrFilled(), 'regex:/^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/', new UniqueTenant('colors')],
+            'code'              => [
+                $this->requiredOrFilled(),
+                'regex:/^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/',
+                new UniqueTenant('colors', $args['id'] ?? null)
+            ],
             'is_active'         => 'nullable|boolean',
             
             /* relateion */

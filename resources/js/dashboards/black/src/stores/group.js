@@ -12,6 +12,16 @@ export default {
             category: false,
             subject: false,
         },
+
+        is_mutation_loading: {
+            category: false,
+            subject: false,
+        },
+        
+        is_query_loading: {
+            category: false,
+            subject: false,
+        },
         
         is_incrementing: {
             // 
@@ -83,12 +93,20 @@ export default {
                     type: 'String',
                     value: ''
                 },
+                icon: {
+                    type: 'String',
+                    value: ''
+                },
                 logo: {
                     type: 'Upload',
                     value: null,
                     file: null,
                     url: ''
                 },
+                is_deleted_image: {
+                    type: 'Boolean',
+                    value: false
+                }
             },
             subject: {
                 parent_id: {
@@ -103,12 +121,20 @@ export default {
                     type: 'String',
                     value: ''
                 },
+                icon: {
+                    type: 'String',
+                    value: ''
+                },
                 logo: {
                     type: 'Upload',
                     value: null,
                     file: null,
                     url: ''
                 },
+                is_deleted_image: {
+                    type: 'Boolean',
+                    value: false
+                }
             },
         },
 
@@ -127,27 +153,33 @@ export default {
             category: `{
                 allData: categories {
                     data {
-                        id title childs {
-                            id title childs {
-                                id title childs {
-                                    id title childs { id title }
+                        id title description icon logo { id file_name thumb } childs {
+                            id title description icon logo { id file_name thumb } childs {
+                                id title description icon logo { id file_name thumb } childs {
+                                    id title description icon logo { id file_name thumb } childs {
+                                        id title description icon
+                                    }
                                 }
                             }
                         }
                     }
+                    total trash chart { month count }
                 }
             }`,
             subject: `{
                 allData: subjects {
                     data {
-                        id title childs {
-                            id title childs {
-                                id title childs {
-                                    id title childs { id title }
+                        id title description icon logo { id file_name thumb } childs {
+                            id title description icon logo { id file_name thumb } childs {
+                                id title description icon logo { id file_name thumb } childs {
+                                    id title description icon logo { id file_name thumb } childs {
+                                        id title description icon
+                                    }
                                 }
                             }
                         }
                     }
+                    total trash chart { month count }
                 }
             }`
         },

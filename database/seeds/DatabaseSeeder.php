@@ -11,13 +11,9 @@ class DatabaseSeeder extends CustomSeeder
      */
     public function run()
     {
-        // for($i = 0; $i < 100; $i++)
-        // {
-        //     $this->call(ProductTablesSeeder::class);    
-        // }
-        // die('fuck end');
-
         // $this->call(LocationTablesSeeder::class);
+
+        // return factory(\App\User::class)->create([ 'email' => 'amirkhadangi920@gmail.com']);
 
         // $this->call(UserTableSeeder::class);
 
@@ -25,21 +21,21 @@ class DatabaseSeeder extends CustomSeeder
 
         // $this->call(OptionTableSeeder::class);
     
-        $this->call(BlogTablesSeeder::class);
+        // $this->call(BlogTablesSeeder::class);
 
-        $this->call(CategoryTablesSeeder::class);
+        // $this->call(CategoryTablesSeeder::class);
 
-        $this->call(FeatureTablesSeeder::class);
+        // $this->call(FeatureTablesSeeder::class);
         
-        $this->call(SpecificationTablesSeeder::class);
+        // $this->call(SpecificationTablesSeeder::class);
         
         // $this->call(PromocodeTablesSeeder::class);
 
-        $this->call(ProductTablesSeeder::class); 
+        // $this->call(ProductTablesSeeder::class); 
 
-        $this->call(AbstractTablesSeeder::class);
+        // $this->call(AbstractTablesSeeder::class);
         
-        // $this->call(OrderTablesSeeder::class);
+        $this->call(OrderTablesSeeder::class);
     }
 
     /**

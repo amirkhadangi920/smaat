@@ -78,15 +78,20 @@
                     </li>
                     <li v-for="(field, childIndex) in fields" :key="childIndex" class="data-table-cell p-2 d-flex align-items-center justify-content-center" >
                       <slot :name="field.field + '-body'" :row="item" :index="index">
-                        {{ item[ field.field ] }}
+                        <el-popover
+                          placement="top-end"
+                          width="300"
+                          trigger="hover"
+                          :disabled="typeof item[ field.field ] === 'string' ? item[ field.field ].length <= 50 : false"
+                          :content="item[ field.field ]"
+                        >
+                          <span slot="reference">{{ item[ field.field ] | truncate(50) }}</span>
+                        </el-popover>
                       </slot>
                     </li>
-                    <!-- <li class="data-table-cell p-2 d-flex align-items-center justify-content-center" v-if="has_times">
-                      
-                    </li> -->
                   </ul>
 
-                  <span class="operation-cell" v-if="has_operation">
+                  <span class="operation-cell" v-if="has_operation && !ignoreOperations.includes(item.id)">
                     <el-tooltip :content="'ویرایش ' + label" placement="right">
                       <base-button
                         v-if="canEdit"
@@ -145,7 +150,7 @@
                 md-icon="search"
                 md-label="متاسفانه هیچ داده ای یافت نشد :("
                 md-description="اگر در حالت جستجو نیستید و هیچ فیلتری نیز اعمال نکرده اید ، میتوانید با کلیک بر روی دکمه زیر یک داده جدید ثبت کنید">
-                <base-button v-if="methods.create" @click="methods.create()" :disabled="can(`create-${type}`)" size="sm" :type="can(`create-${type}`) ? 'default' : 'info'" class="pull-left">
+                <base-button v-if="methods.create" @click="methods.create()" :disabled="can(`create-${type}`)" size="sm" :type="can(`create-${type}`) ? 'default' : 'success'" class="pull-left">
                   <i class="tim-icons icon-pencil"></i>
                   افزودن {{ label }} جدید
                 </base-button>
@@ -246,19 +251,19 @@
       },
       has_animation: {
         type: Boolean,
-        default: true,
+        default: () => true
       },
       is_grid_view: {
         type: Boolean,
-        default: false,
+        default: () => false
       },
       has_times: {
         type: Boolean,
-        default: false
+        default: () => false
       },
       has_operation: {
         type: Boolean,
-        default: false
+        default: () => false
       },
       methods: {
         type: Object,
@@ -270,16 +275,20 @@
       },
       canEdit: {
         type: Boolean,
-        default: true
+        default: () => true
       },
       canSelect: {
         type: Boolean,
-        default: true
+        default: () => true
       },
       canDelete: {
         type: Boolean,
-        default: true
+        default: () => true
       },
+      ignoreOperations: {
+        type: Array,
+        default: () => []
+      }
     },
     components: {
       Tooltip,
@@ -401,18 +410,24 @@
 </script>
 
 <style>
+  
+  .el-popover {
+    direction: rtl;
+    text-align: right;
+  }
+
   .flip-list-move {
     transition: transform 500ms !important;
   }
 
   .btn-danger {
-    box-shadow: 0px 4px 20px -3px #ff3d3d, 0px 4px 18px -8px #000 !important;
+    box-shadow: 0px 5px 10px -4px #ff3d3d, 0px 4px 6px -5px #000 !important;
   }
   .btn-warning {
-    box-shadow: 0px 4px 20px -3px #ff8d72, 0px 4px 18px -8px #000 !important;
+    box-shadow: 0px 5px 10px -4px #ff8d72, 0px 4px 6px -5px #000 !important;
   }
   .btn-success {
-    box-shadow: 0px 4px 20px -3px #007bff, 0px 4px 18px -8px #000 !important;
+    box-shadow: 0px 5px 10px -4px #007bff, 0px 4px 6px -5px #000 !important;
   }
 
   .data-table .operation-cell {
@@ -457,10 +472,6 @@
     border: 1px solid #344675 !important;
   }
 
-  .white-content .card:not(.card-white) {
-    box-shadow: 0px 0px 60px -30px rgb(255, 0, 214) !important;
-  }
-
   .remove-button {
     cursor: pointer;
   }
@@ -481,7 +492,7 @@
     right: 10px;
     top: 10%;
     border-radius: 5px 15px 15px 5px;
-    box-shadow: 0px 6px 35px -20px #19375a inset, 0px 5px 30px -25px #0076ff inset;
+    box-shadow: 0px 6px 12px -14px #19375a inset, 0px 5px 11px -15px #0076ff inset;
   }
 
   .data-table {
@@ -498,6 +509,8 @@
     width: 100%;
     padding: 10px;
     z-index: 50;
+    -ms-word-break: break-word;
+    word-break: break-word;
   }
 
   .operation-cell i {
@@ -526,7 +539,7 @@
   }
   .created-at-label {
     background: #007bff;
-    box-shadow: 0px 4px 20px -3px #007bff, 0px 4px 18px -8px #000;
+    box-shadow: 0px 4px 12px -15px #007bff, 0px 3px 11px -16px #000;
     border-radius: 10px;
     padding: 2px 7px 10px;
     font-size: 8px;
@@ -537,7 +550,7 @@
   }
   .updated-at-label {
     background: #fd7e14;
-    box-shadow: 0px 4px 20px -3px #fd7e14, 0px 4px 18px -8px #000;
+    box-shadow: 0px 4px 12px -15px #fd7e14, 0px 3px 11px -16px #000;
     border-radius: 10px;
     padding: 2px 7px 10px;
     font-size: 8px;
@@ -565,9 +578,9 @@
     height: 100%;
     background: rgba(255, 255, 255, 0.5);
     z-index: -2;
-    box-shadow: 0px 0px 35px -20px #19375a, 0px 0px 30px -25px #0076ff;
+    box-shadow: 0px 0px 12px -14px #19375a, 0px 0px 11px -15px #0076ff;
     border-radius: 20px;
-    transform: rotate(1deg);
+    transform: rotate(0.8deg);
   }
   .data-table-row::before {
     content: '';
@@ -575,23 +588,25 @@
     bottom: 0px;
     left: 4%;
     width: 92%;
-    box-shadow: 0px 0px 35px -20px #19375a, 0px 0px 30px -25px #0076ff;
+    box-shadow: 0px 0px 12px -14px #19375a, 0px 0px 11px -15px #0076ff;
     height: 100%;
     background: rgba(255, 255, 255, 0.3);
     z-index: -3;
     border-radius: 20px;
-    transform: rotate(2deg);
+    transform: rotate(1.2deg);
   }
   .data-table-row ul {
     background: #fff;
-    box-shadow: 0px 0px 35px -20px #19375a, 0px 0px 30px -25px #0076ff;
+    box-shadow: 0px 7px 12px -15px #19375a, 0px 5px 11px -16px #0076ff;
     position: relative;
     border-radius: 20px;
+    min-height: 74px;
     overflow: hidden !important;
   }
   .data-table-row ul::before {
     z-index: -1;
     content: '';
+    display: none;
     position: absolute;
     top: -280px;
     left: -110px;
@@ -605,9 +620,9 @@
     text-shadow: 0px 10px 37px #440139;
   }
   
-  .data-table-row:hover {
-    transform: scale(1.01);
-    box-shadow: 0px 0px 70px -30px #ff00d3;
+  .data-table-row:hover ul {
+    transform: scale(1.003) !important;
+    box-shadow: 0px 7px 14px -14px #19375a, 0px 5px 12px -15px #0076ff;
   }
 
   .data-table-row td {
@@ -623,7 +638,7 @@
   
   .data-table img {
     max-height: 50px;
-    box-shadow: 0px 12px 40px -15px #000000a6;
+    filter: drop-shadow(0px 4px 10px #ddd) !important;
   }
 
   button.swal2-confirm {

@@ -110,6 +110,24 @@ export default {
             spec: false,
         },
 
+        is_mutation_loading: {
+            brand: false,
+            size: false,
+            warranty: false,
+            color: false,
+            unit: false,
+            spec: false,
+        },
+        
+        is_query_loading: {
+            brand: false,
+            size: false,
+            warranty: false,
+            color: false,
+            unit: false,
+            spec: false,
+        },
+
         is_grid_view: {
             brand: false,
             size: false,
@@ -230,6 +248,10 @@ export default {
                     file: null,
                     url: ''
                 },
+                is_deleted_image: {
+                    type: 'Boolean',
+                    value: false
+                }
             },
             size: {
                 name: {
@@ -270,6 +292,10 @@ export default {
                     file: null,
                     url: ''
                 },
+                is_deleted_image: {
+                    type: 'Boolean',
+                    value: false
+                }
             },
             color: {
                 name: {

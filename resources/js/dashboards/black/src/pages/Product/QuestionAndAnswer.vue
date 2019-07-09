@@ -42,6 +42,9 @@ export default {
   components: {
     BaseOpinion
   },
+  metaInfo: {
+    title: 'پرسش و پاسخ کاربران',
+  },
   data() {
     return {
       type: 'question_and_answer',

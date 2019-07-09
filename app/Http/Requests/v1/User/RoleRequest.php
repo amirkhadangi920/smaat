@@ -16,7 +16,7 @@ class RoleRequest extends MainRequest
     public function rules($args, $method)
     {
         $this->method = $method;
-        
+
         return [
             'display_name'  => [
                 'required',

@@ -68,6 +68,7 @@ class CreateSpecsTables extends Migration
 
         $schema->create('spec_rows', function (Blueprint $table) {
             $table->table([
+                'icon'          => 'nullable|50',
                 'is_detailable' => 'default:0',
                 'is_filterable' => 'default:0',
                 'is_multiple'   => 'default:0',

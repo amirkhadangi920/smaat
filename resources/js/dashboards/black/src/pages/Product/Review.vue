@@ -32,6 +32,9 @@ export default {
   components: {
     BaseOpinion
   },
+  metaInfo: {
+    title: 'نقد و بررسی محصولات',
+  },
   data() {
     return {
       type: 'review',

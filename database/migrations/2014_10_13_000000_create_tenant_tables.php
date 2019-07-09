@@ -23,7 +23,9 @@ class CreateTenantTables extends Migration
         $schema->create('tenants', function (Blueprint $table) {
             $table->table([
                 'info'
-            ], ['users'], 'uuid');
+            ], [
+                'users' => ['nullable', 'set null'],
+            ], 'uuid');
         });
 
         $schema->create('hostnames', function (Blueprint $table) {
@@ -40,16 +42,18 @@ class CreateTenantTables extends Migration
 
         $schema->create('user_phones', function (Blueprint $table) {
             $table->table([
-                'type'              => '50',
-                'phone_number'      => '255'
+                'type'              => 50,
+                'phone_number'      => 20
             ], [ 'users', 'tenants' ]);
         });
 
         $schema->create('user_addresses', function (Blueprint $table) {
             $table->table([
-                'type'          => '50',
-                'address'       => '255',
-                'postal_code'   => '10',
+                'full_name'     => 50,
+                'phone_number'  => 20,
+                'type'          => 50,
+                'address'       => 25,
+                'postal_code'   => 10,
                 'coordinates'   => 'point',
             ], [ 'cities', 'users', 'tenants' ]);
         });

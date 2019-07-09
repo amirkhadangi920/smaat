@@ -22,6 +22,12 @@ class UserAddressType extends BaseType
             'city' => [
                 'type' => \GraphQL::type('city')
             ],
+            'full_name' => [
+                'type' => Type::string()
+            ],
+            'phone_number' => [
+                'type' => Type::string()
+            ],
             'type' => [
                 'type' => Type::string()
             ],

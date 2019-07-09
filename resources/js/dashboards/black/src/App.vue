@@ -158,8 +158,14 @@ export default {
     DashboardContent,
     MobileMenu
   },
+  metaInfo() {
+    return {
+      titleTemplate: `%s | ${this.$store.state.siteSetting.title ? this.$store.state.siteSetting.title : 'فروشگاه'}`
+    }
+  },
   data() {
     return {
+      title: 'SmaaT shop',
       opened_index: this.$route.meta.index,
       is_collapsed: false,
     }
@@ -195,7 +201,6 @@ export default {
   },
   mounted() {
     setTimeout(() => {
-      
       anime({
         targets: '.content .background',
         height: 200,
@@ -229,34 +234,17 @@ export default {
     
     // this.$watch('$route', this.disableRTL, { immediate: true });
     this.$watch('$sidebar.showSidebar', this.toggleNavOpen)
-  },
-  created() {
-    setTimeout( () => {
-      // var granimInstance = new Granim({
-      //   element: '#granim-canvas',
-      //   name: 'granim',
-      //   opacity: [1, 1],
-      //   direction: 'diagonal',
-      //   stateTransitionSpeed: 20000,
-      //   states : {
-      //       "default-state": {
-      //           gradients: [
-      //               ['#8b387d', '#33002a'],
-      //               ['#fd5d93', '#910e7d'],
-      //               ['#574ee1', '#a804f2'],
-      //               ['#68002c', '#310129']
-      //           ]
-      //       }
-      //   }
-      // });
-
-      $('#particles-js').addClass('show')
-    }, 100)
   }
 };
 </script>
 
 <style>
+
+.material-icons {
+  font-family: Material Icons !important;
+  font-style: normal !important;
+}
+
 .content {
   transition: padding 300ms;
 }
@@ -348,31 +336,31 @@ i.dashboard-icon, i.feature-icon, i.blog-icon, i.product-icon, i.shop-icon, i.us
 }
 .el-menu-item i.dashboard-icon {
   background: #cc04c1;
-  box-shadow: 0px 4px 20px -3px #cc04c1, 0px 4px 18px -8px #000;
+  box-shadow: 0px 3px 10px -4px #cc04c1, 0px 3px 6px -5px #000;
 }
 .el-submenu__title i.feature-icon {
   background: #ff3d3d;
-  box-shadow: 0px 4px 20px -3px #ff3d3d, 0px 4px 18px -8px #000;
+  box-shadow: 0px 3px 10px -4px #ff3d3d, 0px 3px 6px -5px #000;
 }
 .el-submenu__title i.blog-icon {
   background: #fd7e14;
-  box-shadow: 0px 4px 20px -3px #fd7e14, 0px 4px 18px -8px #000;
+  box-shadow: 0px 3px 10px -4px #fd7e14, 0px 3px 6px -5px #000;
 }
 .el-submenu__title i.product-icon {
   background: #ffc107;
-  box-shadow: 0px 4px 20px -3px #ffc107, 0px 4px 18px -8px #000;
+  box-shadow: 0px 3px 10px -4px #ffc107, 0px 3px 6px -5px #000;
 }
 .el-submenu__title i.shop-icon {
   background: #20c997;
-  box-shadow: 0px 4px 20px -3px #20c997, 0px 4px 18px -8px #000;
+  box-shadow: 0px 3px 10px -4px #20c997, 0px 3px 6px -5px #000;
 }
 .el-submenu__title i.user-icon {
   background: #007bff;
-  box-shadow: 0px 4px 20px -3px #007bff, 0px 4px 18px -8px #000;
+  box-shadow: 0px 3px 10px -4px #007bff, 0px 3px 6px -5px #000;
 }
 .el-submenu__title i.setting-icon {
   background: #6c757d;
-  box-shadow: 0px 4px 20px -3px #6c757d, 0px 4px 18px -8px #000;
+  box-shadow: 0px 3px 10px -4px #6c757d, 0px 3px 6px -5px #000;
 }
 
 .alert.open.top.left {
@@ -451,7 +439,7 @@ i.dashboard-icon, i.feature-icon, i.blog-icon, i.product-icon, i.shop-icon, i.us
   height: 30px;
   color: #fff;
   border-radius: 5px;
-  box-shadow: 0px 4px 25px -6px #f70000, 0px 3px 10px -8px #000;
+  box-shadow: 0px 5px 10px -4px #ff8d72, 0px 4px 6px -5px #000 !important;
   text-shadow: 1px 2px 7px #0000005c;
 }
 .md-field .md-button.md-toggle-password {

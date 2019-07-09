@@ -34,8 +34,27 @@ use Grimzy\LaravelMysqlSpatial\Types\Point;
 use App\Models\Promocode\Promocode;
 use App\Models\Spec\SpecHeader;
 use App\Models\Spec\SpecDefault;
+use App\Models\Opinion\Comment;
+use App\Models\Opinion\QuestionAndAnswer;
 
 Route::get('/test/amir', function() {
+
+    return Role::all();
+
+    return Role::first()->update([ 'name' => 'test' ]);
+
+    return User::whereEmail('amirkhadangi920@owner.com')->with('roles')->first();
+
+    // return Product::first()
+    //     ->addMedia( public_path('images/user-test.jpg') )
+    //     ->preservingOriginal()
+    //     ->toMediaCollection();
+
+    // auth()->login( User::find('bc181bf43341') );
+
+    // return factory(QuestionAndAnswer::class, 20)->create(['is_accept' => 1, 'user_id' => 'bc181bf43341']);
+
+    return Order::find('1e40a545cc70')->update([ 'coordinates' => new Point(36.2305, 59.6168) ]);
 
     // $row = SpecRow::find(1);
 
@@ -47,9 +66,7 @@ Route::get('/test/amir', function() {
     // return $brand = Brand::select('id')->with('media')->first();
 
     // $brand
-    //     ->addMedia( public_path('images/user-test.jpg') )
-    //     ->preservingOriginal()
-    //     ->toMediaCollection();
+
 
     // $brand->clearMediaCollection();
 

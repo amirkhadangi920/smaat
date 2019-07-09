@@ -21,7 +21,7 @@ class ArticleRequest extends MainRequest
             'title'         => [
                 $this->requiredOrFilled(),
                 'string',
-                'max:50', 
+                'max:100', 
                 new UniqueTenant('articles', $args['id'] ?? null)
             ],
             'description'   => 'nullable|string|max:255',

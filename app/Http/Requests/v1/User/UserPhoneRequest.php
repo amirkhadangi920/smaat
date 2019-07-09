@@ -21,7 +21,7 @@ class UserPhoneRequest extends MainRequest
             'phone_number'  => [
                 'required',
                 'string',
-                'regex:/09(1[0-9]|3[1-9]|2[1-9])-?[0-9]{3}-?[0-9]{4}/',
+                'regex:/09(1[0-9]|3[1-9]|2[1-9]0[1-9])-?[0-9]{3}-?[0-9]{4}/',
                 new UniqueUserPhoneAddress('user_phones', $args['id'] ?? null)
             ],
         ];

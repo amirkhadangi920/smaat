@@ -17,7 +17,10 @@
     <template slot="filter-labels"></template>
     
     <template v-slot:photos-body="slotProps">
-      <img class="tilt" :src="slotProps.row.photos && slotProps.row.photos.length !== 0 ? slotProps.row.photos[0].thumb : '/images/placeholder.png'" />
+      <div>
+        <img class="tilt" :src="slotProps.row.photos && slotProps.row.photos.length !== 0 ? slotProps.row.photos[0].thumb : '/images/placeholder.png'" />
+        <span v-if="!slotProps.row.is_active" :style="{ marginTop: '-50%', background: '#f13b3bc7' }" class="d-block position-relative badge badge-danger">پیش نویس</span>
+      </div>
     </template>
 
     <template v-slot:brand-body="slotProps">
@@ -26,13 +29,22 @@
 
     <template v-slot:categories-body="slotProps">
       <transition-group name="list">
-        <span
-          v-for="item in slotProps.row.categories.filter( (category, index) => index < 3)"
+        <el-popover
+          v-for="item in slotProps.row.categories.filter( (i, index) => index < 3)"
           :key="item.id"
-          class="badge badge-default ml-1 hvr-grow-shadow hvr-icon-grow">
-          <i class="tim-icons icon-bullet-list-67 hvr-icon"></i>
-          {{ item.title }}
-        </span>
+          placement="top-end"
+          width="300"
+          trigger="hover"
+          :disabled="typeof item.title === 'string' ? item.title.length <= 20 : false"
+          :content="item.title"
+        >
+          <span
+            slot="reference"
+            class="badge badge-default ml-1 hvr-grow-shadow hvr-icon-grow">
+            <i class="tim-icons icon-bullet-list-67 hvr-icon"></i>
+            {{ item.title | truncate(20) }}
+          </span>
+        </el-popover>
 
         <el-dropdown v-if="slotProps.row.categories.length > 3" :key="slotProps.row.categories.map((c) => c.id).join(',')">
           <span class="el-dropdown-link badge badge-default">
@@ -64,26 +76,22 @@
 </template>
 
 <script>
-import {Tooltip} from 'element-ui'
-import {BaseDropdown} from '../../components'
 import Datatable from '../../components/BaseDatatable.vue'
-import ICountUp from 'vue-countup-v2';
-import {mapActions, mapMutations} from 'vuex'
+
 import createMixin from '../../mixins/createMixin'
 import initDatatable from '../../mixins/initDatatable'
-import tilt from 'tilt.js'
-import {ElTree} from 'element-ui'
 
 export default {
   components: {
-    Datatable,
-    BaseDropdown,
-    ICountUp
+    Datatable
   },
   mixins: [
     initDatatable,
     createMixin,
   ],
+  metaInfo: {
+    title: 'محصولات',
+  },
   data() {
     return {
         type: 'product',
@@ -96,10 +104,6 @@ export default {
           label: 'title',
         },
     }
-  },
-  created() {
-    setTimeout( () => $('.tilt').tilt({scale: 1.1}) ,300)
-    setTimeout( () => $('.tilt-fixed').tilt() ,300)
   },
   methods: {
     create() {
@@ -141,6 +145,7 @@ export default {
     allQuery() {
       return `
         name
+        is_active
         photos {
           id
           file_name

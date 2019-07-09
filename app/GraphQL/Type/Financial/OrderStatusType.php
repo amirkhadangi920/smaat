@@ -30,6 +30,9 @@ class OrderStatusType extends BaseType
             'color' => [
                 'type' => Type::string()
             ],
+            'icon' => [
+                'type' => Type::string()
+            ],
             'changed_at' => [
                 'type' => Type::string(),
                 'resolve' => function($data) {

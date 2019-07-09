@@ -1,13 +1,13 @@
 <template>
   <div class="row" :style="{ position: 'relative', zIndex: 10 }">
-    <div class="row col-12">
+    <div class="row col-12 mb-3">
       <div class="col-12 text-right">
         <div class="pull-right">
           <h1 class="animated bounceInRight delay-first" :style="{ color: '#fff', fontWeight: 'bold', textShadow: '0px 3px 15px #333' }">
             مدیریت <span :style="{ color: '#ff3d3d' }">تنظیمات</span> سایت
-            <i class="tim-icons icon-align-left-2" :style="{fontSize: '25px'}"></i>
+            <i class="header-nav-icon tim-icons icon-align-left-2" :style="{fontSize: '25px'}"></i>
           </h1>
-          <h6 class="text-muted animated bounceInRight delay-secound">با استفاده از بخش زیر میتوانید تنظیمات کلی وبسایت خود را مدیریت کنید</h6>
+          <h6 class="header-description animated bounceInRight delay-secound">با استفاده از بخش زیر میتوانید تنظیمات کلی وبسایت خود را مدیریت کنید</h6>
         </div>
         <div class="pull-left animated bounceInDown delay-last">
           <flip-clock :options="{
@@ -161,7 +161,7 @@
         <div class="col-md-3">
           <md-field :class="getValidationClass('theme_color')">
             <el-color-picker v-model="info.theme_color"></el-color-picker>
-            <span class="md-helper-text">رنگ قالب فروشگاه انتخاب کنید</span>
+            <span class="md-helper-text pt-2">رنگ قالب فروشگاه انتخاب کنید</span>
           </md-field>
         </div>
 
@@ -175,12 +175,27 @@
         </div>
       </div>
 
-      <base-button @click="updateInfo" size="sm" type="warning">
-        <i class="tim-icons icon-simple-add"></i>
+      <base-button
+        @click="updateInfo"
+        size="sm"
+        type="warning"
+        :loading="is_update_site_info"
+      >
+        <transition name="fade" mode="out-in">
+          <semipolar-spinner
+            :animation-duration="2000"
+            :size="17"
+            color="#fff"
+            v-if="is_update_site_info"
+          />
+          <span v-else class="pull-right ml-2" >
+            <i v-if="attr('is_creating')" class="tim-icons icon-simple-add"></i>
+            <i v-else class="tim-icons icon-pencil"></i>
+          </span>
+        </transition>
         بروز رسانی تنظیمات کلی
       </base-button>
     </card>
-
 
     <div class="row">
       <div class="col-md-6">
@@ -258,8 +273,25 @@
               </base-button>
             </el-tooltip>
 
-            <base-button @click="updateSlider('posters')" class="hvr-icon-spin" type="warning" size="sm" >
-              <i class="tim-icons icon-pencil hvr-icon" :style="{ fontSize: '18px !important' }"></i>
+            <base-button
+              @click="updateSlider('posters')"
+              :loading="is_update_site_posters"
+              class="hvr-icon-spin"
+              type="warning"
+              size="sm"
+            >
+              <transition name="fade" mode="out-in">
+                <semipolar-spinner
+                  :animation-duration="2000"
+                  :size="17"
+                  color="#fff"
+                  v-if="is_update_site_posters"
+                />
+                <span v-else class="pull-right ml-2" >
+                  <i v-if="attr('is_creating')" class="tim-icons icon-simple-add"></i>
+                  <i v-else class="tim-icons icon-pencil"></i>
+                </span>
+              </transition>
               بروزرسانی پوسترها
             </base-button>
           </div>
@@ -341,9 +373,26 @@
                 <i class="tim-icons icon-trash-simple hvr-icon" :style="{ fontSize: '18px !important' }"></i>
               </base-button>
             </el-tooltip>
-
-            <base-button @click="updateSlider('slider')" class="hvr-icon-spin" type="warning" size="sm" >
-              <i class="tim-icons icon-pencil hvr-icon" :style="{ fontSize: '18px !important' }"></i>
+            
+            <base-button
+              @click="updateSlider('slider')"
+              :loading="is_update_site_slider"
+              class="hvr-icon-spin"
+              type="warning"
+              size="sm"
+            >
+              <transition name="fade" mode="out-in">
+                <semipolar-spinner
+                  :animation-duration="2000"
+                  :size="17"
+                  color="#fff"
+                  v-if="is_update_site_slider"
+                />
+                <span v-else class="pull-right ml-2" >
+                  <i v-if="attr('is_creating')" class="tim-icons icon-simple-add"></i>
+                  <i v-else class="tim-icons icon-pencil"></i>
+                </span>
+              </transition>
               بروزرسانی اسلایدر
             </base-button>
           </div>
@@ -351,6 +400,25 @@
       </div>
     </div>
 
+    <transition name="fade">
+      <div class="main-panel-loading" v-if="!is_loaded">
+        <fingerprint-spinner
+          :animation-duration="1000"
+          :size="100"
+          color="#fff"
+        />
+      </div>
+    </transition>
+
+    <transition name="loading">
+      <div class="query-loader" v-if="attr('is_query_loading')">
+        <half-circle-spinner
+          :animation-duration="800"
+          :size="40"
+          color="#fff"
+        />
+      </div>
+    </transition>
   </div>
 </template>
 <script>
@@ -358,17 +426,24 @@ import { FlipClock } from '@mvpleung/flipclock';
 import { validationMixin } from 'vuelidate'
 import { required, maxLength } from 'vuelidate/lib/validators'
 import binding from '../../mixins/binding';
-import createMixin from '../../mixins/createMixin';
+import createMixin from '../../mixins/createMixin'
+import {SemipolarSpinner, HalfCircleSpinner, FingerprintSpinner} from 'epic-spinners'
 
 export default {
   components: {
-    FlipClock
+    FlipClock,
+    SemipolarSpinner,
+    HalfCircleSpinner,
+    FingerprintSpinner
   },
   mixins: [
     validationMixin,
     binding,
     createMixin
   ],
+  metaInfo: {
+    title: 'تنظیمات سایت',
+  },
   validations: {
     title: {
       required,
@@ -391,6 +466,7 @@ export default {
     return {
       type: null,
       group: 'setting',
+      label: 'تنظیمات',
 
       info: {
         title: '',
@@ -425,6 +501,9 @@ export default {
       ],
 
       is_loaded: false,
+      is_update_site_info: false,
+      is_update_site_slider: false,
+      is_update_site_posters: false,
     }
   },
   mounted()
@@ -486,10 +565,12 @@ export default {
     },
     updateInfo()
     {
+      this.is_update_site_info = true
       this.type = 'site_info'
 
       this.storeInServer({
         callback: ({data}) => {
+          this.is_update_site_info = false
           return console.log( data )
         }
       })
@@ -498,8 +579,11 @@ export default {
     {
       this.type = type === 'slider' ? 'site_slider' : 'site_posters'
 
+      type === 'slider' ? this.is_update_site_slider = true : this.is_update_site_posters = true
+
       this.storeInServer({
         callback: ({data}) => {
+          type === 'slider' ? this.is_update_site_slider = false : this.is_update_site_posters = false
           return console.log( data )
         }
       })

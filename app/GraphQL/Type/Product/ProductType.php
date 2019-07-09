@@ -25,6 +25,10 @@ class ProductType extends BaseType
                 'type' => Type::string(),
                 'selectable' => false
             ],
+            'slug' => [
+                'type' => Type::string(),
+                'selectable' => false
+            ],
             'second_name' => [
                 'type' => Type::listOf( Type::string() ),
                 'selectable' => false
@@ -74,7 +78,19 @@ class ProductType extends BaseType
             'colors' => $this->relationListField('color'),
             'unit' => $this->relationItemField('unit'),
             'reviews' => $this->paginatedRelationListField('review', 'is_accept'),
-            'questions' => $this->paginatedRelationListField('question_and_answer', 'is_accept'),
+            'questions' => [
+                'type'  => Type::listOf( \GraphQL::type('question_and_answer') ),
+                'query' => function(array $args, $query) {
+                
+                    if ( !$this->checkPermission('read-question_and_answer') )
+                        $query->where("question_and_answers.is_accept", 1);
+                        
+                    $query->where('parent_id', null)
+                          ->offset( (($args['page'] ?? 1 ) - 1) * 10 )->take(10);
+        
+                    return $query->orderBy('created_at', 'desc');
+                }
+            ],
             'accessories' => $this->paginatedRelationListField('product'),
             'audits' => $this->audits('product'),
             'is_active' => $this->acceptableField('product')

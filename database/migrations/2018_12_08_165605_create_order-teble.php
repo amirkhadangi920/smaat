@@ -22,9 +22,13 @@ class CreateOrderTeble extends Migration
         $schema->create('order_statuses', function (Blueprint $table) {
             $table->table([
                 'color'             => 'nullable|max:12',
+                'icon'              => 'nullable|max:50',
                 'jalali_created_at' => 'datetime|nullable',
                 'is_active'         => 'boolean|default:1'
-            ], ['users', 'tenants']);
+            ], [
+                'users',
+                'tenants' => ['nullable', 'cascade']
+            ]);
         });
 
         $schema->create('order_status_translations', function ($table) {
@@ -66,8 +70,6 @@ class CreateOrderTeble extends Migration
                 'shipping_methods' => ['nullable', 'set null'],
                 'cities' => ['nullable', 'set null'],
             ], 'uuid', ['paid_at', 'jalali_paid_at', 'user_addresses', 'user_phones']);
-
-            $table->unique(['order_id', 'variation_id']);
         });
 
         $schema->create('order_status_changes', function ($table) {
@@ -90,8 +92,6 @@ class CreateOrderTeble extends Migration
                 'orders',
                 'variations' => ['nullable', 'set null'],
             ],  'uuid');
-
-            $table->unique(['order_id', 'variation_id']);
         });
     }
 

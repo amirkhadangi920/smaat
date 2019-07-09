@@ -41,7 +41,7 @@ class CreateArticlesTable extends Migration
             $table->uuid('article_id');
 
             $table->string('slug', 100);
-            $table->string('title', 50);
+            $table->string('title', 100);
             $table->string('description', 255)->nullable();
             $table->text('body');
 

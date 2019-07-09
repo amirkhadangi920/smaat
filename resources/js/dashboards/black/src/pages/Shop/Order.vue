@@ -17,8 +17,18 @@
     ref="datatable">
 
     <template v-slot:user-body="slotProps">
-      <img class="tilt" :src="slotProps.row.user.avatar ? slotProps.row.user.avatar.thumb : '/images/placeholder-user.png'" />
-      <p>{{ slotProps.row.user.full_name }}</p>
+      <table class="spec-feature-table">
+        <tbody>
+          <tr>
+            <td>
+              <img class="tilt" :src="slotProps.row.user.avatar ? slotProps.row.user.avatar.thumb : '/images/placeholder-user.png'" />
+            </td>
+            <td class="text-right">
+              {{ slotProps.row.user.full_name || truncate(30) }}
+            </td>
+          </tr>
+        </tbody>
+      </table>
     </template>
 
     <template v-slot:offer-body="slotProps">
@@ -33,6 +43,8 @@
 
     <template v-slot:status-body="slotProps">
       <el-select
+        class="order-status-select"
+        v-if="slotProps.row.status"
         :disabled="can('change-status-order')"
         @change="changeStatus(slotProps.index, $event)"
         v-model="slotProps.row.status.id"
@@ -45,11 +57,16 @@
           :label="item.title"
           :value="item.id"
         >
-          <div class="status-item" :style="{ borderLeft: `7px solid ${item.color}` }">
-            {{ item.title }}
+          <div class="status-item" :style="{ borderRight: `7px solid ${item.color}` }">
+            {{ item.title | truncate(50) }}
+            <i v-if="item.icon" class="material-icons pull-left">{{ item.icon }}</i>
           </div>
         </el-option>
       </el-select>
+
+      <span v-else class="badge badge-warning">
+        نا مشخص :(
+      </span>
     </template>
 
     <template #custom-operations="slotProps">
@@ -59,17 +76,11 @@
         </base-button>
       </el-tooltip>
     </template>
-
-    <template slot="filter-labels"></template>
-    <template slot="modal"></template>
   </datatable>
 </template>
 
 <script>
-import {BaseDropdown} from '../../components'
 import Datatable from '../../components/BaseDatatable.vue'
-import ICountUp from 'vue-countup-v2';
-import tilt from 'tilt.js'
 
 import createMixin from '../../mixins/createMixin'
 import initDatatable from '../../mixins/initDatatable'
@@ -80,14 +91,15 @@ import moment from 'moment'
 export default {
   components: {
     Datatable,
-    BaseDropdown,
-    ICountUp
   },
   mixins: [
     initDatatable,
     createMixin,
     filtersHelper
   ],
+  metaInfo: {
+    title: 'سفارشات',
+  },
   data() {
     return {
       plural: 'orders',
@@ -100,11 +112,16 @@ export default {
     this.$store.dispatch('getData', {
       group: 'shop',
       type: 'order_status',
-      query: `order_statuses(per_page: 30) { data { id title color } }`
+      query: `order_statuses(per_page: 30) {
+        data { id title color icon created_at updated_at }
+        total trash chart { month count }
+      }`
     })
   },
   methods: {
     changeStatus(index, status) {
+      this.setAttr('is_query_loading', true)
+
       var selected_status = this.$store.state.shop.order_status.filter(item => item.id === status)[0];
 
       axios.post('/graphql/auth', {
@@ -116,6 +133,7 @@ export default {
         }`
       })
       .then(({data}) => {
+        this.setAttr('is_query_loading', false)
 
         if ( data.data.changeOrderStatus.status === 400 )
         {
@@ -142,7 +160,10 @@ export default {
           verticalAlign: 'top',
           horizontalAlign: 'left',
         })
-      }).catch( error => console.log(error) );
+      }).catch( error => {
+        console.log(error)
+        this.setAttr('is_query_loading', false)
+      });
     },
   },
   computed: {
@@ -167,7 +188,6 @@ export default {
         },
       ]
     },
-
     allQuery() {
       return `
         user {
@@ -186,7 +206,7 @@ export default {
         }`
     },
   },
-  beforeRouteLeave (to, from, next) {
+  beforeRouteLeave(to, from, next) {
     this.$refs.datatable.closePanel()
 
     setTimeout( () => next(), 700);
@@ -195,6 +215,13 @@ export default {
 </script>
 
 <style scope>
+.order-status-select input {
+  height: 30px !important;
+}
+.order-status-select .el-select__caret {
+  line-height: 12px;
+}
+
 .el-select {
   border-radius: 5px;
   border: 1.5px solid rgb(211, 211, 211);

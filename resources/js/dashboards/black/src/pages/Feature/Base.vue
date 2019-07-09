@@ -12,7 +12,6 @@
       update: update
     }"
 
-    :getdata="[1,2,3,4,5,6,7,8,9,10]"
     ref="datatable"
   > 
     <template v-slot:logo-body="slotProps">
@@ -21,13 +20,22 @@
 
     <template v-slot:categories-body="slotProps">
       <transition-group name="list">
-        <span
-          v-for="item in slotProps.row.categories.filter( (category, index) => index < 3)"
+        <el-popover
+          v-for="item in slotProps.row.categories.filter( (i, index) => index < 3)"
           :key="item.id"
-          class="badge badge-default ml-1 hvr-grow-shadow hvr-icon-grow">
-          <i class="tim-icons icon-bullet-list-67 hvr-icon"></i>
-          {{ item.title }}
-        </span>
+          placement="top-end"
+          width="300"
+          trigger="hover"
+          :disabled="typeof item.title === 'string' ? item.title.length <= 20 : false"
+          :content="item.title"
+        >
+          <span
+            slot="reference"
+            class="badge badge-default ml-1 hvr-grow-shadow hvr-icon-grow">
+            <i class="tim-icons icon-bullet-list-67 hvr-icon"></i>
+            {{ item.title | truncate(20) }}
+          </span>
+        </el-popover>
 
         <el-dropdown v-if="slotProps.row.categories.length > 3" :key="slotProps.row.categories.map((c) => c.id).join(',')">
           <span class="el-dropdown-link badge badge-default">
@@ -45,7 +53,7 @@
     </template>
 
     <template v-slot:code-body="slotProps">
-      <span class="badge badge-primary p-2" :style="{ background: slotProps.row.code }">
+      <span class="badge badge-primary color-badge p-2" :style="{ background: slotProps.row.code }">
         {{ slotProps.row.code }}
       </span>
     </template>
@@ -83,11 +91,10 @@
               :auto-upload="false"
               :show-file-list="false"
               :on-change="addImage">
-              <img
-                v-if="$store.state[group].form[type].logo.url"
-                :src="$store.state[group].form[type].logo.url"
-                class="avatar"
-              />
+              <div v-if="$store.state[group].form[type].logo.url">
+                <img :src="$store.state[group].form[type].logo.url" class="avatar" />
+                <i @click.prevent="deleteImage" class="el-icon-delete avatar-uploader-icon"></i>
+              </div>
               <i v-else class="el-icon-plus avatar-uploader-icon"></i>
             </el-upload>
             <small slot="helperText" id="emailHelp" class="form-text text-muted">لوگوی مورد نظر خود را انتخاب کنید</small>
@@ -99,15 +106,10 @@
 </template>
 
 <script>
-import {Tooltip} from 'element-ui'
-import {BaseDropdown} from '../../components'
 import Datatable from '../../components/BaseDatatable.vue'
-import ICountUp from 'vue-countup-v2';
-import {mapActions, mapMutations} from 'vuex'
+
 import createMixin from '../../mixins/createMixin'
 import initDatatable from '../../mixins/initDatatable'
-import tilt from 'tilt.js'
-import {ElTree} from 'element-ui'
 
 export default {
   props: [
@@ -119,9 +121,7 @@ export default {
     'plural'
   ],
   components: {
-    Datatable,
-    BaseDropdown,
-    ICountUp
+    Datatable
   },
   mixins: [
     initDatatable,
@@ -157,7 +157,6 @@ export default {
         row.categories.map(i => i.id)
       ), 100);
     },
-
     changeSelectedCategories() {
       this.$store.commit('setFormData', {
         group: this.group,
@@ -165,32 +164,6 @@ export default {
         field: 'categories',
         value: this.$refs.categories.getCheckedKeys()
       })
-    },
-    filterLogo(command) {
-      this.setAttr('filters', { hasLogo: command })
-
-      this.changeTableData();
-    },
-    filterCategory(command) {
-      this.setAttr('filters', {
-        hasCategories: command,
-        categories: this.$refs.filter_categories.getCheckedKeys()
-      })
-
-      if ( this.filter('categories', []).length == 0 ) {
-        this.setAttr('filters', {categories: []})
-      }
-
-      this.setAttr('filters', {
-        categories_string: this.$refs.filter_categories.getCheckedNodes()
-          .map( (category => category.title ))
-          .join(' ، ')
-      })
-
-      this.changeTableData();
-    },
-    filterSearch() {
-      this.changeTableData();
     },
   },
   computed: {
@@ -231,13 +204,13 @@ export default {
     queryFields() {
       return this.fields.filter( i => i.field !== 'logo' && i.field !== 'categories' ).map( i => i.field ).join(' ');
     },
-
-    hasFilter() {
-      return this.filter('query') != null 
-          || this.filter('hasLogo') != null
-          || this.filter('hasCategories') != null
-          || this.filter('categories', []).length != 0
-    },
   },
 }
 </script>
+
+<style>
+.color-badge {
+  box-shadow: 0px 3px 20px -4px #888;
+  text-shadow: 1px 1px 10px #777;
+}
+</style>

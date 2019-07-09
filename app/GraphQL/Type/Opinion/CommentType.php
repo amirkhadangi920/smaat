@@ -33,7 +33,9 @@ class CommentType extends BaseType
             'question' => $this->relationItemField('comment', 'is_accept'),
             'answers' => $this->relationListField('comment', 'is_accept'),
             'audits' => $this->audits('comment'),
-            'is_accept' => $this->acceptableField('comment'),
+            'is_accept' => [
+                'type' => Type::boolean(),
+            ],
         ];
     }
 }

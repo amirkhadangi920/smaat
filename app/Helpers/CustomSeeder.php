@@ -78,7 +78,7 @@ class CustomSeeder extends Seeder
     public function createTenant()
     {
         $tenant = factory(Tenant::class)->create();
-        $tenant->hostnames()->saveMany( factory(Hostname::class, rand(1, 5))->make() );
+        $tenant->hostnames()->save( factory(Hostname::class)->make() );
         
         return $tenant->id;
     }

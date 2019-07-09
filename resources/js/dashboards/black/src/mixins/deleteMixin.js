@@ -43,6 +43,8 @@ export default {
         cancelButtonText: 'نه ، اشتباه شده'
       }).then((result) => {
         if (result.value) {
+          this.setAttr('is_query_loading', true)
+
           const mutation = voca.camelCase(`delete ${this.type}`)
 
           axios.post('/graphql/auth', {
@@ -53,6 +55,8 @@ export default {
               }
             }`
           }).then(({data}) => {
+            this.setAttr('is_query_loading', false)
+
             const result = data.data[mutation]
             
             if ( result.status === 400 )
@@ -75,7 +79,10 @@ export default {
               showConfirmButton: false,
               timer: 1000,
             })
-          }).catch(error => console.log(error));
+          }).catch(error => {
+            this.setAttr('is_query_loading', false)
+            console.log(error)
+          });
         }
       })
     },
@@ -111,6 +118,7 @@ export default {
         cancelButtonText: 'نه ، اشتباه شده'
       }).then((result) => {
         if (result.value) {
+          this.setAttr('is_query_loading', true)
 
           var ids = [];
 
@@ -134,6 +142,8 @@ export default {
               }
             }`
           }).then(({data}) => {
+            this.setAttr('is_query_loading', false)
+
             const result = data.data[mutation]
             
             if ( result.status === 400 )
@@ -148,7 +158,7 @@ export default {
             }
 
             let newDataArray = this.$store.state[this.group][this.type].filter((item, index) => {
-              return !this.attr('selected_items').includes(index)
+              return !this.attr('selected_items').includes(index) || ( this.ignoreOperations && this.ignoreOperations.includes(item.id) )
             })
 
             this.setData(newDataArray);
@@ -170,6 +180,8 @@ export default {
             })
 
           }).catch(error => {
+            this.setAttr('is_query_loading', false)
+            
             if (error.response) {
               this.$swal.fire({
                 title: 'خطایی رخ داد !',

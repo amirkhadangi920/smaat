@@ -13,113 +13,37 @@
     }"
     
     ref="datatable">
-
-    <template slot="filter-labels" v-if="false">
-      <span class="pull-right text-muted ml-2" v-show="hasFilter">فیتلر های اعمال شده :</span>
-
-      <span
-        class="badge badge-default p-2 ml-2 pull-right"
-        @click="filterLogo(null)"
-        v-show="filter('hasLogo') == 1">
-        فقط عکس دار ها
-        <i class="tim-icons icon-simple-remove remove-button"></i>
-      </span>
-      <span
-        class="badge badge-default p-2 ml-2 pull-right"
-        @click="filterLogo(null)"
-        v-show="filter('hasLogo') == 0">
-        فقط بدون عکس
-        <i class="tim-icons icon-simple-remove remove-button"></i>
-      </span>
-
-      <span
-        class="badge badge-default p-2 ml-2 pull-right"
-        @click="filterCategory(null)"
-        v-show="filter('hasCategories') == 1">
-        فقط با دسته بندی ها
-        <i class="tim-icons icon-simple-remove remove-button"></i>
-      </span>
-      <span 
-        class="badge badge-default p-2 ml-2 pull-right"
-        @click="filterCategory(null)"
-        v-show="filter('hasCategories') == 0">
-        فقط بدون دسته بندی ها
-        <i class="tim-icons icon-simple-remove remove-button"></i>
-      </span>
-
-      <span
-        class="badge badge-default p-2 ml-2 pull-right"
-        @click="$refs.filter_categories.setCheckedNodes([]); filterCategory( filter('hasCategories') )"
-        v-show="filter('categories') && filter('categories_string')">
-        فقط برای گروه {{ filter('categories').length !== 1 ? 'های' : '' }} : <b>{{ filter('categories_string') }}</b>
-        <i class="tim-icons icon-simple-remove remove-button"></i>
-      </span>
-
-      <span
-        class="badge badge-default p-2 ml-2 pull-right"
-        @click="$store.state[group].filters[type].query = null; filterSearch()"
-        v-show="filter('query')">
-        جستجو برای : {{ filter('query') }}
-        <i class="tim-icons icon-simple-remove remove-button"></i>
-      </span>
-    </template>
     
     <template v-slot:image-body="slotProps">
       <img class="tilt" :src="slotProps.row.image ? slotProps.row.image.thumb : '/images/placeholder.png'" />
     </template>
-
-    <template slot="categories-header" v-if="false">
-      <el-popover placement="top-start" width="200" trigger="hover"
-        content="this is content, this is content, this is content">
-
-        <el-dropdown @command="filterCategory">
-          <span class="el-dropdown-link">
-            با / بدون دسته بندی <i class="el-icon-arrow-down el-icon--right"></i>
-          </span>
-          <el-dropdown-menu slot="dropdown" dir="rtl">
-            <el-dropdown-item icon="el-icon-tickets" :command="null">همه</el-dropdown-item>
-            <el-dropdown-item icon="el-icon-check" :command="1">با دسته بندی</el-dropdown-item>
-            <el-dropdown-item icon="el-icon-error" :command="0">بدون دسته بندی</el-dropdown-item>
-          </el-dropdown-menu>
-        </el-dropdown>
-
-        <hr />
-
-        <el-tree
-          dir="ltr"
-          class="rtl"
-          :data="$store.state.group.categories"
-          :props="defaultProps"
-          :accordion="true"
-          ref="filter_categories"
-          empty-text="هیچ دسته بندی ای یافت نشد :("
-          show-checkbox
-          node-key="id"
-        >
-          <span class="custom-tree-node" slot-scope="{ node }">
-            <span>{{ node.label }}</span>
-          </span>
-        </el-tree>
-        <hr />
-        <base-button @click="filterCategory($store.state[group].filters[type].hasCategories)" size="sm">اعمال</base-button>
-
-        <p class="text-muted hvr-icon-up" slot="reference">
-          <i class="tim-icons icon-bullet-list-67 hvr-icon"></i>
-          دسته بندی ها
-          <i class="el-icon-arrow-down el-icon--right"></i>
-        </p>
-      </el-popover>
+    
+    <template v-slot:reading_time-body="slotProps">
+      <span v-if="slotProps.row.reading_time">{{ slotProps.row.reading_time }} دقیقه</span>
+      <span v-else class="badge badge-warning">
+        <i class="tim-icons icon-watch-time"></i>
+        نا مشخص
+      </span>
     </template>
 
     <template v-slot:subjects-body="slotProps">
       <transition-group name="list">
-        <span
-          v-for="item in slotProps.row.subjects.filter( (category, index) => index < 3)"
+        <el-popover
+          v-for="item in slotProps.row.subjects.filter( (i, index) => index < 3)"
           :key="item.id"
-          class="badge badge-default ml-1 hvr-grow-shadow hvr-icon-grow">
-          <i class="tim-icons icon-bullet-list-67 hvr-icon"></i>
-          {{ item.title }}
-        </span>
+          placement="top-end"
+          width="300"
+          trigger="hover"
+          :disabled="typeof item.title === 'string' ? item.title.length <= 20 : false"
+          :content="item.title"
+        >
+          <span
+            slot="reference"
+            class="badge badge-default ml-1 hvr-grow-shadow hvr-icon-grow">
+            <i class="tim-icons icon-bullet-list-67 hvr-icon"></i>
+            {{ item.title | truncate(20) }}
+          </span>
+        </el-popover>
 
         <el-dropdown v-if="slotProps.row.subjects.length > 3" :key="slotProps.row.subjects.map((c) => c.id).join(',')">
           <span class="el-dropdown-link badge badge-default">
@@ -226,26 +150,22 @@
 </template>
 
 <script>
-import {Tooltip} from 'element-ui'
-import {BaseDropdown} from '../../components'
 import Datatable from '../../components/BaseDatatable.vue'
-import ICountUp from 'vue-countup-v2';
-import {mapActions, mapMutations} from 'vuex'
+
 import createMixin from '../../mixins/createMixin'
 import initDatatable from '../../mixins/initDatatable'
-import tilt from 'tilt.js'
-import {ElTree} from 'element-ui'
-import ClassicEditor from '@ckeditor/ckeditor5-build-classic'
-
 import { validationMixin } from 'vuelidate'
 import { required, maxLength } from 'vuelidate/lib/validators'
 import Binding, { bind } from '../../mixins/binding'
 
+import ClassicEditor from '@ckeditor/ckeditor5-build-classic'
+
 export default {
   components: {
     Datatable,
-    BaseDropdown,
-    ICountUp,
+  },
+  metaInfo: {
+    title: 'مقالات',
   },
   mixins: [
     initDatatable,
@@ -274,10 +194,6 @@ export default {
       type: 'subject',
     })
   },
-  created() {
-    setTimeout( () => $('.tilt').tilt({scale: 1.1}) ,300)
-    setTimeout( () => $('.tilt-fixed').tilt() ,300)
-  },
   methods: {
     changeSelectedSubjects() {
       this.$store.commit('setFormData', {
@@ -289,6 +205,8 @@ export default {
     },
     getRowData(row)
     {
+      this.setAttr('is_query_loading', true)
+
       return axios.get('/graphql/auth', {
         params: {
           query: `{
@@ -306,15 +224,15 @@ export default {
     },
     afterEdit(row)
     {
-      setTimeout(() => {
-        this.$refs.subjects.setCheckedKeys( row.subjects.map(i => i.id) )
-      }, 100);
+      this.setAttr('is_query_loading', false)
+
+      setTimeout(() => this.$refs.subjects.setCheckedKeys( row.subjects.map(i => i.id) ), 100)
     },
   },
   validations: {
     title: {
       required,
-      maxLength: maxLength(50)
+      maxLength: maxLength(100)
     },
     description: {
       maxLength: maxLength(255)
@@ -388,12 +306,15 @@ export default {
   beforeRouteLeave (to, from, next) {
     this.$refs.datatable.closePanel()
 
-    setTimeout( () => next(), 700);
+    setTimeout( () => next(), 700)
   },
 }
 </script>
 
 <style>
+.ck.ck-content.ck-editor__editable img {
+  max-height: unset;
+}
 .el-icon-plus.avatar-uploader-icon, .el-upload, .avatar {
   width: 100%;
 }

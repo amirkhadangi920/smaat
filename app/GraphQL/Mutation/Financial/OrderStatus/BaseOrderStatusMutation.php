@@ -27,6 +27,9 @@ class BaseOrderStatusMutation extends MainMutation
             'color' => [
                 'type' => Type::string()
             ],
+            'icon' => [
+                'type' => Type::string()
+            ],
             'is_active' => [
                 'type' => Type::boolean()
             ]

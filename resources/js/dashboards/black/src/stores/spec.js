@@ -52,6 +52,18 @@ export default {
             spec_header: false,
             spec_default: false,
         },
+        
+        is_mutation_loading: {
+            spec_row: false,
+            spec_header: false,
+            spec_default: false,
+        },
+        
+        is_query_loading: {
+            spec_row: false,
+            spec_header: false,
+            spec_default: false,
+        },
 
         is_grid_view: {
             spec_row: false,
@@ -140,6 +152,10 @@ export default {
                     value: ''
                 },
                 prefix: {
+                    type: 'String',
+                    value: ''
+                },
+                icon: {
                     type: 'String',
                     value: ''
                 },

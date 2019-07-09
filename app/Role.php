@@ -27,8 +27,6 @@ class Role extends LaratrustRole implements AuditableContract
      */
     protected $fillable = [
         'name',
-        // 'display_name',
-        // 'description',
         'is_active'
     ];
 

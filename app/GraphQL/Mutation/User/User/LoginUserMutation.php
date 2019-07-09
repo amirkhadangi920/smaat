@@ -7,12 +7,13 @@ use App\Http\Requests\v1\LoginRequest;
 use Auth;
 use Rebing\GraphQL\Support\SelectFields;
 use GraphQL\Type\Definition\ResolveInfo;
+use function GuzzleHttp\json_encode;
 
 class LoginUserMutation extends BaseUserMutation
 {
     public function type()
     {
-        return \GraphQL::type('user');
+        return \GraphQL::type('me');
     }
 
     /**
@@ -48,13 +49,18 @@ class LoginUserMutation extends BaseUserMutation
 
             $this->moveLocalCartToServer();
 
-            return [
-                'id'    => Auth::user()->id,
-                'email' => Auth::user()->email,
-                'token' => Auth::user()->createToken('web')->accessToken
-            ];
+            $data = collect( Auth::user()->toArray() );
+            
+            $data->put('token', Auth::user()->createToken('web')->accessToken);
+
+            return $data;
         } 
         else
-            return response()->json(['message' => 'Unauthorised'], 401);
+        {
+            die(json_encode([
+                'ststus' => 400,
+                'message' => 'Unauthorised'
+            ]));
+        }
     }
 }

@@ -20,22 +20,22 @@ class UserRequest extends MainRequest
         return [
             'first_name'        => 'nullable|string|max:20',
             'first_name'        => 'nullable|string|max:30',
-            'social_links'      => 'nullable|array',
-            'social_links.*'    => 'required|string|max:100',
+            // 'social_links'      => 'nullable|array',
+            // 'social_links.*'    => 'required|string|max:100',
             'email'             => [
-                'required',
+                $this->requiredOrFilled(),
                 'email',
                 new UniqueTenant('users', $args['id'] ?? null, null, false)
             ],
             'avatar'            => 'nullable|image|mimes:jpg,jpeg,png|max:1024',
-            'address'           => 'nullable|string|max:255',
-            'postal_code'       => 'nullable|digits:10',
+            'national_code'     => 'nullable|size:10',
+            'gender'            => 'nullable|boolean',
             
             // relations
             'city_id'           => ['nullable', 'integer', new ExistsTenant('cities')],
 
-            'permissions'       => ['nullable', 'array', new ExistsTenant],
-            'permissions.*'     => 'required|integer',
+            'permissions'       => 'nullable|array',
+            'permissions.*'     => 'required|integer|exists:permissions,id',
             
             'roles'             => ['nullable', 'array', new ExistsTenant],
             'roles.*'           => 'required|integer',

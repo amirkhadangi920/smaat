@@ -43,18 +43,25 @@
 
 <script>
 import BaseFeature from './Base.vue'
-import Binding, { bind } from '../../mixins/binding'
-import { validationMixin } from 'vuelidate'
-import { required, maxLength } from 'vuelidate/lib/validators'
 import SmartInput from '../../components/BaseInput'
 import BaseForm from '../../components/BaseForm'
 
+import Binding, { bind } from '../../mixins/binding'
+import { validationMixin } from 'vuelidate'
+import { required, maxLength } from 'vuelidate/lib/validators'
+
 export default {
-  mixins: [validationMixin, Binding],
+  mixins: [
+    validationMixin,
+    Binding
+  ],
   components: {
     SmartInput,
     BaseFeature,
     BaseForm
+  },
+  metaInfo: {
+    title: 'برندها',
   },
   data() {
     return {
@@ -62,7 +69,6 @@ export default {
       type: 'brand',
     }
   },
-
   validations: {
     name: {
       required,
@@ -70,16 +76,6 @@ export default {
     },
     description: {
       maxLength: maxLength(255)
-    },
-  },
-  mounted() {
-    
-  },
-  methods: {
-    validate() {
-      this.$v.$touch()
-
-      return !this.$v.$invalid;
     },
   },
   computed: {

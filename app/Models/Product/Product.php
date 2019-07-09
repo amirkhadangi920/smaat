@@ -24,13 +24,16 @@ use Illuminate\Support\Str;
 use Spatie\MediaLibrary\HasMedia\HasMedia;
 use Spatie\MediaLibrary\HasMedia\HasMediaTrait;
 use App\Helpers\MediaConversionsTrait;
+use Spatie\MediaLibrary\Models\Media;
+use App\Models\Option\SiteSetting;
+use Spatie\Image\Manipulations;
 
 class Product extends Model implements AuditableContract, LikeableContract, HasMedia
 {
     use SoftDeletes, Auditable, HasTenant, HasTags;
     use Filterable, Likeable, CreateTimeline, CreatorRelationship;
     use SoftCascadeTrait, Translatable, SearchableTrait;
-    use HasMediaTrait, MediaConversionsTrait;
+    use HasMediaTrait;
 
     /****************************************
      **             Attributes
@@ -72,6 +75,7 @@ class Product extends Model implements AuditableContract, LikeableContract, HasM
         'brand_id',
         'unit_id',
         'spec_id',
+        'label_id',
         'code',
         'note',
         'aparat_video',
@@ -314,5 +318,62 @@ class Product extends Model implements AuditableContract, LikeableContract, HasM
                 'source' => 'name'
             ]
         ];
+    }
+
+    /**
+     * Create conversions for media library
+     *
+     * @param Media $media
+     * @return void
+     */
+    public function registerMediaConversions(Media $media = null)
+    {
+        $this
+            ->addMediaConversion('thumb')
+            ->keepOriginalImageFormat()
+            ->width(100)
+            ->height(100)
+            ->sharpen(10);
+
+        $this
+            ->addMediaConversion('small')
+            ->keepOriginalImageFormat()
+            ->width(250)
+            ->height(250);
+
+        $this
+            ->addMediaConversion('medium')
+            ->keepOriginalImageFormat()
+            ->width(500)
+            ->height(500);
+
+        $this
+            ->addMediaConversion('large')
+            ->keepOriginalImageFormat()
+            ->width(1024)
+            ->height(800);
+
+        $this
+            ->addMediaConversion('wide')
+            ->keepOriginalImageFormat()
+            ->width(1680)
+            ->height(1200);
+
+        $watermark = SiteSetting::whereName('watermark')->with('media')->first()->media ?? collect([]);
+
+        if ( $watermark->isNotEmpty() )
+        {
+            $this
+                ->addMediaConversion('watermark')
+                ->keepOriginalImageFormat()
+                ->width(1024)
+                ->height(800)
+                ->watermark( $watermark->first()->getPath() )
+                ->watermarkPosition(Manipulations::POSITION_TOP_LEFT)
+                ->watermarkOpacity(70)
+                ->watermarkPadding(10, 10, Manipulations::UNIT_PERCENT)
+                ->watermarkHeight(20, Manipulations::UNIT_PERCENT)
+                ->watermarkWidth(20, Manipulations::UNIT_PERCENT);
+        }
     }
 }

@@ -48,7 +48,8 @@ class UniqueInSpec implements Rule
             $result->where("{$this->table}.id", '!=', $this->args['id']);
 
         $result->where($attribute, $value)
-            ->where($this->field, $this->args[ $this->field ] ?? false);
+            ->where($this->field, $this->args[ $this->field ] ?? false)
+            ->where("{$this->table}.deleted_at", null);
 
         return $result->count() === 0;
     }
