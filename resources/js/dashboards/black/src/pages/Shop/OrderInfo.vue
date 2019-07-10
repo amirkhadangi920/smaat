@@ -333,7 +333,6 @@
           },
         ]"
         :methods="{}"
-        
         :has_loaded="true"
         :is_grid_view="false"
         :has_times="false"

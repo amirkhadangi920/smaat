@@ -335,6 +335,7 @@
           type="brand"
           group="feature"
           label="سطر جدول"
+          :canSelect="false"
           :fields="[
             {
               field: 'title',

@@ -13,6 +13,7 @@
     }"
     :canCreate="false" 
     ref="datatable"
+    :ignoreOperations="ignoreOperations"
   >
 
     <template #filter-labels></template>
@@ -233,7 +234,8 @@ export default {
         plural: 'users',
         type: 'user',
         group: 'user',
-        label: 'کاربر'
+        label: 'کاربر',
+        ignoreOperations: ['000000000000']
     }
   },
   mounted() {

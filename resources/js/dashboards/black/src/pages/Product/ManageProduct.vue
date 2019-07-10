@@ -231,6 +231,7 @@
               :methods="{ deleteSingle: (index) => form_data.accessories.splice(index, 1) }"
               :has_loaded="is_loaded"
               :canEdit="false"
+              :canSelect="false"
               :has_times="false"
               :has_operation="true"
             >

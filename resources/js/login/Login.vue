@@ -1,12 +1,10 @@
 <template>
     <div class="container d-flex align-items-center justify-content-center">
 
-        <div id="map" style="width: 600px; height: 450px; background: #eee; border: 2px solid #aaa;"></div>
-
         <div class="row col-8" dir="rtl">
             <div class="col-12 login-form">
                 <form @submit.prevent="login">
-                    <h2 class="text-center">ورود به سایت</h2>
+                    <h2 class="text-center mb-4" :style="{ color: '#fff' }">ورود به سایت</h2>
                     <div class="alert alert-danger text-center" v-if="has_error">
                         متاسفانه اطلاعات ورودی به هم مطابقت ندارند :(    
                     </div>      
@@ -27,6 +25,7 @@
                 <!-- <p class="text-center"><a href="#">Create an Account</a></p> -->
             </div>
         </div>
+
     </div>
 </template>
 
@@ -37,25 +36,12 @@ export default {
             has_error: false,
 
             form: {
-                email: 'amirkhadangi920@owner.com',
-                password: '123456'
+                email: '',
+                password: ''
             }
         }
     },
     mounted() {
-        axios.get('https://api.neshan.org/v1/search', {
-            params: {
-                term: "خیام",
-                lat: 36.2605,
-                lng: 59.6168
-            },
-            headers: {
-                "Api-Key": 'service.iNRXHTXo2sAB90bKwCU4rDllf5TpkJYCwPAeJxDL'
-            }
-        }).then( response => {
-            console.log( response.data.items )
-        }).catch( error => console.log( error.response ))
-
         if ( localStorage.getItem('JWT') && localStorage.getItem('JWT') !== undefined )
             window.location.replace('/panel')
     },

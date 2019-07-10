@@ -124,6 +124,13 @@
                 <sidebar-link to="/panel/setting/site" name="تنظیمات سایت" icon="tim-icons icon-link-72"/>      
               </el-menu-item>
             </el-submenu>
+            <el-menu-item class="main" index="7">
+              <a href="/" class="nav-link">
+                <i class="tim-icons icon-tv-2 dashboard-icon"></i>
+                <p>مشاهده وبسایت</p>
+              </a>
+              <!-- <sidebar-link @click="window.href = '/'" to="/" name="مشاهده وبسایت" icon=""/> -->
+            </el-menu-item>
           </el-menu>
         </template>
       </side-bar>

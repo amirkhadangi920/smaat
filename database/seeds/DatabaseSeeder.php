@@ -17,7 +17,7 @@ class DatabaseSeeder extends CustomSeeder
 
         // $this->call(UserTableSeeder::class);
 
-        // $this->call(LaratrustSeeder::class);
+        $this->call(LaratrustSeeder::class);
 
         // $this->call(OptionTableSeeder::class);
     
