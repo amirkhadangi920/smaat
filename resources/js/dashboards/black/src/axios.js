@@ -2,6 +2,8 @@ import Vue from 'vue'
 
 import axios from 'axios'
 import VueAxios from 'vue-axios'
+
+// axios.defaults.baseURL = 'http://smaat.ir/'
 axios.defaults.headers.common['Accept'] = 'application/json';
 axios.defaults.headers.common['Authorization'] = `Bearer ${localStorage.getItem('JWT')}`;
 axios.interceptors.response.use(function (response) {

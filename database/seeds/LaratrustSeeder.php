@@ -13,29 +13,26 @@ class LaratrustSeeder extends CustomSeeder
      */
     public function run()
     {
-        // dd( Role::all() );
+        // $default_usernames = ['amirkhadangi920', 'grcg2000', 'imisia99', 'm.hadi.z.1997'];
 
+        // $usernames = collect();
+        // while(true)
+        // {
+        //     $usernames->push( $this->command->ask('Please enter an Username ', $default_usernames[$usernames->count()] ?? "admin". ( $usernames->count() - 4 )) );
 
-        $default_usernames = ['amirkhadangi920', 'grcg2000', 'imisia99', 'm.hadi.z.1997'];
+        //     if ( $usernames->last() === 'end' )
+        //     {
+        //         $usernames->pop();
+        //         break;
+        //     };
+        // }
 
-        $usernames = collect();
-        while(true)
-        {
-            $usernames->push( $this->command->ask('Please enter an Username ', $default_usernames[$usernames->count()] ?? "admin". ( $usernames->count() - 4 )) );
-
-            if ( $usernames->last() === 'end' )
-            {
-                $usernames->pop();
-                break;
-            };
-        }
-
-        while(true)
-        {
-            $password = $this->command->secret('Please Enter an password ');
+        // while(true)
+        // {
+        //     $password = $this->command->secret('Please Enter an password ');
             
-            if ( !is_null($password) ) break;
-        }
+        //     if ( !is_null($password) ) break;
+        // }
 
         $this->command->info('Truncating User, Role and Permission tables');
         $this->truncateLaratrustTables();
@@ -56,6 +53,10 @@ class LaratrustSeeder extends CustomSeeder
                 'description' => $roleLabel[$key]['description']
             // ], [
             ]);
+
+            $role->tenant_id = null;
+            $role->save();
+
             $permissions = [];
 
             $this->command->info('Creating Role '. strtoupper($key));
@@ -80,21 +81,36 @@ class LaratrustSeeder extends CustomSeeder
             // Attach all permissions to the role
             $role->permissions()->sync($permissions);
 
-            $usernames->each( function($username) use($password, $role, $key) {
+            $this->command->info("Creating support@smaat.ir user");
 
-                $this->command->info("Creating '{$username}' user");
+            $user = \App\User::firstOrCreate([
+                'email' => 'support@smaat.ir'
+            ], [
+                'first_name' => 'پشتیبان',
+                'last_name' => 'اسمات',
+                'password' => bcrypt('123456')
+            ]);
+
+            $user->attachRole($role);
+
+            $user->tenant_id = null;
+            $user->save();
+
+            // $usernames->each( function($username) use($password, $role, $key) {
+
+            //     $this->command->info("Creating '{$username}' user");
     
-                $email = "{$username}@{$key}.com";
-                // Create default user for each role
+            //     $email = "{$username}@{$key}.com";
+            //     // Create default user for each role
 
-                $user = \App\User::firstOrCreate([
-                    'email' => $email
-                ], [
-                    'password' => bcrypt( $password )
-                ]);
-                // echo $user->id . PHP_EOL . $role->id . PHP_EOL;
-                $user->attachRole($role);
-            });
+            //     $user = \App\User::firstOrCreate([
+            //         'email' => $email
+            //     ], [
+            //         'password' => bcrypt( $password )
+            //     ]);
+            //     // echo $user->id . PHP_EOL . $role->id . PHP_EOL;
+            //     $user->attachRole($role);
+            // });
         }
 
         // Creating user with permissions

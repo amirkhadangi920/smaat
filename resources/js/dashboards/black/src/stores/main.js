@@ -290,26 +290,26 @@ export default new Vuex.Store({
             if( state.permissions.length > 0 )
                 return state.permissions
 
-            axios.get('/graphql/auth', {
-                params: {
-                    query: `{
-                        me {
-                            id
-                            first_name
-                            last_name
-                            full_name
-                            email
-                            avatar { id file_name thumb }
-                            allPermissions { id name display_name description }
-                        }
+            axios.post('/graphql/auth', {
+                query: `{
+                    me {
+                        id
+                        first_name
+                        last_name
+                        full_name
+                        email
+                        avatar { id file_name thumb }
+                        allPermissions { id name display_name description }
+                    }
 
-                        siteSetting {
-                            title
-                        }
-                    }`
-                }
+                    siteSetting {
+                        title
+                    }
+                }`
             })
             .then(({data}) => {
+                return console.log(data)
+                
                 if ( data.data.me.allPermissions.length === 0 )
                 {
                     localStorage.removeItem('JWT')
@@ -322,6 +322,8 @@ export default new Vuex.Store({
                 commit('setSiteSetting', data.data.siteSetting)
             })
             .catch(error => {
+                return console.log(error)
+
                 localStorage.removeItem('JWT')
                 window.location = "/login"
             })

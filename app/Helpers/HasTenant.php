@@ -27,7 +27,8 @@ trait HasTenant
         static::addGlobalScope(new TenantScope);
 
         static::creating(function($model) {
-            if ( env('APPLY_TENANT_FILTERS', true) ) {
+
+            if ( !app()->runningInConsole() ) {
                 if ( !$id = static::getTenantId() ) abort(404);
     
                 $model->tenant_id = $id;
@@ -39,10 +40,7 @@ trait HasTenant
                 
             if ( self::$has_user ?? true )
             {
-                if ( app()->runningInConsole() )
-                    $model->user_id = User::first()->id ?? null;
-                
-                else 
+                if ( !app()->runningInConsole() )
                     $model->user_id = auth()->user()->id ?? null;
             }
 
@@ -50,14 +48,14 @@ trait HasTenant
                 $model->jalali_created_at = jdate();
         });
 
-        static::updating(function($model) {
+        // static::updating(function($model) {
 
-            if ( !$model->tenant_id ) abort(403);
-        });
+        //     if ( !$model->tenant_id ) abort(403);
+        // });
 
-        static::deleting(function($model) {
+        // static::deleting(function($model) {
 
-            if ( !$model->tenant_id ) abort(403);
-        });
+        //     if ( !$model->tenant_id ) abort(403);
+        // });
     }
 }

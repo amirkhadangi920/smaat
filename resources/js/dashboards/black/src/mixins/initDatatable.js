@@ -7,25 +7,23 @@ export default {
   { 
     if (this.data().length === 0)
     {
-      axios.get('/graphql/auth', {
-        params: {
-          query: `{
-            allData: ${this.plural} {
-              data {
-                id
-                ${this.allQuery}
+      axios.post('/graphql/auth', {
+        query: `{
+          allData: ${this.plural} {
+            data {
+              id
+              ${this.allQuery}
 
-                ${ this.attr('has_timestamps') ? 'created_at updated_at' : ''}
-              }
-              chart {
-                month
-                count
-              }
-              total
-              trash
+              ${ this.attr('has_timestamps') ? 'created_at updated_at' : ''}
             }
-          }`
-        }
+            chart {
+              month
+              count
+            }
+            total
+            trash
+          }
+        }`
       })
       .then(({data}) => {
         this.setData(data.data.allData.data)

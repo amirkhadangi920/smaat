@@ -28,6 +28,7 @@ Vue.use(VueRouter);
 Vue.use(RouterPrefetch);
 Vue.use(VueSweetalert2);
 
+
 /* eslint-disable no-new */
 new Vue({
   router,

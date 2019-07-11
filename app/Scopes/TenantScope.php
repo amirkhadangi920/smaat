@@ -18,13 +18,14 @@ class TenantScope implements Scope
      */
     public function apply(Builder $builder, Model $model)
     {
+
         $tenant_id = cache()->rememberForever(request()->getHost(), function () {
             return Hostname::whereDomain( request()->getHost() )->first()->tenant_id ?? false;
         });
 
-        if ( !$tenant_id && env('APPLY_TENANT_FILTERS', true) ) abort(404);
+        if ( !$tenant_id && !app()->runningInConsole() ) abort(404);
 
-        if( env('APPLY_TENANT_FILTERS', true) )
+        if( !app()->runningInConsole() )
             $builder->where( $model->getTable().'.tenant_id', $tenant_id)
                     ->orWhereNull( $model->getTable().'.tenant_id' );
     }

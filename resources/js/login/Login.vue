@@ -36,8 +36,8 @@ export default {
             has_error: false,
 
             form: {
-                email: '',
-                password: ''
+                email: 'amirkhadangi@smaat.ir',
+                password: '123456'
             }
         }
     },
@@ -47,22 +47,29 @@ export default {
     },
     methods: {
         login() {
-            axios({
-                method: 'POST',
-                headers: {
-                    'Accept': 'application/json',
-                },
-                url: '/api/v1/login',
-                data: this.form
+            axios.post('/graphql', {
+                query: `mutation {
+                    login(email: "${this.form.email}", password: "${this.form.password}") {
+                        id
+                        token
+                        email
+                    }
+                }`
             })
             .then( ({data}) => {
+                if ( data.status === 400 )
+                {
+                    this.has_error = true;
+                    return console.log(data.message)
+                }
+                
                 this.has_error = false;
-                localStorage.setItem('JWT', data.data.token)
+                localStorage.setItem('JWT', data.data.login.token)
                 window.location.replace('/panel')
             })
             .catch( (error) => {
                 this.has_error = true;
-                console.log(error.response)
+                console.log(error)
             })
         }
     }

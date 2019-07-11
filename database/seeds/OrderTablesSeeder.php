@@ -9,6 +9,7 @@ use App\Models\{
     Promocode\Promocode
 };
 use App\Models\Financial\{ OrderStatus, ShippingMethod, Order };
+use App\User;
 
 class OrderTablesSeeder extends CustomSeeder
 {
@@ -19,39 +20,53 @@ class OrderTablesSeeder extends CustomSeeder
      */
     public function run()
     {
-        OrderStatus::create([
-            'id' => 1,
-            'title' => 'سبد خرید',
-            'color' => '#F59C52',
-            'icon' => 'shopping_cart',
-            'description' => 'سفارش هم اکنون یک سبد خرید است و شامل اقلامی است که مشتری به سبد خرید خود اضافه کرده است ، به مرحله پرداخت نرسیده است'
+        $user_id = User::whereEmail('support@smaat.ir')->first()->id ?? null;
+        $order_statuses = [];
+
+
+        $order_statuses[] = OrderStatus::create([
+            'id'            => 1,
+            'user_id'       => $user_id,
+            'title'         => 'سبد خرید',
+            'color'         => '#F59C52',
+            'icon'          => 'shopping_cart',
+            'description'   => 'سفارش هم اکنون یک سبد خرید است و شامل اقلامی است که مشتری به سبد خرید خود اضافه کرده است ، به مرحله پرداخت نرسیده است'
         ]);
 
-        OrderStatus::create([
-            'id' => 2,
-            'title' => 'در انتظار پرداخت',
-            'color' => '#F5502E',
-            'icon' => 'payment',
-            'description' => 'مشتری اقدام به پرداخت صورت حساب خود از درگاه پرداخت بانکی کرده است'
+        $order_statuses[] = OrderStatus::create([
+            'id'            => 2,
+            'user_id'       => $user_id,
+            'title'         => 'در انتظار پرداخت',
+            'color'         => '#F5502E',
+            'icon'          => 'payment',
+            'description'   => 'مشتری اقدام به پرداخت صورت حساب خود از درگاه پرداخت بانکی کرده است'
         ]);
 
-        OrderStatus::create([
-            'id' => 3,
-            'title' => 'پرداخت شده',
-            'color' => '#396EF2',
-            'icon' => 'bookmark_border',
-            'description' => 'مبلغ سفارش به صورت کامل پرداخت شده است و در انتظار بررسی میباشد'
+        $order_statuses[] = OrderStatus::create([
+            'id'            => 3,
+            'user_id'       => $user_id,
+            'title'         => 'پرداخت شده',
+            'color'         => '#396EF2',
+            'icon'          => 'bookmark_border',
+            'description'   => 'مبلغ سفارش به صورت کامل پرداخت شده است و در انتظار بررسی میباشد'
         ]);
 
-        OrderStatus::create([
-            'id' => 4,
-            'title' => 'لغو شده',
-            'color' => '#F23939',
-            'icon' => 'cancel_presentation',
-            'description' => 'سفارش مورد نظر به هر دلیلی لغو شده است'
+        $order_statuses[] = OrderStatus::create([
+            'id'            => 4,
+            'user_id'       => $user_id,
+            'title'         => 'لغو شده',
+            'color'         => '#F23939',
+            'icon'          => 'cancel_presentation',
+            'description'   => 'سفارش مورد نظر به هر دلیلی لغو شده است'
         ]);
 
-        die( OrderStatus::count() );
+        foreach( $order_statuses as $item )
+        {
+            $item->tenant_id = null;
+            $item->save();
+        }
+
+        die('All Order status was created \n');
 
         ShippingMethod::where('id', '!=', null)->forceDelete();
         OrderStatus::where('id', '!=', null)->forceDelete();

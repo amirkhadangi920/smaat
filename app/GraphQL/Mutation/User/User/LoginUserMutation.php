@@ -58,7 +58,7 @@ class LoginUserMutation extends BaseUserMutation
         else
         {
             die(json_encode([
-                'ststus' => 400,
+                'status' => 400,
                 'message' => 'Unauthorised'
             ]));
         }
