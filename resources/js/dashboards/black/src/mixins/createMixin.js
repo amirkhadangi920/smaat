@@ -38,7 +38,8 @@ export default {
 
     create()
     {
-      this.clearForm()
+      if ( !this.attr('is_creating') )
+        this.clearForm()
       
       if ( typeof this.afterCreate === "function" )
         this.afterCreate();
@@ -48,8 +49,10 @@ export default {
     },
     edit(index, row)
     {
-      if ( typeof this.getRowData === "function" )
-      {
+      if (
+           typeof this.getRowData === "function"
+        && ( this.attr('is_creating') || row.id !== this.attr('selected').id )
+      ) {
         const rowData = row
         row = this.getRowData(row);
 
@@ -63,7 +66,8 @@ export default {
     },
     handleEdit(index, row)
     {
-      this.fillFormForEditing(row)
+      if ( this.attr('is_creating') || row.id !== this.attr('selected').id )
+        this.fillFormForEditing(row)
 
       this.setAttr('selected', {
         index,
@@ -146,6 +150,7 @@ export default {
         group: this.group,
         type: this.type,
       })
+      
       
       this.$store.commit('setFormData', {
         group: this.group,
@@ -271,6 +276,19 @@ export default {
         this.$notify({
           title: 'یافت نشد',
           message: `متاسفانه اطلاعات ${this.label} درخواستی شما یافت نشد :(`,
+          timeout: 10000,
+          type: 'danger',
+          verticalAlign: 'top',
+          horizontalAlign: 'left',
+        })
+      }
+      else
+      {
+        this.setAttr('is_mutation_loading', false)
+        
+        this.$notify({
+          title: 'خطای سرور',
+          message: `متاسفانه در ارتباط با سرور مشکلی بوجود آمد ، لطفا مرورگر خود را رفرش کرده و دوباره تلاش کنید`,
           timeout: 10000,
           type: 'danger',
           verticalAlign: 'top',

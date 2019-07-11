@@ -40,7 +40,7 @@ export default {
           data: data.data.allData.chart.map(period => period.count)
         })
       }).then(() => this.load(true))
-      .then(() => $('.tilt').tilt({ scale: 1.1 }))
+      .then(() => $('.tilt').tilt({ scale: 1.05, maxTilt: 3 }))
       .then(() => {
         anime({
           targets: '.card i',
@@ -82,7 +82,7 @@ export default {
           ctx.stroke = function () {
             ctx.save();
             ctx.shadowColor = '#2F80ED';
-            ctx.shadowBlur = 30;
+            ctx.shadowBlur = 15;
             ctx.shadowOffsetX = 0;
             ctx.shadowOffsetY = 10;
             _stroke.apply(this, arguments)
@@ -218,7 +218,8 @@ export default {
           this.setData(response.data.data)
 
           setTimeout(() => $('.tilt').tilt({
-            scale: 1.1
+            scale: 1.05,
+            maxTilt: 3
           }), 300)
         }, 500);
       })

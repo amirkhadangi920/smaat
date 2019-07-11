@@ -541,6 +541,7 @@
               <label>زمان ارسال</label>
               <md-input type="number" v-model="form_variation.sending_time" />
               <i class="md-icon tim-icons icon-bag-16"></i>
+              <span class="md-suffix">روز</span>
               <span class="md-helper-text">میانگین زمان ارسال این تنوع محصول</span>
             </md-field>
             <br/>
