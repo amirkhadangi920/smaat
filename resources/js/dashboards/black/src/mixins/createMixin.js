@@ -277,6 +277,19 @@ export default {
           horizontalAlign: 'left',
         })
       }
+      else
+      {
+        this.setAttr('is_mutation_loading', false)
+        
+        this.$notify({
+          title: 'خطای سرور',
+          message: `متاسفانه در ارتباط با سرور مشکلی بوجود آمد ، لطفا مرورگر خود را رفرش کرده و دوباره تلاش کنید`,
+          timeout: 10000,
+          type: 'danger',
+          verticalAlign: 'top',
+          horizontalAlign: 'left',
+        })
+      }
     }
   }
 }

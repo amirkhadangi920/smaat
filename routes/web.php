@@ -26,7 +26,7 @@ Route::get('/login', function() {
 
 Route::get('/{path?}', function() {
 
-    return view('comming-soon');
+    // return view('comming-soon');
 
     $dashboard_template = 'karma';
 
