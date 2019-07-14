@@ -308,7 +308,7 @@ export default new Vuex.Store({
                 }`
             })
             .then(({data}) => {
-                return console.log(data)
+                // return console.log(data)
                 
                 if ( data.data.me.allPermissions.length === 0 )
                 {
@@ -322,7 +322,7 @@ export default new Vuex.Store({
                 commit('setSiteSetting', data.data.siteSetting)
             })
             .catch(error => {
-                return console.log(error)
+                // return console.log(error)
 
                 localStorage.removeItem('JWT')
                 window.location = "/login"
