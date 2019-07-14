@@ -631,10 +631,8 @@ export default {
     {
       this.setAttr('is_query_loading', true)
 
-      axios.get('/graphql/auth', {
-        params: {
-          query: `{ singleData: ${this.type} (id: ${row.id}) { ${this.fullInfoQuery} } }`
-        }
+      axios.post('/graphql/auth', {
+        query: `{ singleData: ${this.type} (id: ${row.id}) { ${this.fullInfoQuery} } }`
       }).then(({data}) => {
         this.showing_info = { ...row, ...data.data.singleData };
         this.showing_info.index = index;

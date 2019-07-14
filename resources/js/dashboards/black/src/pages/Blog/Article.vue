@@ -207,19 +207,17 @@ export default {
     {
       this.setAttr('is_query_loading', true)
 
-      return axios.get('/graphql/auth', {
-        params: {
-          query: `{
-            singleData: ${this.type} (id: "${row.id}") {
-              id
-              ${this.allQuery}
-              body
-              tags { name }
-              created_at
-              updated_at
-            }
-          }`
-        }
+      return axios.post('/graphql/auth', {
+        query: `{
+          singleData: ${this.type} (id: "${row.id}") {
+            id
+            ${this.allQuery}
+            body
+            tags { name }
+            created_at
+            updated_at
+          }
+        }`
       })
     },
     afterEdit(row)

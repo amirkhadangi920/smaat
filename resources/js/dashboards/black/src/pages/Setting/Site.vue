@@ -508,27 +508,25 @@ export default {
   },
   mounted()
   {
-    axios.get('/graphql/auth', {
-      params: {
-        query: `{
-          siteSetting {
-            title description phone address
-            theme_color is_enabled
-            logo { small }
-            banner { small }
-            header_banner { small }
-            watermark { small }
-            slider {
-              image { small }
-              title description button link
-            }
-            posters {
-              image { small }
-              title description button link
-            }
+    axios.post('/graphql/auth', {
+      query: `{
+        siteSetting {
+          title description phone address
+          theme_color is_enabled
+          logo { small }
+          banner { small }
+          header_banner { small }
+          watermark { small }
+          slider {
+            image { small }
+            title description button link
           }
-        }`
-      }
+          posters {
+            image { small }
+            title description button link
+          }
+        }
+      }`
     })
     .then(({data}) => {
       this.info = data.data.siteSetting

@@ -130,17 +130,15 @@ export default {
     mounted() {
         this.loading = true
 
-        axios.get('/graphql/auth', {
-            params: {
-                query: `{
-                    allData: ${this.type} (per_page: 30 ${ this.filters ? ',' + this.filters : ''}) {
-                        data {
-                            id
-                            ${this.fields}
-                        }
+        axios.post('/graphql/auth', {
+            query: `{
+                allData: ${this.type} (per_page: 30 ${ this.filters ? ',' + this.filters : ''}) {
+                    data {
+                        id
+                        ${this.fields}
                     }
-                }`
-            }
+                }
+            }`
         })
         .then(({data}) =>
         {   
@@ -174,17 +172,15 @@ export default {
             {
                 this.loading = true;
 
-                axios.get('/graphql/auth', {
-                    params: {
-                        query: `{
-                            allData: ${this.type} (query: "${query}" ${ this.filters ? ',' + this.filters : ''}) {
-                                data {
-                                    id
-                                    ${this.fields}
-                                }
+                axios.post('/graphql/auth', {
+                    query: `{
+                        allData: ${this.type} (query: "${query}" ${ this.filters ? ',' + this.filters : ''}) {
+                            data {
+                                id
+                                ${this.fields}
                             }
-                        }`
-                    }
+                        }
+                    }`
                 })
                 .then(({data}) =>
                 {

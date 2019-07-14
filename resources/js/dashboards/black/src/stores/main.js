@@ -250,10 +250,8 @@ export default new Vuex.Store({
                 }`
             }
 
-            axios.get('/graphql/auth', {
-                params: {
-                    query: query
-                }
+            axios.post('/graphql/auth', {
+                query: query
             }).then(({data}) => {
 
                 commit('setData', {

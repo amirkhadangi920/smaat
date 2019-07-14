@@ -789,45 +789,43 @@ export default {
   },
   mounted()
   {
-    axios.get('/graphql/auth', {
-      params: {
-        query: `{
-          spec(id: ${this.$route.params.id}) {
+    axios.post('/graphql/auth', {
+      query: `{
+        spec(id: ${this.$route.params.id}) {
+          id
+          title
+          description
+          categories {
+            id
+            title
+          }
+          headers {
             id
             title
             description
-            categories {
-              id
-              title
-            }
-            headers {
+
+            rows {
               id
               title
               description
+              help
+              postfix
+              prefix
+              icon
+              is_required
+              is_multiple
+              is_filterable
+              created_at
+              updated_at
 
-              rows {
+              defaults {
                 id
-                title
-                description
-                help
-                postfix
-                prefix
-                icon
-                is_required
-                is_multiple
-                is_filterable
-                created_at
-                updated_at
-
-                defaults {
-                  id
-                  value
-                }
+                value
               }
             }
           }
-        }`
-      }
+        }
+      }`
     })
     .then(({data}) => {
       this.table_title = data.data.spec.title

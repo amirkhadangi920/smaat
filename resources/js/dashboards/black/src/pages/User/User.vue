@@ -294,16 +294,14 @@ export default {
     {
       this.setAttr('is_query_loading', true)
 
-      return axios.get('/graphql/auth', {
-        params: {
-          query: `{
-            singleData: ${this.type} (id: "${row.id}") {
-              national_code gender
-              permissions { id }
-              roles { id }
-            }
-          }`
-        }
+      return axios.post('/graphql/auth', {
+        query: `{
+          singleData: ${this.type} (id: "${row.id}") {
+            national_code gender
+            permissions { id }
+            roles { id }
+          }
+        }`
       })
     },
     afterEdit(row)

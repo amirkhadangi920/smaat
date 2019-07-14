@@ -5,24 +5,22 @@ export default {
   {
     if (this.data().length === 0)
     {
-      axios.get('/graphql/auth', {
-        params: {
-          query: `{
-            allData: ${this.plural} {
+      axios.post('/graphql/auth', {
+        query: `{
+          allData: ${this.plural} {
+            id title description logo { id file_name thumb } childs {
               id title description logo { id file_name thumb } childs {
                 id title description logo { id file_name thumb } childs {
                   id title description logo { id file_name thumb } childs {
                     id title description logo { id file_name thumb } childs {
-                      id title description logo { id file_name thumb } childs {
-                        id title description logo { id file_name thumb }
-                      }
+                      id title description logo { id file_name thumb }
                     }
                   }
                 }
               }
             }
-          }`
-        }
+          }
+        }`
       })
       .then(({data}) => this.setData(data.data.allData) )
       .then(() => this.load(true) )

@@ -209,33 +209,20 @@ export default {
       this.setAttr('has_loaded', status)
     },
     changeTableData() {
-      axios.get(`/api/v1/${this.type}`, {
-        params: this.attr('filters')
-      }).then((response) => {
-        setTimeout(() => {
-          this.setData(response.data.data)
-
-          setTimeout(() => $('.tilt').tilt({
-            scale: 1.05,
-            maxTilt: 3
-          }), 300)
-        }, 500);
-      })
+      // 
     },
     handlePagination(page)
     {
-      axios.get('/graphql/auth', {
-        params: {
-          query: `{
-            allData: ${this.plural} (page: ${page}) {
-              data {
-                id ${this.allQuery}
-                ${ this.attr('has_timestamps') ? 'created_at updated_at' : ''}
-              }
-              total
+      axios.post('/graphql/auth', {
+        query: `{
+          allData: ${this.plural} (page: ${page}) {
+            data {
+              id ${this.allQuery}
+              ${ this.attr('has_timestamps') ? 'created_at updated_at' : ''}
             }
-          }`
-        }
+            total
+          }
+        }`
       })
       .then(({data}) => {
         this.setData(data.data.allData.data)
@@ -251,18 +238,16 @@ export default {
     {
       if ( query.length >= 3 || query.length === 0  )
       {
-        axios.get('/graphql/auth', {
-          params: {
-            query: `{
-              allData: ${this.plural} (query: "${query}") {
-                data {
-                  id ${this.allQuery}
-                  ${ this.attr('has_timestamps') ? 'created_at updated_at' : ''}
-                }
-                total
+        axios.post('/graphql/auth', {
+          query: `{
+            allData: ${this.plural} (query: "${query}") {
+              data {
+                id ${this.allQuery}
+                ${ this.attr('has_timestamps') ? 'created_at updated_at' : ''}
               }
-            }`
-          }
+              total
+            }
+          }`
         })
         .then(({data}) => {
           this.setData(data.data.allData.data)

@@ -901,23 +901,21 @@ export default {
       this.setAttr('selected', { id: this.$route.params.id })
       this.setAttr('is_creating', false)
 
-      axios.get('/graphql/auth', {
-        params: {
-          query: `{
-            product (id: "${this.$route.params.id}") {
-              ${this.allQuery}
-              variations {
-                id
-                sales_price
-                inventory
-                sending_time
-                color { id name code }
-                warranty { id title expire }
-                size { id name }
-              }
+      axios.post('/graphql/auth', {
+        query: `{
+          product (id: "${this.$route.params.id}") {
+            ${this.allQuery}
+            variations {
+              id
+              sales_price
+              inventory
+              sending_time
+              color { id name code }
+              warranty { id title expire }
+              size { id name }
             }
-          }`
-        }
+          }
+        }`
       })
       .then(({data}) => {
         if ( data.data.product.spec && data.data.product.spec.headers.length )
@@ -1277,22 +1275,20 @@ export default {
     {
       if ( ! this.is_loaded ) return
 
-      axios.get('/graphql/auth', {
-        params: {
-          query: `{
-            spec (id: ${newVal}) {
-              id title headers {
-                id title description
-                rows {
-                  id title description help
-                  prefix postfix is_multiple
-                  data { id }
-                  defaults { id value }
-                }
+      axios.post('/graphql/auth', {
+        query: `{
+          spec (id: ${newVal}) {
+            id title headers {
+              id title description
+              rows {
+                id title description help
+                prefix postfix is_multiple
+                data { id }
+                defaults { id value }
               }
             }
-          }`
-        }
+          }
+        }`
       })
       .then(({data}) => {
         this.handleSpecification(data.data.spec.headers)

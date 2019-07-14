@@ -505,51 +505,49 @@ export default {
     this.$watchLocation({ enableHighAccuracy: true })
     .then(({lat, lng}) => this.location = [lat, lng])
 
-    axios.get('/graphql/auth', {
-      params: {
-        query: `{
-          order (id: "${this.$route.params.id}") {
+    axios.post('/graphql/auth', {
+      query: `{
+        order (id: "${this.$route.params.id}") {
+          id
+          destination
+          phone_number
+          coordinates { lat lng }
+          postal_code
+          offer
+          total
+          shipping_cost
+          paid_at created_at updated_at
+          status: order_status { id title color }
+          status_changes { id title color changed_at }
+          method: shipping_method { id name cost }
+          city { id name }
+          user {
             id
-            destination
-            phone_number
-            coordinates { lat lng }
-            postal_code
+            first_name last_name full_name
+            email national_code gender
+            phones { id type phone_number }
+            avatar { id file_name thumb }
+          }
+          items {
+            id
+            count
+            price
             offer
-            total
-            shipping_cost
-            paid_at created_at updated_at
-            status: order_status { id title color }
-            status_changes { id title color changed_at }
-            method: shipping_method { id name cost }
-            city { id name }
-            user {
+            variation {
               id
-              first_name last_name full_name
-              email national_code gender
-              phones { id type phone_number }
-              avatar { id file_name thumb }
-            }
-            items {
-              id
-              count
-              price
-              offer
-              variation {
-                id
-                inventory
-                sending_time
-                color { id name code }
-                size { id name }
-                warranty { id title expire }
-                product { 
-                  id name photos { id file_name thumb }
-                  unit { id title }
-                }
+              inventory
+              sending_time
+              color { id name code }
+              size { id name }
+              warranty { id title expire }
+              product { 
+                id name photos { id file_name thumb }
+                unit { id title }
               }
             }
           }
-        }`
-      }
+        }
+      }`
     })
     .then( ({data}) => {
       this.info = data.data.order;

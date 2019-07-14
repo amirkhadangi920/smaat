@@ -260,12 +260,10 @@ export default {
   },
   mounted()
   {
-    axios.get('/graphql/auth', {
-      params: {
-        query: `{
-          me { ${this.allQuery} }
-        }`
-      }
+    axios.post('/graphql/auth', {
+      query: `{
+        me { ${this.allQuery} }
+      }`
     })
     .then(({data}) => {
       this.info = data.data.me

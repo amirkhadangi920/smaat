@@ -289,56 +289,54 @@ export default {
   {
     require('owl.carousel/dist/owl.carousel.js')
 
-    axios.get('/graphql/auth', {
-      params: {
-        query: `{
-          products {
-            data {
-              id name description photos { id file_name small } categories { id title } colors { id name code } brand { id name }
-            }
-            total
+    axios.post('/graphql/auth', {
+      query: `{
+        products {
+          data {
+            id name description photos { id file_name small } categories { id title } colors { id name code } brand { id name }
           }
-          
-          articles {
-            data {
-              id title description reading_time image { id file_name small } subjects { id title }
-            }
+          total
+        }
+        
+        articles {
+          data {
+            id title description reading_time image { id file_name small } subjects { id title }
           }
+        }
 
-          orders {
-            data {
-              id offer total created_at updated_at
-              status: order_status { id title color }
-              user {
-                id first_name last_name full_name avatar { id file_name thumb }
-              }
+        orders {
+          data {
+            id offer total created_at updated_at
+            status: order_status { id title color }
+            user {
+              id first_name last_name full_name avatar { id file_name thumb }
             }
-            total
           }
-          
-          users {
-            data {
-              id
-              first_name
-              last_name
-              full_name
-              email
-              avatar { id file_name small }
-            }
-            total
+          total
+        }
+        
+        users {
+          data {
+            id
+            first_name
+            last_name
+            full_name
+            email
+            avatar { id file_name small }
           }
-          
-          comments(per_page: 5) {
-            data { id title is_accept created_at updated_at }
-          }
-          reviews(per_page: 5) {
-            data { id title is_accept created_at updated_at }
-          }
-          question_and_answers(per_page: 5) {
-            data { id title is_accept created_at updated_at }
-          } 
-        }`
-      }
+          total
+        }
+        
+        comments(per_page: 5) {
+          data { id title is_accept created_at updated_at }
+        }
+        reviews(per_page: 5) {
+          data { id title is_accept created_at updated_at }
+        }
+        question_and_answers(per_page: 5) {
+          data { id title is_accept created_at updated_at }
+        } 
+      }`
     })
     .then(({data}) => {
       this.products = data.data.products.data
