@@ -36,8 +36,8 @@ export default {
             has_error: false,
 
             form: {
-                email: 'amirkhadangi@smaat.ir',
-                password: '123456'
+                email: '',
+                password: ''
             }
         }
     },
