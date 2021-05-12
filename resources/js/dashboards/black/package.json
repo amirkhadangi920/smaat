@@ -14,7 +14,7 @@
   },
   "dependencies": {
     "@mvpleung/flipclock": "0.0.6",
-    "chart.js": "^2.7.3",
+    "chart.js": "^2.9.4",
     "chartjs": "^0.3.24",
     "element-ui": "^2.7.0",
     "element-ui-new": "^1.1.1",
