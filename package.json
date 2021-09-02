@@ -10,7 +10,7 @@
     "production": "cross-env NODE_ENV=production node_modules/webpack/bin/webpack.js --no-progress --hide-modules --config=node_modules/laravel-mix/setup/webpack.config.js"
   },
   "devDependencies": {
-    "axios": "^0.18.0",
+    "axios": "^0.21.1",
     "cross-env": "^5.1",
     "expose-loader": "^0.7.5",
     "laravel-mix": "^4.0.7",
@@ -31,7 +31,7 @@
     "@fortawesome/vue-fontawesome": "^0.1.6",
     "animate.css": "^3.7.0",
     "aos": "^2.3.4",
-    "axios": "^0.18.0",
+    "axios": "^0.21.1",
     "chartist": "^0.11.0",
     "countup.js": "^2.0.4",
     "element-ui": "git+https://github.com/AmirKhadangi920/element.git",
